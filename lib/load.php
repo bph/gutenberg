@@ -70,6 +70,11 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 	require_once __DIR__ . '/experimental/kses-allowed-html.php';
 }
 
+// Experimental signaling server.
+if ( ! class_exists( 'Gutenberg_HTTP_Singling_Server' ) ) {
+	require_once __DIR__ . '/experimental/sync/class-gutenberg-http-signaling-server.php';
+}
+
 require __DIR__ . '/experimental/editor-settings.php';
 
 // Gutenberg plugin compat.
@@ -251,3 +256,6 @@ require __DIR__ . '/block-supports/duotone.php';
 require __DIR__ . '/block-supports/shadow.php';
 require __DIR__ . '/block-supports/background.php';
 require __DIR__ . '/block-supports/behaviors.php';
+
+// Data views.
+require_once __DIR__ . '/experimental/data-views.php';

@@ -8,7 +8,12 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useEntityRecords } from '@wordpress/core-data';
 import { decodeEntities } from '@wordpress/html-entities';
-import { useState, useMemo, useCallback } from '@wordpress/element';
+import {
+	useContext,
+	useMemo,
+	useCallback,
+	useEffect,
+} from '@wordpress/element';
 import { dateI18n, getDate, getSettings } from '@wordpress/date';
 
 /**
@@ -19,9 +24,10 @@ import Link from '../routes/link';
 import { DataViews } from '../dataviews';
 import useTrashPostAction from '../actions/trash-post';
 import Media from '../media';
+import DataviewsContext from '../dataviews/context';
+import { DEFAULT_STATUSES } from '../dataviews/provider';
 
 const EMPTY_ARRAY = [];
-const EMPTY_OBJECT = {};
 const defaultConfigPerViewType = {
 	list: {},
 	grid: {
@@ -30,35 +36,40 @@ const defaultConfigPerViewType = {
 };
 
 export default function PagePages() {
-	const [ view, setView ] = useState( {
-		type: 'list',
-		filters: {
-			search: '',
-			status: 'publish, draft',
-		},
-		page: 1,
-		perPage: 5,
-		sort: {
-			field: 'date',
-			direction: 'desc',
-		},
-		visibleFilters: [ 'search', 'author', 'status' ],
-		// All fields are visible by default, so it's
-		// better to keep track of the hidden ones.
-		hiddenFields: [ 'date', 'featured-image' ],
-		layout: {},
-	} );
+	const { view, setView } = useContext( DataviewsContext );
 	// Request post statuses to get the proper labels.
 	const { records: statuses } = useEntityRecords( 'root', 'status' );
-	const postStatuses = useMemo(
-		() =>
-			statuses === null
-				? EMPTY_OBJECT
-				: Object.fromEntries(
-						statuses.map( ( { slug, name } ) => [ slug, name ] )
-				  ),
-		[ statuses ]
-	);
+	const defaultStatuses = useMemo( () => {
+		return statuses === null
+			? DEFAULT_STATUSES
+			: statuses
+					.filter( ( { slug } ) => slug !== 'trash' )
+					.map( ( { slug } ) => slug )
+					.sort()
+					.join();
+	}, [ statuses ] );
+
+	useEffect( () => {
+		// Only update the view if the statuses received from the endpoint
+		// are different from the DEFAULT_STATUSES provided initially.
+		//
+		// The pages endpoint depends on the status endpoint via the status filter.
+		// Initially, this code filters the pages request by DEFAULT_STATUTES,
+		// instead of using the default (publish).
+		// https://developer.wordpress.org/rest-api/reference/pages/#list-pages
+		//
+		// By doing so, it avoids a second request to the pages endpoint
+		// upon receiving the statuses when they are the same (most common scenario).
+		if ( DEFAULT_STATUSES !== defaultStatuses ) {
+			setView( {
+				...view,
+				filters: {
+					...view.filters,
+					status: defaultStatuses,
+				},
+			} );
+		}
+	}, [ defaultStatuses ] );
 
 	const queryArgs = useMemo(
 		() => ( {
@@ -133,7 +144,6 @@ export default function PagePages() {
 						</VStack>
 					);
 				},
-				filters: [ { id: 'search', type: 'search' } ],
 				maxWidth: 400,
 				sortingFn: 'alphanumeric',
 				enableHiding: false,
@@ -150,37 +160,31 @@ export default function PagePages() {
 						</a>
 					);
 				},
-				filters: [ { id: 'author', type: 'enumeration' } ],
-				elements: [
-					{
-						value: '',
-						label: __( 'All' ),
-					},
-					...( authors?.map( ( { id, name } ) => ( {
+				filters: [ 'enumeration' ],
+				elements:
+					authors?.map( ( { id, name } ) => ( {
 						value: id,
 						label: name,
-					} ) ) || [] ),
-				],
+					} ) ) || [],
 			},
 			{
 				header: __( 'Status' ),
 				id: 'status',
 				getValue: ( { item } ) =>
-					postStatuses[ item.status ] ?? item.status,
-				filters: [ { type: 'enumeration', id: 'status' } ],
-				elements: [
-					{ label: __( 'All' ), value: 'publish,draft' },
-					...( ( postStatuses &&
-						Object.entries( postStatuses )
-							.filter( ( [ slug ] ) =>
-								[ 'publish', 'draft' ].includes( slug )
-							)
-							.map( ( [ slug, name ] ) => ( {
-								value: slug,
-								label: name,
-							} ) ) ) ||
-						[] ),
+					statuses?.find( ( { slug } ) => slug === item.status )
+						?.name ?? item.status,
+				filters: [
+					{
+						type: 'enumeration',
+						id: 'status',
+						resetValue: defaultStatuses,
+					},
 				],
+				elements:
+					statuses?.map( ( { slug, name } ) => ( {
+						value: slug,
+						label: name,
+					} ) ) || [],
 				enableSorting: false,
 			},
 			{
@@ -196,8 +200,12 @@ export default function PagePages() {
 				},
 			},
 		],
-		[ postStatuses, authors ]
+		[ statuses, authors ]
 	);
+
+	const filters = useMemo( () => [
+		{ id: 'search', type: 'search', name: __( 'Filter list' ) },
+	] );
 
 	const trashPostAction = useTrashPostAction();
 	const actions = useMemo( () => [ trashPostAction ], [ trashPostAction ] );
@@ -218,7 +226,7 @@ export default function PagePages() {
 
 			setView( updatedView );
 		},
-		[ view ]
+		[ view, setView ]
 	);
 
 	// TODO: we need to handle properly `data={ data || EMPTY_ARRAY }` for when `isLoading`.
@@ -227,6 +235,7 @@ export default function PagePages() {
 			<DataViews
 				paginationInfo={ paginationInfo }
 				fields={ fields }
+				filters={ filters }
 				actions={ actions }
 				data={ pages || EMPTY_ARRAY }
 				isLoading={ isLoadingPages }
