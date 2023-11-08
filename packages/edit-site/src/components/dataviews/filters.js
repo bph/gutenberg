@@ -6,67 +6,71 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import InFilter from './in-filter';
+import { default as InFilter, OPERATOR_IN } from './in-filter';
+import ResetFilters from './reset-filters';
+
+const VALID_OPERATORS = [ OPERATOR_IN ];
 
 export default function Filters( { fields, view, onChangeView } ) {
-	const filterIndex = {};
+	const filtersRegistered = [];
 	fields.forEach( ( field ) => {
 		if ( ! field.filters ) {
 			return;
 		}
 
 		field.filters.forEach( ( filter ) => {
-			const id = field.id;
-			if ( 'string' === typeof filter ) {
-				filterIndex[ id ] = {
-					id,
+			if ( VALID_OPERATORS.some( ( operator ) => operator === filter ) ) {
+				filtersRegistered.push( {
+					field: field.id,
 					name: field.header,
-					type: filter,
-				};
-			}
-
-			if ( 'object' === typeof filter ) {
-				filterIndex[ id ] = {
-					id,
-					name: field.header,
-					type: filter.type,
-				};
-			}
-
-			if ( 'enumeration' === filterIndex[ id ]?.type ) {
-				const elements = [
-					{
-						value: '',
-						label: __( 'All' ),
-					},
-					...( field.elements || [] ),
-				];
-				filterIndex[ id ] = {
-					...filterIndex[ id ],
-					elements,
-				};
+					operator: filter,
+					elements: [
+						{
+							value: '',
+							label: __( 'All' ),
+						},
+						...( field.elements || [] ),
+					],
+				} );
 			}
 		} );
 	} );
 
-	return view.visibleFilters?.map( ( filterName ) => {
-		const filter = filterIndex[ filterName ];
-
-		if ( ! filter ) {
-			return null;
-		}
-
-		if ( filter.type === 'enumeration' ) {
-			return (
-				<InFilter
-					key={ filterName }
-					filter={ filter }
-					view={ view }
-					onChangeView={ onChangeView }
-				/>
+	const visibleFilters = view.visibleFilters
+		?.map( ( fieldName ) => {
+			const visibleFiltersForField = filtersRegistered.filter(
+				( f ) => f.field === fieldName
 			);
-		}
 
-		return null;
-	} );
+			if ( visibleFiltersForField.length === 0 ) {
+				return null;
+			}
+
+			return visibleFiltersForField.map( ( filter ) => {
+				if ( OPERATOR_IN === filter.operator ) {
+					return (
+						<InFilter
+							key={ fieldName + '.' + filter.operator }
+							filter={ visibleFiltersForField[ 0 ] }
+							view={ view }
+							onChangeView={ onChangeView }
+						/>
+					);
+				}
+				return null;
+			} );
+		} )
+		.filter( Boolean );
+
+	if ( visibleFilters?.length > 0 ) {
+		visibleFilters.push(
+			<ResetFilters
+				key="reset-filters"
+				view={ view }
+				onChangeView={ onChangeView }
+			/>
+		);
+	}
+
+	return visibleFilters;
 }
