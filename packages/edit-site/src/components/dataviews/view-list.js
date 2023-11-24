@@ -14,6 +14,7 @@ import {
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useAsyncList } from '@wordpress/compose';
 import {
 	chevronDown,
 	chevronUp,
@@ -73,13 +74,7 @@ function HeaderMenu( { dataView, header } ) {
 	if ( header.column.columnDef.type === ENUMERATION_TYPE ) {
 		filter = {
 			field: header.column.columnDef.id,
-			elements: [
-				{
-					value: '',
-					label: __( 'All' ),
-				},
-				...( header.column.columnDef.elements || [] ),
-			],
+			elements: header.column.columnDef.elements || [],
 		};
 	}
 	const isFilterable = !! filter;
@@ -166,11 +161,6 @@ function HeaderMenu( { dataView, header } ) {
 										)[ 0 ] === filter.field
 								);
 
-								// Set the empty item as active if the filter is not set.
-								if ( ! columnFilter && element.value === '' ) {
-									isActive = true;
-								}
-
 								if ( columnFilter ) {
 									const value =
 										Object.values( columnFilter )[ 0 ];
@@ -205,19 +195,15 @@ function HeaderMenu( { dataView, header } ) {
 													}
 												);
 
-											if ( element.value === '' ) {
-												dataView.setColumnFilters(
-													otherFilters
-												);
-											} else {
-												dataView.setColumnFilters( [
-													...otherFilters,
-													{
-														[ filter.field +
-														':in' ]: element.value,
-													},
-												] );
-											}
+											dataView.setColumnFilters( [
+												...otherFilters,
+												{
+													[ filter.field + ':in' ]:
+														isActive
+															? undefined
+															: element.value,
+												},
+											] );
 										} }
 									>
 										{ element.label }
@@ -347,8 +333,9 @@ function ViewList( {
 			return { field, operator, value };
 		} );
 
+	const shownData = useAsyncList( data );
 	const dataView = useReactTable( {
-		data,
+		data: shownData,
 		columns,
 		manualSorting: true,
 		manualFiltering: true,
@@ -470,6 +457,9 @@ function ViewList( {
 											width:
 												header.column.columnDef.width ||
 												undefined,
+											minWidth:
+												header.column.columnDef
+													.minWidth || undefined,
 											maxWidth:
 												header.column.columnDef
 													.maxWidth || undefined,
@@ -495,6 +485,9 @@ function ViewList( {
 											width:
 												cell.column.columnDef.width ||
 												undefined,
+											minWidth:
+												cell.column.columnDef
+													.minWidth || undefined,
 											maxWidth:
 												cell.column.columnDef
 													.maxWidth || undefined,
