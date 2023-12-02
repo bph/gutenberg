@@ -95,7 +95,6 @@ export default function AddFilter( { fields, view, onChangeView } ) {
 										],
 									} ) );
 								} }
-								role="menuitemcheckbox"
 							>
 								{ element.label }
 							</DropdownMenuItem>
