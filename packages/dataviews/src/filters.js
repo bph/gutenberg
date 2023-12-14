@@ -6,7 +6,7 @@ import AddFilter from './add-filter';
 import ResetFilters from './reset-filters';
 import { ENUMERATION_TYPE, OPERATOR_IN, OPERATOR_NOT_IN } from './constants';
 
-const operatorsFromField = ( field ) => {
+const sanitizeOperators = ( field ) => {
 	let operators = field.filterBy?.operators;
 	if ( ! operators || ! Array.isArray( operators ) ) {
 		operators = [ OPERATOR_IN, OPERATOR_NOT_IN ];
@@ -23,7 +23,7 @@ export default function Filters( { fields, view, onChangeView } ) {
 			return;
 		}
 
-		const operators = operatorsFromField( field );
+		const operators = sanitizeOperators( field );
 		if ( operators.length === 0 ) {
 			return;
 		}
@@ -46,29 +46,31 @@ export default function Filters( { fields, view, onChangeView } ) {
 		}
 	} );
 
-	const filterComponents = filters.map( ( filter ) => {
-		if ( ! filter.isVisible ) {
-			return null;
-		}
-
-		return (
-			<FilterSummary
-				key={ filter.field + '.' + filter.operator }
-				filter={ filter }
-				view={ view }
-				onChangeView={ onChangeView }
-			/>
-		);
-	} );
-
-	filterComponents.push(
+	const addFilter = (
 		<AddFilter
 			key="add-filter"
-			fields={ fields }
+			filters={ filters }
 			view={ view }
 			onChangeView={ onChangeView }
 		/>
 	);
+	const filterComponents = [
+		addFilter,
+		...filters.map( ( filter ) => {
+			if ( ! filter.isVisible ) {
+				return null;
+			}
+
+			return (
+				<FilterSummary
+					key={ filter.field + '.' + filter.operator }
+					filter={ filter }
+					view={ view }
+					onChangeView={ onChangeView }
+				/>
+			);
+		} ),
+	];
 
 	if ( filterComponents.length > 1 ) {
 		filterComponents.push(
