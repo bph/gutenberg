@@ -97,6 +97,12 @@
 		&:last-child {
 			border-bottom: 0;
 		}
+
+		&:hover {
+			td {
+				background-color: #f8f8f8;
+			}
+		}
 	}
 	thead {
 		tr {
@@ -110,6 +116,19 @@
 			border-top: 1px solid $gray-100;
 			padding-top: $grid-unit-05;
 			padding-bottom: $grid-unit-05;
+		}
+	}
+
+	.dataviews-table-header-button {
+		padding: 0;
+		gap: $grid-unit-05;
+
+		span {
+			speak: none;
+
+			&:empty {
+				display: none;
+			}
 		}
 	}
 }
@@ -236,13 +255,9 @@
 		}
 	}
 
-	.edit-site-page-pages__featured-image,
 	.dataviews-list-view__media-placeholder {
 		min-width: $grid-unit-40;
 		height: $grid-unit-40;
-	}
-
-	.dataviews-list-view__media-placeholder {
 		background-color: $gray-200;
 	}
 

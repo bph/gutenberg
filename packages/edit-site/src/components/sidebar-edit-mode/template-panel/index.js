@@ -4,8 +4,10 @@
 import { useSelect } from '@wordpress/data';
 import { PanelBody } from '@wordpress/components';
 import {
-	PostTaxonomiesPanel,
+	PostExcerptPanel,
+	PostFeaturedImagePanel,
 	PostLastRevisionPanel,
+	PostTaxonomiesPanel,
 	store as editorStore,
 } from '@wordpress/editor';
 import { store as coreStore } from '@wordpress/core-data';
@@ -64,6 +66,8 @@ export default function TemplatePanel() {
 			</PanelBody>
 			<PostLastRevisionPanel />
 			<PostTaxonomiesPanel />
+			<PostFeaturedImagePanel />
+			<PostExcerptPanel />
 		</>
 	);
 }
