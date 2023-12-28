@@ -483,7 +483,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							'Starting year',
 							'copyright-date-block'
 						) }
-						value={ startingYear }
+						value={ startingYear || '' }
 						onChange={ ( value ) =>
 							setAttributes( { startingYear: value } )
 						}
@@ -495,6 +495,10 @@ export default function Edit( { attributes, setAttributes } ) {
 	);
 }
 ```
+
+<div class="callout callout-tip">
+	You may have noticed that the <code>value</code> property has a value of <code>startingYear || ''</code>. The symbol <code>||</code> is called the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR">Logical OR</a> (logical disjunction) operator. This prevents warnings in React when the <code>startingYear</code> is empty. See <a href="https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components">Controlled and uncontrolled components</a> for details.
+</div>
 
 Save the file and refresh the Editor. Confirm that a text field now exists in the Settings panel. Add a starting year and confirm that when you update the page, the value is saved.
 
@@ -522,7 +526,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'copyright-date-block' ) }>
 					<ToggleControl
-						checked={ showStartingYear }
+						checked={ !! showStartingYear }
 						label={ __(
 							'Show starting year',
 							'copyright-date-block'
@@ -539,7 +543,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								'Starting year',
 								'copyright-date-block'
 							) }
-							value={ startingYear }
+							value={ startingYear || '' }
 							onChange={ ( value ) =>
 								setAttributes( { startingYear: value } )
 							}
@@ -601,7 +605,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'copyright-date-block' ) }>
 					<ToggleControl
-						checked={ showStartingYear }
+						checked={ !! showStartingYear }
 						label={ __(
 							'Show starting year',
 							'copyright-date-block'
@@ -618,7 +622,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								'Starting year',
 								'copyright-date-block'
 							) }
-							value={ startingYear }
+							value={ startingYear || '' }
 							onChange={ ( value ) =>
 								setAttributes( { startingYear: value } )
 							}
@@ -690,7 +694,9 @@ In the next section, however, you will add static rendering to the block. This e
 
 ## Adding static rendering
 
-A block can be dynamically rendered, statically rendered, or both. The block you have built so far is dynamically rendered. The HTML output of the block is not actually stored in the database, only the block markup and the associated attributes.
+A block can utilize dynamic rendering, static rendering, or both. The block you have built so far is dynamically rendered. Its block markup and associated attributes are stored in the database, but its HTML output is not.
+
+Statically rendered blocks will always store the block markup, attributes, and output in the database. Blocks can also store static output in the database while being further enhanced dynamically on the front end, a combination of both methods.
 
 You will see the following if you switch to the Code editor from within the Editor.
 
