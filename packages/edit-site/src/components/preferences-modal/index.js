@@ -107,6 +107,7 @@ export default function EditSitePreferencesModal() {
 						label={ __( 'Distraction free' ) }
 					/>
 					<EnableFeature
+						scope="core"
 						featureName="focusMode"
 						help={ __(
 							'Highlights the current block and fades other content.'
@@ -128,7 +129,7 @@ export default function EditSitePreferencesModal() {
 						) }
 					>
 						<EnableFeature
-							namespace="core"
+							scope="core"
 							featureName="keepCaretInsideBlock"
 							help={ __(
 								'Keeps the text cursor within the block boundaries, aiding users with screen readers by preventing unintentional cursor movement outside the block.'
@@ -138,7 +139,7 @@ export default function EditSitePreferencesModal() {
 					</PreferencesModalSection>
 					<PreferencesModalSection title={ __( 'Interface' ) }>
 						<EnableFeature
-							namespace="core"
+							scope="core"
 							featureName="showIconLabels"
 							label={ __( 'Show button text labels' ) }
 							help={ __(

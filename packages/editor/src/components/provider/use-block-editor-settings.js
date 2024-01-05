@@ -46,11 +46,11 @@ const BLOCK_EDITOR_SETTINGS = [
 	'enableCustomSpacing',
 	'enableCustomUnits',
 	'enableOpenverseMediaCategory',
-	'focusMode',
 	'distractionFree',
 	'fontSizes',
 	'gradients',
 	'generateAnchors',
+	'getPostLinkProps',
 	'hasFixedToolbar',
 	'hasInlineToolbar',
 	'isDistractionFree',
@@ -75,7 +75,6 @@ const BLOCK_EDITOR_SETTINGS = [
 	'__unstableIsBlockBasedTheme',
 	'__experimentalArchiveTitleTypeLabel',
 	'__experimentalArchiveTitleNameLabel',
-	'__experimentalGetPostLinkProps',
 ];
 
 /**
@@ -90,6 +89,7 @@ const BLOCK_EDITOR_SETTINGS = [
 function useBlockEditorSettings( settings, postType, postId ) {
 	const {
 		allowRightClickOverrides,
+		focusMode,
 		keepCaretInsideBlock,
 		reusableBlocks,
 		hasUploadPermissions,
@@ -100,7 +100,6 @@ function useBlockEditorSettings( settings, postType, postId ) {
 		userPatternCategories,
 		restBlockPatterns,
 		restBlockPatternCategories,
-		getPostLinkProps,
 	} = useSelect(
 		( select ) => {
 			const isWeb = Platform.OS === 'web';
@@ -113,8 +112,6 @@ function useBlockEditorSettings( settings, postType, postId ) {
 				getBlockPatterns,
 				getBlockPatternCategories,
 			} = select( coreStore );
-			const { getPostLinkProps: postLinkProps } =
-				select( editorStore ).getEditorSettings();
 			const { get } = select( preferencesStore );
 
 			const siteSettings = canUser( 'read', 'settings' )
@@ -131,6 +128,7 @@ function useBlockEditorSettings( settings, postType, postId ) {
 					postType,
 					postId
 				)?._links?.hasOwnProperty( 'wp:action-unfiltered-html' ),
+				focusMode: get( 'core', 'focusMode' ),
 				keepCaretInsideBlock: get( 'core', 'keepCaretInsideBlock' ),
 				reusableBlocks: isWeb
 					? getEntityRecords( 'postType', 'wp_block', {
@@ -144,7 +142,6 @@ function useBlockEditorSettings( settings, postType, postId ) {
 				userPatternCategories: getUserPatternCategories(),
 				restBlockPatterns: getBlockPatterns(),
 				restBlockPatternCategories: getBlockPatternCategories(),
-				getPostLinkProps: postLinkProps,
 			};
 		},
 		[ postType, postId ]
@@ -214,6 +211,8 @@ function useBlockEditorSettings( settings, postType, postId ) {
 		[ saveEntityRecord, userCanCreatePages ]
 	);
 
+	const forceDisableFocusMode = settings.focusMode === false;
+
 	return useMemo(
 		() => ( {
 			...Object.fromEntries(
@@ -222,6 +221,7 @@ function useBlockEditorSettings( settings, postType, postId ) {
 				)
 			),
 			allowRightClickOverrides,
+			focusMode: focusMode && ! forceDisableFocusMode,
 			keepCaretInsideBlock,
 			mediaUpload: hasUploadPermissions ? mediaUpload : undefined,
 			__experimentalReusableBlocks: reusableBlocks,
@@ -253,10 +253,11 @@ function useBlockEditorSettings( settings, postType, postId ) {
 					? [ [ 'core/navigation', {}, [] ] ]
 					: settings.template,
 			__experimentalSetIsInserterOpened: setIsInserterOpened,
-			__experimentalGetPostLinkProps: getPostLinkProps,
 		} ),
 		[
 			allowRightClickOverrides,
+			focusMode,
+			forceDisableFocusMode,
 			keepCaretInsideBlock,
 			settings,
 			hasUploadPermissions,
@@ -272,7 +273,6 @@ function useBlockEditorSettings( settings, postType, postId ) {
 			pageForPosts,
 			postType,
 			setIsInserterOpened,
-			getPostLinkProps,
 		]
 	);
 }
