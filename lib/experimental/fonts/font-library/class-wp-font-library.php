@@ -63,11 +63,11 @@ class WP_Font_Library {
 	 */
 	public static function register_font_collection( $config ) {
 		$new_collection = new WP_Font_Collection( $config );
-		if ( self::is_collection_registered( $config['id'] ) ) {
+		if ( self::is_collection_registered( $config['slug'] ) ) {
 			$error_message = sprintf(
-				/* translators: %s: Font collection id. */
-				__( 'Font collection with id: "%s" is already registered.', 'default' ),
-				$config['id']
+				/* translators: %s: Font collection slug. */
+				__( 'Font collection with slug: "%s" is already registered.', 'default' ),
+				$config['slug']
 			);
 			_doing_it_wrong(
 				__METHOD__,
@@ -76,7 +76,7 @@ class WP_Font_Library {
 			);
 			return new WP_Error( 'font_collection_registration_error', $error_message );
 		}
-		self::$collections[ $config['id'] ] = $new_collection;
+		self::$collections[ $config['slug'] ] = $new_collection;
 		return $new_collection;
 	}
 
@@ -85,20 +85,20 @@ class WP_Font_Library {
 	 *
 	 * @since 6.5.0
 	 *
-	 * @param string $collection_id Font collection ID.
+	 * @param string $collection_slug Font collection slug.
 	 * @return bool True if the font collection was unregistered successfully and false otherwise.
 	 */
-	public static function unregister_font_collection( $collection_id ) {
-		if ( ! self::is_collection_registered( $collection_id ) ) {
+	public static function unregister_font_collection( $slug ) {
+		if ( ! self::is_collection_registered( $slug ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				/* translators: %s: Font collection id. */
-				sprintf( __( 'Font collection "%s" not found.', 'default' ), $collection_id ),
+				/* translators: %s: Font collection slug. */
+				sprintf( __( 'Font collection "%s" not found.', 'default' ), $slug ),
 				'6.5.0'
 			);
 			return false;
 		}
-		unset( self::$collections[ $collection_id ] );
+		unset( self::$collections[ $slug ] );
 		return true;
 	}
 
@@ -107,11 +107,11 @@ class WP_Font_Library {
 	 *
 	 * @since 6.5.0
 	 *
-	 * @param string $collection_id Font collection ID.
+	 * @param string $slug Font collection slug.
 	 * @return bool True if the font collection is registered and false otherwise.
 	 */
-	private static function is_collection_registered( $collection_id ) {
-		return array_key_exists( $collection_id, self::$collections );
+	private static function is_collection_registered( $slug ) {
+		return array_key_exists( $slug, self::$collections );
 	}
 
 	/**
@@ -130,84 +130,17 @@ class WP_Font_Library {
 	 *
 	 * @since 6.5.0
 	 *
-	 * @param string $id Font collection id.
+	 * @param string $slug Font collection slug.
 	 * @return array List of font collections.
 	 */
-	public static function get_font_collection( $id ) {
-		if ( array_key_exists( $id, self::$collections ) ) {
-			return self::$collections[ $id ];
+	public static function get_font_collection( $slug ) {
+		if ( array_key_exists( $slug, self::$collections ) ) {
+			return self::$collections[ $slug ];
 		}
 		return new WP_Error( 'font_collection_not_found', 'Font collection not found.' );
 	}
 
-	/**
-	 * Returns an array containing the current fonts upload directory's path and URL.
-	 *
-	 * @since 6.5.0
-	 *
-	 * @param array $defaults {
-	 *     Array of information about the upload directory.
-	 *
-	 *     @type string       $path    Base directory and subdirectory or full path to the fonts upload directory.
-	 *     @type string       $url     Base URL and subdirectory or absolute URL to the fonts upload directory.
-	 *     @type string       $subdir  Subdirectory
-	 *     @type string       $basedir Path without subdir.
-	 *     @type string       $baseurl URL path without subdir.
-	 *     @type string|false $error   False or error message.
-	 * }
-	 *
-	 * @return array $defaults {
-	 *     Array of information about the upload directory.
-	 *
-	 *     @type string       $path    Base directory and subdirectory or full path to the fonts upload directory.
-	 *     @type string       $url     Base URL and subdirectory or absolute URL to the fonts upload directory.
-	 *     @type string       $subdir  Subdirectory
-	 *     @type string       $basedir Path without subdir.
-	 *     @type string       $baseurl URL path without subdir.
-	 *     @type string|false $error   False or error message.
-	 * }
-	 */
-	public static function fonts_dir( $defaults = array() ) {
-		$site_path = self::get_multi_site_dir();
 
-		// Sets the defaults.
-		$defaults['path']    = path_join( WP_CONTENT_DIR, 'fonts' ) . $site_path;
-		$defaults['url']     = untrailingslashit( content_url( 'fonts' ) ) . $site_path;
-		$defaults['subdir']  = '';
-		$defaults['basedir'] = path_join( WP_CONTENT_DIR, 'fonts' ) . $site_path;
-		$defaults['baseurl'] = untrailingslashit( content_url( 'fonts' ) ) . $site_path;
-		$defaults['error']   = false;
-
-		// Filters the fonts directory data.
-		return apply_filters( 'fonts_dir', $defaults );
-	}
-
-	/**
-	 * Gets the Site dir for fonts, using the blog ID if multi-site, empty otherwise.
-	 *
-	 * @since 6.5.0
-	 *
-	 * @return string Site dir path.
-	 */
-	private static function get_multi_site_dir() {
-		$font_sub_dir = '';
-		if ( is_multisite() && ! ( is_main_network() && is_main_site() ) ) {
-			$font_sub_dir = '/sites/' . get_current_blog_id();
-		}
-		return $font_sub_dir;
-	}
-
-	/**
-	 * Gets the upload directory for fonts.
-	 *
-	 * @since 6.5.0
-	 *
-	 * @return string Path of the upload directory for fonts.
-	 */
-	public static function get_fonts_dir() {
-		$fonts_dir_settings = self::fonts_dir();
-		return $fonts_dir_settings['path'];
-	}
 
 	/**
 	 * Sets the allowed mime types for fonts.
