@@ -55,13 +55,14 @@ if ( ! class_exists( 'WP_Font_Library' ) ) {
 		 *
 		 * @since 6.5.0
 		 *
-		 * @param string $slug Font collection slug.
-		 * @param array  $args Font collection config options.
-		 *                     See {@see wp_register_font_collection()} for the supported fields.
+		 * @param string $slug         Font collection slug.
+		 * @param array  $data_or_file Font collection data array or a file path or url to a JSON file
+		 *                             containing the font collection.
+		 *                             See {@see wp_register_font_collection()} for the supported fields.
 		 * @return WP_Font_Collection|WP_Error A font collection if registration was successful, else WP_Error.
 		 */
-		public static function register_font_collection( $slug, $args = array() ) {
-			$new_collection = new WP_Font_Collection( $slug, $args );
+		public static function register_font_collection( $slug, $data_or_file ) {
+			$new_collection = new WP_Font_Collection( $slug, $data_or_file );
 
 			if ( self::is_collection_registered( $new_collection->slug ) ) {
 				$error_message = sprintf(
@@ -81,28 +82,11 @@ if ( ! class_exists( 'WP_Font_Library' ) ) {
 		}
 
 		/**
-		 * Register a new font collection from a json file.
-		 *
-		 * @since 6.5.0
-		 *
-		 * @param string $file_or_url File path or URL to a JSON file containing the font collection data.
-		 * @return WP_Font_Collection|WP_Error A font collection if registration was successful, else WP_Error.
-		 */
-		public static function register_font_collection_from_json( $file_or_url ) {
-			$args = WP_Font_Collection::load_from_json( $file_or_url );
-			if ( is_wp_error( $args ) ) {
-				return $args;
-			}
-
-			return self::register_font_collection( $args['slug'], $args );
-		}
-
-		/**
 		 * Unregisters a previously registered font collection.
 		 *
 		 * @since 6.5.0
 		 *
-		 * @param string $collection_slug Font collection slug.
+		 * @param string $slug Font collection slug.
 		 * @return bool True if the font collection was unregistered successfully and false otherwise.
 		 */
 		public static function unregister_font_collection( $slug ) {
@@ -110,7 +94,7 @@ if ( ! class_exists( 'WP_Font_Library' ) ) {
 				_doing_it_wrong(
 					__METHOD__,
 					/* translators: %s: Font collection slug. */
-					sprintf( __( 'Font collection "%s" not found.', 'default' ), $slug ),
+					sprintf( __( 'Font collection "%s" not found.' ), $slug ),
 					'6.5.0'
 				);
 				return false;
@@ -148,7 +132,8 @@ if ( ! class_exists( 'WP_Font_Library' ) ) {
 		 * @since 6.5.0
 		 *
 		 * @param string $slug Font collection slug.
-		 * @return WP_Font_Collection Font collection object.
+		 * @return WP_Font_Collection|WP_Error Font collection object,
+		 *                                     or WP_Error object if the font collection doesn't exist.
 		 */
 		public static function get_font_collection( $slug ) {
 			if ( array_key_exists( $slug, self::$collections ) ) {
@@ -156,8 +141,6 @@ if ( ! class_exists( 'WP_Font_Library' ) ) {
 			}
 			return new WP_Error( 'font_collection_not_found', 'Font collection not found.' );
 		}
-
-
 
 		/**
 		 * Sets the allowed mime types for fonts.
