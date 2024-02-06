@@ -131,7 +131,7 @@ if ( ! function_exists( 'wp_register_font_collection' ) ) {
 	 *                                     successfully, or WP_Error object on failure.
 	 */
 	function wp_register_font_collection( $slug, $data_or_file ) {
-		return WP_Font_Library::register_font_collection( $slug, $data_or_file );
+		return WP_Font_Library::get_instance()->register_font_collection( $slug, $data_or_file );
 	}
 }
 
@@ -145,7 +145,7 @@ if ( ! function_exists( 'wp_unregister_font_collection' ) ) {
 	 * @return bool True if the font collection was unregistered successfully, else false.
 	 */
 	function wp_unregister_font_collection( $slug ) {
-		return WP_Font_Library::unregister_font_collection( $slug );
+		return WP_Font_Library::get_instance()->unregister_font_collection( $slug );
 	}
 }
 
@@ -184,7 +184,6 @@ if ( ! function_exists( 'wp_get_font_dir' ) ) {
 	 * }
 	 */
 	function wp_get_font_dir( $defaults = array() ) {
-		// Multi site path
 		$site_path = '';
 		if ( is_multisite() && ! ( is_main_network() && is_main_site() ) ) {
 			$site_path = '/sites/' . get_current_blog_id();
@@ -258,9 +257,10 @@ if ( ! function_exists( '_wp_before_delete_font_face' ) ) {
 		}
 
 		$font_files = get_post_meta( $post_id, '_wp_font_face_file', false );
+		$font_dir   = wp_get_font_dir()['path'];
 
 		foreach ( $font_files as $font_file ) {
-			wp_delete_file( wp_get_font_dir()['path'] . '/' . $font_file );
+			wp_delete_file( $font_dir . '/' . $font_file );
 		}
 	}
 	add_action( 'before_delete_post', '_wp_before_delete_font_face', 10, 2 );

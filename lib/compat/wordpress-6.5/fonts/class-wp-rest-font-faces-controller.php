@@ -180,8 +180,8 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				if ( isset( $settings[ $key ] ) && ! $settings[ $key ] ) {
 					return new WP_Error(
 						'rest_invalid_param',
-						/* translators: %s: Font family setting key. */
-						sprintf( __( 'font_face_setting[%s] cannot be empty.', 'gutenberg' ), $key ),
+						/* translators: %s: Name of the missing font face settings parameter, e.g. "font_face_settings[src]". */
+						sprintf( __( '%s cannot be empty.', 'gutenberg' ), "font_face_setting[ $key ]" ),
 						array( 'status' => 400 )
 					);
 				}
@@ -196,7 +196,8 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				if ( empty( $src ) ) {
 					return new WP_Error(
 						'rest_invalid_param',
-						__( 'font_face_settings[src] values must be non-empty strings.', 'gutenberg' ),
+						/* translators: %s: Font face source parameter name: "font_face_settings[src]". */
+						sprintf( __( '%s values must be non-empty strings.', 'gutenberg' ), 'font_face_settings[src]' ),
 						array( 'status' => 400 )
 					);
 				}
@@ -205,8 +206,8 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				if ( false === wp_http_validate_url( $src ) && ! isset( $files[ $src ] ) ) {
 					return new WP_Error(
 						'rest_invalid_param',
-						/* translators: %s: src value in the font face settings. */
-						sprintf( __( 'font_face_settings[src] value "%s" must be a valid URL or file reference.', 'gutenberg' ), $src ),
+						/* translators: 1: Font face source parameter name: "font_face_settings[src]", 2: The invalid src value. */
+						sprintf( __( '%1$s value "%2$s" must be a valid URL or file reference.', 'gutenberg' ), 'font_face_settings[src]', $src ),
 						array( 'status' => 400 )
 					);
 				}
@@ -217,8 +218,8 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				if ( ! in_array( $file, $srcs, true ) ) {
 					return new WP_Error(
 						'rest_invalid_param',
-						// translators: %s: File key (e.g. `file-0`) in the request data.
-						sprintf( __( 'File %1$s must be used in font_face_settings[src].', 'gutenberg' ), $file ),
+						/* translators: 1: File key (e.g. "file-0") in the request data, 2: Font face source parameter name: "font_face_settings[src]". */
+						sprintf( __( 'File %1$s must be used in %2$s.', 'gutenberg' ), $file, 'font_face_settings[src]' ),
 						array( 'status' => 400 )
 					);
 				}
@@ -291,7 +292,7 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				return new WP_Error(
 					'rest_font_face_parent_id_mismatch',
 					/* translators: %d: A post id. */
-					sprintf( __( 'The font face does not belong to the specified font family with id of "%d"', 'gutenberg' ), $font_family->ID ),
+					sprintf( __( 'The font face does not belong to the specified font family with id of "%d".', 'gutenberg' ), $font_family->ID ),
 					array( 'status' => 404 )
 				);
 			}
@@ -405,7 +406,7 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				return new WP_Error(
 					'rest_font_face_parent_id_mismatch',
 					/* translators: %d: A post id. */
-					sprintf( __( 'The font face does not belong to the specified font family with id of "%d"', 'gutenberg' ), $font_family->ID ),
+					sprintf( __( 'The font face does not belong to the specified font family with id of "%d".', 'gutenberg' ), $font_family->ID ),
 					array( 'status' => 404 )
 				);
 			}
@@ -847,7 +848,7 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 		 * @return array Array containing uploaded file attributes on success, or error on failure.
 		 */
 		protected function handle_font_file_upload( $file ) {
-			add_filter( 'upload_mimes', array( 'WP_Font_Library', 'set_allowed_mime_types' ) );
+			add_filter( 'upload_mimes', array( 'WP_Font_Utils', 'get_allowed_font_mime_types' ) );
 			add_filter( 'upload_dir', 'wp_get_font_dir' );
 
 			$overrides = array(
@@ -861,13 +862,13 @@ if ( ! class_exists( 'WP_REST_Font_Faces_Controller' ) ) {
 				// See wp_check_filetype_and_ext().
 				'test_type'            => true,
 				// Only allow uploading font files for this request.
-				'mimes'                => WP_Font_Library::get_expected_font_mime_types_per_php_version(),
+				'mimes'                => WP_Font_Utils::get_allowed_font_mime_types(),
 			);
 
 			$uploaded_file = wp_handle_upload( $file, $overrides );
 
 			remove_filter( 'upload_dir', 'wp_get_font_dir' );
-			remove_filter( 'upload_mimes', array( 'WP_Font_Library', 'set_allowed_mime_types' ) );
+			remove_filter( 'upload_mimes', array( 'WP_Font_Utils', 'get_allowed_font_mime_types' ) );
 
 			return $uploaded_file;
 		}
