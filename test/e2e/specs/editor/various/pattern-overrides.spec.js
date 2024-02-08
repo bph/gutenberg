@@ -305,7 +305,7 @@ test.describe( 'Pattern Overrides', () => {
 			exact: true,
 		} );
 		const editLinkButton = page.getByRole( 'button', {
-			name: 'Edit',
+			name: 'Edit link',
 			exact: true,
 		} );
 		const saveLinkButton = page.getByRole( 'button', {
@@ -472,7 +472,7 @@ test.describe( 'Pattern Overrides', () => {
 		await editor.showBlockToolbar();
 		await page
 			.getByRole( 'toolbar', { name: 'Block tools' } )
-			.getByRole( 'link', { name: 'Edit original' } )
+			.getByRole( 'button', { name: 'Edit original' } )
 			.click();
 
 		// The inner paragraph should be editable in the pattern focus mode.
