@@ -76,6 +76,9 @@ function gutenberg_build_files_notice() {
  * Verify that we can initialize the Gutenberg editor , then load it.
  *
  * @since 1.5.0
+ *
+ * @global string $wp_version             The WordPress version string.
+ *
  */
 function gutenberg_pre_init() {
 	global $wp_version;
