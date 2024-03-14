@@ -337,7 +337,6 @@ export default function PagePages() {
 			{
 				header: __( 'Date' ),
 				id: 'date',
-				getValue: ( { item } ) => item.date,
 				render: ( { item } ) => {
 					const formattedDate = dateI18n(
 						getSettings().formats.datetimeAbbreviated,
@@ -356,11 +355,11 @@ export default function PagePages() {
 	const actions = useMemo(
 		() => [
 			viewPostAction,
-			trashPostAction,
 			restorePostAction,
 			permanentlyDeletePostAction,
 			editPostAction,
 			postRevisionsAction,
+			trashPostAction,
 		],
 		[ permanentlyDeletePostAction, restorePostAction, editPostAction ]
 	);
