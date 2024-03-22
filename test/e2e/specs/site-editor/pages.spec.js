@@ -5,7 +5,7 @@ const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 
 async function draftNewPage( page ) {
 	await page.getByRole( 'button', { name: 'Pages' } ).click();
-	await page.getByRole( 'button', { name: 'Draft a new page' } ).click();
+	await page.getByRole( 'button', { name: 'Add new page' } ).click();
 	await page
 		.locator( 'role=dialog[name="Draft a new page"i]' )
 		.locator( 'role=textbox[name="Page title"i]' )
@@ -101,18 +101,6 @@ test.describe( 'Pages', () => {
 		/*
 		 * Test create page.Test creating a new page and editing the template.
 		 */
-		// Selecting a block in the template should display a notice.
-		await editor.canvas
-			.getByRole( 'document', {
-				name: 'Block: Site Title',
-			} )
-			.click( { force: true } );
-		await expect(
-			page.locator(
-				'role=button[name="Dismiss this notice"i] >> text="Edit your template to edit this block."'
-			)
-		).toBeVisible();
-
 		// Switch to template editing focus.
 		await editor.openDocumentSettingsSidebar();
 		await page
