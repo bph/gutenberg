@@ -41,11 +41,11 @@ import {
 	LAYOUT_LIST,
 } from '../../utils/constants';
 import {
-	useResetTemplateAction,
+	resetTemplateAction,
 	deleteTemplateAction,
 	renameTemplateAction,
 } from './actions';
-import { postRevisionsAction } from '../actions';
+import { postRevisionsAction, useEditPostAction } from '../actions';
 import usePatternSettings from '../page-patterns/use-pattern-settings';
 import { unlock } from '../../lock-unlock';
 import AddNewTemplatePart from './add-new-template-part';
@@ -338,15 +338,16 @@ export default function PageTemplatesTemplateParts( { postType } ) {
 		return filterSortAndPaginate( records, view, fields );
 	}, [ records, view, fields ] );
 
-	const resetTemplateAction = useResetTemplateAction();
+	const editTemplateAction = useEditPostAction();
 	const actions = useMemo(
 		() => [
+			editTemplateAction,
 			resetTemplateAction,
 			renameTemplateAction,
 			postRevisionsAction,
 			deleteTemplateAction,
 		],
-		[ resetTemplateAction ]
+		[ editTemplateAction ]
 	);
 
 	const onChangeView = useCallback(
