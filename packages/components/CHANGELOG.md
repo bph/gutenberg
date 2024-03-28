@@ -6,9 +6,19 @@
 
 -   `InputControl`: Ignore IME events when `isPressEnterToChange` is enabled ([#60090](https://github.com/WordPress/gutenberg/pull/60090)).
 
+### Experimental
+
+-   `CustomSelectControlV2`: Rename for consistency ([#60178](https://github.com/WordPress/gutenberg/pull/60178)).
+
 ### Internal
 
 -   `Popover`, `ColorPicker`: Obviate pointer event trap #59449 ([#59449](https://github.com/WordPress/gutenberg/pull/59449)).
+-   `Popover`, `ToggleGroupControl`: Use `useReducedMotion()` ([#60168](https://github.com/WordPress/gutenberg/pull/60168)).
+-   `NavigatorProvider`: Simplify the router state logic ([#60190](https://github.com/WordPress/gutenberg/pull/60190)).
+
+### Experimental
+
+-   `CustomSelectControlV2`: Fix hint behavior in legacy ([#60183](https://github.com/WordPress/gutenberg/pull/60183)).
 
 ## 27.2.0 (2024-03-21)
 
