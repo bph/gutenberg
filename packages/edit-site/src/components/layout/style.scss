@@ -15,7 +15,7 @@
 	z-index: z-index(".edit-site-layout__hub");
 
 	@include break-medium {
-		width: calc(#{$nav-sidebar-width} - #{$grid-unit-30});
+		width: calc(#{$nav-sidebar-width} - #{$grid-unit-15});
 	}
 
 	.edit-site-layout.is-full-canvas & {
@@ -23,6 +23,13 @@
 		border-radius: 0;
 		width: $header-height;
 		box-shadow: none;
+	}
+}
+
+.edit-site-layout__header-container:has(+ .edit-site-layout__content > .edit-site-layout__mobile>.edit-site-page) {
+	margin-bottom: $header-height;
+	@include break-medium {
+		margin-bottom: 0;
 	}
 }
 
@@ -131,12 +138,15 @@
 		top: $canvas-padding;
 		bottom: $canvas-padding;
 		width: calc(100% - #{$canvas-padding});
-		transition: border-radius 0.4s;
-		// This ensure the radius work properly.
-		overflow: hidden;
 
-		.edit-site-layout:not(.is-full-canvas) & {
-			border-radius: $radius-block-ui * 4;
+		.edit-site-resizable-frame__inner-content {
+			transition: border-radius 0.4s;
+			// This ensure the radius work properly.
+			overflow: hidden;
+
+			.edit-site-layout:not(.is-full-canvas) & {
+				border-radius: $radius-block-ui * 4;
+			}
 		}
 	}
 
