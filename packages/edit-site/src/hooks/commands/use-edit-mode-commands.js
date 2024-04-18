@@ -185,9 +185,8 @@ function useEditUICommands() {
 	const { canvasMode, activeSidebar } = useSelect( ( select ) => {
 		return {
 			canvasMode: unlock( select( editSiteStore ) ).getCanvasMode(),
-			activeSidebar: select( interfaceStore ).getActiveComplementaryArea(
-				editSiteStore.name
-			),
+			activeSidebar:
+				select( interfaceStore ).getActiveComplementaryArea( 'core' ),
 		};
 	}, [] );
 	const { openModal } = useDispatch( interfaceStore );
@@ -204,10 +203,10 @@ function useEditUICommands() {
 		icon: isRTL() ? drawerLeft : drawerRight,
 		callback: ( { close } ) => {
 			close();
-			if ( activeSidebar === 'edit-site/template' ) {
+			if ( activeSidebar === 'edit-post/document' ) {
 				closeGeneralSidebar();
 			} else {
-				openGeneralSidebar( 'edit-site/template' );
+				openGeneralSidebar( 'edit-post/document' );
 			}
 		},
 	} );
@@ -218,10 +217,10 @@ function useEditUICommands() {
 		icon: blockDefault,
 		callback: ( { close } ) => {
 			close();
-			if ( activeSidebar === 'edit-site/block-inspector' ) {
+			if ( activeSidebar === 'edit-site/block' ) {
 				closeGeneralSidebar();
 			} else {
-				openGeneralSidebar( 'edit-site/block-inspector' );
+				openGeneralSidebar( 'edit-site/block' );
 			}
 		},
 	} );
