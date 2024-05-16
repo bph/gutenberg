@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import type { MouseEventHandler, ReactElement } from 'react';
+
+/**
  * WordPress dependencies
  */
 import {
@@ -15,6 +20,7 @@ import { moreVertical } from '@wordpress/icons';
  * Internal dependencies
  */
 import { unlock } from './lock-unlock';
+import type { Action, ActionModal as ActionModalType, AnyItem } from './types';
 
 const {
 	DropdownMenuV2: DropdownMenu,
@@ -24,7 +30,44 @@ const {
 	kebabCase,
 } = unlock( componentsPrivateApis );
 
-function ButtonTrigger( { action, onClick } ) {
+export interface ActionTriggerProps< Item extends AnyItem > {
+	action: Action< Item >;
+	onClick: MouseEventHandler;
+	isBusy?: boolean;
+}
+
+interface ActionModalProps< Item extends AnyItem > {
+	action: ActionModalType< Item >;
+	items: Item[];
+	closeModal?: () => void;
+}
+
+interface ActionWithModalProps< Item extends AnyItem >
+	extends ActionModalProps< Item > {
+	ActionTrigger: ( props: ActionTriggerProps< Item > ) => ReactElement;
+	isBusy?: boolean;
+}
+
+interface ActionsDropdownMenuGroupProps< Item extends AnyItem > {
+	actions: Action< Item >[];
+	item: Item;
+}
+
+interface ItemActionsProps< Item extends AnyItem > {
+	item: Item;
+	actions: Action< Item >[];
+	isCompact: boolean;
+}
+
+interface CompactItemActionsProps< Item extends AnyItem > {
+	item: Item;
+	actions: Action< Item >[];
+}
+
+function ButtonTrigger< Item extends AnyItem >( {
+	action,
+	onClick,
+}: ActionTriggerProps< Item > ) {
 	return (
 		<Button
 			label={ action.label }
@@ -36,25 +79,50 @@ function ButtonTrigger( { action, onClick } ) {
 	);
 }
 
-function DropdownMenuItemTrigger( { action, onClick } ) {
+function DropdownMenuItemTrigger< Item extends AnyItem >( {
+	action,
+	onClick,
+}: ActionTriggerProps< Item > ) {
 	return (
 		<DropdownMenuItem
 			onClick={ onClick }
-			hideOnClick={ ! action.RenderModal }
+			hideOnClick={ ! ( 'RenderModal' in action ) }
 		>
 			<DropdownMenuItemLabel>{ action.label }</DropdownMenuItemLabel>
 		</DropdownMenuItem>
 	);
 }
 
-export function ActionWithModal( {
+export function ActionModal< Item extends AnyItem >( {
+	action,
+	items,
+	closeModal,
+}: ActionModalProps< Item > ) {
+	return (
+		<Modal
+			title={ action.modalHeader || action.label }
+			__experimentalHideHeader={ !! action.hideModalHeader }
+			onRequestClose={ closeModal ?? ( () => {} ) }
+			overlayClassName={ `dataviews-action-modal dataviews-action-modal__${ kebabCase(
+				action.id
+			) }` }
+		>
+			<action.RenderModal
+				items={ items }
+				closeModal={ closeModal }
+				onActionStart={ action.onActionStart }
+				onActionPerformed={ action.onActionPerformed }
+			/>
+		</Modal>
+	);
+}
+
+export function ActionWithModal< Item extends AnyItem >( {
 	action,
 	items,
 	ActionTrigger,
-	onActionStart,
-	onActionPerformed,
 	isBusy,
-} ) {
+}: ActionWithModalProps< Item > ) {
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const actionTriggerProps = {
 		action,
@@ -64,38 +132,28 @@ export function ActionWithModal( {
 		items,
 		isBusy,
 	};
-	const { RenderModal, hideModalHeader } = action;
 	return (
 		<>
 			<ActionTrigger { ...actionTriggerProps } />
 			{ isModalOpen && (
-				<Modal
-					title={ action.modalHeader || action.label }
-					__experimentalHideHeader={ !! hideModalHeader }
-					onRequestClose={ () => {
-						setIsModalOpen( false );
-					} }
-					overlayClassName={ `dataviews-action-modal dataviews-action-modal__${ kebabCase(
-						action.id
-					) }` }
-				>
-					<RenderModal
-						items={ items }
-						closeModal={ () => setIsModalOpen( false ) }
-						onActionStart={ onActionStart }
-						onActionPerformed={ onActionPerformed }
-					/>
-				</Modal>
+				<ActionModal
+					action={ action }
+					items={ items }
+					closeModal={ () => setIsModalOpen( false ) }
+				/>
 			) }
 		</>
 	);
 }
 
-function ActionsDropdownMenuGroup( { actions, item } ) {
+export function ActionsDropdownMenuGroup< Item extends AnyItem >( {
+	actions,
+	item,
+}: ActionsDropdownMenuGroupProps< Item > ) {
 	return (
 		<DropdownMenuGroup>
 			{ actions.map( ( action ) => {
-				if ( !! action.RenderModal ) {
+				if ( 'RenderModal' in action ) {
 					return (
 						<ActionWithModal
 							key={ action.id }
@@ -117,7 +175,11 @@ function ActionsDropdownMenuGroup( { actions, item } ) {
 	);
 }
 
-export default function ItemActions( { item, actions, isCompact } ) {
+export default function ItemActions< Item extends AnyItem >( {
+	item,
+	actions,
+	isCompact,
+}: ItemActionsProps< Item > ) {
 	const { primaryActions, eligibleActions } = useMemo( () => {
 		// If an action is eligible for all items, doesn't need
 		// to provide the `isEligible` function.
@@ -147,7 +209,7 @@ export default function ItemActions( { item, actions, isCompact } ) {
 		>
 			{ !! primaryActions.length &&
 				primaryActions.map( ( action ) => {
-					if ( !! action.RenderModal ) {
+					if ( 'RenderModal' in action ) {
 						return (
 							<ActionWithModal
 								key={ action.id }
@@ -170,7 +232,10 @@ export default function ItemActions( { item, actions, isCompact } ) {
 	);
 }
 
-function CompactItemActions( { item, actions } ) {
+function CompactItemActions< Item extends AnyItem >( {
+	item,
+	actions,
+}: CompactItemActionsProps< Item > ) {
 	return (
 		<DropdownMenu
 			trigger={
