@@ -254,7 +254,17 @@ _Returns_
 
 ### DocumentBar
 
-Undocumented declaration.
+This component renders a navigation bar at the top of the editor. It displays the title of the current document, a back button (if applicable), and a command center button. It also handles different states of the document, such as "not found" or "unsynced".
+
+_Usage_
+
+```jsx
+<DocumentBar />
+```
+
+_Returns_
+
+-   `JSX.Element`: The rendered DocumentBar component.
 
 ### DocumentOutline
 
@@ -326,7 +336,17 @@ _Returns_
 
 ### EditorNotices
 
-Undocumented declaration.
+This component renders the notices displayed in the editor. It displays pinned notices first, followed by dismissible
+
+_Usage_
+
+```jsx
+<EditorNotices />
+```
+
+_Returns_
+
+-   `JSX.Element`: The rendered EditorNotices component.
 
 ### EditorProvider
 
