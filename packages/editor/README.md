@@ -1565,7 +1565,17 @@ Undocumented declaration.
 
 ### ThemeSupportCheck
 
-Undocumented declaration.
+Checks if the current theme supports specific features and renders the children if supported.
+
+_Parameters_
+
+-   _props_ `Object`: The component props.
+-   _props.children_ `Element`: The children to render if the theme supports the specified features.
+-   _props.supportKeys_ `string|string[]`: The key(s) of the theme support(s) to check.
+
+_Returns_
+
+-   `JSX.Element|null`: The rendered children if the theme supports the specified features, otherwise null.
 
 ### TimeToRead
 
@@ -1597,7 +1607,11 @@ _Returns_
 
 ### useEntitiesSavedStatesIsDirty
 
-Undocumented declaration.
+Custom hook that determines if any entities are dirty (edited) and provides a way to manage selected/unselected entities.
+
+_Returns_
+
+-   `Object`: An object containing the following properties: - dirtyEntityRecords: An array of dirty entity records. - isDirty: A boolean indicating if there are any dirty entity records. - setUnselectedEntities: A function to set the unselected entities. - unselectedEntities: An array of unselected entities.
 
 ### usePostScheduleLabel
 
