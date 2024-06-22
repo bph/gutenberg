@@ -46,6 +46,16 @@ const props = {
 			name: 'aquamarine',
 			style: customStyles,
 		},
+		{
+			key: 'color3',
+			name: 'tomato (with custom props)',
+			className: customClassName,
+			style: customStyles,
+			// try passing a valid HTML attribute
+			'aria-label': 'test label',
+			// try adding a custom prop
+			customPropFoo: 'foo',
+		},
 	],
 };
 
@@ -54,7 +64,7 @@ const ControlledCustomSelectControl = ( {
 	onChange: onChangeProp,
 	...restProps
 } ) => {
-	const [ value, setValue ] = useState( options[ 0 ] );
+	const [ value, setValue ] = useState( restProps.value ?? options[ 0 ] );
 
 	const onChange = ( changeObject ) => {
 		onChangeProp?.( changeObject );
@@ -71,11 +81,71 @@ const ControlledCustomSelectControl = ( {
 	);
 };
 
+it( 'Should apply external controlled updates', async () => {
+	const mockOnChange = jest.fn();
+	const { rerender } = render(
+		<UncontrolledCustomSelectControl
+			{ ...props }
+			value={ props.options[ 0 ] }
+			onChange={ mockOnChange }
+		/>
+	);
+
+	const currentSelectedItem = screen.getByRole( 'button', {
+		expanded: false,
+	} );
+
+	expect( currentSelectedItem ).toHaveTextContent( props.options[ 0 ].name );
+
+	rerender(
+		<UncontrolledCustomSelectControl
+			{ ...props }
+			value={ props.options[ 1 ] }
+		/>
+	);
+
+	expect( currentSelectedItem ).toHaveTextContent( props.options[ 1 ].name );
+
+	expect( mockOnChange ).not.toHaveBeenCalled();
+} );
+
 describe.each( [
-	[ 'uncontrolled', UncontrolledCustomSelectControl ],
-	[ 'controlled', ControlledCustomSelectControl ],
+	[ 'Uncontrolled', UncontrolledCustomSelectControl ],
+	[ 'Controlled', ControlledCustomSelectControl ],
 ] )( 'CustomSelectControl %s', ( ...modeAndComponent ) => {
 	const [ , Component ] = modeAndComponent;
+
+	it( 'Should select the first option when no explicit initial value is passed without firing onChange', () => {
+		const mockOnChange = jest.fn();
+		render( <Component { ...props } onChange={ mockOnChange } /> );
+
+		expect(
+			screen.getByRole( 'button', {
+				expanded: false,
+			} )
+		).toHaveTextContent( props.options[ 0 ].name );
+
+		expect( mockOnChange ).not.toHaveBeenCalled();
+	} );
+
+	it( 'Should pick the initially selected option if the value prop is passed without firing onChange', async () => {
+		const mockOnChange = jest.fn();
+		render(
+			<Component
+				{ ...props }
+				onChange={ mockOnChange }
+				value={ props.options[ 3 ] }
+			/>
+		);
+
+		expect(
+			screen.getByRole( 'button', {
+				expanded: false,
+			} )
+		).toHaveTextContent( props.options[ 3 ].name );
+
+		expect( mockOnChange ).not.toHaveBeenCalled();
+	} );
 
 	it( 'Should replace the initial selection when a new item is selected', async () => {
 		const user = userEvent.setup();
@@ -275,13 +345,7 @@ describe.each( [
 		const user = userEvent.setup();
 		const mockOnChange = jest.fn();
 
-		render(
-			<Component
-				{ ...props }
-				value={ props.options[ 0 ] }
-				onChange={ mockOnChange }
-			/>
-		);
+		render( <Component { ...props } onChange={ mockOnChange } /> );
 
 		await user.click(
 			screen.getByRole( 'button', {
@@ -289,32 +353,21 @@ describe.each( [
 			} )
 		);
 
-		// DIFFERENCE WITH V2: NOT CALLED
-		// expect( mockOnChange ).toHaveBeenNthCalledWith(
-		// 	1,
-		// 	expect.objectContaining( {
-		// 		inputValue: '',
-		// 		isOpen: false,
-		// 		selectedItem: { key: 'flower1', name: 'violets' },
-		// 		type: '',
-		// 	} )
-		// );
-
 		await user.click(
 			screen.getByRole( 'option', {
 				name: 'aquamarine',
 			} )
 		);
 
-		expect( mockOnChange ).toHaveBeenNthCalledWith(
-			1,
+		expect( mockOnChange ).toHaveBeenCalledTimes( 1 );
+		expect( mockOnChange ).toHaveBeenLastCalledWith(
 			expect.objectContaining( {
 				inputValue: '',
 				isOpen: false,
 				selectedItem: expect.objectContaining( {
 					name: 'aquamarine',
 				} ),
-				type: '__item_click__',
+				type: expect.any( String ),
 			} )
 		);
 	} );
@@ -335,12 +388,53 @@ describe.each( [
 		await user.keyboard( 'p' );
 		await user.keyboard( '{enter}' );
 
-		expect( mockOnChange ).toHaveBeenNthCalledWith(
-			1,
+		expect( mockOnChange ).toHaveBeenCalledTimes( 1 );
+		expect( mockOnChange ).toHaveBeenLastCalledWith(
 			expect.objectContaining( {
 				selectedItem: expect.objectContaining( {
 					key: 'flower3',
 					name: 'poppy',
+				} ),
+			} )
+		);
+	} );
+
+	it( "Should pass arbitrary props to onChange's selectedItem, but apply only style and className to DOM elements", async () => {
+		const user = userEvent.setup();
+		const onChangeMock = jest.fn();
+
+		render( <Component { ...props } onChange={ onChangeMock } /> );
+
+		const currentSelectedItem = screen.getByRole( 'button', {
+			expanded: false,
+		} );
+
+		await user.click( currentSelectedItem );
+
+		const optionWithCustomAttributes = screen.getByRole( 'option', {
+			name: 'tomato (with custom props)',
+		} );
+
+		// Assert that the option element does not have the custom attributes
+		expect( optionWithCustomAttributes ).not.toHaveAttribute(
+			'customPropFoo'
+		);
+		expect( optionWithCustomAttributes ).not.toHaveAttribute(
+			'aria-label'
+		);
+
+		await user.click( optionWithCustomAttributes );
+
+		expect( onChangeMock ).toHaveBeenCalledTimes( 1 );
+		expect( onChangeMock ).toHaveBeenCalledWith(
+			expect.objectContaining( {
+				selectedItem: expect.objectContaining( {
+					key: 'color3',
+					name: 'tomato (with custom props)',
+					className: customClassName,
+					style: customStyles,
+					'aria-label': 'test label',
+					customPropFoo: 'foo',
 				} ),
 			} )
 		);
@@ -395,7 +489,9 @@ describe.each( [
 			await user.keyboard( '{arrowdown}' );
 			await user.keyboard( '{enter}' );
 
-			expect( currentSelectedItem ).toHaveTextContent( 'crimson clover' );
+			expect( currentSelectedItem ).toHaveTextContent(
+				props.options[ 1 ].name
+			);
 		} );
 
 		it( 'Should be able to type characters to select matching options', async () => {
