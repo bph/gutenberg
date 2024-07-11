@@ -62,6 +62,24 @@ import { usePrevious } from '@wordpress/compose';
 const { usePostActions } = unlock( editorPrivateApis );
 const { useLocation, useHistory } = unlock( routerPrivateApis );
 const EMPTY_ARRAY = [];
+const defaultLayouts = {
+	[ LAYOUT_TABLE ]: {
+		layout: {
+			'featured-image': {
+				width: '1%',
+			},
+			title: {
+				maxWidth: 300,
+			},
+		},
+	},
+	[ LAYOUT_GRID ]: {
+		layout: {},
+	},
+	[ LAYOUT_LIST ]: {
+		layout: {},
+	},
+};
 
 const getFormattedDate = ( dateToDisplay ) =>
 	dateI18n(
@@ -230,7 +248,7 @@ function PostStatusField( { item } ) {
 	const label = status?.label || item.status;
 	const icon = status?.icon;
 	return (
-		<HStack alignment="left" spacing={ 1 }>
+		<HStack alignment="left" spacing={ 0 }>
 			{ icon && (
 				<div className="posts-list-page-post-author-field__icon-container">
 					<Icon icon={ icon } />
@@ -241,26 +259,22 @@ function PostStatusField( { item } ) {
 	);
 }
 
-function PostAuthorField( { item, viewType } ) {
-	const { text, icon, imageUrl } = useSelect(
+function PostAuthorField( { item } ) {
+	const { text, imageUrl } = useSelect(
 		( select ) => {
 			const { getUser } = select( coreStore );
 			const user = getUser( item.author );
 			return {
-				icon: authorIcon,
 				imageUrl: user?.avatar_urls?.[ 48 ],
 				text: user?.name,
 			};
 		},
 		[ item ]
 	);
-
-	const withAuthorImage = viewType !== LAYOUT_LIST && imageUrl;
-	const withAuthorIcon = viewType !== LAYOUT_LIST && ! imageUrl;
 	const [ isImageLoaded, setIsImageLoaded ] = useState( false );
 	return (
-		<HStack alignment="left" spacing={ 1 }>
-			{ withAuthorImage && (
+		<HStack alignment="left" spacing={ 0 }>
+			{ !! imageUrl && (
 				<div
 					className={ clsx( 'page-templates-author-field__avatar', {
 						'is-loaded': isImageLoaded,
@@ -273,9 +287,9 @@ function PostAuthorField( { item, viewType } ) {
 					/>
 				</div>
 			) }
-			{ withAuthorIcon && (
+			{ ! imageUrl && (
 				<div className="page-templates-author-field__icon">
-					<Icon icon={ icon } />
+					<Icon icon={ authorIcon } />
 				</div>
 			) }
 			<span className="page-templates-author-field__name">{ text }</span>
@@ -405,7 +419,6 @@ export default function PostsList( { postType } ) {
 					<FeaturedImage item={ item } viewType={ view.type } />
 				),
 				enableSorting: false,
-				width: '1%',
 			},
 			{
 				header: __( 'Title' ),
@@ -459,7 +472,6 @@ export default function PostsList( { postType } ) {
 						</HStack>
 					);
 				},
-				maxWidth: 300,
 				enableHiding: false,
 			},
 			{
@@ -471,11 +483,7 @@ export default function PostsList( { postType } ) {
 						value: id,
 						label: name,
 					} ) ) || [],
-				render: ( { item } ) => {
-					return (
-						<PostAuthorField viewType={ view.type } item={ item } />
-					);
-				},
+				render: PostAuthorField,
 			},
 			{
 				header: __( 'Status' ),
@@ -645,6 +653,7 @@ export default function PostsList( { postType } ) {
 				setSelection={ setSelection }
 				onSelectionChange={ onSelectionChange }
 				getItemId={ getItemId }
+				defaultLayouts={ defaultLayouts }
 			/>
 		</Page>
 	);

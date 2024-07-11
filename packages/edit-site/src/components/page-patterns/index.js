@@ -62,6 +62,14 @@ const defaultLayouts = {
 	[ LAYOUT_TABLE ]: {
 		layout: {
 			primaryField: 'title',
+			styles: {
+				preview: {
+					width: '1%',
+				},
+				author: {
+					width: '1%',
+				},
+			},
 		},
 	},
 	[ LAYOUT_GRID ]: {
@@ -169,7 +177,7 @@ function Author( { item, viewType } ) {
 	const withIcon = viewType !== LAYOUT_LIST;
 
 	return (
-		<HStack alignment="left" spacing={ 1 }>
+		<HStack alignment="left" spacing={ 0 }>
 			{ withIcon && imageUrl && (
 				<div
 					className={ clsx( 'page-templates-author-field__avatar', {
@@ -282,7 +290,6 @@ export default function DataviewsPatterns() {
 					<Preview item={ item } viewType={ view.type } />
 				),
 				enableSorting: false,
-				width: '1%',
 			},
 			{
 				header: __( 'Title' ),
@@ -335,7 +342,6 @@ export default function DataviewsPatterns() {
 				filterBy: {
 					isPrimary: true,
 				},
-				width: '1%',
 			} );
 		}
 
