@@ -47,7 +47,7 @@ export type Operator =
 	| 'isAll'
 	| 'isNotAll';
 
-export type ItemRecord = Record< string, unknown >;
+export type ItemRecord = Object;
 
 export type FieldType = 'text' | 'integer';
 
@@ -164,13 +164,15 @@ export type Data< Item > = Item[];
  * The form configuration.
  */
 export type Form = {
-	visibleFields?: string[];
+	type?: 'regular' | 'panel';
+	fields?: string[];
 };
 
 export type DataFormControlProps< Item > = {
 	data: Item;
 	field: NormalizedField< Item >;
 	onChange: Dispatch< SetStateAction< Item > >;
+	hideLabelFromVision?: boolean;
 };
 
 /**
@@ -421,6 +423,12 @@ interface ActionBase< Item > {
 	supportsBulk?: boolean;
 }
 
+export interface RenderModalProps< Item > {
+	items: Item[];
+	closeModal?: () => void;
+	onActionPerformed?: ( items: Item[] ) => void;
+}
+
 export interface ActionModal< Item > extends ActionBase< Item > {
 	/**
 	 * Modal to render when the action is triggered.
@@ -429,11 +437,7 @@ export interface ActionModal< Item > extends ActionBase< Item > {
 		items,
 		closeModal,
 		onActionPerformed,
-	}: {
-		items: Item[];
-		closeModal?: () => void;
-		onActionPerformed?: ( items: Item[] ) => void;
-	} ) => ReactElement;
+	}: RenderModalProps< Item > ) => ReactElement;
 
 	/**
 	 * Whether to hide the modal header.
@@ -496,4 +500,11 @@ export interface SupportedLayouts {
 	list?: Omit< ViewList, 'type' >;
 	grid?: Omit< ViewGrid, 'type' >;
 	table?: Omit< ViewTable, 'type' >;
+}
+
+export interface DataFormProps< Item > {
+	data: Item;
+	fields: Field< Item >[];
+	form: Form;
+	onChange: Dispatch< SetStateAction< Item > >;
 }
