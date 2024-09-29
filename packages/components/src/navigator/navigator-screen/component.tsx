@@ -36,7 +36,7 @@ function UnconnectedNavigatorScreen(
 ) {
 	if ( ! /^\//.test( props.path ) ) {
 		warning(
-			'wp.components.NavigatorScreen: the `path` should follow a URL-like scheme; it should start with and be separated by the `/` character.'
+			'wp.components.Navigator.Screen: the `path` should follow a URL-like scheme; it should start with and be separated by the `/` character.'
 		);
 	}
 
@@ -48,7 +48,7 @@ function UnconnectedNavigatorScreen(
 		path,
 		onAnimationEnd: onAnimationEndProp,
 		...otherProps
-	} = useContextSystem( props, 'NavigatorScreen' );
+	} = useContextSystem( props, 'Navigator.Screen' );
 
 	const { location, match, addScreen, removeScreen } =
 		useContext( NavigatorContext );
@@ -153,43 +153,7 @@ function UnconnectedNavigatorScreen(
 	) : null;
 }
 
-/**
- * The `NavigatorScreen` component represents a single view/screen/panel and
- * should be used in combination with the `NavigatorProvider`, the
- * `NavigatorButton` and the `NavigatorBackButton` components (or the `useNavigator`
- * hook).
- *
- * @example
- * ```jsx
- * import {
- *   __experimentalNavigatorProvider as NavigatorProvider,
- *   __experimentalNavigatorScreen as NavigatorScreen,
- *   __experimentalNavigatorButton as NavigatorButton,
- *   __experimentalNavigatorBackButton as NavigatorBackButton,
- * } from '@wordpress/components';
- *
- * const MyNavigation = () => (
- *   <NavigatorProvider initialPath="/">
- *     <NavigatorScreen path="/">
- *       <p>This is the home screen.</p>
- *        <NavigatorButton path="/child">
- *          Navigate to child screen.
- *       </NavigatorButton>
- *     </NavigatorScreen>
- *
- *     <NavigatorScreen path="/child">
- *       <p>This is the child screen.</p>
- *       <NavigatorBackButton>
- *         Go back
- *       </NavigatorBackButton>
- *     </NavigatorScreen>
- *   </NavigatorProvider>
- * );
- * ```
- */
 export const NavigatorScreen = contextConnect(
 	UnconnectedNavigatorScreen,
-	'NavigatorScreen'
+	'Navigator.Screen'
 );
-
-export default NavigatorScreen;
