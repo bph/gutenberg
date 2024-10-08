@@ -47,6 +47,7 @@ import {
 	SlotFillProvider,
 	Tooltip,
 	VisuallyHidden,
+	__unstableUseNavigateRegions as useNavigateRegions,
 } from '@wordpress/components';
 import {
 	useMediaQuery,
@@ -84,26 +85,16 @@ const DESIGN_POST_TYPES = [
 	'wp_navigation',
 ];
 
-function useEditorStyles() {
-	const {
-		hasThemeStyleSupport,
-		editorSettings,
-		isZoomedOutView,
-		renderingMode,
-		postType,
-	} = useSelect( ( select ) => {
-		const { __unstableGetEditorMode } = select( blockEditorStore );
-		const { getCurrentPostType, getRenderingMode } = select( editorStore );
-		const _postType = getCurrentPostType();
+function useEditorStyles( ...additionalStyles ) {
+	const { hasThemeStyleSupport, editorSettings } = useSelect( ( select ) => {
 		return {
 			hasThemeStyleSupport:
 				select( editPostStore ).isFeatureActive( 'themeStyles' ),
 			editorSettings: select( editorStore ).getEditorSettings(),
-			isZoomedOutView: __unstableGetEditorMode() === 'zoom-out',
-			renderingMode: getRenderingMode(),
-			postType: _postType,
 		};
 	}, [] );
+
+	const addedStyles = additionalStyles.join( '\n' );
 
 	// Compute the default styles.
 	return useMemo( () => {
@@ -141,19 +132,8 @@ function useEditorStyles() {
 			? editorSettings.styles ?? []
 			: defaultEditorStyles;
 
-		// Add a space for the typewriter effect. When typing in the last block,
-		// there needs to be room to scroll up.
-		if (
-			! isZoomedOutView &&
-			renderingMode === 'post-only' &&
-			! DESIGN_POST_TYPES.includes( postType )
-		) {
-			return [
-				...baseStyles,
-				{
-					css: ':root :where(.editor-styles-wrapper)::after {content: ""; display: block; height: 40vh;}',
-				},
-			];
+		if ( addedStyles ) {
+			return [ ...baseStyles, { css: addedStyles } ];
 		}
 
 		return baseStyles;
@@ -162,7 +142,7 @@ function useEditorStyles() {
 		editorSettings.disableLayoutStyles,
 		editorSettings.styles,
 		hasThemeStyleSupport,
-		postType,
+		addedStyles,
 	] );
 }
 
@@ -394,7 +374,6 @@ function Layout( {
 } ) {
 	useCommands();
 	useEditPostCommands();
-	const paddingAppenderRef = usePaddingAppender();
 	const shouldIframe = useShouldIframe();
 	const { createErrorNotice } = useDispatch( noticesStore );
 	const {
@@ -418,6 +397,7 @@ function Layout( {
 		hasHistory,
 		isWelcomeGuideVisible,
 		templateId,
+		enablePaddingAppender,
 	} = useSelect(
 		( select ) => {
 			const { get } = select( preferencesStore );
@@ -433,9 +413,12 @@ function Layout( {
 				kind: 'postType',
 				name: 'wp_template',
 			} );
+			const { __unstableGetEditorMode } = select( blockEditorStore );
+			const { getEditorMode, getRenderingMode } = select( editorStore );
+			const isRenderingPostOnly = getRenderingMode() === 'post-only';
 
 			return {
-				mode: select( editorStore ).getEditorMode(),
+				mode: getEditorMode(),
 				isFullscreenActive:
 					select( editPostStore ).isFeatureActive( 'fullscreenMode' ),
 				hasActiveMetaboxes: select( editPostStore ).hasMetaBoxes(),
@@ -445,7 +428,7 @@ function Layout( {
 				isDistractionFree: get( 'core', 'distractionFree' ),
 				showMetaBoxes:
 					! DESIGN_POST_TYPES.includes( currentPostType ) &&
-					select( editorStore ).getRenderingMode() === 'post-only',
+					isRenderingPostOnly,
 				isWelcomeGuideVisible: isFeatureActive( 'welcomeGuide' ),
 				templateId:
 					supportsTemplateMode &&
@@ -454,9 +437,16 @@ function Layout( {
 					! isEditingTemplate
 						? getEditedPostTemplateId()
 						: null,
+				enablePaddingAppender:
+					__unstableGetEditorMode() !== 'zoom-out' &&
+					isRenderingPostOnly &&
+					! DESIGN_POST_TYPES.includes( currentPostType ),
 			};
 		},
 		[ currentPostType, isEditingTemplate, settings.supportsTemplateMode ]
+	);
+	const [ paddingAppenderRef, paddingStyle ] = usePaddingAppender(
+		enablePaddingAppender
 	);
 
 	// Set the right context for the command palette
@@ -473,7 +463,7 @@ function Layout( {
 		} ),
 		[ settings, onNavigateToEntityRecord, onNavigateToPreviousEntityRecord ]
 	);
-	const styles = useEditorStyles();
+	const styles = useEditorStyles( paddingStyle );
 
 	// We need to add the show-icon-labels class to the body element so it is applied to modals.
 	if ( showIconLabels ) {
@@ -481,6 +471,8 @@ function Layout( {
 	} else {
 		document.body.classList.remove( 'show-icon-labels' );
 	}
+
+	const navigateRegionsProps = useNavigateRegions();
 
 	const className = clsx( 'edit-post-layout', 'is-mode-' + mode, {
 		'has-metaboxes': hasActiveMetaboxes,
@@ -567,47 +559,53 @@ function Layout( {
 			<ErrorBoundary>
 				<CommandMenu />
 				<WelcomeGuide postType={ currentPostType } />
-				<Editor
-					settings={ editorSettings }
-					initialEdits={ initialEdits }
-					postType={ currentPostType }
-					postId={ currentPostId }
-					templateId={ templateId }
-					className={ className }
-					styles={ styles }
-					forceIsDirty={ hasActiveMetaboxes }
-					contentRef={ paddingAppenderRef }
-					disableIframe={ ! shouldIframe }
-					// We should auto-focus the canvas (title) on load.
-					// eslint-disable-next-line jsx-a11y/no-autofocus
-					autoFocus={ ! isWelcomeGuideVisible }
-					onActionPerformed={ onActionPerformed }
-					extraSidebarPanels={
-						showMetaBoxes && <MetaBoxes location="side" />
-					}
-					extraContent={
-						! isDistractionFree &&
-						showMetaBoxes && (
-							<MetaBoxesMain isLegacy={ ! shouldIframe } />
-						)
-					}
+				<div
+					className={ navigateRegionsProps.className }
+					{ ...navigateRegionsProps }
+					ref={ navigateRegionsProps.ref }
 				>
-					<PostLockedModal />
-					<EditorInitialization />
-					<FullscreenMode isActive={ isFullscreenActive } />
-					<BrowserURL hasHistory={ hasHistory } />
-					<UnsavedChangesWarning />
-					<AutosaveMonitor />
-					<LocalAutosaveMonitor />
-					<EditPostKeyboardShortcuts />
-					<EditorKeyboardShortcutsRegister />
-					<BlockKeyboardShortcuts />
-					<InitPatternModal />
-					<PluginArea onError={ onPluginAreaError } />
-					<PostEditorMoreMenu />
-					{ backButton }
-					<EditorSnackbars />
-				</Editor>
+					<Editor
+						settings={ editorSettings }
+						initialEdits={ initialEdits }
+						postType={ currentPostType }
+						postId={ currentPostId }
+						templateId={ templateId }
+						className={ className }
+						styles={ styles }
+						forceIsDirty={ hasActiveMetaboxes }
+						contentRef={ paddingAppenderRef }
+						disableIframe={ ! shouldIframe }
+						// We should auto-focus the canvas (title) on load.
+						// eslint-disable-next-line jsx-a11y/no-autofocus
+						autoFocus={ ! isWelcomeGuideVisible }
+						onActionPerformed={ onActionPerformed }
+						extraSidebarPanels={
+							showMetaBoxes && <MetaBoxes location="side" />
+						}
+						extraContent={
+							! isDistractionFree &&
+							showMetaBoxes && (
+								<MetaBoxesMain isLegacy={ ! shouldIframe } />
+							)
+						}
+					>
+						<PostLockedModal />
+						<EditorInitialization />
+						<FullscreenMode isActive={ isFullscreenActive } />
+						<BrowserURL hasHistory={ hasHistory } />
+						<UnsavedChangesWarning />
+						<AutosaveMonitor />
+						<LocalAutosaveMonitor />
+						<EditPostKeyboardShortcuts />
+						<EditorKeyboardShortcutsRegister />
+						<BlockKeyboardShortcuts />
+						<InitPatternModal />
+						<PluginArea onError={ onPluginAreaError } />
+						<PostEditorMoreMenu />
+						{ backButton }
+						<EditorSnackbars />
+					</Editor>
+				</div>
 			</ErrorBoundary>
 		</SlotFillProvider>
 	);
