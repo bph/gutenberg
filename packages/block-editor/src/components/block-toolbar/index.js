@@ -69,6 +69,9 @@ export function PrivateBlockToolbar( {
 		hasParentPattern,
 		hasContentOnlyLocking,
 		showShuffleButton,
+		showSlots,
+		showGroupButtons,
+		showLockButtons,
 	} = useSelect( ( select ) => {
 		const {
 			getBlockName,
@@ -81,7 +84,7 @@ export function PrivateBlockToolbar( {
 			getBlockParentsByBlockName,
 			getTemplateLock,
 			getParentSectionBlock,
-			isZoomOutMode,
+			isZoomOut,
 		} = unlock( select( blockEditorStore ) );
 		const selectedBlockClientIds = getSelectedBlockClientIds();
 		const selectedBlockClientId = selectedBlockClientIds[ 0 ];
@@ -122,7 +125,7 @@ export function PrivateBlockToolbar( {
 			shouldShowVisualToolbar: isValid && isVisual,
 			toolbarKey: `${ selectedBlockClientId }${ parentClientId }`,
 			showParentSelector:
-				! isZoomOutMode() &&
+				! isZoomOut() &&
 				parentBlockType &&
 				getBlockEditingMode( parentClientId ) !== 'disabled' &&
 				hasBlockSupport(
@@ -134,7 +137,10 @@ export function PrivateBlockToolbar( {
 			isUsingBindings: _isUsingBindings,
 			hasParentPattern: _hasParentPattern,
 			hasContentOnlyLocking: _hasTemplateLock,
-			showShuffleButton: isZoomOutMode(),
+			showShuffleButton: isZoomOut(),
+			showSlots: ! isZoomOut(),
+			showGroupButtons: ! isZoomOut(),
+			showLockButtons: ! isZoomOut(),
 		};
 	}, [] );
 
@@ -195,11 +201,13 @@ export function PrivateBlockToolbar( {
 						>
 							<ToolbarGroup className="block-editor-block-toolbar__block-controls">
 								<BlockSwitcher clientIds={ blockClientIds } />
-								{ ! isMultiToolbar && isDefaultEditingMode && (
-									<BlockLockToolbar
-										clientId={ blockClientId }
-									/>
-								) }
+								{ ! isMultiToolbar &&
+									isDefaultEditingMode &&
+									showLockButtons && (
+										<BlockLockToolbar
+											clientId={ blockClientId }
+										/>
+									) }
 								<BlockMover
 									clientIds={ blockClientIds }
 									hideDragHandle={ hideDragHandle }
@@ -209,7 +217,8 @@ export function PrivateBlockToolbar( {
 					) }
 				{ ! hasContentOnlyLocking &&
 					shouldShowVisualToolbar &&
-					isMultiToolbar && <BlockGroupToolbar /> }
+					isMultiToolbar &&
+					showGroupButtons && <BlockGroupToolbar /> }
 				{ showShuffleButton && (
 					<ToolbarGroup>
 						<Shuffle
@@ -218,7 +227,7 @@ export function PrivateBlockToolbar( {
 						/>
 					</ToolbarGroup>
 				) }
-				{ shouldShowVisualToolbar && (
+				{ shouldShowVisualToolbar && showSlots && (
 					<>
 						<BlockControls.Slot
 							group="parent"
