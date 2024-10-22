@@ -34,7 +34,7 @@
 		"@emotion/jest": "11.7.1",
 		"@emotion/native": "11.0.0",
 		"@geometricpanda/storybook-addon-badges": "2.0.1",
-		"@octokit/rest": "16.26.0",
+		"@octokit/rest": "21.0.2",
 		"@octokit/types": "6.34.0",
 		"@octokit/webhooks-types": "5.8.0",
 		"@playwright/test": "1.47.0",
@@ -71,7 +71,7 @@
 		"@types/sprintf-js": "1.1.2",
 		"@types/uuid": "8.3.1",
 		"ajv": "8.7.1",
-		"appium": "2.0.0",
+		"appium": "2.12.0",
 		"babel-jest": "29.7.0",
 		"babel-loader": "9.2.1",
 		"babel-plugin-inline-json-import": "0.3.2",
@@ -87,7 +87,7 @@
 		"commander": "9.2.0",
 		"concurrently": "3.5.0",
 		"copy-webpack-plugin": "10.2.0",
-		"core-js-builder": "3.38.1",
+		"core-js-builder": "2.6.12",
 		"cross-env": "3.2.4",
 		"css-loader": "6.2.0",
 		"cssnano": "6.0.1",
@@ -116,7 +116,7 @@
 		"jest-message-util": "29.6.2",
 		"jest-watch-typeahead": "2.2.2",
 		"json2md": "2.0.1",
-		"lerna": "7.1.4",
+		"lerna": "8.1.8",
 		"lint-staged": "10.0.2",
 		"make-dir": "3.0.0",
 		"mkdirp": "3.0.1",
@@ -137,7 +137,7 @@
 		"react": "18.3.1",
 		"react-docgen-typescript": "2.2.2",
 		"react-dom": "18.3.1",
-		"react-native": "0.73.3",
+		"react-native": "0.73.10",
 		"react-native-url-polyfill": "1.1.2",
 		"react-refresh": "0.14.0",
 		"react-test-renderer": "18.3.1",
@@ -153,7 +153,7 @@
 		"snapshot-diff": "0.10.0",
 		"source-map-loader": "3.0.0",
 		"sprintf-js": "1.1.1",
-		"storybook": "7.6.15",
+		"storybook": "7.6.20",
 		"storybook-source-link": "2.0.9",
 		"strip-json-comments": "5.0.0",
 		"style-loader": "3.2.1",
@@ -161,7 +161,7 @@
 		"terser-webpack-plugin": "5.3.10",
 		"typescript": "5.5.3",
 		"uuid": "9.0.1",
-		"webdriverio": "8.16.20",
+		"webdriverio": "9.2.1",
 		"webpack": "5.95.0",
 		"webpack-bundle-analyzer": "4.9.1",
 		"worker-farm": "1.7.0"
@@ -289,5 +289,10 @@
 	},
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"lighthouse": "9.3.1",
+		"remark": "15.0.1",
+		"remark-parse": "11.0.0"
+	}
 }
