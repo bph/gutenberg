@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAEC,wBAFuB,CAAC,8CAA8C,CAEtE,kBAAkB,CAAC;EAClB,YAAY,EAAE,CAAC;EACf,aAAa,EAAE,CAAC;CAChB;;AALF,AAQC,wBARuB,CAAC,8CAA8C,CAQtE,0BAA0B,CAAC;EAC1B,OAAO,EAAE,KAAK;CACd;;AAVF,AAYC,wBAZuB,CAAC,8CAA8C,CAYtE,oBAAoB,CAAC,oBAAoB,CAAC;EACzC,OAAO,EAAE,IAAI;CACb",
-    "sources": [
-        "editor.scss"
-    ],
-    "names": [],
-    "file": "editor.css"
-}
