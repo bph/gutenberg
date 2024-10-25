@@ -98,21 +98,26 @@ To find out more about contributing to this package or Gutenberg as a whole, ple
 
     This file is used when using the option to register individual block from the `@wordpress/block-library` package.
 
-4.  If a `view.js` file (or a file prefixed with `view`, e.g. `view-example.js`) is present in the block's directory, this file will be built along other assets, making it available to load from the browser. You only need to reference a `view.min.js` (notice the different file extension) file in the `block.json` file as follows:
+4.  If the block exposes a script module on the front end, it must be included in the package's `package.json` file in the `wpScriptModules` object. This will include the script module when it's bundled for use in WordPress. See [the packages README for more details.](../README.md):
 
     ```json
     {
-    	"viewScript": "file:./view.min.js"
+    	"name": "@wordpress/block-library",
+    	"wpScriptModuleExports": {
+    		"./blinking-paragraph/view": "./build-module/blinking-paragraph/view.js",
+    		"./image/view": "./build-module/image/view.js"
+    		// Add any new script modules here.
+    	}
     }
     ```
 
-    This file will get automatically loaded when the static block is present on the front end. For dynamic block, you need to manually enqueue the view script in `render_callback` of the block, example:
+    For every dynamic block, you need to manually enqueue the view script module in `render_callback` of the block, example:
 
     ```php
     function render_block_core_blinking_paragraph( $attributes, $content ) {
-        $should_load_view_script = ! empty( $attributes['isInteractive'] ) && ! wp_script_is( 'wp-block-blinking-paragraph-view' );
+        $should_load_view_script = ! empty( $attributes['isInteractive'] );
         if ( $should_load_view_script ) {
-    	    wp_enqueue_script( 'wp-block-blinking-paragraph-view' );
+    	    wp_enqueue_script_module( '@wordpress/block-library/blinking-paragraph' );
         }
 
     	return $content;

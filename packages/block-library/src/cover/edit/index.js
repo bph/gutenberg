@@ -152,8 +152,7 @@ function CoverEdit( {
 				isUserOverlayColor: isUserOverlayColor || false,
 			} );
 		} )();
-		// Disable reason: Update the block only when the featured image changes.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// Update the block only when the featured image changes.
 	}, [ mediaUrl ] );
 
 	// instead of destructuring the attributes

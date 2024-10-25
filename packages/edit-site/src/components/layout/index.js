@@ -75,7 +75,6 @@ export default function Layout( { route } ) {
 			toggleRef.current?.focus();
 		}
 		// Should not depend on the previous canvas mode value but the next.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ canvas ] );
 
 	return (

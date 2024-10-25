@@ -7,6 +7,7 @@ import {
 	BlockControls,
 	PlainText,
 	useBlockProps,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import {
 	ToolbarButton,
@@ -14,6 +15,7 @@ import {
 	ToolbarGroup,
 	VisuallyHidden,
 } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { useInstanceId } from '@wordpress/compose';
 
 /**
@@ -26,6 +28,10 @@ export default function HTMLEdit( { attributes, setAttributes, isSelected } ) {
 	const isDisabled = useContext( Disabled.Context );
 
 	const instanceId = useInstanceId( HTMLEdit, 'html-edit-desc' );
+
+	const isPreviewMode = useSelect( ( select ) => {
+		return select( blockEditorStore ).getSettings().isPreviewMode;
+	}, [] );
 
 	function switchToPreview() {
 		setIsPreview( true );
@@ -58,7 +64,7 @@ export default function HTMLEdit( { attributes, setAttributes, isSelected } ) {
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
-			{ isPreview || isDisabled ? (
+			{ isPreview || isPreviewMode || isDisabled ? (
 				<>
 					<Preview
 						content={ attributes.content }

@@ -212,7 +212,6 @@ export function RichTextWrapper(
 				selectionChangeEnd
 			);
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ clientId, identifier ]
 	);
 
@@ -368,7 +367,6 @@ export function RichTextWrapper(
 				onChange( insert( value, '\n' ) );
 			}
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[
 			onReplace,
 			onSplit,

@@ -24,13 +24,7 @@ import {
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
 import { useSelect } from '@wordpress/data';
 import { useResizeObserver } from '@wordpress/compose';
-import {
-	useMemo,
-	useState,
-	memo,
-	useContext,
-	useEffect,
-} from '@wordpress/element';
+import { useMemo, useState, memo, useContext } from '@wordpress/element';
 import { ENTER, SPACE } from '@wordpress/keycodes';
 
 /**
@@ -148,7 +142,7 @@ function StyleBook( {
 	const [ textColor ] = useGlobalStyle( 'color.text' );
 	const [ backgroundColor ] = useGlobalStyle( 'color.background' );
 	const colors = useMultiOriginPalettes();
-	const [ examples, setExamples ] = useState( () => getExamples( colors ) );
+	const examples = useMemo( () => getExamples( colors ), [ colors ] );
 	const tabs = useMemo(
 		() =>
 			getTopLevelStyleBookCategories().filter( ( category ) =>
@@ -158,11 +152,6 @@ function StyleBook( {
 			),
 		[ examples ]
 	);
-
-	// Ensure color examples are kept in sync with Global Styles palette changes.
-	useEffect( () => {
-		setExamples( getExamples( colors ) );
-	}, [ colors ] );
 
 	const { base: baseConfig } = useContext( GlobalStylesContext );
 
@@ -179,21 +168,19 @@ function StyleBook( {
 		( select ) => select( blockEditorStore ).getSettings(),
 		[]
 	);
+	const [ globalStyles ] = useGlobalStylesOutputWithConfig( mergedConfig );
 
 	const settings = useMemo(
 		() => ( {
 			...originalSettings,
+			styles:
+				! isObjectEmpty( globalStyles ) && ! isObjectEmpty( userConfig )
+					? globalStyles
+					: originalSettings.styles,
 			isPreviewMode: true,
 		} ),
-		[ originalSettings ]
+		[ globalStyles, originalSettings, userConfig ]
 	);
-
-	const [ globalStyles ] = useGlobalStylesOutputWithConfig( mergedConfig );
-
-	settings.styles =
-		! isObjectEmpty( globalStyles ) && ! isObjectEmpty( userConfig )
-			? globalStyles
-			: settings.styles;
 
 	return (
 		<EditorCanvasContainer

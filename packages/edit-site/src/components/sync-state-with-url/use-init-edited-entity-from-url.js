@@ -249,15 +249,19 @@ export default function useInitEditedEntityFromURL() {
 		useResolveEditedEntityAndContext( params );
 
 	const { setEditedEntity } = useDispatch( editSiteStore );
-	const { __unstableSetEditorMode, resetZoomLevel } = unlock(
-		useDispatch( blockEditorStore )
-	);
+	const { resetZoomLevel } = unlock( useDispatch( blockEditorStore ) );
 
 	useEffect( () => {
 		if ( isReady ) {
-			__unstableSetEditorMode( 'edit' );
 			resetZoomLevel();
 			setEditedEntity( postType, postId, context );
 		}
-	}, [ isReady, postType, postId, context, setEditedEntity ] );
+	}, [
+		isReady,
+		postType,
+		postId,
+		context,
+		setEditedEntity,
+		resetZoomLevel,
+	] );
 }

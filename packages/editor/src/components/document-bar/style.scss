@@ -67,10 +67,6 @@
 	flex: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
-
-	.editor-document-bar.is-global & {
-		color: var(--wp-block-synced-color);
-	}
 }
 
 .editor-document-bar__post-type-label {

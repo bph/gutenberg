@@ -38,15 +38,15 @@ const SlugEdit = ( {
 	const permalinkPrefix = prefix;
 	const permalinkSuffix = suffix;
 	const isEditable = PERMALINK_POSTNAME_REGEX.test( permalinkTemplate );
-	const originalSlug = useRef( slug );
-	const slugToDisplay = slug || originalSlug.current;
+	const originalSlugRef = useRef( slug );
+	const slugToDisplay = slug || originalSlugRef.current;
 	const permalink = isEditable
 		? `${ permalinkPrefix }${ slugToDisplay }${ permalinkSuffix }`
 		: safeDecodeURIComponent( data.link || '' );
 
 	useEffect( () => {
-		if ( slug && originalSlug.current === undefined ) {
-			originalSlug.current = slug;
+		if ( slug && originalSlugRef.current === undefined ) {
+			originalSlugRef.current = slug;
 		}
 	}, [ slug ] );
 
@@ -111,7 +111,7 @@ const SlugEdit = ( {
 						} }
 						onBlur={ () => {
 							if ( slug === '' ) {
-								onChangeControl( originalSlug.current );
+								onChangeControl( originalSlugRef.current );
 							}
 						} }
 						aria-describedby={ postUrlSlugDescriptionId }
