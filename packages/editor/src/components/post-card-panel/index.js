@@ -1,8 +1,4 @@
 /**
- * External dependencies
- */
-import clsx from 'clsx';
-/**
  * WordPress dependencies
  */
 import {
@@ -22,8 +18,6 @@ import { store as editorStore } from '../../store';
 import {
 	TEMPLATE_POST_TYPE,
 	TEMPLATE_PART_POST_TYPE,
-	PATTERN_POST_TYPE,
-	GLOBAL_POST_TYPES,
 } from '../../store/constants';
 import { unlock } from '../../lock-unlock';
 import PostActions from '../post-actions';
@@ -33,7 +27,7 @@ export default function PostCardPanel( {
 	postId,
 	onActionPerformed,
 } ) {
-	const { isFrontPage, isPostsPage, title, icon, isSync } = useSelect(
+	const { isFrontPage, isPostsPage, title, icon } = useSelect(
 		( select ) => {
 			const { __experimentalGetTemplateInfo } = select( editorStore );
 			const { canUser, getEditedEntityRecord } = select( coreStore );
@@ -52,25 +46,11 @@ export default function PostCardPanel( {
 				[ TEMPLATE_POST_TYPE, TEMPLATE_PART_POST_TYPE ].includes(
 					postType
 				) && __experimentalGetTemplateInfo( _record );
-			let _isSync = false;
-			if ( GLOBAL_POST_TYPES.includes( postType ) ) {
-				if ( PATTERN_POST_TYPE === postType ) {
-					// When the post is first created, the top level wp_pattern_sync_status is not set so get meta value instead.
-					const currentSyncStatus =
-						_record?.meta?.wp_pattern_sync_status === 'unsynced'
-							? 'unsynced'
-							: _record?.wp_pattern_sync_status;
-					_isSync = currentSyncStatus !== 'unsynced';
-				} else {
-					_isSync = true;
-				}
-			}
 			return {
 				title: _templateInfo?.title || _record?.title,
 				icon: unlock( select( editorStore ) ).getPostIcon( postType, {
 					area: _record?.area,
 				} ),
-				isSync: _isSync,
 				isFrontPage: siteSettings?.page_on_front === postId,
 				isPostsPage: siteSettings?.page_for_posts === postId,
 			};
@@ -84,12 +64,7 @@ export default function PostCardPanel( {
 				className="editor-post-card-panel__header"
 				align="flex-start"
 			>
-				<Icon
-					className={ clsx( 'editor-post-card-panel__icon', {
-						'is-sync': isSync,
-					} ) }
-					icon={ icon }
-				/>
+				<Icon className="editor-post-card-panel__icon" icon={ icon } />
 				<Text
 					numberOfLines={ 2 }
 					truncate

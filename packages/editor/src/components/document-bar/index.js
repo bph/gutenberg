@@ -26,7 +26,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 /**
  * Internal dependencies
  */
-import { TEMPLATE_POST_TYPES, GLOBAL_POST_TYPES } from '../../store/constants';
+import { TEMPLATE_POST_TYPES } from '../../store/constants';
 import { store as editorStore } from '../../store';
 
 /** @typedef {import("@wordpress/components").IconType} IconType */
@@ -56,7 +56,6 @@ export default function DocumentBar( props ) {
 		postTypeLabel,
 		documentTitle,
 		isNotFound,
-		isUnsyncedPattern,
 		templateTitle,
 		onNavigateToPreviousEntityRecord,
 	} = useSelect( ( select ) => {
@@ -93,7 +92,6 @@ export default function DocumentBar( props ) {
 					_postType,
 					_postId
 				),
-			isUnsyncedPattern: _document?.wp_pattern_sync_status === 'unsynced',
 			templateTitle: _templateInfo.title,
 			onNavigateToPreviousEntityRecord:
 				getEditorSettings().onNavigateToPreviousEntityRecord,
@@ -104,7 +102,6 @@ export default function DocumentBar( props ) {
 	const isReducedMotion = useReducedMotion();
 
 	const isTemplate = TEMPLATE_POST_TYPES.includes( postType );
-	const isGlobalEntity = GLOBAL_POST_TYPES.includes( postType );
 	const hasBackButton = !! onNavigateToPreviousEntityRecord;
 	const entityTitle = isTemplate ? templateTitle : documentTitle;
 	const title = props.title || entityTitle;
@@ -119,7 +116,6 @@ export default function DocumentBar( props ) {
 		<div
 			className={ clsx( 'editor-document-bar', {
 				'has-back-button': hasBackButton,
-				'is-global': isGlobalEntity && ! isUnsyncedPattern,
 			} ) }
 		>
 			<AnimatePresence>
