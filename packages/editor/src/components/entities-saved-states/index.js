@@ -177,9 +177,9 @@ export function EntitiesSavedStatesExtensible( {
 									_n(
 										'There is <strong>%d site change</strong> waiting to be saved.',
 										'There are <strong>%d site changes</strong> waiting to be saved.',
-										sortedPartitionedSavables.length
+										dirtyEntityRecords.length
 									),
-									sortedPartitionedSavables.length
+									dirtyEntityRecords.length
 								),
 								{ strong: <strong /> }
 						  )
