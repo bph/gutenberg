@@ -6,7 +6,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '@wordpress/editor';
 import { decodeEntities } from '@wordpress/html-entities';
 import { useMemo, useCallback } from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { blockMeta, post, archive } from '@wordpress/icons';
 
 /**
@@ -246,14 +246,17 @@ export const usePostTypeMenuItems = ( onClickMenuItem ) => {
 			if ( _needsUniqueIdentifier ) {
 				menuItemTitle = labels.template_name
 					? sprintf(
-							// translators: %1s: Name of the template e.g: "Single Item: Post"; %2s: Slug of the post type e.g: "book".
-							__( '%1$s (%2$s)' ),
+							// translators: 1: Name of the template e.g: "Single Item: Post". 2: Slug of the post type e.g: "book".
+							_x( '%1$s (%2$s)', 'post type menu label' ),
 							labels.template_name,
 							slug
 					  )
 					: sprintf(
-							// translators: %1s: Name of the post type e.g: "Post"; %2s: Slug of the post type e.g: "book".
-							__( 'Single item: %1$s (%2$s)' ),
+							// translators: 1: Name of the post type e.g: "Post". 2: Slug of the post type e.g: "book".
+							_x(
+								'Single item: %1$s (%2$s)',
+								'post type menu label'
+							),
 							labels.singular_name,
 							slug
 					  );
@@ -410,14 +413,14 @@ export const useTaxonomiesMenuItems = ( onClickMenuItem ) => {
 			if ( _needsUniqueIdentifier ) {
 				menuItemTitle = labels.template_name
 					? sprintf(
-							// translators: %1s: Name of the template e.g: "Products by Category"; %2s: Slug of the taxonomy e.g: "product_cat".
-							__( '%1$s (%2$s)' ),
+							// translators: 1: Name of the template e.g: "Products by Category". 2s: Slug of the taxonomy e.g: "product_cat".
+							_x( '%1$s (%2$s)', 'taxonomy template menu label' ),
 							labels.template_name,
 							slug
 					  )
 					: sprintf(
-							// translators: %1s: Name of the taxonomy e.g: "Category"; %2s: Slug of the taxonomy e.g: "product_cat".
-							__( '%1$s (%2$s)' ),
+							// translators: 1: Name of the taxonomy e.g: "Category". 2: Slug of the taxonomy e.g: "product_cat".
+							_x( '%1$s (%2$s)', 'taxonomy menu label' ),
 							labels.singular_name,
 							slug
 					  );

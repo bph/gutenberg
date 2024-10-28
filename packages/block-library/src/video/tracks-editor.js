@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import {
 	NavigableMenu,
 	MenuItem,
@@ -63,7 +63,7 @@ function TrackList( { tracks, onEditPress } ) {
 						onClick={ () => onEditPress( index ) }
 						aria-label={ sprintf(
 							/* translators: %s: Label of the video text track e.g: "French subtitles" */
-							__( 'Edit %s' ),
+							_x( 'Edit %s', 'text tracks' ),
 							track.label
 						) }
 					>

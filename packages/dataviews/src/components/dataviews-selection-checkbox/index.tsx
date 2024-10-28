@@ -33,8 +33,9 @@ export default function DataViewsSelectionCheckbox< Item >( {
 	if ( primaryField?.getValue && item ) {
 		// eslint-disable-next-line @wordpress/valid-sprintf
 		selectionLabel = sprintf(
-			/* translators: %s: item title. */
-			checked ? __( 'Deselect item: %s' ) : __( 'Select item: %s' ),
+			checked
+				? /* translators: %s: item title. */ __( 'Deselect item: %s' )
+				: /* translators: %s: item title. */ __( 'Select item: %s' ),
 			primaryField.getValue( { item } )
 		);
 	} else {

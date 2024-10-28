@@ -113,7 +113,7 @@ export const useTransformCommands = () => {
 		const { name, title, icon } = transformation;
 		return {
 			name: 'core/block-editor/transform-to-' + name.replace( '/', '-' ),
-			// translators: %s: block title/name.
+			/* translators: %s: Block or block variation name. */
 			label: sprintf( __( 'Transform to %s' ), title ),
 			icon: <BlockIcon icon={ icon } />,
 			callback: ( { close } ) => {

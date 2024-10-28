@@ -13,7 +13,7 @@ import {
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { chevronLeft, chevronRight } from '@wordpress/icons';
-import { __, isRTL, sprintf } from '@wordpress/i18n';
+import { __, _x, isRTL, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -68,8 +68,8 @@ function BlockCard( { title, icon, description, blockType, className, name } ) {
 				<h2 className="block-editor-block-card__title">
 					{ name?.length
 						? sprintf(
-								// translators:  %1$s: Custom block name. %2$s: Block title.
-								__( '%1$s (%2$s)' ),
+								// translators:  1: Custom block name. 2: Block title.
+								_x( '%1$s (%2$s)', 'block label' ),
 								name,
 								title
 						  )

@@ -64,7 +64,7 @@ export default function AddNewPostModal( { postType, onSave, onClose } ) {
 
 			createSuccessNotice(
 				sprintf(
-					// translators: %s: Title of the created post e.g: "Hello world".
+					// translators: %s: Title of the created post or template, e.g: "Hello world".
 					__( '"%s" successfully created.' ),
 					decodeEntities( newPage.title?.rendered || title )
 				),

@@ -211,7 +211,7 @@ function NewTemplateModal( { onClose } ) {
 
 			createSuccessNotice(
 				sprintf(
-					// translators: %s: Title of the created template e.g: "Category".
+					// translators: %s: Title of the created post or template, e.g: "Hello world".
 					__( '"%s" successfully created.' ),
 					decodeEntities( newTemplate.title?.rendered || title )
 				),

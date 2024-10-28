@@ -38,7 +38,7 @@ const duplicatePost: Action< BasePost > = {
 			...items[ 0 ],
 			title: sprintf(
 				/* translators: %s: Existing template title */
-				__( '%s (Copy)' ),
+				_x( '%s (Copy)', 'template' ),
 				getItemTitle( items[ 0 ] )
 			),
 		} );
@@ -104,7 +104,7 @@ const duplicatePost: Action< BasePost > = {
 
 				createSuccessNotice(
 					sprintf(
-						// translators: %s: Title of the created template e.g: "Category".
+						// translators: %s: Title of the created post or template, e.g: "Hello world".
 						__( '"%s" successfully created.' ),
 						decodeEntities( newItem.title?.rendered || item.title )
 					),

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { store as coreStore } from '@wordpress/core-data';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { store as noticesStore } from '@wordpress/notices';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as preferencesStore } from '@wordpress/preferences';
@@ -410,8 +410,8 @@ export const removeTemplates =
 							decodeEntities( title )
 					  )
 					: sprintf(
-							/* translators: The template/part's name. */
-							__( '"%s" deleted.' ),
+							/* translators: %s: The template/part's name. */
+							_x( '"%s" deleted.', 'template part' ),
 							decodeEntities( title )
 					  );
 			} else {

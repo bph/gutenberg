@@ -318,7 +318,7 @@ function MetaBoxesMain( { isLegacy } ) {
 						</Tooltip>
 						<VisuallyHidden id={ separatorHelpId }>
 							{ __(
-								'Use up and down arrow keys to resize the metabox pane.'
+								'Use up and down arrow keys to resize the meta box panel.'
 							) }
 						</VisuallyHidden>
 					</>
@@ -511,7 +511,7 @@ function Layout( {
 								: newItem.title?.rendered;
 						createSuccessNotice(
 							sprintf(
-								// translators: %s: Title of the created post e.g: "Post 1".
+								// translators: %s: Title of the created post or template, e.g: "Hello world".
 								__( '"%s" successfully created.' ),
 								decodeEntities( title )
 							),

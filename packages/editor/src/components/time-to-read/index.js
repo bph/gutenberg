@@ -47,10 +47,10 @@ export default function TimeToRead() {
 			  } )
 			: createInterpolateElement(
 					sprintf(
-						/* translators: %s is the number of minutes the post will take to read. */
+						/* translators: %s: the number of minutes to read the post. */
 						_n(
-							'<span>%d</span> minute',
-							'<span>%d</span> minutes',
+							'<span>%s</span> minute',
+							'<span>%s</span> minutes',
 							minutesToRead
 						),
 						minutesToRead

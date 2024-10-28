@@ -44,7 +44,7 @@ function PostLastRevision() {
 				icon={ backup }
 				iconPosition="right"
 				text={ sprintf(
-					/* translators: %s: number of revisions */
+					/* translators: %s: number of revisions. */
 					__( 'Revisions (%s)' ),
 					revisionsCount
 				) }

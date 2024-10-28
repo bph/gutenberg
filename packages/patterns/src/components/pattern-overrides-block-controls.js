@@ -68,7 +68,7 @@ function PatternOverridesToolbarIndicator( { clientIds } ) {
 
 	const blockDescription = isSingleBlockSelected
 		? sprintf(
-				/* translators: %1s: The block type's name; %2s: The block's user-provided name (the same as the override name). */
+				/* translators: 1: The block type's name. 2: The block's user-provided name (the same as the override name). */
 				__( 'This %1$s is editable using the "%2$s" override.' ),
 				firstBlockTitle.toLowerCase(),
 				firstBlockName

@@ -47,9 +47,8 @@ export function useCommentAvatar( { commentId } ) {
 		src: avatarUrls ? avatarUrls[ avatarUrls.length - 1 ] : defaultAvatar,
 		minSize,
 		maxSize,
-		// translators: %s is the Author name.
 		alt: authorName
-			? // translators: %s is the Author name.
+			? // translators: %s: Author name.
 			  sprintf( __( '%s Avatar' ), authorName )
 			: __( 'Default Avatar' ),
 	};
@@ -89,7 +88,7 @@ export function useUserAvatar( { userId, postId, postType } ) {
 		minSize,
 		maxSize,
 		alt: authorDetails
-			? // translators: %s is the Author name.
+			? // translators: %s: Author name.
 			  sprintf( __( '%s Avatar' ), authorDetails?.name )
 			: __( 'Default Avatar' ),
 	};

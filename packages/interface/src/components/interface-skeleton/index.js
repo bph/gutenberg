@@ -105,7 +105,7 @@ function InterfaceSkeleton(
 		/* translators: accessibility text for the secondary sidebar landmark region. */
 		secondarySidebar: __( 'Block Library' ),
 		/* translators: accessibility text for the settings landmark region. */
-		sidebar: __( 'Settings' ),
+		sidebar: _x( 'Settings', 'settings landmark area' ),
 		/* translators: accessibility text for the publish landmark region. */
 		actions: __( 'Publish' ),
 		/* translators: accessibility text for the footer landmark region. */

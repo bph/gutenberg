@@ -7,7 +7,7 @@ import {
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
+import { _x, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -89,8 +89,8 @@ export default function SpacingSizesControl( {
 		ALL_SIDES.includes( view ) && showSideInLabel ? LABELS[ view ] : '';
 
 	const label = sprintf(
-		// translators: 2. Type of spacing being modified (Padding, margin, etc). 1: The side of the block being modified (top, bottom, left etc.).
-		__( '%1$s %2$s' ),
+		// translators: 1: The side of the block being modified (top, bottom, left etc.). 2. Type of spacing being modified (padding, margin, etc).
+		_x( '%1$s %2$s', 'spacing' ),
 		labelProp,
 		sideLabel
 	).trim();

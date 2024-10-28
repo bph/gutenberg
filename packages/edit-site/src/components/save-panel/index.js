@@ -50,7 +50,7 @@ const EntitiesSavedStatesForPreview = ( { onClose } ) => {
 	const additionalPrompt = (
 		<p>
 			{ sprintf(
-				/* translators: %1$s: The name of active theme, %2$s: The name of theme to be activated. */
+				/* translators: 1: The name of active theme, 2: The name of theme to be activated. */
 				__(
 					'Saving your changes will change your active theme from %1$s to %2$s.'
 				),

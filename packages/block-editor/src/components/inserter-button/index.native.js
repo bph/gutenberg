@@ -54,7 +54,7 @@ class MenuItem extends Component {
 		const accessibilityLabelFormat = blockIsNew
 			? // translators: Newly available block name. %s: The localized block name
 			  __( '%s block, newly available' )
-			: // translators: Block name. %s: The localized block name
+			: // translators: %s: Block name e.g. "Image block"
 			  __( '%s block' );
 		const accessibilityLabel = sprintf(
 			accessibilityLabelFormat,

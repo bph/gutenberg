@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { useDispatch } from '@wordpress/data';
-import { __, sprintf, _x } from '@wordpress/i18n';
+import { _x, sprintf } from '@wordpress/i18n';
 import { store as noticesStore } from '@wordpress/notices';
 import { useMemo } from '@wordpress/element';
 // @ts-ignore
@@ -42,7 +42,7 @@ const duplicateTemplatePart: Action< TemplatePart > = {
 			createSuccessNotice(
 				sprintf(
 					// translators: %s: The new template part's title e.g. 'Call to action (copy)'.
-					__( '"%s" duplicated.' ),
+					_x( '"%s" duplicated.', 'template part' ),
 					getItemTitle( item )
 				),
 				{ type: 'snackbar', id: 'edit-site-patterns-success' }
@@ -55,7 +55,7 @@ const duplicateTemplatePart: Action< TemplatePart > = {
 				defaultArea={ item.area }
 				defaultTitle={ sprintf(
 					/* translators: %s: Existing template part title */
-					__( '%s (Copy)' ),
+					_x( '%s (Copy)', 'template part' ),
 					getItemTitle( item )
 				) }
 				onCreate={ onTemplatePartSuccess }

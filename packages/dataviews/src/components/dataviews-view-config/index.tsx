@@ -363,12 +363,12 @@ function FieldItem( {
 							isVisible
 								? sprintf(
 										/* translators: %s: field label */
-										__( 'Hide %s' ),
+										_x( 'Hide %s', 'field' ),
 										label
 								  )
 								: sprintf(
 										/* translators: %s: field label */
-										__( 'Show %s' ),
+										_x( 'Show %s', 'field' ),
 										label
 								  )
 						}

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { _x, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -19,8 +19,8 @@ function useEditorTitle() {
 	let title;
 	if ( hasLoadedPost ) {
 		title = sprintf(
-			// translators: A breadcrumb trail for the Admin document title. %1$s: title of template being edited, %2$s: type of template (Template or Template Part).
-			__( '%1$s ‹ %2$s' ),
+			// translators: A breadcrumb trail for the Admin document title. 1: title of template being edited, 2: type of template (Template or Template Part).
+			_x( '%1$s ‹ %2$s', 'breadcrumb trail' ),
 			getTitle(),
 			POST_TYPE_LABELS[ editedPost.type ] ??
 				POST_TYPE_LABELS[ TEMPLATE_POST_TYPE ]

@@ -109,7 +109,8 @@ export default function SidebarNavigationScreen( {
 						{ ! isPreviewingTheme()
 							? title
 							: sprintf(
-									'Previewing %1$s: %2$s',
+									/* translators: 1: theme name. 2: title */
+									__( 'Previewing %1$s: %2$s' ),
 									previewingThemeName,
 									title
 							  ) }

@@ -45,7 +45,7 @@ function VariationsButtons( {
 						selectedValue === variation.name
 							? variation.title
 							: sprintf(
-									/* translators: %s: Name of the block variation */
+									/* translators: %s: Block or block variation name. */
 									__( 'Transform to %s' ),
 									variation.title
 							  )
@@ -127,7 +127,7 @@ function VariationsToggleGroupControl( {
 							selectedValue === variation.name
 								? variation.title
 								: sprintf(
-										/* translators: %s: Name of the block variation */
+										/* translators: %s: Block or block variation name. */
 										__( 'Transform to %s' ),
 										variation.title
 								  )

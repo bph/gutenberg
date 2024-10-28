@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { useEntityRecords, store as coreStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
@@ -27,7 +27,7 @@ import { NAVIGATION_POST_TYPE } from '../../utils/constants';
 // Copied from packages/block-library/src/navigation/edit/navigation-menu-selector.js.
 function buildMenuLabel( title, id, status ) {
 	if ( ! title ) {
-		/* translators: %s is the index of the menu in the list of menus. */
+		/* translators: %s: the index of the menu in the list of menus. */
 		return sprintf( __( '(no title %s)' ), id );
 	}
 
@@ -36,8 +36,8 @@ function buildMenuLabel( title, id, status ) {
 	}
 
 	return sprintf(
-		// translators: %1s: title of the menu; %2s: status of the menu (draft, pending, etc.).
-		__( '%1$s (%2$s)' ),
+		// translators: 1: title of the menu. 2: status of the menu (draft, pending, etc.).
+		_x( '%1$s (%2$s)', 'menu label' ),
 		decodeEntities( title ),
 		status
 	);

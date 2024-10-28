@@ -10,7 +10,7 @@ import {
 	Button,
 } from '@wordpress/components';
 import { useState, useMemo } from '@wordpress/element';
-import { sprintf, __ } from '@wordpress/i18n';
+import { sprintf, __, _x } from '@wordpress/i18n';
 import { closeSmall } from '@wordpress/icons';
 
 /**
@@ -105,7 +105,7 @@ function FormField< Item >( {
 							aria-expanded={ isOpen }
 							aria-label={ sprintf(
 								// translators: %s: Field name.
-								__( 'Edit %s' ),
+								_x( 'Edit %s', 'field' ),
 								field.label
 							) }
 							onClick={ onToggle }

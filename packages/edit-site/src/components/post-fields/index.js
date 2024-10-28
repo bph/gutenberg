@@ -254,7 +254,7 @@ function usePostFields( viewType ) {
 					if ( isDraftOrPrivate ) {
 						return createInterpolateElement(
 							sprintf(
-								/* translators: %s: page creation date */
+								/* translators: %s: page creation or modification date. */
 								__( '<span>Modified: <time>%s</time></span>' ),
 								getFormattedDate( item.date )
 							),
@@ -305,7 +305,7 @@ function usePostFields( viewType ) {
 					if ( isPending ) {
 						return createInterpolateElement(
 							sprintf(
-								/* translators: %s: the newest of created or modified date for the page */
+								/* translators: %s: page creation or modification date. */
 								__( '<span>Modified: <time>%s</time></span>' ),
 								getFormattedDate( dateToDisplay )
 							),

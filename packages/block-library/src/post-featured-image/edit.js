@@ -207,7 +207,7 @@ export default function PostFeaturedImageEdit( {
 						label={
 							postType?.labels.singular_name
 								? sprintf(
-										// translators: %s: Name of the post type e.g: "Page".
+										// translators: %s: Name of the post type e.g: "post".
 										__( 'Link to %s' ),
 										postType.labels.singular_name
 								  )
