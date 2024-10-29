@@ -49,5 +49,8 @@ export type BaseControlProps = {
 };
 
 export type BaseControlVisualLabelProps = {
+	/**
+	 * The content to be displayed within the `BaseControl.VisualLabel`.
+	 */
 	children: ReactNode;
 };

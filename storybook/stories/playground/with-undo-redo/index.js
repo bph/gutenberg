@@ -52,6 +52,7 @@ export default function EditorWithUndoRedo() {
 						accessibleWhenDisabled
 						icon={ undoIcon }
 						label="Undo"
+						size="compact"
 					/>
 					<Button
 						onClick={ redo }
@@ -59,6 +60,7 @@ export default function EditorWithUndoRedo() {
 						accessibleWhenDisabled
 						icon={ redoIcon }
 						label="Redo"
+						size="compact"
 					/>
 					<BlockToolbar hideDragHandle />
 				</div>

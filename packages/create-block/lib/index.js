@@ -37,6 +37,12 @@ program
 		'project template type name; allowed values: "standard", "es5", the name of an external npm package, or the path to a local directory',
 		'standard'
 	)
+	.option( '--variant <variant>', 'the variant of the template to use' )
+	.option( '--no-plugin', 'scaffold only block files' )
+	.option(
+		'--target-dir <directory>',
+		'the directory where the files will be scaffolded, defaults to the slug'
+	)
 	.option( '--namespace <value>', 'internal namespace for the block name' )
 	.option(
 		'--title <value>',
@@ -57,8 +63,6 @@ program
 		'disable integration with `@wordpress/scripts` package'
 	)
 	.option( '--wp-env', 'enable integration with `@wordpress/env` package' )
-	.option( '--no-plugin', 'scaffold only block files' )
-	.option( '--variant <variant>', 'the variant of the template to use' )
 	.action(
 		async (
 			slug,
@@ -72,6 +76,7 @@ program
 				wpScripts,
 				wpEnv,
 				variant,
+				targetDir,
 			}
 		) => {
 			await checkSystemRequirements( engines );
@@ -102,6 +107,7 @@ program
 						title,
 						wpScripts,
 						wpEnv,
+						targetDir,
 					} ).filter( ( [ , value ] ) => value !== undefined )
 				);
 

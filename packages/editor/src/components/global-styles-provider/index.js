@@ -56,13 +56,27 @@ function useGlobalStylesUserConfig() {
 				select( coreStore ).__experimentalGetCurrentGlobalStylesId();
 
 			let record;
-			const userCanEditGlobalStyles = canUser( 'update', {
-				kind: 'root',
-				name: 'globalStyles',
-				id: _globalStylesId,
-			} );
 
-			if ( _globalStylesId ) {
+			// We want the global styles ID request to finish before triggering
+			// the OPTIONS request for user capabilities, otherwise it will
+			// fetch `/wp/v2/global-styles` instead of
+			// `/wp/v2/global-styles/{id}`!
+			// Please adjust the preloaded requests if this changes!
+			const userCanEditGlobalStyles = _globalStylesId
+				? canUser( 'update', {
+						kind: 'root',
+						name: 'globalStyles',
+						id: _globalStylesId,
+				  } )
+				: null;
+
+			if (
+				_globalStylesId &&
+				// We want the OPTIONS request for user capabilities to finish
+				// before getting the records, otherwise we'll fetch both!
+				typeof userCanEditGlobalStyles === 'boolean'
+			) {
+				// Please adjust the preloaded requests if this changes!
 				if ( userCanEditGlobalStyles ) {
 					record = getEditedEntityRecord(
 						'root',

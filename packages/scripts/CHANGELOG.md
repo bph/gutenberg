@@ -4,7 +4,8 @@
 
 ### Enhancements
 
--   Add BlueOak-1.0.0 the GPLv2-comatible licenses recognized by check-licenses ([#66139](https://github.com/WordPress/gutenberg/pull/66139)).
+-   Add BlueOak-1.0.0 the GPLv2-compatible licenses recognized by check-licenses ([#66139](https://github.com/WordPress/gutenberg/pull/66139)).
+-   Add an optional `--root-folder` argument to the `plugin-zip` command ([#61375](https://github.com/WordPress/gutenberg/pull/61375)). By default, the command will use the plugin's name as the root folder of the zip. If the change in the behavior impacted your workflow, you could pass `--no-root-folder` to remove the root folder.
 
 ### Internal
 

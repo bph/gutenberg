@@ -43,9 +43,6 @@ function buildMenuLabel( title, id, status ) {
 	);
 }
 
-// Save a boolean to prevent us creating a fallback more than once per session.
-let hasCreatedFallback = false;
-
 export default function SidebarNavigationScreenNavigationMenus( { backPath } ) {
 	const {
 		records: navigationMenus,
@@ -61,13 +58,13 @@ export default function SidebarNavigationScreenNavigationMenus( { backPath } ) {
 		isResolvingNavigationMenus && ! hasResolvedNavigationMenus;
 
 	const { getNavigationFallbackId } = unlock( useSelect( coreStore ) );
+	const isCreatingNavigationFallback = useSelect(
+		( select ) =>
+			select( coreStore ).isResolving( 'getNavigationFallbackId' ),
+		[]
+	);
 
 	const firstNavigationMenu = navigationMenus?.[ 0 ];
-
-	// Save a boolean to prevent us creating a fallback more than once per session.
-	if ( firstNavigationMenu ) {
-		hasCreatedFallback = true;
-	}
 
 	// If there is no navigation menu found
 	// then trigger fallback algorithm to create one.
@@ -75,7 +72,8 @@ export default function SidebarNavigationScreenNavigationMenus( { backPath } ) {
 		! firstNavigationMenu &&
 		! isResolvingNavigationMenus &&
 		hasResolvedNavigationMenus &&
-		! hasCreatedFallback
+		// Ensure a fallback navigation is created only once
+		! isCreatingNavigationFallback
 	) {
 		getNavigationFallbackId();
 	}
