@@ -4,9 +4,9 @@
 import type * as Ariakit from '@ariakit/react';
 import type { Placement } from '@floating-ui/react-dom';
 
-export interface DropdownMenuContext {
+export interface MenuContext {
 	/**
-	 * The ariakit store shared across all DropdownMenu subcomponents.
+	 * The ariakit store shared across all Menu subcomponents.
 	 */
 	store: Ariakit.MenuStore;
 	/**
@@ -15,33 +15,33 @@ export interface DropdownMenuContext {
 	variant?: 'toolbar';
 }
 
-export interface DropdownMenuProps {
+export interface MenuProps {
 	/**
-	 * The trigger button.
+	 * The button triggering the menu popover.
 	 */
 	trigger: React.ReactElement;
 	/**
-	 * The contents of the dropdown.
+	 * The contents of the menu (ie. one or more menu items).
 	 */
 	children?: React.ReactNode;
 	/**
-	 * The open state of the dropdown menu when it is initially rendered. Use when
+	 * The open state of the menu popover when it is initially rendered. Use when
 	 * not wanting to control its open state.
 	 *
 	 * @default false
 	 */
 	defaultOpen?: boolean;
 	/**
-	 * The controlled open state of the dropdown menu. Must be used in conjunction
+	 * The controlled open state of the menu popover. Must be used in conjunction
 	 * with `onOpenChange`.
 	 */
 	open?: boolean;
 	/**
-	 * Event handler called when the open state of the dropdown menu changes.
+	 * Event handler called when the open state of the menu popover changes.
 	 */
 	onOpenChange?: ( open: boolean ) => void;
 	/**
-	 * The modality of the dropdown menu. When set to true, interaction with
+	 * The modality of the menu popover. When set to true, interaction with
 	 * outside elements will be disabled and only menu content will be visible to
 	 * screen readers.
 	 *
@@ -49,7 +49,7 @@ export interface DropdownMenuProps {
 	 */
 	modal?: boolean;
 	/**
-	 * The placement of the dropdown menu popover.
+	 * The placement of the menu popover.
 	 *
 	 * @default 'bottom-start' for root-level menus, 'right-start' for nested menus
 	 */
@@ -80,21 +80,22 @@ export interface DropdownMenuProps {
 		  ) => boolean );
 }
 
-export interface DropdownMenuGroupProps {
+export interface MenuGroupProps {
 	/**
-	 * The contents of the dropdown menu group.
+	 * The contents of the menu group (ie. an optional menu group label and one
+	 * or more menu items).
 	 */
 	children: React.ReactNode;
 }
 
-export interface DropdownMenuGroupLabelProps {
+export interface MenuGroupLabelProps {
 	/**
-	 * The contents of the dropdown menu group.
+	 * The contents of the menu group label.
 	 */
 	children: React.ReactNode;
 }
 
-export interface DropdownMenuItemProps {
+export interface MenuItemProps {
 	/**
 	 * The contents of the menu item.
 	 */
@@ -108,7 +109,7 @@ export interface DropdownMenuItemProps {
 	 */
 	suffix?: React.ReactNode;
 	/**
-	 * Whether to hide the parent menu when the item is clicked.
+	 * Whether to hide the menu popover when the menu item is clicked.
 	 *
 	 * @default true
 	 */
@@ -119,10 +120,10 @@ export interface DropdownMenuItemProps {
 	disabled?: boolean;
 }
 
-export interface DropdownMenuCheckboxItemProps
-	extends Omit< DropdownMenuItemProps, 'prefix' | 'hideOnClick' > {
+export interface MenuCheckboxItemProps
+	extends Omit< MenuItemProps, 'prefix' | 'hideOnClick' > {
 	/**
-	 * Whether to hide the dropdown menu when the item is clicked.
+	 * Whether to hide the menu popover when the menu item is clicked.
 	 *
 	 * @default false
 	 */
@@ -151,10 +152,10 @@ export interface DropdownMenuCheckboxItemProps
 	onChange?: ( event: React.ChangeEvent< HTMLInputElement > ) => void;
 }
 
-export interface DropdownMenuRadioItemProps
-	extends Omit< DropdownMenuItemProps, 'prefix' | 'hideOnClick' > {
+export interface MenuRadioItemProps
+	extends Omit< MenuItemProps, 'prefix' | 'hideOnClick' > {
 	/**
-	 * Whether to hide the dropdown menu when the item is clicked.
+	 * Whether to hide the menu popover when the menu item is clicked.
 	 *
 	 * @default false
 	 */
@@ -182,4 +183,4 @@ export interface DropdownMenuRadioItemProps
 	onChange?: ( event: React.ChangeEvent< HTMLInputElement > ) => void;
 }
 
-export interface DropdownMenuSeparatorProps {}
+export interface MenuSeparatorProps {}

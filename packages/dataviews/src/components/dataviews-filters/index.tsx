@@ -10,13 +10,13 @@ import {
 } from '@wordpress/element';
 import { __experimentalHStack as HStack, Button } from '@wordpress/components';
 import { funnel } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import FilterSummary from './filter-summary';
-import { default as AddFilter, AddFilterDropdownMenu } from './add-filter';
+import { default as AddFilter, AddFilterMenu } from './add-filter';
 import ResetFilters from './reset-filters';
 import DataViewsContext from '../dataviews-context';
 import { sanitizeOperators } from '../../utils';
@@ -100,7 +100,7 @@ export function FilterVisibilityToggle( {
 	}
 	if ( ! hasVisibleFilters ) {
 		return (
-			<AddFilterDropdownMenu
+			<AddFilterMenu
 				filters={ filters }
 				view={ view }
 				onChangeView={ onChangeViewWithFilterVisibility }
@@ -124,7 +124,7 @@ export function FilterVisibilityToggle( {
 				className="dataviews-filters__visibility-toggle"
 				size="compact"
 				icon={ funnel }
-				label={ __( 'Toggle filter display' ) }
+				label={ _x( 'Filter', 'verb' ) }
 				onClick={ () => {
 					if ( ! isShowingFilter ) {
 						setOpenedFilter( null );

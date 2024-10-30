@@ -43,7 +43,6 @@
 		"@wordpress/icons": "*",
 		"@wordpress/plugins": "*",
 		"@wordpress/preferences": "*",
-		"@wordpress/private-apis": "*",
 		"@wordpress/viewport": "*",
 		"clsx": "^2.1.1"
 	},

@@ -32,7 +32,7 @@ import { useRegistry } from '@wordpress/data';
  */
 import { unlock } from '../../lock-unlock';
 import {
-	ActionsDropdownMenuGroup,
+	ActionsMenuGroup,
 	ActionModal,
 } from '../../components/dataviews-item-actions';
 import type { Action, NormalizedField, ViewListProps } from '../../types';
@@ -49,7 +49,7 @@ interface ListViewItemProps< Item > {
 	onDropdownTriggerKeyDown: React.KeyboardEventHandler< HTMLButtonElement >;
 }
 
-const { DropdownMenuV2: DropdownMenu } = unlock( componentsPrivateApis );
+const { Menu } = unlock( componentsPrivateApis );
 
 function generateItemWrapperCompositeId( idPrefix: string ) {
 	return `${ idPrefix }-item-wrapper`;
@@ -176,10 +176,10 @@ function ListItem< Item >( {
 	}, [ actions, item ] );
 
 	const renderedMediaField = mediaField?.render ? (
-		<mediaField.render item={ item } />
-	) : (
-		<div className="dataviews-view-list__media-placeholder"></div>
-	);
+		<div className="dataviews-view-list__media-wrapper">
+			<mediaField.render item={ item } />
+		</div>
+	) : null;
 
 	const renderedPrimaryField = primaryField?.render ? (
 		<primaryField.render item={ item } />
@@ -195,7 +195,7 @@ function ListItem< Item >( {
 				/>
 			) }
 			<div role="gridcell">
-				<DropdownMenu
+				<Menu
 					trigger={
 						<Composite.Item
 							id={ generateDropdownTriggerCompositeId(
@@ -215,11 +215,11 @@ function ListItem< Item >( {
 					}
 					placement="bottom-end"
 				>
-					<ActionsDropdownMenuGroup
+					<ActionsMenuGroup
 						actions={ eligibleActions }
 						item={ item }
 					/>
-				</DropdownMenu>
+				</Menu>
 			</div>
 		</HStack>
 	);
@@ -248,9 +248,7 @@ function ListItem< Item >( {
 					/>
 				</div>
 				<HStack spacing={ 3 } justify="start" alignment="flex-start">
-					<div className="dataviews-view-list__media-wrapper">
-						{ renderedMediaField }
-					</div>
+					{ renderedMediaField }
 					<VStack
 						spacing={ 1 }
 						className="dataviews-view-list__field-wrapper"

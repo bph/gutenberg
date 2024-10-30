@@ -12,6 +12,7 @@ import {
 	useShortcut,
 	store as keyboardShortcutsStore,
 } from '@wordpress/keyboard-shortcuts';
+import { isAppleOS } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
@@ -40,7 +41,9 @@ const ZoomOutToggle = ( { disabled } ) => {
 			category: 'global',
 			description: __( 'Enter or exit zoom out.' ),
 			keyCombination: {
-				modifier: 'primaryShift',
+				// `primaryShift+0` (`ctrl+shift+0`) is the shortcut for switching
+				// to input mode in Windows, so apply a different key combination.
+				modifier: isAppleOS() ? 'primaryShift' : 'secondary',
 				character: '0',
 			},
 		} );

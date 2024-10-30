@@ -220,6 +220,7 @@ const UnforwardedTabPanel = (
 							) }-view` }
 							render={
 								<Button
+									__next40pxDefaultSize
 									icon={ tab.icon }
 									label={ tab.icon && tab.title }
 									showTooltip={ !! tab.icon }

@@ -23,7 +23,7 @@ import { useRegistry } from '@wordpress/data';
 import { unlock } from '../../lock-unlock';
 import type { Action, ActionModal as ActionModalType } from '../../types';
 
-const { DropdownMenuV2, kebabCase } = unlock( componentsPrivateApis );
+const { Menu, kebabCase } = unlock( componentsPrivateApis );
 
 export interface ActionTriggerProps< Item > {
 	action: Action< Item >;
@@ -43,7 +43,7 @@ interface ActionWithModalProps< Item > extends ActionModalProps< Item > {
 	isBusy?: boolean;
 }
 
-interface ActionsDropdownMenuGroupProps< Item > {
+interface ActionsMenuGroupProps< Item > {
 	actions: Action< Item >[];
 	item: Item;
 }
@@ -77,7 +77,7 @@ function ButtonTrigger< Item >( {
 	);
 }
 
-function DropdownMenuItemTrigger< Item >( {
+function MenuItemTrigger< Item >( {
 	action,
 	onClick,
 	items,
@@ -85,12 +85,12 @@ function DropdownMenuItemTrigger< Item >( {
 	const label =
 		typeof action.label === 'string' ? action.label : action.label( items );
 	return (
-		<DropdownMenuV2.Item
+		<Menu.Item
 			onClick={ onClick }
 			hideOnClick={ ! ( 'RenderModal' in action ) }
 		>
-			<DropdownMenuV2.ItemLabel>{ label }</DropdownMenuV2.ItemLabel>
-		</DropdownMenuV2.Item>
+			<Menu.ItemLabel>{ label }</Menu.ItemLabel>
+		</Menu.Item>
 	);
 }
 
@@ -146,13 +146,13 @@ export function ActionWithModal< Item >( {
 	);
 }
 
-export function ActionsDropdownMenuGroup< Item >( {
+export function ActionsMenuGroup< Item >( {
 	actions,
 	item,
-}: ActionsDropdownMenuGroupProps< Item > ) {
+}: ActionsMenuGroupProps< Item > ) {
 	const registry = useRegistry();
 	return (
-		<DropdownMenuV2.Group>
+		<Menu.Group>
 			{ actions.map( ( action ) => {
 				if ( 'RenderModal' in action ) {
 					return (
@@ -160,12 +160,12 @@ export function ActionsDropdownMenuGroup< Item >( {
 							key={ action.id }
 							action={ action }
 							items={ [ item ] }
-							ActionTrigger={ DropdownMenuItemTrigger }
+							ActionTrigger={ MenuItemTrigger }
 						/>
 					);
 				}
 				return (
-					<DropdownMenuItemTrigger
+					<MenuItemTrigger
 						key={ action.id }
 						action={ action }
 						onClick={ () => {
@@ -175,7 +175,7 @@ export function ActionsDropdownMenuGroup< Item >( {
 					/>
 				);
 			} ) }
-		</DropdownMenuV2.Group>
+		</Menu.Group>
 	);
 }
 
@@ -245,7 +245,7 @@ function CompactItemActions< Item >( {
 	actions,
 }: CompactItemActionsProps< Item > ) {
 	return (
-		<DropdownMenuV2
+		<Menu
 			trigger={
 				<Button
 					size="compact"
@@ -258,7 +258,7 @@ function CompactItemActions< Item >( {
 			}
 			placement="bottom-end"
 		>
-			<ActionsDropdownMenuGroup actions={ actions } item={ item } />
-		</DropdownMenuV2>
+			<ActionsMenuGroup actions={ actions } item={ item } />
+		</Menu>
 	);
 }

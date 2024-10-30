@@ -2,8 +2,12 @@
  * WordPress dependencies
  */
 import { __, _x, sprintf } from '@wordpress/i18n';
-import { useEffect, useMemo, useState } from '@wordpress/element';
-import { FormTokenField, withFilters } from '@wordpress/components';
+import { Fragment, useEffect, useMemo, useState } from '@wordpress/element';
+import {
+	FormTokenField,
+	withFilters,
+	__experimentalVStack as VStack,
+} from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import deprecated from '@wordpress/deprecated';
 import { store as coreStore } from '@wordpress/core-data';
@@ -288,8 +292,15 @@ export function FlatTermSelector( { slug, __nextHasNoMarginBottom } ) {
 		singularName
 	);
 
+	const Wrapper = ( { children } ) =>
+		__nextHasNoMarginBottom ? (
+			<VStack spacing={ 4 }>{ children }</VStack>
+		) : (
+			<Fragment>{ children }</Fragment>
+		);
+
 	return (
-		<>
+		<Wrapper>
 			<FormTokenField
 				__next40pxDefaultSize
 				value={ values }
@@ -306,7 +317,7 @@ export function FlatTermSelector( { slug, __nextHasNoMarginBottom } ) {
 				__nextHasNoMarginBottom={ __nextHasNoMarginBottom }
 			/>
 			<MostUsedTerms taxonomy={ taxonomy } onSelect={ appendTerm } />
-		</>
+		</Wrapper>
 	);
 }
 

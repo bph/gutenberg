@@ -376,7 +376,7 @@ export default function SearchEdit( {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						title={ __( 'Toggle search label' ) }
+						title={ __( 'Show search label' ) }
 						icon={ toggleLabel }
 						onClick={ () => {
 							setAttributes( {

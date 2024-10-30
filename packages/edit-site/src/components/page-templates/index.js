@@ -74,7 +74,6 @@ const defaultLayouts = {
 		fields: [ 'title', 'description', 'author' ],
 		layout: {
 			primaryField: 'title',
-			mediaField: 'preview',
 		},
 	},
 };
