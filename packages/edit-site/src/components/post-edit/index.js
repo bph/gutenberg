@@ -66,6 +66,7 @@ function PostEditForm( { postType, postId } ) {
 			'author',
 			'date',
 			'slug',
+			'parent',
 			'comment_status',
 		],
 	};

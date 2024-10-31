@@ -109,7 +109,11 @@ export const NoticeListSubcomponent: StoryFn< typeof NoticeList > = () => {
 	return (
 		<>
 			<NoticeList notices={ notices } onRemove={ removeNotice } />
-			<Button variant="primary" onClick={ resetNotices }>
+			<Button
+				__next40pxDefaultSize
+				variant="primary"
+				onClick={ resetNotices }
+			>
 				Reset Notices
 			</Button>
 		</>

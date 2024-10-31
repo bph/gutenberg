@@ -25,6 +25,11 @@ import PostViewLink from '../post-view-link';
 import PreviewDropdown from '../preview-dropdown';
 import ZoomOutToggle from '../zoom-out-toggle';
 import { store as editorStore } from '../../store';
+import {
+	TEMPLATE_PART_POST_TYPE,
+	PATTERN_POST_TYPE,
+	NAVIGATION_POST_TYPE,
+} from '../../store/constants';
 
 const toolbarVariations = {
 	distractionFreeDisabled: { y: '-50px' },
@@ -60,12 +65,10 @@ function Header( {
 		showIconLabels,
 		hasFixedToolbar,
 		hasBlockSelection,
-		isNestedEntity,
 	} = useSelect( ( select ) => {
 		const { get: getPreference } = select( preferencesStore );
 		const {
 			getEditorMode,
-			getEditorSettings,
 			getCurrentPostType,
 			isPublishSidebarOpened: _isPublishSidebarOpened,
 		} = select( editorStore );
@@ -78,14 +81,18 @@ function Header( {
 			hasFixedToolbar: getPreference( 'core', 'fixedToolbar' ),
 			hasBlockSelection:
 				!! select( blockEditorStore ).getBlockSelectionStart(),
-			isNestedEntity:
-				!! getEditorSettings().onNavigateToPreviousEntityRecord,
 		};
 	}, [] );
 
 	const canBeZoomedOut = [ 'post', 'page', 'wp_template' ].includes(
 		postType
 	);
+
+	const disablePreviewOption = [
+		NAVIGATION_POST_TYPE,
+		TEMPLATE_PART_POST_TYPE,
+		PATTERN_POST_TYPE,
+	].includes( postType );
 
 	const [ isBlockToolsCollapsed, setIsBlockToolsCollapsed ] =
 		useState( true );
@@ -155,7 +162,7 @@ function Header( {
 
 				<PreviewDropdown
 					forceIsAutosaveable={ forceIsDirty }
-					disabled={ isNestedEntity }
+					disabled={ disablePreviewOption }
 				/>
 				<PostPreviewButton
 					className="editor-header__post-preview-button"

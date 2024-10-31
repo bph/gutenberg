@@ -36,25 +36,40 @@ const {
 } = unlock( preferencesPrivateApis );
 
 export default function EditorPreferencesModal( { extraSections = {} } ) {
+	const isActive = useSelect( ( select ) => {
+		return select( interfaceStore ).isModalActive( 'editor/preferences' );
+	}, [] );
+	const { closeModal } = useDispatch( interfaceStore );
+
+	if ( ! isActive ) {
+		return null;
+	}
+
+	// Please wrap all contents inside PreferencesModalContents to prevent all
+	// hooks from executing when the modal is not open.
+	return (
+		<PreferencesModal closeModal={ closeModal }>
+			<PreferencesModalContents extraSections={ extraSections } />
+		</PreferencesModal>
+	);
+}
+
+function PreferencesModalContents( { extraSections = {} } ) {
 	const isLargeViewport = useViewportMatch( 'medium' );
-	const { isActive, showBlockBreadcrumbsOption } = useSelect(
+	const showBlockBreadcrumbsOption = useSelect(
 		( select ) => {
 			const { getEditorSettings } = select( editorStore );
 			const { get } = select( preferencesStore );
-			const { isModalActive } = select( interfaceStore );
 			const isRichEditingEnabled = getEditorSettings().richEditingEnabled;
 			const isDistractionFreeEnabled = get( 'core', 'distractionFree' );
-			return {
-				showBlockBreadcrumbsOption:
-					! isDistractionFreeEnabled &&
-					isLargeViewport &&
-					isRichEditingEnabled,
-				isActive: isModalActive( 'editor/preferences' ),
-			};
+			return (
+				! isDistractionFreeEnabled &&
+				isLargeViewport &&
+				isRichEditingEnabled
+			);
 		},
 		[ isLargeViewport ]
 	);
-	const { closeModal } = useDispatch( interfaceStore );
 	const { setIsListViewOpened, setIsInserterOpened } =
 		useDispatch( editorStore );
 	const { set: setPreference } = useDispatch( preferencesStore );
@@ -330,13 +345,5 @@ export default function EditorPreferencesModal( { extraSections = {} } ) {
 		]
 	);
 
-	if ( ! isActive ) {
-		return null;
-	}
-
-	return (
-		<PreferencesModal closeModal={ closeModal }>
-			<PreferencesModalTabs sections={ sections } />
-		</PreferencesModal>
-	);
+	return <PreferencesModalTabs sections={ sections } />;
 }

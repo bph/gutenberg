@@ -57,6 +57,13 @@ const termNamesToIds = ( names, terms ) => {
 		.filter( ( id ) => id !== undefined );
 };
 
+const Wrapper = ( { children, __nextHasNoMarginBottom } ) =>
+	__nextHasNoMarginBottom ? (
+		<VStack spacing={ 4 }>{ children }</VStack>
+	) : (
+		<Fragment>{ children }</Fragment>
+	);
+
 /**
  * Renders a flat term selector component.
  *
@@ -292,15 +299,8 @@ export function FlatTermSelector( { slug, __nextHasNoMarginBottom } ) {
 		singularName
 	);
 
-	const Wrapper = ( { children } ) =>
-		__nextHasNoMarginBottom ? (
-			<VStack spacing={ 4 }>{ children }</VStack>
-		) : (
-			<Fragment>{ children }</Fragment>
-		);
-
 	return (
-		<Wrapper>
+		<Wrapper __nextHasNoMarginBottom={ __nextHasNoMarginBottom }>
 			<FormTokenField
 				__next40pxDefaultSize
 				value={ values }

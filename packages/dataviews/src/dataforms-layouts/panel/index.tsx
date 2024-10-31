@@ -19,6 +19,7 @@ import { closeSmall } from '@wordpress/icons';
 import { normalizeFields } from '../../normalize-fields';
 import { getVisibleFields } from '../get-visible-fields';
 import type { DataFormProps, NormalizedField } from '../../types';
+import FormFieldVisibility from '../../components/form-field-visibility';
 
 interface FormFieldProps< Item > {
 	data: Item;
@@ -156,12 +157,17 @@ export default function FormPanel< Item >( {
 		<VStack spacing={ 2 }>
 			{ visibleFields.map( ( field ) => {
 				return (
-					<FormField
+					<FormFieldVisibility
 						key={ field.id }
 						data={ data }
 						field={ field }
-						onChange={ onChange }
-					/>
+					>
+						<FormField
+							data={ data }
+							field={ field }
+							onChange={ onChange }
+						/>
+					</FormFieldVisibility>
 				);
 			} ) }
 		</VStack>

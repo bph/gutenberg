@@ -159,6 +159,9 @@
 					{
 						"docs/reference-guides/block-api/block-attributes.md": []
 					},
+					{
+						"docs/reference-guides/block-api/block-bindings.md": []
+					},
 					{ "docs/reference-guides/block-api/block-context.md": [] },
 					{
 						"docs/reference-guides/block-api/block-deprecation.md": []

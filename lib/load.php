@@ -116,6 +116,9 @@ require __DIR__ . '/compat/wordpress-6.7/class-wp-block-templates-registry.php';
 require __DIR__ . '/compat/wordpress-6.7/compat.php';
 require __DIR__ . '/compat/wordpress-6.7/post-formats.php';
 
+// WordPress 6.8 compat.
+require __DIR__ . '/compat/wordpress-6.8/preload.php';
+
 // Experimental features.
 require __DIR__ . '/experimental/block-editor-settings-mobile.php';
 require __DIR__ . '/experimental/blocks.php';

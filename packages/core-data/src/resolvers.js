@@ -14,7 +14,7 @@ import apiFetch from '@wordpress/api-fetch';
  * Internal dependencies
  */
 import { STORE_NAME } from './name';
-import { getOrLoadEntitiesConfig, DEFAULT_ENTITY_KEY } from './entities';
+import { additionalEntityConfigLoaders, DEFAULT_ENTITY_KEY } from './entities';
 import {
 	forwardResolver,
 	getNormalizedCommaSeparable,
@@ -64,8 +64,8 @@ export const getCurrentUser =
  */
 export const getEntityRecord =
 	( kind, name, key = '', query ) =>
-	async ( { select, dispatch, registry } ) => {
-		const configs = await dispatch( getOrLoadEntitiesConfig( kind, name ) );
+	async ( { select, dispatch, registry, resolveSelect } ) => {
+		const configs = await resolveSelect.getEntitiesConfig( kind );
 		const entityConfig = configs.find(
 			( config ) => config.name === name && config.kind === kind
 		);
@@ -230,8 +230,8 @@ export const getEditedEntityRecord = forwardResolver( 'getEntityRecord' );
  */
 export const getEntityRecords =
 	( kind, name, query = {} ) =>
-	async ( { dispatch, registry } ) => {
-		const configs = await dispatch( getOrLoadEntitiesConfig( kind, name ) );
+	async ( { dispatch, registry, resolveSelect } ) => {
+		const configs = await resolveSelect.getEntitiesConfig( kind );
 		const entityConfig = configs.find(
 			( config ) => config.name === name && config.kind === kind
 		);
@@ -431,33 +431,9 @@ export const getEmbedPreview =
  */
 export const canUser =
 	( requestedAction, resource, id ) =>
-	async ( { dispatch, registry } ) => {
+	async ( { dispatch, registry, resolveSelect } ) => {
 		if ( ! ALLOWED_RESOURCE_ACTIONS.includes( requestedAction ) ) {
 			throw new Error( `'${ requestedAction }' is not a valid action.` );
-		}
-
-		let resourcePath = null;
-		if ( typeof resource === 'object' ) {
-			if ( ! resource.kind || ! resource.name ) {
-				throw new Error( 'The entity resource object is not valid.' );
-			}
-
-			const configs = await dispatch(
-				getOrLoadEntitiesConfig( resource.kind, resource.name )
-			);
-			const entityConfig = configs.find(
-				( config ) =>
-					config.name === resource.name &&
-					config.kind === resource.kind
-			);
-			if ( ! entityConfig ) {
-				return;
-			}
-
-			resourcePath =
-				entityConfig.baseURL + ( resource.id ? '/' + resource.id : '' );
-		} else {
-			resourcePath = `/wp/v2/${ resource }` + ( id ? '/' + id : '' );
 		}
 
 		const { hasStartedResolution } = registry.select( STORE_NAME );
@@ -475,6 +451,30 @@ export const canUser =
 			if ( isAlreadyResolving ) {
 				return;
 			}
+		}
+
+		let resourcePath = null;
+		if ( typeof resource === 'object' ) {
+			if ( ! resource.kind || ! resource.name ) {
+				throw new Error( 'The entity resource object is not valid.' );
+			}
+
+			const configs = await resolveSelect.getEntitiesConfig(
+				resource.kind
+			);
+			const entityConfig = configs.find(
+				( config ) =>
+					config.name === resource.name &&
+					config.kind === resource.kind
+			);
+			if ( ! entityConfig ) {
+				return;
+			}
+
+			resourcePath =
+				entityConfig.baseURL + ( resource.id ? '/' + resource.id : '' );
+		} else {
+			resourcePath = `/wp/v2/${ resource }` + ( id ? '/' + id : '' );
 		}
 
 		let response;
@@ -823,8 +823,8 @@ export const getDefaultTemplateId =
  */
 export const getRevisions =
 	( kind, name, recordKey, query = {} ) =>
-	async ( { dispatch, registry } ) => {
-		const configs = await dispatch( getOrLoadEntitiesConfig( kind, name ) );
+	async ( { dispatch, registry, resolveSelect } ) => {
+		const configs = await resolveSelect.getEntitiesConfig( kind );
 		const entityConfig = configs.find(
 			( config ) => config.name === name && config.kind === kind
 		);
@@ -944,8 +944,8 @@ getRevisions.shouldInvalidate = ( action, kind, name, recordKey ) =>
  */
 export const getRevision =
 	( kind, name, recordKey, revisionKey, query ) =>
-	async ( { dispatch } ) => {
-		const configs = await dispatch( getOrLoadEntitiesConfig( kind, name ) );
+	async ( { dispatch, resolveSelect } ) => {
+		const configs = await resolveSelect.getEntitiesConfig( kind );
 		const entityConfig = configs.find(
 			( config ) => config.name === name && config.kind === kind
 		);
@@ -1015,5 +1015,33 @@ export const getRegisteredPostMeta =
 				postType,
 				options?.schema?.properties?.meta?.properties
 			);
+		}
+	};
+
+/**
+ * Requests entity configs for the given kind from the REST API.
+ *
+ * @param {string} kind Entity kind.
+ */
+export const getEntitiesConfig =
+	( kind ) =>
+	async ( { dispatch } ) => {
+		const loader = additionalEntityConfigLoaders.find(
+			( l ) => l.kind === kind
+		);
+
+		if ( ! loader ) {
+			return;
+		}
+
+		try {
+			const configs = await loader.loadEntities();
+			if ( ! configs.length ) {
+				return;
+			}
+
+			dispatch.addEntities( configs );
+		} catch {
+			// Do nothing if the request comes back with an API error.
 		}
 	};

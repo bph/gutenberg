@@ -150,9 +150,10 @@ function UnforwardedSnackbar(
 				{ actions.map( ( { label, onClick, url }, index ) => {
 					return (
 						<Button
+							__next40pxDefaultSize
 							key={ index }
 							href={ url }
-							variant="tertiary"
+							variant="link"
 							onClick={ (
 								event: MouseEvent< HTMLButtonElement >
 							) => onActionClick( event, onClick ) }

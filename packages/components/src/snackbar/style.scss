@@ -48,25 +48,16 @@
 .components-snackbar__action.components-button {
 	margin-left: $grid-unit-40;
 	color: $white;
-	height: auto;
 	flex-shrink: 0;
-	line-height: $default-line-height;
-	padding: 0;
 
-	&:not(:disabled):not([aria-disabled="true"]):not(.is-secondary) {
-		text-decoration: underline;
-		background-color: transparent;
+	&:focus {
+		box-shadow: none;
+		outline: 1px dotted $white;
+	}
 
-		&:focus {
-			color: $white;
-			box-shadow: none;
-			outline: 1px dotted $white;
-		}
-
-		&:hover {
-			text-decoration: none;
-			color: $white;
-		}
+	&:hover {
+		text-decoration: none;
+		color: currentColor;
 	}
 }
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 6.11.0 (2024-10-30)
+
 ### Bug Fixes
 
 -   Fix reactivity of undefined objects and arrays added with `deepMerge()` ([#66183](https://github.com/WordPress/gutenberg/pull/66183)).

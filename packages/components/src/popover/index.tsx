@@ -419,6 +419,7 @@ const UnforwardedPopover = (
 					</span>
 					<Button
 						className="components-popover__close"
+						size="small"
 						icon={ close }
 						onClick={ onClose }
 					/>

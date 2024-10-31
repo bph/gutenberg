@@ -12,6 +12,7 @@ import {
  * Internal dependencies
  */
 import type { DataFormCombinedEditProps, NormalizedField } from '../../types';
+import FormFieldVisibility from '../form-field-visibility';
 
 function Header( { title }: { title: string } ) {
 	return (
@@ -41,13 +42,15 @@ function DataFormCombinedEdit< Item >( {
 		);
 	const children = visibleChildren.map( ( child ) => {
 		return (
-			<div className="dataforms-combined-edit__field" key={ child.id }>
-				<child.Edit
-					data={ data }
-					field={ child }
-					onChange={ onChange }
-				/>
-			</div>
+			<FormFieldVisibility key={ child.id } data={ data } field={ child }>
+				<div className="dataforms-combined-edit__field">
+					<child.Edit
+						data={ data }
+						field={ child }
+						onChange={ onChange }
+					/>
+				</div>
+			</FormFieldVisibility>
 		);
 	} );
 

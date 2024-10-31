@@ -10,6 +10,7 @@ import { useMemo } from '@wordpress/element';
 import { normalizeFields } from '../../normalize-fields';
 import { getVisibleFields } from '../get-visible-fields';
 import type { DataFormProps } from '../../types';
+import FormFieldVisibility from '../../components/form-field-visibility';
 
 export default function FormRegular< Item >( {
 	data,
@@ -33,12 +34,17 @@ export default function FormRegular< Item >( {
 		<VStack spacing={ 4 }>
 			{ visibleFields.map( ( field ) => {
 				return (
-					<field.Edit
+					<FormFieldVisibility
 						key={ field.id }
 						data={ data }
 						field={ field }
-						onChange={ onChange }
-					/>
+					>
+						<field.Edit
+							data={ data }
+							field={ field }
+							onChange={ onChange }
+						/>
+					</FormFieldVisibility>
 				);
 			} ) }
 		</VStack>

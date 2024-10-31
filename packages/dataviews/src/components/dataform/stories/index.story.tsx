@@ -7,7 +7,18 @@ import { useState } from '@wordpress/element';
  * Internal dependencies
  */
 import DataForm from '../index';
-import type { CombinedFormField } from '../../../types';
+import type { CombinedFormField, Field } from '../../../types';
+
+type SamplePost = {
+	title: string;
+	order: number;
+	author: number;
+	status: string;
+	reviewer: string;
+	date: string;
+	birthdate: string;
+	password?: string;
+};
 
 const meta = {
 	title: 'DataViews/DataForm',
@@ -75,14 +86,18 @@ const fields = [
 		elements: [
 			{ value: 'draft', label: 'Draft' },
 			{ value: 'published', label: 'Published' },
+			{ value: 'private', label: 'Private' },
 		],
 	},
 	{
 		id: 'password',
 		label: 'Password',
 		type: 'text' as const,
+		isVisible: ( item: SamplePost ) => {
+			return item.status !== 'private';
+		},
 	},
-];
+] as Field< SamplePost >[];
 
 export const Default = ( { type }: { type: 'panel' | 'regular' } ) => {
 	const [ post, setPost ] = useState( {
@@ -102,13 +117,14 @@ export const Default = ( { type }: { type: 'panel' | 'regular' } ) => {
 			'author',
 			'reviewer',
 			'status',
+			'password',
 			'date',
 			'birthdate',
 		],
 	};
 
 	return (
-		<DataForm
+		<DataForm< SamplePost >
 			data={ post }
 			fields={ fields }
 			form={ {

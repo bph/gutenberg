@@ -1,16 +1,9 @@
 /**
- * WordPress dependencies
- */
-import triggerFetch from '@wordpress/api-fetch';
-jest.mock( '@wordpress/api-fetch' );
-
-/**
  * Internal dependencies
  */
 import {
 	getMethodName,
 	rootEntitiesConfig,
-	getOrLoadEntitiesConfig,
 	prePersistPostType,
 } from '../entities';
 
@@ -40,79 +33,6 @@ describe( 'getMethodName', () => {
 		delete rootEntitiesConfig[ id ];
 
 		expect( methodName ).toEqual( 'getPostTypeBook' );
-	} );
-} );
-
-describe( 'getKindEntities', () => {
-	beforeEach( async () => {
-		triggerFetch.mockReset();
-	} );
-
-	it( 'shouldn’t do anything if the entities have already been resolved', async () => {
-		const dispatch = jest.fn();
-		const select = {
-			getEntitiesConfig: jest.fn( () => entities ),
-			getEntityConfig: jest.fn( () => ( {
-				kind: 'postType',
-				name: 'post',
-			} ) ),
-		};
-		const entities = [ { kind: 'postType' } ];
-		await getOrLoadEntitiesConfig(
-			'postType',
-			'post'
-		)( { dispatch, select } );
-		expect( dispatch ).not.toHaveBeenCalled();
-	} );
-
-	it( 'shouldn’t do anything if there no defined kind config', async () => {
-		const dispatch = jest.fn();
-		const select = {
-			getEntitiesConfig: jest.fn( () => [] ),
-			getEntityConfig: jest.fn( () => undefined ),
-		};
-		await getOrLoadEntitiesConfig(
-			'unknownKind',
-			undefined
-		)( { dispatch, select } );
-		expect( dispatch ).not.toHaveBeenCalled();
-	} );
-
-	it( 'should fetch and add the entities', async () => {
-		const fetchedEntities = [
-			{
-				rest_base: 'posts',
-				labels: {
-					singular_name: 'post',
-				},
-				supports: {
-					revisions: true,
-				},
-			},
-		];
-		const dispatch = jest.fn();
-		const select = {
-			getEntitiesConfig: jest.fn( () => [] ),
-			getEntityConfig: jest.fn( () => undefined ),
-		};
-		triggerFetch.mockImplementation( () => fetchedEntities );
-
-		await getOrLoadEntitiesConfig(
-			'postType',
-			'post'
-		)( { dispatch, select } );
-		expect( dispatch ).toHaveBeenCalledTimes( 1 );
-		expect( dispatch.mock.calls[ 0 ][ 0 ].type ).toBe( 'ADD_ENTITIES' );
-		expect( dispatch.mock.calls[ 0 ][ 0 ].entities.length ).toBe( 1 );
-		expect( dispatch.mock.calls[ 0 ][ 0 ].entities[ 0 ].baseURL ).toBe(
-			'/wp/v2/posts'
-		);
-		expect(
-			dispatch.mock.calls[ 0 ][ 0 ].entities[ 0 ].getRevisionsUrl( 1 )
-		).toBe( '/wp/v2/posts/1/revisions' );
-		expect(
-			dispatch.mock.calls[ 0 ][ 0 ].entities[ 0 ].getRevisionsUrl( 1, 2 )
-		).toBe( '/wp/v2/posts/1/revisions/2' );
 	} );
 } );
 

@@ -372,6 +372,12 @@
 		"parent": "block-api"
 	},
 	{
+		"title": "Bindings",
+		"slug": "block-bindings",
+		"markdown_source": "../docs/reference-guides/block-api/block-bindings.md",
+		"parent": "block-api"
+	},
+	{
 		"title": "Context",
 		"slug": "block-context",
 		"markdown_source": "../docs/reference-guides/block-api/block-context.md",

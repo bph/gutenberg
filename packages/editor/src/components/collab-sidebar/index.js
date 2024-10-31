@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch, resolveSelect } from '@wordpress/data';
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 import { comment as commentIcon } from '@wordpress/icons';
 import { addFilter } from '@wordpress/hooks';
 import { store as noticesStore } from '@wordpress/notices';
@@ -22,7 +22,7 @@ import { store as editorStore } from '../../store';
 import AddCommentButton from './comment-button';
 import AddCommentToolbarButton from './comment-button-toolbar';
 
-const threadsEmptyArray = [];
+const EMPTY_ARRAY = [];
 
 const isBlockCommentExperimentEnabled =
 	window?.__experimentalEnableBlockComment;
@@ -54,44 +54,40 @@ export default function CollabSidebar() {
 	const { saveEntityRecord, deleteEntityRecord } = useDispatch( coreStore );
 	const { getEntityRecord } = resolveSelect( coreStore );
 	const { enableComplementaryArea } = useDispatch( interfaceStore );
-	const [ blockCommentID, setBlockCommentID ] = useState( null );
 	const [ showCommentBoard, setShowCommentBoard ] = useState( false );
-	const { postId } = useSelect( ( select ) => {
+
+	const { postId, postStatus, threads } = useSelect( ( select ) => {
+		const { getCurrentPostId, getEditedPostAttribute } =
+			select( editorStore );
+		const _postId = getCurrentPostId();
+		const data = !! _postId
+			? select( coreStore ).getEntityRecords( 'root', 'comment', {
+					post: _postId,
+					type: 'block_comment',
+					status: 'any',
+					per_page: 100,
+			  } )
+			: null;
+
 		return {
-			postId: select( editorStore ).getCurrentPostId(),
+			postId: _postId,
+			postStatus: getEditedPostAttribute( 'status' ),
+			threads: data ?? EMPTY_ARRAY,
 		};
 	}, [] );
 
-	const threads = useSelect(
-		( select ) => {
-			if ( ! postId ) {
-				return threadsEmptyArray;
-			}
-			const { getEntityRecords } = select( coreStore );
-			const data = getEntityRecords( 'root', 'comment', {
-				post: postId,
-				type: 'block_comment',
-				status: 'any',
-				per_page: 100,
-			} );
-			return data || threadsEmptyArray;
-		},
-		[ postId ]
-	);
+	const { clientId, blockCommentId } = useSelect( ( select ) => {
+		const { getBlockAttributes, getSelectedBlockClientId } =
+			select( blockEditorStore );
+		const _clientId = getSelectedBlockClientId();
 
-	const clientId = useSelect( ( select ) => {
-		const { getSelectedBlockClientId } = select( blockEditorStore );
-		return getSelectedBlockClientId();
+		return {
+			clientId: _clientId,
+			blockCommentId: _clientId
+				? getBlockAttributes( _clientId )?.blockCommentId
+				: null,
+		};
 	}, [] );
-
-	const blockDetails = useSelect(
-		( select ) => {
-			return clientId
-				? select( blockEditorStore ).getBlock( clientId )
-				: null;
-		},
-		[ clientId ]
-	);
 
 	// Get the dispatch functions to save the comment and update the block attributes.
 	const { updateBlockAttributes } = useDispatch( blockEditorStore );
@@ -252,24 +248,18 @@ export default function CollabSidebar() {
 		);
 	};
 
-	useEffect( () => {
-		if ( blockDetails ) {
-			setBlockCommentID( blockDetails?.attributes.blockCommentId );
-		}
-	}, [ postId, clientId ] );
-
 	// Check if the experimental flag is enabled.
-	if ( ! isBlockCommentExperimentEnabled ) {
+	if ( ! isBlockCommentExperimentEnabled || postStatus === 'publish' ) {
 		return null; // or maybe return some message indicating no threads are available.
 	}
 
 	return (
 		<>
-			{ ! blockCommentID && (
+			{ ! blockCommentId && (
 				<AddCommentButton onClick={ openCollabBoard } />
 			) }
 
-			{ blockCommentID > 0 && (
+			{ blockCommentId > 0 && (
 				<AddCommentToolbarButton onClick={ openCollabBoard } />
 			) }
 			<PluginSidebar

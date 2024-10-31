@@ -34,7 +34,7 @@
 		}
 	}
 
-	&__container {
+	.components-guide__container {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -42,7 +42,7 @@
 		min-height: 100%;
 	}
 
-	&__page {
+	.components-guide__page {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -53,7 +53,7 @@
 		}
 	}
 
-	&__footer {
+	.components-guide__footer {
 		align-content: center;
 		display: flex;
 		height: $button-size;
@@ -64,7 +64,7 @@
 		width: 100%;
 	}
 
-	&__page-control {
+	.components-guide__page-control {
 		margin: 0;
 		text-align: center;
 
@@ -74,8 +74,6 @@
 		}
 
 		.components-button {
-			height: 30px;
-			min-width: 20px;
 			margin: -6px 0;
 			color: $gray-200;
 		}

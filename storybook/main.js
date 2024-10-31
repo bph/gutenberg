@@ -2,6 +2,7 @@
  * External dependencies
  */
 const path = require( 'path' );
+const DefinePlugin = require( 'webpack' ).DefinePlugin;
 
 /**
  * WordPress dependencies
@@ -107,6 +108,15 @@ module.exports = {
 					},
 				],
 			},
+			plugins: [
+				...config.plugins,
+				new DefinePlugin( {
+					// Ensures that `@wordpress/warning` can properly detect dev mode.
+					'globalThis.SCRIPT_DEBUG': JSON.stringify(
+						process.env.NODE_ENV === 'development'
+					),
+				} ),
+			],
 		};
 	},
 };

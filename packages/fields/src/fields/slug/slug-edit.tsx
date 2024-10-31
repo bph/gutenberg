@@ -21,6 +21,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import type { BasePost } from '../../types';
+import { getSlug } from './utils';
 
 const SlugEdit = ( {
 	field,
@@ -29,7 +30,7 @@ const SlugEdit = ( {
 }: DataFormControlProps< BasePost > ) => {
 	const { id } = field;
 
-	const slug = field.getValue( { item: data } ) ?? '';
+	const slug = field.getValue( { item: data } ) || getSlug( data );
 	const permalinkTemplate = data.permalink_template || '';
 	const PERMALINK_POSTNAME_REGEX = /%(?:postname|pagename)%/;
 	const [ prefix, suffix ] = permalinkTemplate.split(
@@ -115,30 +116,26 @@ const SlugEdit = ( {
 							}
 						} }
 						aria-describedby={ postUrlSlugDescriptionId }
-						help={
-							<>
-								<p className="fields-controls__slug-help">
-									<span className="fields-controls__slug-help-visual-label">
-										{ __( 'Permalink:' ) }
-									</span>
-									<ExternalLink
-										className="fields-controls__slug-help-link"
-										href={ permalink }
-									>
-										<span className="fields-controls__slug-help-prefix">
-											{ permalinkPrefix }
-										</span>
-										<span className="fields-controls__slug-help-slug">
-											{ slugToDisplay }
-										</span>
-										<span className="fields-controls__slug-help-suffix">
-											{ permalinkSuffix }
-										</span>
-									</ExternalLink>
-								</p>
-							</>
-						}
 					/>
+					<div className="fields-controls__slug-help">
+						<span className="fields-controls__slug-help-visual-label">
+							{ __( 'Permalink:' ) }
+						</span>
+						<ExternalLink
+							className="fields-controls__slug-help-link"
+							href={ permalink }
+						>
+							<span className="fields-controls__slug-help-prefix">
+								{ permalinkPrefix }
+							</span>
+							<span className="fields-controls__slug-help-slug">
+								{ slugToDisplay }
+							</span>
+							<span className="fields-controls__slug-help-suffix">
+								{ permalinkSuffix }
+							</span>
+						</ExternalLink>
+					</div>
 				</VStack>
 			) }
 			{ ! isEditable && (

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 8.0.0 (2024-10-30)
+
 ### Breaking Changes
 
 -   Removed `smallScreenTitle` prop from the `ComplementaryArea` component ([#64474](https://github.com/WordPress/gutenberg/pull/64474)).

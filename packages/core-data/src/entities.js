@@ -10,14 +10,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { RichTextData } from '@wordpress/rich-text';
 
-/**
- * Internal dependencies
- */
-import { addEntities } from './actions';
-import { getSyncProvider } from './sync';
-
 export const DEFAULT_ENTITY_KEY = 'id';
-
 const POST_RAW_ATTRIBUTES = [ 'title', 'excerpt', 'content' ];
 
 export const rootEntitiesConfig = [
@@ -27,6 +20,8 @@ export const rootEntitiesConfig = [
 		name: '__unstableBase',
 		baseURL: '/',
 		baseURLParams: {
+			// Please also change the preload path when changing this.
+			// @see lib/compat/wordpress-6.8/preload.php
 			_fields: [
 				'description',
 				'gmt_offset',
@@ -458,60 +453,3 @@ export const getMethodName = ( kind, name, prefix = 'get' ) => {
 	const suffix = pascalCase( name );
 	return `${ prefix }${ kindPrefix }${ suffix }`;
 };
-
-function registerSyncConfigs( configs ) {
-	configs.forEach( ( { syncObjectType, syncConfig } ) => {
-		getSyncProvider().register( syncObjectType, syncConfig );
-		const editSyncConfig = { ...syncConfig };
-		delete editSyncConfig.fetch;
-		getSyncProvider().register( syncObjectType + '--edit', editSyncConfig );
-	} );
-}
-
-/**
- * Loads the entities into the store.
- *
- * Note: The `name` argument is used for `root` entities requiring additional server data.
- *
- * @param {string} kind Kind
- * @param {string} name Name
- * @return {(thunkArgs: object) => Promise<Array>} Entities
- */
-export const getOrLoadEntitiesConfig =
-	( kind, name ) =>
-	async ( { select, dispatch } ) => {
-		let configs = select.getEntitiesConfig( kind );
-		const hasConfig = !! select.getEntityConfig( kind, name );
-
-		if ( configs?.length > 0 && hasConfig ) {
-			if ( window.__experimentalEnableSync ) {
-				if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-					registerSyncConfigs( configs );
-				}
-			}
-
-			return configs;
-		}
-
-		const loader = additionalEntityConfigLoaders.find( ( l ) => {
-			if ( ! name || ! l.name ) {
-				return l.kind === kind;
-			}
-
-			return l.kind === kind && l.name === name;
-		} );
-		if ( ! loader ) {
-			return [];
-		}
-
-		configs = await loader.loadEntities();
-		if ( window.__experimentalEnableSync ) {
-			if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-				registerSyncConfigs( configs );
-			}
-		}
-
-		dispatch( addEntities( configs ) );
-
-		return configs;
-	};
