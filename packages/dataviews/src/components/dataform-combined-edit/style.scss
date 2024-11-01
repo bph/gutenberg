@@ -9,4 +9,8 @@
 	&__field {
 		flex: 1 1 auto;
 	}
+
+	p.components-base-control__help:has(.components-checkbox-control__help) {
+		margin-top: $grid-unit-05;
+	}
 }

@@ -10,9 +10,12 @@ export function maybeWarnDeprecated36pxSize( {
 }: {
 	componentName: string;
 	__next40pxDefaultSize: boolean | undefined;
-	size: string;
+	size: string | undefined;
 } ) {
-	if ( __next40pxDefaultSize || size !== 'default' ) {
+	if (
+		__next40pxDefaultSize ||
+		( size !== undefined && size !== 'default' )
+	) {
 		return;
 	}
 

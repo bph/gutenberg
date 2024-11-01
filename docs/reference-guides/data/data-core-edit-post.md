@@ -528,6 +528,10 @@ _Parameters_
 
 -   _feature_ `string`: Feature name.
 
+### toggleFullscreenMode
+
+Action that toggles the Fullscreen Mode view option.
+
 ### togglePinnedPluginItem
 
 Triggers an action object used to toggle a plugin name flag.

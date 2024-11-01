@@ -22,6 +22,7 @@ import EnhancedPaginationControl from './inspector-controls/enhanced-pagination-
 import QueryToolbar from './query-toolbar';
 import QueryInspectorControls from './inspector-controls';
 import EnhancedPaginationModal from './enhanced-pagination-modal';
+import { getQueryContextFromTemplate } from '../utils';
 
 const DEFAULTS_POSTS_PER_PAGE = 3;
 
@@ -42,7 +43,8 @@ export default function QueryContent( {
 		tagName: TagName = 'div',
 		query: { inherit } = {},
 	} = attributes;
-	const { postType } = context;
+	const { templateSlug, postType } = context;
+	const { isSingular } = getQueryContextFromTemplate( templateSlug );
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
 	const instanceId = useInstanceId( QueryContent );
@@ -50,16 +52,6 @@ export default function QueryContent( {
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TEMPLATE,
 	} );
-	const isTemplate = useSelect(
-		( select ) => {
-			const currentTemplate =
-				select( coreStore ).__experimentalGetTemplateForLink()?.type;
-			const isInTemplate = 'wp_template' === currentTemplate;
-			const isInSingularContent = postType !== undefined;
-			return isInTemplate && ! isInSingularContent;
-		},
-		[ postType ]
-	);
 	const { postsPerPage } = useSelect( ( select ) => {
 		const { getSettings } = select( blockEditorStore );
 		const { getEntityRecord, getEntityRecordEdits, canUser } =
@@ -106,9 +98,9 @@ export default function QueryContent( {
 		} else if ( ! query.perPage && postsPerPage ) {
 			newQuery.perPage = postsPerPage;
 		}
-		// We need to reset the `inherit` value if not in a template, as queries
-		// are not inherited when outside a template (e.g. when in singular content).
-		if ( ! isTemplate && query.inherit ) {
+		// We need to reset the `inherit` value if in a singular template, as queries
+		// are not inherited when in singular content (e.g. post, page, 404, blank).
+		if ( isSingular && query.inherit ) {
 			newQuery.inherit = false;
 		}
 		if ( !! Object.keys( newQuery ).length ) {
@@ -117,10 +109,10 @@ export default function QueryContent( {
 		}
 	}, [
 		query.perPage,
+		query.inherit,
 		postsPerPage,
 		inherit,
-		isTemplate,
-		query.inherit,
+		isSingular,
 		__unstableMarkNextChangeAsNotPersistent,
 		updateQuery,
 	] );
@@ -167,7 +159,8 @@ export default function QueryContent( {
 					setDisplayLayout={ updateDisplayLayout }
 					setAttributes={ setAttributes }
 					clientId={ clientId }
-					isTemplate={ isTemplate }
+					postTypeFromContext={ postType }
+					isSingular={ isSingular }
 				/>
 			</InspectorControls>
 			<BlockControls>

@@ -563,58 +563,6 @@ export const getAutosave =
 		await resolveSelect.getAutosaves( postType, postId );
 	};
 
-/**
- * Retrieve the frontend template used for a given link.
- *
- * @param {string} link Link.
- */
-export const __experimentalGetTemplateForLink =
-	( link ) =>
-	async ( { dispatch, resolveSelect } ) => {
-		let template;
-		try {
-			// This is NOT calling a REST endpoint but rather ends up with a response from
-			// an Ajax function which has a different shape from a WP_REST_Response.
-			template = await apiFetch( {
-				url: addQueryArgs( link, {
-					'_wp-find-template': true,
-				} ),
-			} ).then( ( { data } ) => data );
-		} catch ( e ) {
-			// For non-FSE themes, it is possible that this request returns an error.
-		}
-
-		if ( ! template ) {
-			return;
-		}
-
-		const record = await resolveSelect.getEntityRecord(
-			'postType',
-			'wp_template',
-			template.id
-		);
-
-		if ( record ) {
-			dispatch.receiveEntityRecords(
-				'postType',
-				'wp_template',
-				[ record ],
-				{
-					'find-template': link,
-				}
-			);
-		}
-	};
-
-__experimentalGetTemplateForLink.shouldInvalidate = ( action ) => {
-	return (
-		( action.type === 'RECEIVE_ITEMS' || action.type === 'REMOVE_ITEMS' ) &&
-		action.invalidateCache &&
-		action.kind === 'postType' &&
-		action.name === 'wp_template'
-	);
-};
-
 export const __experimentalGetCurrentGlobalStylesId =
 	() =>
 	async ( { dispatch, resolveSelect } ) => {
@@ -801,13 +749,27 @@ export const getNavigationFallbackId =
 
 export const getDefaultTemplateId =
 	( query ) =>
-	async ( { dispatch } ) => {
+	async ( { dispatch, registry, resolveSelect } ) => {
 		const template = await apiFetch( {
 			path: addQueryArgs( '/wp/v2/templates/lookup', query ),
 		} );
+		// Wait for the the entities config to be loaded, otherwise receiving
+		// the template as an entity will not work.
+		await resolveSelect.getEntitiesConfig( 'postType' );
 		// Endpoint may return an empty object if no template is found.
 		if ( template?.id ) {
-			dispatch.receiveDefaultTemplateId( query, template.id );
+			registry.batch( () => {
+				dispatch.receiveDefaultTemplateId( query, template.id );
+				dispatch.receiveEntityRecords( 'postType', 'wp_template', [
+					template,
+				] );
+				// Avoid further network requests.
+				dispatch.finishResolution( 'getEntityRecord', [
+					'postType',
+					'wp_template',
+					template.id,
+				] );
+			} );
 		}
 	};
 

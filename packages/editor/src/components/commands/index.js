@@ -36,7 +36,6 @@ function useEditorCommandLoader() {
 		isListViewOpen,
 		showBlockBreadcrumbs,
 		isDistractionFree,
-		isTopToolbar,
 		isFocusMode,
 		isPreviewMode,
 		isViewable,
@@ -56,7 +55,6 @@ function useEditorCommandLoader() {
 			showBlockBreadcrumbs: get( 'core', 'showBlockBreadcrumbs' ),
 			isDistractionFree: get( 'core', 'distractionFree' ),
 			isFocusMode: get( 'core', 'focusMode' ),
-			isTopToolbar: get( 'core', 'fixedToolbar' ),
 			isPreviewMode: getSettings().isPreviewMode,
 			isViewable: getPostType( getCurrentPostType() )?.viewable ?? false,
 			isCodeEditingEnabled: getEditorSettings().codeEditingEnabled,
@@ -73,6 +71,8 @@ function useEditorCommandLoader() {
 		setIsListViewOpened,
 		switchEditorMode,
 		toggleDistractionFree,
+		toggleSpotlightMode,
+		toggleTopToolbar,
 	} = useDispatch( editorStore );
 	const { openModal, enableComplementaryArea, disableComplementaryArea } =
 		useDispatch( interfaceStore );
@@ -121,23 +121,8 @@ function useEditorCommandLoader() {
 			? __( 'Exit Spotlight mode' )
 			: __( 'Enter Spotlight mode' ),
 		callback: ( { close } ) => {
-			toggle( 'core', 'focusMode' );
+			toggleSpotlightMode();
 			close();
-			createInfoNotice(
-				isFocusMode ? __( 'Spotlight off.' ) : __( 'Spotlight on.' ),
-				{
-					id: 'core/editor/toggle-spotlight-mode/notice',
-					type: 'snackbar',
-					actions: [
-						{
-							label: __( 'Undo' ),
-							onClick: () => {
-								toggle( 'core', 'focusMode' );
-							},
-						},
-					],
-				}
-			);
 		},
 	} );
 
@@ -164,28 +149,8 @@ function useEditorCommandLoader() {
 		name: 'core/toggle-top-toolbar',
 		label: __( 'Top toolbar' ),
 		callback: ( { close } ) => {
-			toggle( 'core', 'fixedToolbar' );
-			if ( isDistractionFree ) {
-				toggleDistractionFree();
-			}
+			toggleTopToolbar();
 			close();
-			createInfoNotice(
-				isTopToolbar
-					? __( 'Top toolbar off.' )
-					: __( 'Top toolbar on.' ),
-				{
-					id: 'core/editor/toggle-top-toolbar/notice',
-					type: 'snackbar',
-					actions: [
-						{
-							label: __( 'Undo' ),
-							onClick: () => {
-								toggle( 'core', 'fixedToolbar' );
-							},
-						},
-					],
-				}
-			);
 		},
 	} );
 

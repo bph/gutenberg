@@ -3297,6 +3297,10 @@ class WP_Theme_JSON_Gutenberg {
 			array(),
 			array( 'include_node_paths_only' => true )
 		);
+
+		// Add top-level styles.
+		$style_nodes[] = array( 'path' => array( 'styles' ) );
+
 		foreach ( $style_nodes as $style_node ) {
 			$path = $style_node['path'];
 			/*

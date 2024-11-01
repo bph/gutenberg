@@ -50,6 +50,10 @@ Undocumented declaration.
 
 This field is used to display the post parent.
 
+### passwordField
+
+This field is used to display the post password.
+
 ### permanentlyDeletePost
 
 Undocumented declaration.

@@ -16,6 +16,7 @@ import Button from '../button';
 import { RadioGroupContext } from './context';
 import type { WordPressComponentProps } from '../context';
 import type { RadioProps } from './types';
+import { maybeWarnDeprecated36pxSize } from '../utils/deprecated-36px-size';
 
 function UnforwardedRadio(
 	{
@@ -29,6 +30,12 @@ function UnforwardedRadio(
 
 	const selectedValue = useStoreState( store, 'value' );
 	const isChecked = selectedValue !== undefined && selectedValue === value;
+
+	maybeWarnDeprecated36pxSize( {
+		componentName: 'Radio',
+		size: undefined,
+		__next40pxDefaultSize: props.__next40pxDefaultSize,
+	} );
 
 	return (
 		<Ariakit.Radio

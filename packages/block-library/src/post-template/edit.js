@@ -100,6 +100,7 @@ export default function PostTemplateEdit( {
 		} = {},
 		templateSlug,
 		previewPostType,
+		postType: postTypeFromContext,
 	},
 	attributes: { layout },
 	__unstableLayoutClassNames,
@@ -186,7 +187,10 @@ export default function PostTemplateEdit( {
 			}
 			// When we preview Query Loop blocks we should prefer the current
 			// block's postType, which is passed through block context.
-			const usedPostType = previewPostType || postType;
+			const usedPostType =
+				postTypeFromContext && postTypeFromContext !== 'page'
+					? postTypeFromContext
+					: previewPostType || postType;
 			return {
 				posts: getEntityRecords( 'postType', usedPostType, {
 					...query,

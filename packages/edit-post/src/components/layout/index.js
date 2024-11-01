@@ -424,9 +424,7 @@ function Layout( {
 					!! select( blockEditorStore ).getBlockSelectionStart(),
 				showIconLabels: get( 'core', 'showIconLabels' ),
 				isDistractionFree: get( 'core', 'distractionFree' ),
-				showMetaBoxes:
-					! DESIGN_POST_TYPES.includes( currentPostType ) &&
-					isRenderingPostOnly,
+				showMetaBoxes: ! DESIGN_POST_TYPES.includes( currentPostType ),
 				isWelcomeGuideVisible: isFeatureActive( 'welcomeGuide' ),
 				templateId:
 					supportsTemplateMode &&

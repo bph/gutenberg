@@ -57,6 +57,19 @@
 	}
 }
 
+// The black plus that shows up on the right side of an empty paragraph block,
+// or the initial appender that exists only on empty documents.
+.block-editor-block-list__empty-block-inserter.block-editor-block-list__empty-block-inserter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	line-height: 0;
+
+	&:disabled {
+		display: none;
+	}
+}
+
 // Sibling inserter / "inbetweenserter".
 .block-editor-block-list__empty-block-inserter,
 .block-editor-block-list__insertion-point-inserter {

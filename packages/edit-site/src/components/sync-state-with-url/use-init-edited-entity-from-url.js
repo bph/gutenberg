@@ -31,47 +31,33 @@ const postTypesWithoutParentTemplate = [
 const authorizedPostTypes = [ 'page', 'post' ];
 
 function useResolveEditedEntityAndContext( { postId, postType } ) {
-	const {
-		hasLoadedAllDependencies,
-		homepageId,
-		postsPageId,
-		url,
-		frontPageTemplateId,
-	} = useSelect( ( select ) => {
-		const { getEntityRecord, getEntityRecords } = select( coreDataStore );
-		const siteData = getEntityRecord( 'root', 'site' );
-		const base = getEntityRecord( 'root', '__unstableBase' );
-		const templates = getEntityRecords( 'postType', TEMPLATE_POST_TYPE, {
-			per_page: -1,
-		} );
-		const _homepageId =
-			siteData?.show_on_front === 'page' &&
-			[ 'number', 'string' ].includes( typeof siteData.page_on_front ) &&
-			!! +siteData.page_on_front // We also need to check if it's not zero(`0`).
-				? siteData.page_on_front.toString()
-				: null;
-		const _postsPageId =
-			siteData?.show_on_front === 'page' &&
-			[ 'number', 'string' ].includes( typeof siteData.page_for_posts )
-				? siteData.page_for_posts.toString()
-				: null;
-		let _frontPageTemplateId;
-		if ( templates ) {
-			const frontPageTemplate = templates.find(
-				( t ) => t.slug === 'front-page'
-			);
-			_frontPageTemplateId = frontPageTemplate
-				? frontPageTemplate.id
-				: false;
-		}
-		return {
-			hasLoadedAllDependencies: !! base && !! siteData,
-			homepageId: _homepageId,
-			postsPageId: _postsPageId,
-			url: base?.home,
-			frontPageTemplateId: _frontPageTemplateId,
-		};
-	}, [] );
+	const { hasLoadedAllDependencies, homepageId, postsPageId } = useSelect(
+		( select ) => {
+			const { getEntityRecord } = select( coreDataStore );
+			const siteData = getEntityRecord( 'root', 'site' );
+			const _homepageId =
+				siteData?.show_on_front === 'page' &&
+				[ 'number', 'string' ].includes(
+					typeof siteData.page_on_front
+				) &&
+				!! +siteData.page_on_front // We also need to check if it's not zero(`0`).
+					? siteData.page_on_front.toString()
+					: null;
+			const _postsPageId =
+				siteData?.show_on_front === 'page' &&
+				[ 'number', 'string' ].includes(
+					typeof siteData.page_for_posts
+				)
+					? siteData.page_for_posts.toString()
+					: null;
+			return {
+				hasLoadedAllDependencies: !! siteData,
+				homepageId: _homepageId,
+				postsPageId: _postsPageId,
+			};
+		},
+		[]
+	);
 
 	/**
 	 * This is a hook that recreates the logic to resolve a template for a given WordPress postID postTypeId
@@ -99,7 +85,6 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 				getEditedEntityRecord,
 				getEntityRecords,
 				getDefaultTemplateId,
-				__experimentalGetTemplateForLink,
 			} = select( coreDataStore );
 
 			function resolveTemplateForPostTypeAndId(
@@ -111,15 +96,7 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 					postTypeToResolve === 'page' &&
 					homepageId === postIdToResolve
 				) {
-					// We're still checking whether the front page template exists.
-					// Don't resolve the template yet.
-					if ( frontPageTemplateId === undefined ) {
-						return undefined;
-					}
-
-					if ( !! frontPageTemplateId ) {
-						return frontPageTemplateId;
-					}
+					return getDefaultTemplateId( { slug: 'front-page' } );
 				}
 
 				const editedEntity = getEditedEntityRecord(
@@ -135,8 +112,7 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 					postTypeToResolve === 'page' &&
 					postsPageId === postIdToResolve
 				) {
-					return __experimentalGetTemplateForLink( editedEntity.link )
-						?.id;
+					return getDefaultTemplateId( { slug: 'home' } );
 				}
 				// First see if the post/page has an assigned template and fetch it.
 				const currentTemplateSlug = editedEntity.template;
@@ -194,20 +170,9 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 			}
 
 			// If we're not rendering a specific page, use the front page template.
-			if ( url ) {
-				const template = __experimentalGetTemplateForLink( url );
-				return template?.id;
-			}
+			return getDefaultTemplateId( { slug: 'front-page' } );
 		},
-		[
-			homepageId,
-			postsPageId,
-			hasLoadedAllDependencies,
-			url,
-			postId,
-			postType,
-			frontPageTemplateId,
-		]
+		[ homepageId, postsPageId, hasLoadedAllDependencies, postId, postType ]
 	);
 
 	const context = useMemo( () => {

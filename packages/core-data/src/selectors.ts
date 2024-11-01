@@ -1285,38 +1285,6 @@ export function getReferenceByDistinctEdits( state ) {
 }
 
 /**
- * Retrieve the frontend template used for a given link.
- *
- * @param state Editor state.
- * @param link  Link.
- *
- * @return The template record.
- */
-export function __experimentalGetTemplateForLink(
-	state: State,
-	link: string
-): Optional< ET.Updatable< ET.WpTemplate > > | null | false {
-	const records = getEntityRecords< ET.WpTemplate >(
-		state,
-		'postType',
-		'wp_template',
-		{
-			'find-template': link,
-		}
-	);
-
-	if ( records?.length ) {
-		return getEditedEntityRecord< ET.WpTemplate >(
-			state,
-			'postType',
-			'wp_template',
-			records[ 0 ].id
-		);
-	}
-	return null;
-}
-
-/**
  * Retrieve the current theme's base global styles
  *
  * @param state Editor state.

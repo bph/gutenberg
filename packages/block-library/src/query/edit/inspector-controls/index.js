@@ -45,9 +45,15 @@ import { useToolsPanelDropdownMenuProps } from '../../../utils/hooks';
 const { BlockInfo } = unlock( blockEditorPrivateApis );
 
 export default function QueryInspectorControls( props ) {
-	const { attributes, setQuery, setDisplayLayout, isTemplate } = props;
-	const { query, displayLayout } = attributes;
 	const {
+		attributes,
+		setQuery,
+		setDisplayLayout,
+		postTypeFromContext,
+		isSingular,
+	} = props;
+	const { query, displayLayout } = attributes;
+	let {
 		order,
 		orderBy,
 		author: authorIds,
@@ -61,6 +67,16 @@ export default function QueryInspectorControls( props ) {
 		parents,
 		format,
 	} = query;
+	// If a post type is set in context, update `postType` to match it,
+	// unless the post type is `page`, as it usually doesn't make sense to loop
+	// through pages.
+	if (
+		postTypeFromContext &&
+		postTypeFromContext !== 'page' &&
+		postTypeFromContext !== postType
+	) {
+		postType = postTypeFromContext;
+	}
 	const allowedControls = useAllowedControls( attributes );
 	const showSticky = postType === 'post';
 	const {
@@ -118,7 +134,7 @@ export default function QueryInspectorControls( props ) {
 	}, [ querySearch, onChangeDebounced ] );
 
 	const showInheritControl =
-		isTemplate && isControlAllowed( allowedControls, 'inherit' );
+		! isSingular && isControlAllowed( allowedControls, 'inherit' );
 	const showPostTypeControl =
 		! inherit && isControlAllowed( allowedControls, 'postType' );
 	const postTypeControlLabel = __( 'Post type' );

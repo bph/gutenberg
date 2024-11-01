@@ -62,24 +62,12 @@
 	}
 }
 
-// The black plus that shows up on the right side of an empty paragraph block, or the initial appender
-// that exists only on empty documents.
-.block-editor-block-list__empty-block-inserter.block-editor-block-list__empty-block-inserter,
-.block-editor-default-block-appender .block-editor-inserter {
-	position: absolute;
-	top: 0;
-	right: 0;
-	line-height: 0;
-
-	&:disabled {
-		display: none;
-	}
-}
-
 
 /**
- * Fixed position appender.
- * These styles apply to all in-canvas inserters that exist inside nesting containers.
+ * Fixed position appender (right bottom corner).
+ *
+ * These styles apply to all in-canvas inserters. All in-canvas inserters always
+ * exist within a block.
  */
 
 .block-editor-block-list__block .block-list-appender {
@@ -94,6 +82,10 @@
 	&.block-list-appender {
 		margin: 0;
 		line-height: 0;
+	}
+
+	.block-editor-inserter:disabled {
+		display: none;
 	}
 
 	.block-editor-default-block-appender {

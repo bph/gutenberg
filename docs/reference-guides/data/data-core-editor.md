@@ -1585,6 +1585,11 @@ _Related_
 
 Action that toggles Distraction free mode. Distraction free mode expects there are no sidebars, as due to the z-index values set, you can't close sidebars.
 
+_Parameters_
+
+-   _options_ `[Object]`: Optional configuration object
+-   _options.createNotice_ `[boolean]`: Whether to create a notice
+
 ### toggleEditorPanelEnabled
 
 Returns an action object used to enable or disable a panel in the editor.
@@ -1618,6 +1623,14 @@ _Returns_
 _Related_
 
 -   toggleSelection in core/block-editor store.
+
+### toggleSpotlightMode
+
+Action that toggles the Spotlight Mode view option.
+
+### toggleTopToolbar
+
+Action that toggles the Top Toolbar view option.
 
 ### trashPost
 

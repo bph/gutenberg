@@ -2301,7 +2301,9 @@ class WP_Theme_JSON_Gutenberg_Test extends WP_UnitTestCase {
 				'styles'  => array(
 					'background' => array(
 						'backgroundImage' => array(
-							'url' => 'http://example.org/quote.png',
+							'id'     => 'uploaded',
+							'source' => 'file',
+							'url'    => 'http://example.org/quote.png',
 						),
 						'backgroundSize'  => 'cover',
 					),
@@ -2333,7 +2335,10 @@ class WP_Theme_JSON_Gutenberg_Test extends WP_UnitTestCase {
 			'version' => WP_Theme_JSON_Gutenberg::LATEST_SCHEMA,
 			'styles'  => array(
 				'background' => array(
-					'backgroundSize' => 'contain',
+					'backgroundImage' => array(
+						'url' => 'http://example.org/site.png',
+					),
+					'backgroundSize'  => 'contain',
 				),
 				'blocks'     => array(
 					'core/group' => array(
@@ -2363,7 +2368,7 @@ class WP_Theme_JSON_Gutenberg_Test extends WP_UnitTestCase {
 			'styles'  => array(
 				'background' => array(
 					'backgroundImage' => array(
-						'url' => 'http://example.org/quote.png',
+						'url' => 'http://example.org/site.png',
 					),
 					'backgroundSize'  => 'contain',
 				),

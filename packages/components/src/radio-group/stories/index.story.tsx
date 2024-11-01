@@ -28,7 +28,13 @@ const meta: Meta< typeof RadioGroup > = {
 	parameters: {
 		actions: { argTypesRegex: '^on.*' },
 		controls: { expanded: true },
-		docs: { canvas: { sourceState: 'shown' } },
+		docs: {
+			canvas: { sourceState: 'shown' },
+			description: {
+				component:
+					'This component is deprecated. Use `RadioControl` or `ToggleGroupControl` instead.',
+			},
+		},
 	},
 };
 export default meta;
@@ -44,9 +50,15 @@ Default.args = {
 	defaultChecked: 'option2',
 	children: (
 		<>
-			<Radio value="option1">Option 1</Radio>
-			<Radio value="option2">Option 2</Radio>
-			<Radio value="option3">Option 3</Radio>
+			<Radio __next40pxDefaultSize value="option1">
+				Option 1
+			</Radio>
+			<Radio __next40pxDefaultSize value="option2">
+				Option 2
+			</Radio>
+			<Radio __next40pxDefaultSize value="option3">
+				Option 3
+			</Radio>
 		</>
 	),
 };

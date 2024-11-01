@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import { store as editPostStore } from '../../store';
 
 function KeyboardShortcuts() {
-	const { toggleFeature } = useDispatch( editPostStore );
+	const { toggleFullscreenMode } = useDispatch( editPostStore );
 	const { registerShortcut } = useDispatch( keyboardShortcutsStore );
 
 	useEffect( () => {
@@ -31,7 +31,7 @@ function KeyboardShortcuts() {
 	}, [] );
 
 	useShortcut( 'core/edit-post/toggle-fullscreen', () => {
-		toggleFeature( 'fullscreenMode' );
+		toggleFullscreenMode();
 	} );
 
 	return null;

@@ -8,7 +8,12 @@ import clsx from 'clsx';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
-import { featuredImageField, slugField, parentField } from '@wordpress/fields';
+import {
+	featuredImageField,
+	slugField,
+	parentField,
+	passwordField,
+} from '@wordpress/fields';
 import {
 	createInterpolateElement,
 	useMemo,
@@ -348,6 +353,7 @@ function usePostFields( viewType ) {
 					},
 				],
 			},
+			passwordField,
 		],
 		[ authors, viewType, frontPageId, postsPageId ]
 	);
