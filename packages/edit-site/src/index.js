@@ -68,6 +68,7 @@ export function initializeEditor( id, settings ) {
 		allowRightClickOverrides: true,
 		distractionFree: false,
 		editorMode: 'visual',
+		editorTool: 'edit',
 		fixedToolbar: false,
 		focusMode: false,
 		inactivePanels: [],

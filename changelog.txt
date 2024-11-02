@@ -1,5 +1,36 @@
 == Changelog ==
 
+= 19.6.0-rc.3 =
+
+
+## Changelog
+
+### Bug Fixes
+
+#### Block Editor
+- Post Editor: Set the default value of the editorTool to edit. ([66636](https://github.com/WordPress/gutenberg/pull/66636))
+
+
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@arthur791004
+
+
+= 19.5.1 =
+
+
+Error: There are no unreleased pull requests associated with the milestone.
+    at fetchAllPullRequests (/home/runner/work/gutenberg/gutenberg/bin/plugin/commands/changelog.js:721:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async createChangelog (/home/runner/work/gutenberg/gutenberg/bin/plugin/commands/changelog.js:1031:24)
+    at async getReleaseChangelog (/home/runner/work/gutenberg/gutenberg/bin/plugin/commands/changelog.js:1057:2)
+    at async Command.<anonymous> (/home/runner/work/gutenberg/gutenberg/bin/plugin/cli.js:11:4)
+
+
 = 19.6.0-rc.2 =
 
 ## Changelog

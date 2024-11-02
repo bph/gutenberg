@@ -81,7 +81,12 @@
 
 		.components-form-token-field__token-text {
 			background: transparent;
-			color: $components-color-accent;
+		}
+
+		&:not(.is-disabled) {
+			.components-form-token-field__token-text {
+				color: $components-color-accent;
+			}
 		}
 
 		.components-form-token-field__remove-token {
@@ -90,7 +95,6 @@
 			position: absolute;
 			top: 1px;
 			right: 0;
-			padding: 0;
 		}
 
 		&.is-success {
@@ -112,18 +116,11 @@
 			}
 		}
 	}
-
-	&.is-disabled {
-		.components-form-token-field__remove-token {
-			cursor: default;
-		}
-	}
 }
 
 .components-form-token-field__token-text,
 .components-form-token-field__remove-token.components-button {
 	display: inline-block;
-	line-height: 24px;
 	height: auto;
 	background: $gray-300;
 	min-width: unset;
@@ -134,20 +131,19 @@
 .components-form-token-field__token-text {
 	border-radius: $radius-x-small 0 0 $radius-x-small;
 	padding: 0 0 0 8px;
+	line-height: 24px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .components-form-token-field__remove-token.components-button {
-	cursor: pointer;
 	border-radius: 0 $radius-x-small $radius-x-small 0;
-	padding: 0 2px;
 	color: $gray-900;
 	line-height: 10px;
 	overflow: initial;
 
-	&:hover {
+	&:hover:not(:disabled) {
 		color: $gray-900;
 	}
 }

@@ -8,7 +8,7 @@ import { __unstableUseShortcutEventMatch as useShortcutEventMatch } from '@wordp
 import { useRef } from '@wordpress/element';
 import { switchToBlockType, store as blocksStore } from '@wordpress/blocks';
 import { speak } from '@wordpress/a11y';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf, _n } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -92,19 +92,35 @@ export default function BlockTools( {
 			return;
 		}
 
-		if ( isMatch( 'core/block-editor/move-up', event ) ) {
+		if (
+			isMatch( 'core/block-editor/move-up', event ) ||
+			isMatch( 'core/block-editor/move-down', event )
+		) {
 			const clientIds = getSelectedBlockClientIds();
 			if ( clientIds.length ) {
 				event.preventDefault();
 				const rootClientId = getBlockRootClientId( clientIds[ 0 ] );
-				moveBlocksUp( clientIds, rootClientId );
-			}
-		} else if ( isMatch( 'core/block-editor/move-down', event ) ) {
-			const clientIds = getSelectedBlockClientIds();
-			if ( clientIds.length ) {
-				event.preventDefault();
-				const rootClientId = getBlockRootClientId( clientIds[ 0 ] );
-				moveBlocksDown( clientIds, rootClientId );
+				const direction = isMatch( 'core/block-editor/move-up', event )
+					? 'up'
+					: 'down';
+				if ( direction === 'up' ) {
+					moveBlocksUp( clientIds, rootClientId );
+				} else {
+					moveBlocksDown( clientIds, rootClientId );
+				}
+				const blockLength = Array.isArray( clientIds )
+					? clientIds.length
+					: 1;
+				const message = sprintf(
+					// translators: %d: the name of the block that has been moved
+					_n(
+						'%d block moved.',
+						'%d blocks moved.',
+						clientIds.length
+					),
+					blockLength
+				);
+				speak( message );
 			}
 		} else if ( isMatch( 'core/block-editor/duplicate', event ) ) {
 			const clientIds = getSelectedBlockClientIds();

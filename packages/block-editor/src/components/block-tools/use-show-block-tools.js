@@ -40,7 +40,9 @@ export function useShowBlockTools() {
 		const _showEmptyBlockSideInserter =
 			clientId &&
 			! isTyping() &&
-			editorMode === 'edit' &&
+			// Hide the block inserter on the navigation mode.
+			// See https://github.com/WordPress/gutenberg/pull/66636#discussion_r1824728483.
+			editorMode !== 'navigation' &&
 			isEmptyDefaultBlock;
 		const _showBlockToolbarPopover =
 			! getSettings().hasFixedToolbar &&

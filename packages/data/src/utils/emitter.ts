@@ -1,12 +1,20 @@
+export interface DataEmitter {
+	emit: VoidFunction;
+	subscribe: ( listener: VoidFunction ) => VoidFunction;
+	pause: VoidFunction;
+	resume: VoidFunction;
+	isPaused: boolean;
+}
+
 /**
  * Create an event emitter.
  *
- * @return {import("../types").DataEmitter} Emitter.
+ * @return The event emitter.
  */
-export function createEmitter() {
+export function createEmitter(): DataEmitter {
 	let isPaused = false;
 	let isPending = false;
-	const listeners = new Set();
+	const listeners = new Set< VoidFunction >();
 	const notifyListeners = () =>
 		// We use Array.from to clone the listeners Set
 		// This ensures that we don't run a listener

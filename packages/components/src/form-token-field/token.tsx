@@ -72,6 +72,7 @@ export default function Token( {
 
 			<Button
 				className="components-form-token-field__remove-token"
+				size="small"
 				icon={ closeSmall }
 				onClick={ ! disabled ? onClick : undefined }
 				// Disable reason: Even when FormTokenField itself is accessibly disabled, token reset buttons shouldn't be in the tab sequence.

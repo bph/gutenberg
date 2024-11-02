@@ -159,6 +159,10 @@ figure.wp-block-image:not(.wp-block) {
 	}
 }
 
+.wp-block-image__toolbar_content_textarea__container {
+	padding: $grid-unit;
+}
+
 .wp-block-image__toolbar_content_textarea {
 	// Corresponds to the size of the textarea in the block inspector.
 	width: 250px;
