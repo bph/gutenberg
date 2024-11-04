@@ -10,7 +10,8 @@
 		margin-bottom: 1.5em;
 	}
 
-	.components-base-control {
+	.components-base-control,
+	.components-radio-control {
 		&:where(:not(:last-child)) {
 			margin-bottom: $grid-unit-20;
 		}

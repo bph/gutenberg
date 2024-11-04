@@ -125,7 +125,12 @@ export default function Layout( { route } ) {
 												isResizableFrameOversized
 											}
 										/>
-										<SidebarContent routeKey={ routeKey }>
+										<SidebarContent
+											shouldAnimate={
+												routeKey !== 'styles-view'
+											}
+											routeKey={ routeKey }
+										>
 											{ areas.sidebar }
 										</SidebarContent>
 										<SaveHub />

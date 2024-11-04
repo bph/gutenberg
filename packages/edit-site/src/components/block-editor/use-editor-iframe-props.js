@@ -60,11 +60,10 @@ export default function useEditorIframeProps() {
 				} );
 			}
 		},
-		onClick: () => {
+		onClick: () =>
 			history.push( { ...params, canvas: 'edit' }, undefined, {
 				transition: 'canvas-mode-edit-transition',
-			} );
-		},
+			} ),
 		onClickCapture: ( event ) => {
 			if ( currentPostIsTrashed ) {
 				event.preventDefault();
