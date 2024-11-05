@@ -533,10 +533,9 @@ class URLInput extends Component {
 			<Popover placement="bottom" focusOnMount={ false }>
 				<div
 					{ ...suggestionsListProps }
-					className={ clsx(
-						'block-editor-url-input__suggestions',
-						`${ className }__suggestions`
-					) }
+					className={ clsx( 'block-editor-url-input__suggestions', {
+						[ `${ className }__suggestions` ]: className,
+					} ) }
 				>
 					{ suggestions.map( ( suggestion, index ) => (
 						<Button

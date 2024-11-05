@@ -22,8 +22,6 @@ import { store as editorStore } from '../../store';
 import AddCommentButton from './comment-button';
 import AddCommentToolbarButton from './comment-button-toolbar';
 
-const EMPTY_ARRAY = [];
-
 const isBlockCommentExperimentEnabled =
 	window?.__experimentalEnableBlockComment;
 const modifyBlockCommentAttributes = ( settings ) => {
@@ -46,19 +44,13 @@ addFilter(
 	modifyBlockCommentAttributes
 );
 
-/**
- * Renders the Collab sidebar.
- */
-export default function CollabSidebar() {
+function CollabSidebarContent( { showCommentBoard, setShowCommentBoard } ) {
 	const { createNotice } = useDispatch( noticesStore );
 	const { saveEntityRecord, deleteEntityRecord } = useDispatch( coreStore );
 	const { getEntityRecord } = resolveSelect( coreStore );
-	const { enableComplementaryArea } = useDispatch( interfaceStore );
-	const [ showCommentBoard, setShowCommentBoard ] = useState( false );
 
-	const { postId, postStatus, threads } = useSelect( ( select ) => {
-		const { getCurrentPostId, getEditedPostAttribute } =
-			select( editorStore );
+	const { postId, threads } = useSelect( ( select ) => {
+		const { getCurrentPostId } = select( editorStore );
 		const _postId = getCurrentPostId();
 		const data = !! _postId
 			? select( coreStore ).getEntityRecords( 'root', 'comment', {
@@ -71,25 +63,11 @@ export default function CollabSidebar() {
 
 		return {
 			postId: _postId,
-			postStatus: getEditedPostAttribute( 'status' ),
-			threads: data ?? EMPTY_ARRAY,
+			threads: data,
 		};
 	}, [] );
 
-	const { clientId, blockCommentId } = useSelect( ( select ) => {
-		const { getBlockAttributes, getSelectedBlockClientId } =
-			select( blockEditorStore );
-		const _clientId = getSelectedBlockClientId();
-
-		return {
-			clientId: _clientId,
-			blockCommentId: _clientId
-				? getBlockAttributes( _clientId )?.blockCommentId
-				: null,
-		};
-	}, [] );
-
-	// Get the dispatch functions to save the comment and update the block attributes.
+	const { getSelectedBlockClientId } = useSelect( blockEditorStore );
 	const { updateBlockAttributes } = useDispatch( blockEditorStore );
 
 	// Process comments to build the tree structure
@@ -98,7 +76,7 @@ export default function CollabSidebar() {
 		const compare = {};
 		const result = [];
 
-		const filteredComments = threads.filter(
+		const filteredComments = ( threads ?? [] ).filter(
 			( comment ) => comment.status !== 'trash'
 		);
 
@@ -120,11 +98,6 @@ export default function CollabSidebar() {
 
 		return result;
 	}, [ threads ] );
-
-	const openCollabBoard = () => {
-		setShowCommentBoard( true );
-		enableComplementaryArea( 'core', 'edit-post/collab-sidebar' );
-	};
 
 	// Function to save the comment.
 	const addNewComment = async ( comment, parentCommentId ) => {
@@ -150,7 +123,7 @@ export default function CollabSidebar() {
 		if ( savedRecord ) {
 			// If it's a main comment, update the block attributes with the comment id.
 			if ( ! parentCommentId ) {
-				updateBlockAttributes( clientId, {
+				updateBlockAttributes( getSelectedBlockClientId(), {
 					blockCommentId: savedRecord?.id,
 				} );
 			}
@@ -232,7 +205,7 @@ export default function CollabSidebar() {
 		await deleteEntityRecord( 'root', 'comment', commentId );
 
 		if ( childComment && ! childComment.parent ) {
-			updateBlockAttributes( clientId, {
+			updateBlockAttributes( getSelectedBlockClientId(), {
 				blockCommentId: undefined,
 			} );
 		}
@@ -248,41 +221,77 @@ export default function CollabSidebar() {
 		);
 	};
 
+	return (
+		<div className="editor-collab-sidebar-panel">
+			<AddComment
+				onSubmit={ addNewComment }
+				showCommentBoard={ showCommentBoard }
+				setShowCommentBoard={ setShowCommentBoard }
+			/>
+			<Comments
+				threads={ resultComments }
+				onEditComment={ onEditComment }
+				onAddReply={ addNewComment }
+				onCommentDelete={ onCommentDelete }
+				onCommentResolve={ onCommentResolve }
+			/>
+		</div>
+	);
+}
+
+/**
+ * Renders the Collab sidebar.
+ */
+export default function CollabSidebar() {
+	const [ showCommentBoard, setShowCommentBoard ] = useState( false );
+	const { enableComplementaryArea } = useDispatch( interfaceStore );
+
+	const { postStatus } = useSelect( ( select ) => {
+		return {
+			postStatus:
+				select( editorStore ).getEditedPostAttribute( 'status' ),
+		};
+	}, [] );
+
+	const { blockCommentId } = useSelect( ( select ) => {
+		const { getBlockAttributes, getSelectedBlockClientId } =
+			select( blockEditorStore );
+		const _clientId = getSelectedBlockClientId();
+
+		return {
+			blockCommentId: _clientId
+				? getBlockAttributes( _clientId )?.blockCommentId
+				: null,
+		};
+	}, [] );
+
+	const openCollabBoard = () => {
+		setShowCommentBoard( true );
+		enableComplementaryArea( 'core', 'edit-post/collab-sidebar' );
+	};
+
 	// Check if the experimental flag is enabled.
 	if ( ! isBlockCommentExperimentEnabled || postStatus === 'publish' ) {
 		return null; // or maybe return some message indicating no threads are available.
 	}
 
+	const AddCommentComponent = blockCommentId
+		? AddCommentToolbarButton
+		: AddCommentButton;
+
 	return (
 		<>
-			{ ! blockCommentId && (
-				<AddCommentButton onClick={ openCollabBoard } />
-			) }
-
-			{ blockCommentId > 0 && (
-				<AddCommentToolbarButton onClick={ openCollabBoard } />
-			) }
+			<AddCommentComponent onClick={ openCollabBoard } />
 			<PluginSidebar
 				identifier={ collabSidebarName }
 				// translators: Comments sidebar title
 				title={ __( 'Comments' ) }
 				icon={ commentIcon }
 			>
-				<div className="editor-collab-sidebar-panel">
-					<AddComment
-						threads={ resultComments }
-						onSubmit={ addNewComment }
-						showCommentBoard={ showCommentBoard }
-						setShowCommentBoard={ setShowCommentBoard }
-					/>
-					<Comments
-						threads={ resultComments }
-						onEditComment={ onEditComment }
-						onAddReply={ addNewComment }
-						onCommentDelete={ onCommentDelete }
-						onCommentResolve={ onCommentResolve }
-					/>
-				</div>
+				<CollabSidebarContent
+					showCommentBoard={ showCommentBoard }
+					setShowCommentBoard={ setShowCommentBoard }
+				/>
 			</PluginSidebar>
 		</>
 	);

@@ -215,8 +215,10 @@ export default function ShadowsEditPanel() {
 					size="medium"
 				>
 					{ sprintf(
-						// translators: %s: name of the shadow
-						'Are you sure you want to delete "%s"?',
+						/* translators: %s: Name of the shadow preset. */
+						__(
+							'Are you sure you want to delete "%s" shadow preset?'
+						),
 						selectedShadow.name
 					) }
 				</ConfirmDialog>

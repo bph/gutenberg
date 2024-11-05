@@ -134,23 +134,21 @@ function isScrollable( element ) {
 	);
 }
 
+export const WITH_OVERFLOW_ELEMENT_BLOCKS = [ 'core/navigation' ];
 /**
- * Returns the rect of the element including all visible nested elements.
+ * Returns the bounding rectangle of an element, with special handling for blocks
+ * that have visible overflowing children (defined in WITH_OVERFLOW_ELEMENT_BLOCKS).
  *
- * Visible nested elements, including elements that overflow the parent, are
- * taken into account.
- *
- * This function is useful for calculating the visible area of a block that
- * contains nested elements that overflow the block, e.g. the Navigation block,
- * which can contain overflowing Submenu blocks.
- *
+ * For blocks like Navigation that can have overflowing elements (e.g. submenus),
+ * this function calculates the combined bounds of both the parent and its visible
+ * children. The returned rect may extend beyond the viewport.
  * The returned rect represents the full extent of the element and its visible
  * children, which may extend beyond the viewport.
  *
  * @param {Element} element Element.
  * @return {DOMRect} Bounding client rect of the element and its visible children.
  */
-export function getVisibleElementBounds( element ) {
+export function getElementBounds( element ) {
 	const viewport = element.ownerDocument.defaultView;
 
 	if ( ! viewport ) {
@@ -158,17 +156,25 @@ export function getVisibleElementBounds( element ) {
 	}
 
 	let bounds = element.getBoundingClientRect();
-	const stack = [ element ];
-	let currentElement;
+	const dataType = element.getAttribute( 'data-type' );
 
-	while ( ( currentElement = stack.pop() ) ) {
-		// Children won’t affect bounds unless the element is not scrollable.
-		if ( ! isScrollable( currentElement ) ) {
-			for ( const child of currentElement.children ) {
-				if ( isElementVisible( child ) ) {
-					const childBounds = child.getBoundingClientRect();
-					bounds = rectUnion( bounds, childBounds );
-					stack.push( child );
+	/*
+	 * For blocks with overflowing elements (like Navigation), include the bounds
+	 * of visible children that extend beyond the parent container.
+	 */
+	if ( dataType && WITH_OVERFLOW_ELEMENT_BLOCKS.includes( dataType ) ) {
+		const stack = [ element ];
+		let currentElement;
+
+		while ( ( currentElement = stack.pop() ) ) {
+			// Children won’t affect bounds unless the element is not scrollable.
+			if ( ! isScrollable( currentElement ) ) {
+				for ( const child of currentElement.children ) {
+					if ( isElementVisible( child ) ) {
+						const childBounds = child.getBoundingClientRect();
+						bounds = rectUnion( bounds, childBounds );
+						stack.push( child );
+					}
 				}
 			}
 		}

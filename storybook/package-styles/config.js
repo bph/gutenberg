@@ -55,8 +55,8 @@ const CONFIG = [
 	},
 	{
 		componentIdMatcher: /^dataviews-/,
-		ltr: [ dataviewsLtr, componentsLtr ],
-		rtl: [ dataviewsRtl, componentsRtl ],
+		ltr: [ componentsLtr, dataviewsLtr ],
+		rtl: [ componentsRtl, dataviewsRtl ],
 	},
 ];
 

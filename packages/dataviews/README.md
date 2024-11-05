@@ -1,10 +1,9 @@
-# DataViews
+# The `@wordpress/dataviews` package
 
-DataViews is a component that provides an API to render datasets using different types of layouts (table, grid, list, etc.).
+The DataViews package offers two components to work with a given dataset:
 
-DataViews is data agnostic, it can work with data coming from a static (JSON file) or dynamic source (HTTP Request) — it just requires the data to be an array of objects that have an unique identifier. Consumers are responsible to query the data source appropiately based on the DataViews props:
-
-![DataViews flow](https://developer.wordpress.org/files/2024/09/368600071-20aa078f-7c3d-406d-8dd0-8b764addd22a.png "DataViews flow")
+- `DataViews`: allows rendering a dataset using different types of layouts (table, grid, list) and interaction capabilities (search, filters, sorting, etc.).
+- `DataForm`: allows editing the items from the same dataset.
 
 ## Installation
 
@@ -14,7 +13,13 @@ Install the module
 npm install @wordpress/dataviews --save
 ```
 
-## Usage
+## `DataViews`
+
+### Usage
+
+The component is data agnostic, it just requires the data to be an array of objects with an unique identifier — it can work with data coming from a static (e.g.: JSON file) or dynamic source (e.g.: HTTP Request). Consumers are responsible to query the data source appropiately:
+
+![DataViews flow](https://developer.wordpress.org/files/2024/09/368600071-20aa078f-7c3d-406d-8dd0-8b764addd22a.png "DataViews flow")
 
 ```jsx
 const Example = () => {
@@ -34,11 +39,11 @@ const Example = () => {
 };
 ```
 
-<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataviews--docs">example implementation of the Dataviews component</a></div>
+<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataviews--docs">example implementation of the Dataviews component</a>.</div>
 
-## Properties
+### Properties
 
-### `data`: `Object[]`
+#### `data`: `Object[]`
 
 The dataset to work with, represented as a one-dimensional array.
 
@@ -60,7 +65,7 @@ const data = [
 
 By default, dataviews would use each record's `id` as an unique identifier. If it's not, the consumer should provide a `getItemId` function that returns one.
 
-### `fields`: `Object[]`
+#### `fields`: `Object[]`
 
 The fields describe the visible items for each record in the dataset.
 
@@ -140,7 +145,7 @@ Each field is an object with the following properties:
     -   `operators`: the list of [operators](#operators) supported by the field.
     -   `isPrimary`: whether it is a primary filter. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
 
-### `view`: `object`
+#### `view`: `object`
 
 The view object configures how the dataset is visible to the user.
 
@@ -183,7 +188,24 @@ Properties:
 -   `fields`: the `id` of the fields that are visible in the UI and the specific order in which they are displayed.
 -   `layout`: config that is specific to a particular layout type.
 
-#### Properties of `layout`
+##### Filter operators
+
+Allowed operators:
+
+| Operator   | Selection      | Description                                                             | Example                                            |
+| ---------- | -------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
+| `is`       | Single item    | `EQUAL TO`. The item's field is equal to a single value.                | Author is Admin                                    |
+| `isNot`    | Single item    | `NOT EQUAL TO`. The item's field is not equal to a single value.        | Author is not Admin                                |
+| `isAny`    | Multiple items | `OR`. The item's field is present in a list of values.                  | Author is any: Admin, Editor                       |
+| `isNone`   | Multiple items | `NOT OR`. The item's field is not present in a list of values.          | Author is none: Admin, Editor                      |
+| `isAll`    | Multiple items | `AND`. The item's field has all of the values in the list.              | Category is all: Book, Review, Science Fiction     |
+| `isNotAll` | Multiple items | `NOT AND`. The item's field doesn't have all of the values in the list. | Category is not all: Book, Review, Science Fiction |
+
+`is` and `isNot` are single-selection operators, while `isAny`, `isNone`, `isAll`, and `isNotALl` are multi-selection. By default, a filter with no operators declared will support the `isAny` and `isNone` multi-selection operators. A filter cannot mix single-selection & multi-selection operators; if a single-selection operator is present in the list of valid operators, the multi-selection ones will be discarded and the filter won't allow selecting more than one item.
+
+> The legacy operators `in` and `notIn` have been deprecated and will be removed soon. In the meantime, they work as `is` and `isNot` operators, respectively.
+
+##### Properties of `layout`
 
 | Properties of `layout`                                                                                          | Table | Grid | List |
 | --------------------------------------------------------------------------------------------------------------- | ----- | ---- | ---- |
@@ -194,7 +216,36 @@ Properties:
 | `combinedFields`: a list of "virtual" fields that are made by combining others. See "Combining fields" section. | ✓     |      |      |
 | `styles`: additional `width`, `maxWidth`, `minWidth` styles for each field column.                              | ✓     |      |      |
 
-### `onChangeView`: `function`
+##### Combining fields
+
+The `table` layout has the ability to create "virtual" fields that are made out by combining existing ones.
+
+Each "virtual field", has to provide an `id` and `label` (optionally a `header` instead), which have the same meaning as any other field.
+
+Additionally, they need to provide:
+
+-   `children`: a list of field's `id` to combine
+-   `direction`: how should they be stacked, `vertical` or `horizontal`
+
+For example, this is how you'd define a `site` field which is a combination of a `title` and `description` fields, which are not displayed:
+
+```js
+{
+	fields: [ 'site', 'status' ],
+	layout: {
+		combinedFields: [
+			{
+				id: 'site',
+				label: 'Site',
+				children: [ 'title', 'description' ],
+				direction: 'vertical',
+			}
+		]
+	}
+}
+```
+
+#### `onChangeView`: `function`
 
 The view is a representation of the visible state of the dataset: what type of layout is used to display it (table, grid, etc.), how the dataset is filtered, how it is sorted or paginated.
 
@@ -259,7 +310,7 @@ function MyCustomPageTable() {
 }
 ```
 
-### `actions`: `Object[]`
+#### `actions`: `Object[]`
 
 Collection of operations that can be performed upon each record.
 
@@ -277,28 +328,28 @@ Each action is an object with the following properties:
 -   `supportsBulk`: Whether the action can be used as a bulk action. False by default.
 -   `disabled`: Whether the action is disabled. False by default.
 
-### `paginationInfo`: `Object`
+#### `paginationInfo`: `Object`
 
 -   `totalItems`: the total number of items in the datasets.
 -   `totalPages`: the total number of pages, taking into account the total items in the dataset and the number of items per page provided by the user.
 
-### `search`: `boolean`
+#### `search`: `boolean`
 
 Whether the search input is enabled. `true` by default.
 
-### `searchLabel`: `string`
+#### `searchLabel`: `string`
 
 What text to show in the search input. "Search" by default.
 
-### `getItemId`: `function`
+#### `getItemId`: `function`
 
 Function that receives an item and returns an unique identifier for it. By default, it uses the `id` of the item as unique identifier. If it's not, the consumer should provide their own.
 
-### `isLoading`: `boolean`
+#### `isLoading`: `boolean`
 
 Whether the data is loading. `false` by default.
 
-### `defaultLayouts`: `Record< string, view >`
+#### `defaultLayouts`: `Record< string, view >`
 
 This property provides layout information about the view types that are active. If empty, enables all layout types (see "Layout Types") with empty layout data.
 
@@ -316,67 +367,76 @@ const defaultLayouts = {
 
 The `defaultLayouts` property should be an object that includes properties named `table`, `grid`, or `list`. Each of these properties should contain a `layout` property, which holds the configuration for each specific layout type. Check [here](#properties-of-layout) the full list of properties available for each layout's configuration
 
-### `onChangeSelection`: `function`
+#### `onChangeSelection`: `function`
 
 Callback that signals the user selected one of more items, and takes them as parameter. So far, only the `list` view implements it.
 
-## Types
+## `DataForm`
 
-### Layouts
+### Usage
 
--   `table`: the view uses a table layout.
--   `grid`: the view uses a grid layout.
--   `list`: the view uses a list layout.
+```jsx
+const Example = () => {
+	// Declare data, fields, etc.
 
-### Fields
-
-> The `enumeration` type was removed as it was deemed redundant with the field.elements metadata. New types will be introduced soon.
-
-## Combining fields
-
-The `table` layout has the ability to create "virtual" fields that are made out by combining existing ones.
-
-Each "virtual field", has to provide an `id` and `label` (optionally a `header` instead), which have the same meaning as any other field.
-
-Additionally, they need to provide:
-
--   `children`: a list of field's `id` to combine
--   `direction`: how should they be stacked, `vertical` or `horizontal`
-
-For example, this is how you'd define a `site` field which is a combination of a `title` and `description` fields, which are not displayed:
-
-```js
-{
-	fields: [ 'site', 'status' ],
-	layout: {
-		combinedFields: [
-			{
-				id: 'site',
-				label: 'Site',
-				children: [ 'title', 'description' ],
-				direction: 'vertical',
-			}
-		]
-	}
+	return (
+		<DataForm
+			data={ data }
+			fields={ fields }
+			form={ form }
+			onChange={ onChange }
+		/>
+	)
 }
 ```
 
-### Operators
+<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataform--docs">example implementation of the DataForm component</a>.</div>
 
-Allowed operators:
+### Props
 
-| Operator   | Selection      | Description                                                             | Example                                            |
-| ---------- | -------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
-| `is`       | Single item    | `EQUAL TO`. The item's field is equal to a single value.                | Author is Admin                                    |
-| `isNot`    | Single item    | `NOT EQUAL TO`. The item's field is not equal to a single value.        | Author is not Admin                                |
-| `isAny`    | Multiple items | `OR`. The item's field is present in a list of values.                  | Author is any: Admin, Editor                       |
-| `isNone`   | Multiple items | `NOT OR`. The item's field is not present in a list of values.          | Author is none: Admin, Editor                      |
-| `isAll`    | Multiple items | `AND`. The item's field has all of the values in the list.              | Category is all: Book, Review, Science Fiction     |
-| `isNotAll` | Multiple items | `NOT AND`. The item's field doesn't have all of the values in the list. | Category is not all: Book, Review, Science Fiction |
+#### `data`: `Object[]`
 
-`is` and `isNot` are single-selection operators, while `isAny`, `isNone`, `isAll`, and `isNotALl` are multi-selection. By default, a filter with no operators declared will support the `isAny` and `isNone` multi-selection operators. A filter cannot mix single-selection & multi-selection operators; if a single-selection operator is present in the list of valid operators, the multi-selection ones will be discarded and the filter won't allow selecting more than one item.
+Same as `data` property of `DataViews`.
 
-> The legacy operators `in` and `notIn` have been deprecated and will be removed soon. In the meantime, they work as `is` and `isNot` operators, respectively.
+#### `fields`: `Object[]`
+
+Same as `fields` property of `DataViews`.
+
+#### `form`: `Object[]`
+
+- `type`: either `regular` or `panel`.
+- `fields`: a list of fields ids that should be rendered.
+
+## Utilities
+
+### `filterSortAndPaginate`
+
+Utility to apply the view config (filters, search, sorting, and pagination) to a dataset client-side.
+
+Parameters:
+
+- `data`: the dataset, as described in the "data" property of DataViews.
+- `view`: the view config, as described in the "view" property of DataViews.
+- `fields`: the fields config, as described in the "fields" property of DataViews.
+
+Returns an object containing:
+
+- `data`: the new dataset, with the view config applied.
+- `paginationInfo`: object containing the following properties:
+	- `totalItems`: total number of items for the current view config.
+	- `totalPages`: total number of pages for the current view config.
+
+### `isItemValid`
+
+Utility to determine whether or not the given item's value is valid according to the current fields and form config.
+
+Parameters:
+
+- `item`: the item, as described in the "data" property of DataForm.
+- `fields`: the fields config, as described in the "fields" property of DataForm.
+- `form`: the form config, as described in the "form" property of DataForm.
+
+Returns a boolean indicating if the item is valid (true) or not (false).
 
 ## Contributing to this package
 

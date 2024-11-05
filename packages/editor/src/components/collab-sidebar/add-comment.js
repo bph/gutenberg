@@ -35,25 +35,22 @@ export function AddComment( {
 	// State to manage the comment thread.
 	const [ inputComment, setInputComment ] = useState( '' );
 
-	const {
-		defaultAvatar,
-		clientId,
-		blockCommentId,
-		showAddCommentBoard,
-		currentUser,
-	} = useSelect( ( select ) => {
-		const { getSettings } = select( blockEditorStore );
-		const { __experimentalDiscussionSettings } = getSettings();
-		const selectedBlock = select( blockEditorStore ).getSelectedBlock();
-		const userData = select( coreStore ).getCurrentUser();
-		return {
-			defaultAvatar: __experimentalDiscussionSettings?.avatarURL,
-			clientId: selectedBlock?.clientId,
-			blockCommentId: selectedBlock?.attributes?.blockCommentId,
-			showAddCommentBoard: showCommentBoard,
-			currentUser: userData,
-		};
-	} );
+	const { defaultAvatar, clientId, blockCommentId, currentUser } = useSelect(
+		( select ) => {
+			const { getSettings, getSelectedBlock } =
+				select( blockEditorStore );
+			const { __experimentalDiscussionSettings } = getSettings();
+			const selectedBlock = getSelectedBlock();
+			const userData = select( coreStore ).getCurrentUser();
+			return {
+				defaultAvatar: __experimentalDiscussionSettings?.avatarURL,
+				clientId: selectedBlock?.clientId,
+				blockCommentId: selectedBlock?.attributes?.blockCommentId,
+				currentUser: userData,
+			};
+		},
+		[]
+	);
 
 	const userAvatar =
 		currentUser && currentUser.avatar_urls && currentUser.avatar_urls[ 48 ]
@@ -69,7 +66,7 @@ export function AddComment( {
 		setInputComment( '' );
 	};
 
-	if ( ! showAddCommentBoard || ! clientId || undefined !== blockCommentId ) {
+	if ( ! showCommentBoard || ! clientId || undefined !== blockCommentId ) {
 		return null;
 	}
 

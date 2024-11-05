@@ -62,6 +62,17 @@
 	}
 }
 
+// The initial appender that exists only on empty documents.
+.block-editor-default-block-appender .block-editor-inserter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	line-height: 0;
+
+	&:disabled {
+		display: none;
+	}
+}
 
 /**
  * Fixed position appender (right bottom corner).

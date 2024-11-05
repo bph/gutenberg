@@ -43,9 +43,9 @@ When creating a new package, you need to provide at least the following. Package
 
     This assumes that your code is located in the `src` folder and will be transpiled with `Babel`.
 
-    For packages that should ship as a WordPress script, include `wpScript: true` in the `package.json` file. This tells the build system to bundle the package for use as a WordPress script.
+    For production packages that will ship as a WordPress script, include `wpScript: true` in the `package.json` file. This tells the build system to bundle the package for use as a WordPress script.
 
-    For packages that should ship as a WordPress script module, include a `wpScriptModuleExports` field the `package.json` file. The value of this field can be a string to expose a single script module, or an object with a [shape like the standard `exports` object](https://nodejs.org/docs/latest-v20.x/api/packages.html#subpath-exports) to expose multiple script modules from a single package:
+    For production packages that will ship as a WordPress script module, include a `wpScriptModuleExports` field in the `package.json` file. The value of this field can be a string to expose a single script module, or an object with a [shape like the standard `exports` object](https://nodejs.org/docs/latest-v20.x/api/packages.html#subpath-exports) to expose multiple script modules from a single package:
 
     ```jsonc
     {
@@ -64,7 +64,7 @@ When creating a new package, you need to provide at least the following. Package
     }
     ```
 
-    Both `wpScript` and `wpScriptModuleExports` may be included if the package exposes both a script and a script module.
+    Both `wpScript` and `wpScriptModuleExports` may be included if the package exposes both a script and a script module. These fields are also essential when performing a license check for all their dependencies, because they trigger strict validation against compatibility with GPL v2. All remaining dependencies WordPress doesn't distribute but uses for development purposes can contain also a few other OSS compatible licenses.
 
 1. `README.md` file containing at least:
     - Package name

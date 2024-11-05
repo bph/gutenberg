@@ -204,8 +204,6 @@ export default function TracksEditor( { tracks = [], onChange } ) {
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<ToolbarGroup>
 					<ToolbarButton
-						label={ __( 'Text tracks' ) }
-						showTooltip
 						aria-expanded={ isOpen }
 						aria-haspopup="true"
 						onClick={ onToggle }

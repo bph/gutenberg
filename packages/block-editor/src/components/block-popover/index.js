@@ -20,7 +20,7 @@ import {
  */
 import { useBlockElement } from '../block-list/use-block-props/use-block-refs';
 import usePopoverScroll from './use-popover-scroll';
-import { rectUnion, getVisibleElementBounds } from '../../utils/dom';
+import { rectUnion, getElementBounds } from '../../utils/dom';
 
 const MAX_POPOVER_RECOMPUTE_COUNTER = Number.MAX_SAFE_INTEGER;
 
@@ -90,10 +90,10 @@ function BlockPopover(
 			getBoundingClientRect() {
 				return lastSelectedElement
 					? rectUnion(
-							getVisibleElementBounds( selectedElement ),
-							getVisibleElementBounds( lastSelectedElement )
+							getElementBounds( selectedElement ),
+							getElementBounds( lastSelectedElement )
 					  )
-					: getVisibleElementBounds( selectedElement );
+					: getElementBounds( selectedElement );
 			},
 			contextElement: selectedElement,
 		};

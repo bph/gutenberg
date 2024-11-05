@@ -43,7 +43,7 @@ export default function QueryContent( {
 		tagName: TagName = 'div',
 		query: { inherit } = {},
 	} = attributes;
-	const { templateSlug, postType } = context;
+	const { templateSlug } = context;
 	const { isSingular } = getQueryContextFromTemplate( templateSlug );
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
@@ -159,7 +159,6 @@ export default function QueryContent( {
 					setDisplayLayout={ updateDisplayLayout }
 					setAttributes={ setAttributes }
 					clientId={ clientId }
-					postTypeFromContext={ postType }
 					isSingular={ isSingular }
 				/>
 			</InspectorControls>
