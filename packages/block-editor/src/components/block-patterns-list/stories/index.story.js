@@ -4,11 +4,6 @@
 import blockLibraryStyles from '!!raw-loader!../../../../../block-library/build-style/style.css';
 
 /**
- * WordPress dependencies
- */
-import { useAsyncList } from '@wordpress/compose';
-
-/**
  * Internal dependencies
  */
 import BlockPatternsList from '../';
@@ -26,13 +21,9 @@ export default {
 
 export const Default = {
 	render: function Template( props ) {
-		const shownPatterns = useAsyncList( props.blockPatterns );
 		return (
 			<ExperimentalBlockEditorProvider settings={ blockEditorSettings }>
-				<BlockPatternsList
-					shownPatterns={ shownPatterns }
-					{ ...props }
-				/>
+				<BlockPatternsList { ...props } />
 			</ExperimentalBlockEditorProvider>
 		);
 	},

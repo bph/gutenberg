@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-const chalk = require( 'chalk' );
 const { readFileSync } = require( 'fs' );
 const { basename, dirname, extname, join, sep } = require( 'path' );
 const { sync: glob } = require( 'fast-glob' );
@@ -21,7 +20,8 @@ const {
 	getBlockJsonModuleFields,
 	getBlockJsonScriptFields,
 } = require( './block-json' );
-const { log } = console;
+
+const { warn } = console;
 
 // See https://babeljs.io/docs/en/config-files#configuration-file-types.
 const hasBabelConfig = () =>
@@ -209,10 +209,8 @@ function getWebpackEntryPoints( buildType ) {
 
 		// Continue only if the source directory exists.
 		if ( ! hasProjectFile( getWordPressSrcDirectory() ) ) {
-			log(
-				chalk.yellow(
-					`Source directory "${ getWordPressSrcDirectory() }" was not found. Please confirm there is a "src" directory in the root or the value passed to --webpack-src-dir is correct.`
-				)
+			warn(
+				`Source directory "${ getWordPressSrcDirectory() }" was not found. Please confirm there is a "src" directory in the root or the value passed to --webpack-src-dir is correct.`
 			);
 			return {};
 		}
@@ -240,12 +238,13 @@ function getWebpackEntryPoints( buildType ) {
 				try {
 					parsedBlockJson = JSON.parse( fileContents );
 				} catch ( error ) {
-					chalk.yellow(
-						`Skipping "${ blockMetadataFile.replace(
+					warn(
+						`Not scanning "${ blockMetadataFile.replace(
 							fromProjectRoot( sep ),
 							''
-						) }" due to malformed JSON.`
+						) }" due to collect entry points due to malformed JSON.`
 					);
+					continue;
 				}
 
 				const fields =
@@ -270,18 +269,16 @@ function getWebpackEntryPoints( buildType ) {
 
 					// Takes the path without the file extension, and relative to the defined source directory.
 					if ( ! filepath.startsWith( srcDirectory ) ) {
-						log(
-							chalk.yellow(
-								`Skipping "${ value.replace(
-									'file:',
-									''
-								) }" listed in "${ blockMetadataFile.replace(
-									fromProjectRoot( sep ),
-									''
-								) }". File is located outside of the "${ getWordPressSrcDirectory() }" directory.`
-							)
+						warn(
+							`Skipping "${ value.replace(
+								'file:',
+								''
+							) }" listed in "${ blockMetadataFile.replace(
+								fromProjectRoot( sep ),
+								''
+							) }". File is located outside of the "${ getWordPressSrcDirectory() }" directory.`
 						);
-						return;
+						continue;
 					}
 					const entryName = filepath
 						.replace( extname( filepath ), '' )
@@ -298,18 +295,16 @@ function getWebpackEntryPoints( buildType ) {
 					);
 
 					if ( ! entryFilepath ) {
-						log(
-							chalk.yellow(
-								`Skipping "${ value.replace(
-									'file:',
-									''
-								) }" listed in "${ blockMetadataFile.replace(
-									fromProjectRoot( sep ),
-									''
-								) }". File does not exist in the "${ getWordPressSrcDirectory() }" directory.`
-							)
+						warn(
+							`Skipping "${ value.replace(
+								'file:',
+								''
+							) }" listed in "${ blockMetadataFile.replace(
+								fromProjectRoot( sep ),
+								''
+							) }". File does not exist in the "${ getWordPressSrcDirectory() }" directory.`
 						);
-						return;
+						continue;
 					}
 					entryPoints[ entryName ] = entryFilepath;
 				}
@@ -334,10 +329,8 @@ function getWebpackEntryPoints( buildType ) {
 		} );
 
 		if ( ! entryFile ) {
-			log(
-				chalk.yellow(
-					`No entry file discovered in the "${ getWordPressSrcDirectory() }" directory.`
-				)
+			warn(
+				`No entry file discovered in the "${ getWordPressSrcDirectory() }" directory.`
 			);
 			return {};
 		}
@@ -370,13 +363,24 @@ function getPhpFilePaths( context, props ) {
 	const srcDirectory = fromProjectRoot( context + sep );
 
 	return blockMetadataFiles.flatMap( ( blockMetadataFile ) => {
-		const blockJson = JSON.parse( readFileSync( blockMetadataFile ) );
-
 		const paths = [];
+		let parsedBlockJson;
+		try {
+			parsedBlockJson = JSON.parse( readFileSync( blockMetadataFile ) );
+		} catch ( error ) {
+			warn(
+				`Not scanning "${ blockMetadataFile.replace(
+					fromProjectRoot( sep ),
+					''
+				) }" due to detect render files due to malformed JSON.`
+			);
+			return paths;
+		}
+
 		for ( const prop of props ) {
 			if (
-				typeof blockJson?.[ prop ] !== 'string' ||
-				! blockJson[ prop ]?.startsWith( 'file:' )
+				typeof parsedBlockJson?.[ prop ] !== 'string' ||
+				! parsedBlockJson[ prop ]?.startsWith( 'file:' )
 			) {
 				continue;
 			}
@@ -384,21 +388,19 @@ function getPhpFilePaths( context, props ) {
 			// Removes the `file:` prefix.
 			const filepath = join(
 				dirname( blockMetadataFile ),
-				blockJson[ prop ].replace( 'file:', '' )
+				parsedBlockJson[ prop ].replace( 'file:', '' )
 			);
 
 			// Takes the path without the file extension, and relative to the defined source directory.
 			if ( ! filepath.startsWith( srcDirectory ) ) {
-				log(
-					chalk.yellow(
-						`Skipping "${ blockJson[ prop ].replace(
-							'file:',
-							''
-						) }" listed in "${ blockMetadataFile.replace(
-							fromProjectRoot( sep ),
-							''
-						) }". File is located outside of the "${ context }" directory.`
-					)
+				warn(
+					`Skipping "${ parsedBlockJson[ prop ].replace(
+						'file:',
+						''
+					) }" listed in "${ blockMetadataFile.replace(
+						fromProjectRoot( sep ),
+						''
+					) }". File is located outside of the "${ context }" directory.`
 				);
 				continue;
 			}

@@ -20,7 +20,6 @@ import { EditorProvider } from '@wordpress/editor';
 /**
  * Internal dependencies
  */
-import { Async } from '../async';
 import { default as Link, useLink } from '../routes/link';
 import { useAddedBy } from './hooks';
 
@@ -63,9 +62,9 @@ function PreviewField( { item } ) {
 				>
 					{ isEmpty && __( 'Empty template' ) }
 					{ ! isEmpty && (
-						<Async>
+						<BlockPreview.Async>
 							<BlockPreview blocks={ blocks } />
-						</Async>
+						</BlockPreview.Async>
 					) }
 				</button>
 			</div>

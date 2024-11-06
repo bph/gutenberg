@@ -26,6 +26,7 @@
 	"main": "build/index.js",
 	"module": "build-module/index.js",
 	"react-native": "src/index",
+	"wpScript": true,
 	"sideEffects": [
 		"build-style/**",
 		"src/**/*.scss",
@@ -59,6 +60,7 @@
 		"@wordpress/keycodes": "*",
 		"@wordpress/notices": "*",
 		"@wordpress/preferences": "*",
+		"@wordpress/priority-queue": "*",
 		"@wordpress/private-apis": "*",
 		"@wordpress/rich-text": "*",
 		"@wordpress/style-engine": "*",
@@ -87,6 +89,5 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"wpScript": true
+	}
 }

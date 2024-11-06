@@ -96,7 +96,32 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 					postTypeToResolve === 'page' &&
 					homepageId === postIdToResolve
 				) {
-					return getDefaultTemplateId( { slug: 'front-page' } );
+					// The /lookup endpoint cannot currently handle a lookup
+					// when a page is set as the front page, so specifically in
+					// that case, we want to check if there is a front page
+					// template, and instead of falling back to the home
+					// template, we want to fall back to the page template.
+					const templates = getEntityRecords(
+						'postType',
+						TEMPLATE_POST_TYPE,
+						{
+							per_page: -1,
+						}
+					);
+					if ( templates ) {
+						const id = templates?.find(
+							( { slug } ) => slug === 'front-page'
+						)?.id;
+						if ( id ) {
+							return id;
+						}
+
+						// If no front page template is found, continue with the
+						// logic below (fetching the page template).
+					} else {
+						// Still resolving `templates`.
+						return undefined;
+					}
 				}
 
 				const editedEntity = getEditedEntityRecord(

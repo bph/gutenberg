@@ -2764,8 +2764,11 @@ export function isNavigationMode( state ) {
  * @return {string} the editor mode.
  */
 export const __unstableGetEditorMode = createRegistrySelector(
-	( select ) => () => {
-		return select( preferencesStore ).get( 'core', 'editorTool' );
+	( select ) => ( state ) => {
+		return (
+			state.settings.editorTool ??
+			select( preferencesStore ).get( 'core', 'editorTool' )
+		);
 	}
 );
 

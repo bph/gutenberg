@@ -442,8 +442,8 @@ export function isCurrentPostPending( state ) {
 /**
  * Return true if the current post has already been published.
  *
- * @param {Object}  state       Global application state.
- * @param {Object?} currentPost Explicit current post for bypassing registry selector.
+ * @param {Object} state         Global application state.
+ * @param {Object} [currentPost] Explicit current post for bypassing registry selector.
  *
  * @return {boolean} Whether the post has been published.
  */

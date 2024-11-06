@@ -1,9 +1,9 @@
 # The `@wordpress/dataviews` package
 
-The DataViews package offers two components to work with a given dataset:
+The DataViews package offers two React components and a few utilites to work with a list of data:
 
-- `DataViews`: allows rendering a dataset using different types of layouts (table, grid, list) and interaction capabilities (search, filters, sorting, etc.).
-- `DataForm`: allows editing the items from the same dataset.
+- `DataViews`: to render the dataset using different types of layouts (table, grid, list) and interaction capabilities (search, filters, sorting, etc.).
+- `DataForm`: to edit the items of the dataset.
 
 ## Installation
 
@@ -15,15 +15,19 @@ npm install @wordpress/dataviews --save
 
 ## `DataViews`
 
+<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataviews--docs">example implementation of the Dataviews component</a>.</div>
+
 ### Usage
 
-The component is data agnostic, it just requires the data to be an array of objects with an unique identifier — it can work with data coming from a static (e.g.: JSON file) or dynamic source (e.g.: HTTP Request). Consumers are responsible to query the data source appropiately:
+The `DataViews` component receives data and some other configuration to render the dataset. It'll call the `onChangeView` callback every time the user has interacted with the dataset in some way (sorted, filtered, changed layout, etc.):
 
 ![DataViews flow](https://developer.wordpress.org/files/2024/09/368600071-20aa078f-7c3d-406d-8dd0-8b764addd22a.png "DataViews flow")
 
+Example:
+
 ```jsx
 const Example = () => {
-	// Declare data, fields, etc.
+	const onChangeView = () => { /* React to user changes. */ }
 
 	return (
 		<DataViews
@@ -39,13 +43,12 @@ const Example = () => {
 };
 ```
 
-<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataviews--docs">example implementation of the Dataviews component</a>.</div>
 
 ### Properties
 
 #### `data`: `Object[]`
 
-The dataset to work with, represented as a one-dimensional array.
+A one-dimensional array of objects.
 
 Example:
 
@@ -63,11 +66,28 @@ const data = [
 ];
 ```
 
-By default, dataviews would use each record's `id` as an unique identifier. If it's not, the consumer should provide a `getItemId` function that returns one.
+The data can come from anywhere, from a static JSON file to a dynamic source like a HTTP Request. It's the consumer's responsiblity to query the data source appropiately and update the dataset based on the user's choices for sorting, filtering, etc.
+
+Each record should have an `id` that identifies them uniquely. If they don't, the consumer should provide the `getItemId` property to `DataViews`: a function that returns an unique identifier for the record.
+
+#### `getItemId`: `function`
+
+Function that receives an item and returns an unique identifier for it.
+
+It's optional. The field will get a default implementation by `DataViews` that returns the value of the `item[ id ]`.
+
+Example:
+
+```js
+// Custom getItemId function.
+{
+	getItemId={ ( item ) => item.name ?? item.id }
+}
+```
 
 #### `fields`: `Object[]`
 
-The fields describe the visible items for each record in the dataset.
+The fields describe the visible items for each record in the dataset and how they behave (how to sort them, display them, etc.). See "Fields API" for a description of every property.
 
 Example:
 
@@ -95,7 +115,7 @@ const fields = [
 	},
 	{
 		id: 'author',
-		label: __( 'Author' ),
+		label: 'Author',
 		render: ( { item } ) => {
 			return <a href="...">{ item.author }</a>;
 		},
@@ -109,8 +129,8 @@ const fields = [
 		enableSorting: false,
 	},
 	{
-		label: __( 'Status' ),
 		id: 'status',
+		label: 'Status',
 		getValue: ( { item } ) =>
 			STATUSES.find( ( { value } ) => value === item.status )?.label ??
 			item.status,
@@ -123,29 +143,7 @@ const fields = [
 ];
 ```
 
-Each field is an object with the following properties:
-
--   `id`: identifier for the field. Unique.
--   `label`: the field's name to be shown in the UI.
--   `getValue`: function that returns the value of the field, defaults to `field[id]`.
--   `render`: function that renders the field. Optional, `getValue` will be used if `render` is not defined.
--   <code id="fields-elements">elements</code>: The list of options to pick from when using the field as a filter or when editing (DataForm component). It expects an array of objects with the following properties:
-
-    -   `value`: The id of the value to filter to (for internal use)
-    -   `label`: The text that will be displayed in the UI for the item.
-    -   `description`: A longer description that describes the element, to also be displayed. Optional.
-
-    To enable the filter by a field we just need to set a proper value to the `elements` property of the field we'd like to filter by.
-
--   `type`: the type of the field. See "Field types".
--   `enableSorting`: whether the data can be sorted by the given field. True by default.
--   `enableHiding`: whether the field can be hidden. True by default.
--   `enableGlobalSearch`: whether the field is searchable. False by default.
--   `filterBy`: configuration for the filters enabled by the `elements` property.
-    -   `operators`: the list of [operators](#operators) supported by the field.
-    -   `isPrimary`: whether it is a primary filter. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
-
-#### `view`: `object`
+#### `view`: `Object`
 
 The view object configures how the dataset is visible to the user.
 
@@ -185,25 +183,8 @@ Properties:
     -   `field`: the field used for sorting the dataset.
     -   `direction`: the direction to use for sorting, one of `asc` or `desc`.
 
--   `fields`: the `id` of the fields that are visible in the UI and the specific order in which they are displayed.
+-   `fields`: a list of field `id` that are visible in the UI and the specific order in which they are displayed.
 -   `layout`: config that is specific to a particular layout type.
-
-##### Filter operators
-
-Allowed operators:
-
-| Operator   | Selection      | Description                                                             | Example                                            |
-| ---------- | -------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
-| `is`       | Single item    | `EQUAL TO`. The item's field is equal to a single value.                | Author is Admin                                    |
-| `isNot`    | Single item    | `NOT EQUAL TO`. The item's field is not equal to a single value.        | Author is not Admin                                |
-| `isAny`    | Multiple items | `OR`. The item's field is present in a list of values.                  | Author is any: Admin, Editor                       |
-| `isNone`   | Multiple items | `NOT OR`. The item's field is not present in a list of values.          | Author is none: Admin, Editor                      |
-| `isAll`    | Multiple items | `AND`. The item's field has all of the values in the list.              | Category is all: Book, Review, Science Fiction     |
-| `isNotAll` | Multiple items | `NOT AND`. The item's field doesn't have all of the values in the list. | Category is not all: Book, Review, Science Fiction |
-
-`is` and `isNot` are single-selection operators, while `isAny`, `isNone`, `isAll`, and `isNotALl` are multi-selection. By default, a filter with no operators declared will support the `isAny` and `isNone` multi-selection operators. A filter cannot mix single-selection & multi-selection operators; if a single-selection operator is present in the list of valid operators, the multi-selection ones will be discarded and the filter won't allow selecting more than one item.
-
-> The legacy operators `in` and `notIn` have been deprecated and will be removed soon. In the meantime, they work as `is` and `isNot` operators, respectively.
 
 ##### Properties of `layout`
 
@@ -247,9 +228,9 @@ For example, this is how you'd define a `site` field which is a combination of a
 
 #### `onChangeView`: `function`
 
-The view is a representation of the visible state of the dataset: what type of layout is used to display it (table, grid, etc.), how the dataset is filtered, how it is sorted or paginated.
+Callback executed when the view has changed. It receives the new view object as a parameter.
 
-It's the consumer's responsibility to work with the data provider to make sure the user options defined through the view's config (sort, pagination, filters, etc.) are respected. The `onChangeView` prop allows the consumer to provide a callback to be called when the view config changes, to process the data accordingly.
+The view is a representation of the visible state of the dataset: what type of layout is used to display it (table, grid, etc.), how the dataset is filtered, how it is sorted or paginated. It's the consumer's responsibility to use the view config to query the data provider and make sure the user decisions (sort, pagination, filters, etc.) are respected.
 
 The following example shows how a view object is used to query the WordPress REST API via the entities abstraction. The same can be done with any other data provider.
 
@@ -317,16 +298,18 @@ Collection of operations that can be performed upon each record.
 Each action is an object with the following properties:
 
 -   `id`: string, required. Unique identifier of the action. For example, `move-to-trash`.
--   `label`: string|function, required. User facing description of the action. For example, `Move to Trash`. In case we want to adjust the label based on the selected items, a function which accepts the selected records as input can be provided. This function should always return a `string` value.
+-   `label`: string|function, required. User facing description of the action. For example, `Move to Trash`. It can also take a function that takes the selected items as a parameter and returns a string: this can be useful to provide a dynamic label based on the selection.
 -   `isPrimary`: boolean, optional. Whether the action should be listed inline (primary) or in hidden in the more actions menu (secondary).
--   `icon`: icon to show for primary actions. It's required for a primary action, otherwise the action would be considered secondary.
+-   `icon`: SVG element. Icon to show for primary actions. It's required for a primary action, otherwise the action would be considered secondary.
 -   `isEligible`: function, optional. Whether the action can be performed for a given record. If not present, the action is considered to be eligible for all items. It takes the given record as input.
 -   `isDestructive`: boolean, optional. Whether the action can delete data, in which case the UI would communicate it via red color.
--   `callback`: function, required unless `RenderModal` is provided. Callback function that takes the record as input and performs the required action.
--   `RenderModal`: ReactElement, optional. If an action requires that some UI be rendered in a modal, it can provide a component which takes as props the record as `item` and a `closeModal` function. When this prop is provided, the `callback` property is ignored.
--   `hideModalHeader`: boolean, optional. This property is used in combination with `RenderModal` and controls the visibility of the modal's header. If the action renders a modal and doesn't hide the header, the action's label is going to be used in the modal's header.
 -   `supportsBulk`: Whether the action can be used as a bulk action. False by default.
 -   `disabled`: Whether the action is disabled. False by default.
+-   `context`: where this action would be visible. One of `list`, `single`.
+-   `callback`: function, required unless `RenderModal` is provided. Callback function that takes as input the list of items to operate with, and performs the required action.
+-   `RenderModal`: ReactElement, optional. If an action requires that some UI be rendered in a modal, it can provide a component which takes as input the the list of `items` to operate with, `closeModal` function, and `onActionPerformed` function. When this prop is provided, the `callback` property is ignored.
+-   `hideModalHeader`: boolean, optional. This property is used in combination with `RenderModal` and controls the visibility of the modal's header. If the action renders a modal and doesn't hide the header, the action's label is going to be used in the modal's header.
+-   `modalHeader`: string, optional. The header of the modal.
 
 #### `paginationInfo`: `Object`
 
@@ -340,10 +323,6 @@ Whether the search input is enabled. `true` by default.
 #### `searchLabel`: `string`
 
 What text to show in the search input. "Search" by default.
-
-#### `getItemId`: `function`
-
-Function that receives an item and returns an unique identifier for it. By default, it uses the `id` of the item as unique identifier. If it's not, the consumer should provide their own.
 
 #### `isLoading`: `boolean`
 
@@ -365,13 +344,27 @@ const defaultLayouts = {
 };
 ```
 
-The `defaultLayouts` property should be an object that includes properties named `table`, `grid`, or `list`. Each of these properties should contain a `layout` property, which holds the configuration for each specific layout type. Check [here](#properties-of-layout) the full list of properties available for each layout's configuration
+The `defaultLayouts` property should be an object that includes properties named `table`, `grid`, or `list`. Each of these properties should contain a `layout` property, which holds the configuration for each specific layout type. Check "Properties of layout" for the full list of properties available for each layout's configuration
+
+#### `selection`: `string[]`
+
+The list of selected items' ids.
+
+If `selection` and `onChangeSelection` are provided, the `DataViews` component behaves as a controlled component, otherwise, it behaves like an uncontrolled component.
 
 #### `onChangeSelection`: `function`
 
-Callback that signals the user selected one of more items, and takes them as parameter. So far, only the `list` view implements it.
+Callback that signals the user selected one of more items. It receives the list of selected items' ids as a parameter.
+
+If `selection` and `onChangeSelection` are provided, the `DataViews` component behaves as a controlled component, otherwise, it behaves like an uncontrolled component.
+
+#### `header`: React component
+
+React component to be rendered next to the view config button.
 
 ## `DataForm`
+
+<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataform--docs">example implementation of the DataForm component</a>.</div>
 
 ### Usage
 
@@ -390,22 +383,85 @@ const Example = () => {
 }
 ```
 
-<div class="callout callout-info">At <a href="https://wordpress.github.io/gutenberg/">WordPress Gutenberg's Storybook</a> there's and <a href="https://wordpress.github.io/gutenberg/?path=/docs/dataviews-dataform--docs">example implementation of the DataForm component</a>.</div>
+### Properties
 
-### Props
+#### `data`: `Object`
 
-#### `data`: `Object[]`
+A single item to be edited.
 
-Same as `data` property of `DataViews`.
+It can be think of as a single record coming from the `data` property of `DataViews` — though it doesn't need to be. It can be totally separated or a mix of records if your app supports bulk editing.
 
 #### `fields`: `Object[]`
 
-Same as `fields` property of `DataViews`.
+The fields describe which parts of the data are visible and how they behave (how to edit them, validate them, etc.). See "Fields API" for a description of every property.
+
+Example:
+
+```js
+const fields = [
+	{
+		id: 'title',
+		type: 'text',
+		label: 'Title',
+	},
+	{
+		id: 'date',
+		type: 'datetime',
+		label: 'Date',
+	},
+	{
+		id: 'author',
+		type: 'text'
+		label: 'Author',
+		elements: [
+			{ value: 1, label: 'Admin' },
+			{ value: 2, label: 'User' },
+		],
+	},
+];
+```
 
 #### `form`: `Object[]`
 
 - `type`: either `regular` or `panel`.
 - `fields`: a list of fields ids that should be rendered.
+
+#### `onChange`: `function`
+
+Callback function that receives an object with the edits done by the user.
+
+Example:
+
+```js
+const data = {
+	id: 1,
+	title: 'Title',
+	author: 'Admin',
+	date: '2012-04-23T18:25:43.511Z',
+};
+
+const onChange = ( edits ) => {
+	/*
+	 * edits will contain user edits.
+	 * For example, if the user edited the title
+	 * edits will be:
+	 *
+	 * {
+	 *   title: 'New title'
+	 * }
+	 *
+	 */
+};
+
+return (
+	<DataForm
+		data={data}
+		fields={fields}
+		form={form}
+		onChange={onChange}
+	/>
+);
+```
 
 ## Utilities
 
@@ -437,6 +493,389 @@ Parameters:
 - `form`: the form config, as described in the "form" property of DataForm.
 
 Returns a boolean indicating if the item is valid (true) or not (false).
+
+## Fields API
+
+### `id`
+
+The unique identifier of the field.
+
+- Type: `string`.
+- Required.
+
+Example:
+
+```js
+{ id: 'field_id' }
+```
+
+### `type`
+
+Field type. One of `text`, `integer`, `datetime`.
+
+If a field declares a `type`, it gets default implementations for the `sort`, `isValid`, and `Edit` functions. They will overriden if the field provides its own.
+
+- Type: `string`.
+- Optional.
+
+Example:
+
+```js
+{ type: 'text' }
+```
+
+### `label`
+
+The field's name. This will be used across the UI.
+
+- Type: `string`.
+- Optional.
+- Defaults to the `id` value.
+
+Example:
+
+```js
+{ label: 'Title' }
+```
+
+### `header`
+
+React component used by the layouts to display the field name — useful to add icons, etc. It's complementary to the `label` property.
+
+- Type: React component.
+- Optional.
+- Defaults to the `label` value.
+- Props: none.
+- Returns a React element that represents the field's name.
+
+Example:
+
+```js
+{
+	header: () => { /* Returns a react element. */ }
+}
+```
+
+### `getValue`
+
+React component that returns the value of a field. This value is used in sorting the fields, or when filtering.
+
+- Type: React component.
+- Optional.
+- Defaults to `item[ id ]`.
+- Props:
+  - `item` value to be processed.
+- Returns a value that represents the field.
+
+Example:
+
+```js
+{
+	getValue: ( { item } ) => { /* The field's value.  */ };
+}
+```
+
+### `render`
+
+React component that renders the field. This is used by the layouts.
+
+- Type: React component.
+- Optional.
+- Defaults to `getValue`.
+- Props
+  - `item` value to be processed.
+- Returns a React element that represents the field's value.
+
+Example:
+
+```js
+{
+	render: ( { item} ) => { /* React element to be displayed. */ }
+}
+```
+
+### `Edit`
+
+React component that renders the control to edit the field.
+
+- Type: React component | `string`. If it's a string, it needs to be one of `text`, `integer`, `datetime`, `radio`, `select`.
+- Required by DataForm. Optional if the field provided a `type`.
+- Props:
+  - `data`: the item to be processed
+  - `field`: the field definition
+  - `onChange`: the callback with the updates
+  - `hideLabelFromVision`: boolean representing if the label should be hidden
+- Returns a React element to edit the field's value.
+
+Example:
+
+```js
+// A custom control defined by the field.
+{
+	Edit: ( {
+		data,
+		field,
+		onChange,
+		hideLabelFromVision
+	} ) => {
+		const value = field.getValue( { item: data } );
+
+		return (
+			<CustomTimePicker
+				value={ value }
+				onChange={ onChange }
+				hideLabelFromVision
+			/>
+		);
+	}
+}
+```
+
+```js
+// Use one of the core controls.
+{
+	Edit: 'radio'
+}
+```
+
+```js
+// Edit is optional when field's type is present.
+// The field will use the default Edit function for text.
+{
+	type: 'text'
+}
+```
+
+```js
+// Edit can be provided even if field's type is present.
+// The field will use its own custom control.
+{
+	type: 'text',
+	Edit: 'radio'
+}
+```
+
+### `sort`
+
+Function to sort the records.
+
+- Type: `function`.
+- Optional.
+- Args
+  - `a`: the first item to compare
+  - `b`: the second item to compare
+  - `direction`: either `asc` (ascending) or `desc` (descending)
+- Returns a number where:
+  - a negative value indicates that `a` should come before `b`
+  - a positive value indicates that `a` should come after `b`
+  - 0 indicates that `a` and `b` are considered equal
+
+Example:
+
+```js
+// A custom sort function defined by the field.
+{
+	sort: ( a, b, direction ) => {
+		return direction === 'asc'
+			? a.localeCompare( b )
+			: b.localeCompare( a );
+	}
+}
+```
+
+```js
+// If field type is provided,
+// the field gets a default sort function.
+{
+	type: 'number'
+}
+```
+
+```js
+// Even if a field type is provided,
+// fields can override the default sort function assigned for that type.
+{
+	type: 'number'
+	sort: ( a, b, direction ) => { /* Custom sort */ }
+}
+```
+
+### `isValid`
+
+Function to validate a field's value.
+
+- Type: function.
+- Optional.
+- Args
+  - `item`: the data to validate
+  - `context`: an object containing the following props:
+    - `elements`: the elements defined by the field
+- Returns a boolean, indicating if the field is valid or not.
+
+Example:
+
+```js
+// Custom isValid function.
+{
+	isValid: ( item, context ) => {
+		return !! item;
+	}
+}
+```
+
+```js
+// If the field defines a type,
+// it'll get a default isValid function for the type.
+{
+	type: 'number',
+}
+```
+
+```js
+// Even if the field provides a type,
+// the field can override the default isValid function.
+{
+	type: 'number',
+	isValid: ( item, context ) => { /* Custom function. */ }
+}
+```
+
+### `isVisible`
+
+Function that indicates if the field should be visible.
+
+- Type: `function`.
+- Optional.
+- Args
+  - `item`: the data to be processed
+- Returns a `boolean` indicating if the field should be visible (`true`) or not (`false`).
+
+Example:
+
+```js
+// Custom isVisible function.
+{
+	isVisible: ( item ) => { /* Custom implementation. */ }
+}
+```
+
+### `enableSorting`
+
+Boolean indicating if the field is sortable.
+
+- Type: `boolean`.
+- Optional.
+- Defaults to `true`.
+
+Example:
+
+```js
+{ enableSorting: true }
+```
+
+### `enableHiding`
+
+Boolean indicating if the field can be hidden.
+
+- Type: `boolean`.
+- Optional.
+- Defaults to `true`.
+
+Example:
+
+```js
+{ enableHiding: true }
+```
+
+### `enableGlobalSearch`
+
+Boolean indicating if the field is searchable.
+
+- Type: `boolean`.
+- Optional.
+- Defaults to `false`.
+
+Example:
+
+```js
+{ enableGlobalSearch: true }
+```
+
+### `elements`
+
+List of valid values for a field. If provided, it creates a DataViews' filter for the field. DataForm's edit control will use these values as well (see `Edit` field property).
+
+- Type: `array` of objects.
+- Optional.
+- Each object can have the following properties:
+  - `value`: required, the value to match against the field's value.
+  - `label`: required, the name to display to users.
+  - `description`: optional, a longer description of the item.
+
+Example:
+
+```js
+{
+	elements: [
+		{ value: '1', label: 'Product A' },
+		{ value: '2', label: 'Product B' },
+		{ value: '3', label: 'Product C' },
+		{ value: '4', label: 'Product D' },
+	]
+}
+```
+
+### `filterBy`
+
+Configuration of the filters.
+
+- Type: `object`.
+- Optional.
+- Properties:
+  - `operators`: the list of operators supported by the field. See "operators" below. By default, a filter will support the `isAny` and `isNone` multi-selection operators.
+  - `isPrimary`: boolean, optional. Indicates if the filter is primary. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
+
+Operators:
+
+| Operator   | Selection      | Description                                                             | Example                                            |
+| ---------- | -------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
+| `is`       | Single item    | `EQUAL TO`. The item's field is equal to a single value.                | Author is Admin                                    |
+| `isNot`    | Single item    | `NOT EQUAL TO`. The item's field is not equal to a single value.        | Author is not Admin                                |
+| `isAny`    | Multiple items | `OR`. The item's field is present in a list of values.                  | Author is any: Admin, Editor                       |
+| `isNone`   | Multiple items | `NOT OR`. The item's field is not present in a list of values.          | Author is none: Admin, Editor                      |
+| `isAll`    | Multiple items | `AND`. The item's field has all of the values in the list.              | Category is all: Book, Review, Science Fiction     |
+| `isNotAll` | Multiple items | `NOT AND`. The item's field doesn't have all of the values in the list. | Category is not all: Book, Review, Science Fiction |
+
+`is` and `isNot` are single-selection operators, while `isAny`, `isNone`, `isAll`, and `isNotALl` are multi-selection. By default, a filter with no operators declared will support the `isAny` and `isNone` multi-selection operators. A filter cannot mix single-selection & multi-selection operators; if a single-selection operator is present in the list of valid operators, the multi-selection ones will be discarded and the filter won't allow selecting more than one item.
+
+Example:
+
+```js
+// Set a filter as primary.
+{
+	filterBy: {
+		isPrimary: true
+	}
+}
+```
+
+```js
+// Configure a filter as single-selection.
+{
+	filterBy: {
+		operators: [ `is`, `isNot` ]
+	}
+}
+```
+
+```js
+// Configure a filter as multi-selection with all the options.
+{
+	filterBy: {
+		operators: [ `isAny`, `isNone`, `isAll`, `isNotAll` ]
+	}
+}
+```
 
 ## Contributing to this package
 

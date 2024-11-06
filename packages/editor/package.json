@@ -25,6 +25,8 @@
 	"main": "build/index.js",
 	"module": "build-module/index.js",
 	"react-native": "src/index",
+	"wpScript": true,
+	"types": "build-types",
 	"sideEffects": [
 		"build-style/**",
 		"src/**/*.scss",
@@ -85,6 +87,5 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"wpScript": true
+	}
 }

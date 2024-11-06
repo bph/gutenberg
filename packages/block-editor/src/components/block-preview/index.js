@@ -19,6 +19,7 @@ import AutoHeightBlockPreview from './auto';
 import EditorStyles from '../editor-styles';
 import { store as blockEditorStore } from '../../store';
 import { BlockListItems } from '../block-list';
+import { Async } from './async';
 
 const EMPTY_ADDITIONAL_STYLES = [];
 
@@ -86,6 +87,10 @@ export function BlockPreview( {
 	);
 }
 
+const MemoizedBlockPreview = memo( BlockPreview );
+
+MemoizedBlockPreview.Async = Async;
+
 /**
  * BlockPreview renders a preview of a block or array of blocks.
  *
@@ -97,7 +102,7 @@ export function BlockPreview( {
  *
  * @return {Component} The component to be rendered.
  */
-export default memo( BlockPreview );
+export default MemoizedBlockPreview;
 
 /**
  * This hook is used to lightly mark an element as a block preview wrapper

@@ -21,7 +21,6 @@ import {
 	MenuItem,
 	ToolbarButton,
 } from '@wordpress/components';
-import { useAsyncList } from '@wordpress/compose';
 import { __, sprintf } from '@wordpress/i18n';
 import { store as coreStore } from '@wordpress/core-data';
 import { useState } from '@wordpress/element';
@@ -85,7 +84,6 @@ function TemplatesList( { area, clientId, isEntityAvailable, onSelect } ) {
 		isEntityAvailable &&
 		!! blockPatterns.length &&
 		( area === 'header' || area === 'footer' );
-	const shownTemplates = useAsyncList( blockPatterns );
 
 	if ( ! canReplace ) {
 		return null;
@@ -96,7 +94,6 @@ function TemplatesList( { area, clientId, isEntityAvailable, onSelect } ) {
 			<BlockPatternsList
 				label={ __( 'Templates' ) }
 				blockPatterns={ blockPatterns }
-				shownPatterns={ shownTemplates }
 				onClickPattern={ onSelect }
 				showTitle={ false }
 			/>

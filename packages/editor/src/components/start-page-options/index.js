@@ -9,7 +9,6 @@ import {
 	__experimentalBlockPatternsList as BlockPatternsList,
 } from '@wordpress/block-editor';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useAsyncList } from '@wordpress/compose';
 import { store as coreStore } from '@wordpress/core-data';
 import { __unstableSerializeAndClean } from '@wordpress/blocks';
 import { store as preferencesStore } from '@wordpress/preferences';
@@ -66,7 +65,6 @@ export function useStartPatterns() {
 }
 
 function PatternSelection( { blockPatterns, onChoosePattern } ) {
-	const shownBlockPatterns = useAsyncList( blockPatterns );
 	const { editEntityRecord } = useDispatch( coreStore );
 	const { postType, postId } = useSelect( ( select ) => {
 		const { getCurrentPostType, getCurrentPostId } = select( editorStore );
@@ -79,7 +77,6 @@ function PatternSelection( { blockPatterns, onChoosePattern } ) {
 	return (
 		<BlockPatternsList
 			blockPatterns={ blockPatterns }
-			shownPatterns={ shownBlockPatterns }
 			onClickPattern={ ( _pattern, blocks ) => {
 				editEntityRecord( 'postType', postType, postId, {
 					blocks,

@@ -18,7 +18,6 @@ import { BlockPatternsList } from '@wordpress/block-editor';
 const MyBlockPatternsList = () => (
 	<BlockPatternsList
 		blockPatterns={ shownBlockPatterns }
-		shownPatterns={ shownBlockPatterns }
 		onClickPattern={ onSelectBlockPattern }
 	/>
 );
@@ -29,13 +28,6 @@ const MyBlockPatternsList = () => (
 #### blockPatterns
 
 An array of block patterns that can be shown in the block patterns list.
-
--   Type: `Array`
--   Required: Yes
-
-#### shownPatterns
-
-An array of shown block patterns objects.
 
 -   Type: `Array`
 -   Required: Yes

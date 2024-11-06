@@ -10,7 +10,7 @@ import {
 	__experimentalHStack as HStack,
 	Button,
 	Tooltip,
-	Flex,
+	FlexBlock,
 } from '@wordpress/components';
 import { __, _x } from '@wordpress/i18n';
 import { useState, useMemo, useId } from '@wordpress/element';
@@ -25,7 +25,6 @@ import { decodeEntities } from '@wordpress/html-entities';
 /**
  * Internal dependencies
  */
-import { Async } from '../async';
 import {
 	PATTERN_TYPES,
 	TEMPLATE_PART_POST_TYPE,
@@ -88,12 +87,12 @@ function PreviewField( { item } ) {
 				{ isEmpty && isTemplatePart && __( 'Empty template part' ) }
 				{ isEmpty && ! isTemplatePart && __( 'Empty pattern' ) }
 				{ ! isEmpty && (
-					<Async>
+					<BlockPreview.Async>
 						<BlockPreview
 							blocks={ blocks }
 							viewportWidth={ item.viewportWidth }
 						/>
-					</Async>
+					</BlockPreview.Async>
 				) }
 			</PreviewWrapper>
 			{ !! description && (
@@ -123,12 +122,7 @@ function TitleField( { item } ) {
 	const title = decodeEntities( defaultGetTitle( item ) );
 	return (
 		<HStack alignment="center" justify="flex-start" spacing={ 2 }>
-			<Flex
-				as="div"
-				gap={ 0 }
-				justify="flex-start"
-				className="edit-site-patterns__pattern-title"
-			>
+			<FlexBlock className="edit-site-patterns__pattern-title">
 				{ item.type === PATTERN_TYPES.theme ? (
 					title
 				) : (
@@ -143,7 +137,7 @@ function TitleField( { item } ) {
 						{ title }
 					</Button>
 				) }
-			</Flex>
+			</FlexBlock>
 			{ item.type === PATTERN_TYPES.theme && (
 				<Tooltip
 					placement="top"

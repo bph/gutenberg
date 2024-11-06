@@ -5,7 +5,6 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import { PanelBody } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useAsyncList } from '@wordpress/compose';
 import { __experimentalBlockPatternsList as BlockPatternsList } from '@wordpress/block-editor';
 import { serialize } from '@wordpress/blocks';
 
@@ -20,7 +19,6 @@ import {
 } from '../../store/constants';
 
 function TemplatesList( { availableTemplates, onSelect } ) {
-	const shownTemplates = useAsyncList( availableTemplates );
 	if ( ! availableTemplates || availableTemplates?.length === 0 ) {
 		return null;
 	}
@@ -29,7 +27,6 @@ function TemplatesList( { availableTemplates, onSelect } ) {
 		<BlockPatternsList
 			label={ __( 'Templates' ) }
 			blockPatterns={ availableTemplates }
-			shownPatterns={ shownTemplates }
 			onClickPattern={ onSelect }
 			showTitlesAsTooltip
 		/>

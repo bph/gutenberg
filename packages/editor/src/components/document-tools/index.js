@@ -35,6 +35,7 @@ function DocumentTools( { className, disableBlockTools = false } ) {
 		inserterSidebarToggleRef,
 		listViewToggleRef,
 		showIconLabels,
+		showTools,
 	} = useSelect( ( select ) => {
 		const { get } = select( preferencesStore );
 		const {
@@ -42,6 +43,8 @@ function DocumentTools( { className, disableBlockTools = false } ) {
 			getEditorMode,
 			getInserterSidebarToggleRef,
 			getListViewToggleRef,
+			getRenderingMode,
+			getCurrentPostType,
 		} = unlock( select( editorStore ) );
 		const { getShortcutRepresentation } = select( keyboardShortcutsStore );
 
@@ -56,6 +59,9 @@ function DocumentTools( { className, disableBlockTools = false } ) {
 			showIconLabels: get( 'core', 'showIconLabels' ),
 			isDistractionFree: get( 'core', 'distractionFree' ),
 			isVisualMode: getEditorMode() === 'visual',
+			showTools:
+				getRenderingMode() !== 'post-only' ||
+				getCurrentPostType() === 'wp_template',
 		};
 	}, [] );
 
@@ -128,7 +134,7 @@ function DocumentTools( { className, disableBlockTools = false } ) {
 				) }
 				{ ( isWideViewport || ! showIconLabels ) && (
 					<>
-						{ isLargeViewport && (
+						{ showTools && isLargeViewport && (
 							<ToolbarItem
 								as={ ToolSelector }
 								showTooltip={ ! showIconLabels }

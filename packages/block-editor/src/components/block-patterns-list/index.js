@@ -134,10 +134,14 @@ function BlockPattern( {
 							} }
 							onMouseLeave={ () => onHover?.( null ) }
 						>
-							<BlockPreview
-								blocks={ blocks }
-								viewportWidth={ viewportWidth }
-							/>
+							<BlockPreview.Async
+								placeholder={ <BlockPatternPlaceholder /> }
+							>
+								<BlockPreview
+									blocks={ blocks }
+									viewportWidth={ viewportWidth }
+								/>
+							</BlockPreview.Async>
 
 							{ showTitle && (
 								<HStack
@@ -187,7 +191,6 @@ function BlockPatternsList(
 	{
 		isDraggable,
 		blockPatterns,
-		shownPatterns,
 		onHover,
 		onClickPattern,
 		orientation,
@@ -205,11 +208,9 @@ function BlockPatternsList(
 		// Reset the active composite item whenever the available patterns change,
 		// to make sure that Composite widget can receive focus correctly when its
 		// composite items change. The first composite item will receive focus.
-		const firstCompositeItemId = blockPatterns.find( ( pattern ) =>
-			shownPatterns.includes( pattern )
-		)?.name;
+		const firstCompositeItemId = blockPatterns[ 0 ]?.name;
 		setActiveCompositeId( firstCompositeItemId );
-	}, [ shownPatterns, blockPatterns ] );
+	}, [ blockPatterns ] );
 
 	return (
 		<Composite
@@ -221,24 +222,19 @@ function BlockPatternsList(
 			aria-label={ label }
 			ref={ ref }
 		>
-			{ blockPatterns.map( ( pattern ) => {
-				const isShown = shownPatterns.includes( pattern );
-				return isShown ? (
-					<BlockPattern
-						key={ pattern.name }
-						id={ pattern.name }
-						pattern={ pattern }
-						onClick={ onClickPattern }
-						onHover={ onHover }
-						isDraggable={ isDraggable }
-						showTitle={ showTitle }
-						showTooltip={ showTitlesAsTooltip }
-						category={ category }
-					/>
-				) : (
-					<BlockPatternPlaceholder key={ pattern.name } />
-				);
-			} ) }
+			{ blockPatterns.map( ( pattern ) => (
+				<BlockPattern
+					key={ pattern.name }
+					id={ pattern.name }
+					pattern={ pattern }
+					onClick={ onClickPattern }
+					onHover={ onHover }
+					isDraggable={ isDraggable }
+					showTitle={ showTitle }
+					showTooltip={ showTitlesAsTooltip }
+					category={ category }
+				/>
+			) ) }
 			{ pagingProps && <BlockPatternsPaging { ...pagingProps } /> }
 		</Composite>
 	);

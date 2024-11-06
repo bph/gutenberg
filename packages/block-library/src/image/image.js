@@ -32,6 +32,7 @@ import {
 	__experimentalUseBorderProps as useBorderProps,
 	__experimentalGetShadowClassesAndStyles as getShadowClassesAndStyles,
 	privateApis as blockEditorPrivateApis,
+	BlockSettingsMenuControls,
 } from '@wordpress/block-editor';
 import { useEffect, useMemo, useState, useRef } from '@wordpress/element';
 import { __, _x, sprintf, isRTL } from '@wordpress/i18n';
@@ -39,7 +40,7 @@ import { getFilename } from '@wordpress/url';
 import { getBlockBindingsSource, switchToBlockType } from '@wordpress/blocks';
 import { crop, overlayText, upload, chevronDown } from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
-import { store as coreStore } from '@wordpress/core-data';
+import { store as coreStore, useEntityProp } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -893,6 +894,16 @@ export default function Image( {
 	const shadowProps = getShadowClassesAndStyles( attributes );
 	const isRounded = attributes.className?.includes( 'is-style-rounded' );
 
+	const { postType, postId, queryId } = context;
+	const isDescendentOfQueryLoop = Number.isFinite( queryId );
+
+	const [ , setFeaturedImage ] = useEntityProp(
+		'postType',
+		postType,
+		'featured_media',
+		postId
+	);
+
 	let img =
 		temporaryURL && hasImageErrored ? (
 			// Show a placeholder during upload when the blob URL can't be loaded. This can
@@ -1094,10 +1105,37 @@ export default function Image( {
 		);
 	}
 
+	/**
+	 * Set the post's featured image with the current image.
+	 */
+	const setPostFeatureImage = () => {
+		setFeaturedImage( id );
+		createSuccessNotice( __( 'Post featured image updated.' ), {
+			type: 'snackbar',
+		} );
+	};
+
+	const featuredImageControl = (
+		<BlockSettingsMenuControls>
+			{ ( { selectedClientIds } ) =>
+				selectedClientIds.length === 1 &&
+				! isDescendentOfQueryLoop &&
+				postId &&
+				id &&
+				clientId === selectedClientIds[ 0 ] && (
+					<MenuItem onClick={ setPostFeatureImage }>
+						{ __( 'Set featured image' ) }
+					</MenuItem>
+				)
+			}
+		</BlockSettingsMenuControls>
+	);
+
 	return (
 		<>
 			{ mediaReplaceFlow }
 			{ controls }
+			{ featuredImageControl }
 			{ img }
 
 			<Caption

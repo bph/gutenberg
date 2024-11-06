@@ -10,7 +10,6 @@ import {
 import { __ } from '@wordpress/i18n';
 import { cloneBlock } from '@wordpress/blocks';
 import { useMemo } from '@wordpress/element';
-import { useAsyncList } from '@wordpress/compose';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -81,10 +80,6 @@ export default function ChangeDesign( { clientId } ) {
 			.slice( 0, MAX_PATTERNS_TO_SHOW );
 	}, [ categories, currentPatternName, patterns ] );
 
-	const currentShownPatterns = useAsyncList(
-		sameCategoryPatternsWithSingleWrapper
-	);
-
 	if ( sameCategoryPatternsWithSingleWrapper.length < 2 ) {
 		return null;
 	}
@@ -121,7 +116,6 @@ export default function ChangeDesign( { clientId } ) {
 					paddingSize="none"
 				>
 					<BlockPatternsList
-						shownPatterns={ currentShownPatterns }
 						blockPatterns={ sameCategoryPatternsWithSingleWrapper }
 						onClickPattern={ onClickPattern }
 						showTitle={ false }

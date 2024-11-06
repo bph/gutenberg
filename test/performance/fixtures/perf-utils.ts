@@ -150,7 +150,7 @@ export class PerfUtils {
 	}
 
 	/**
-	 * Generates and loads a 1000 empty paragraphs into the editor canvas.
+	 * Generates and loads a 1000 paragraphs into the editor canvas.
 	 */
 	async load1000Paragraphs() {
 		await this.page.waitForFunction(
@@ -161,7 +161,7 @@ export class PerfUtils {
 			const { createBlock } = window.wp.blocks;
 			const { dispatch } = window.wp.data;
 			const blocks = Array.from( { length: 1000 } ).map( () =>
-				createBlock( 'core/paragraph' )
+				createBlock( 'core/paragraph', { content: 'paragraph' } )
 			);
 			dispatch( 'core/block-editor' ).resetBlocks( blocks );
 		} );

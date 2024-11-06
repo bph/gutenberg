@@ -25,12 +25,12 @@
 	},
 	"main": "build/index.js",
 	"module": "build-module/index.js",
+	"wpScript": true,
 	"types": "build-types",
 	"dependencies": {
 		"wasm-vips": "^0.0.10"
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"wpScript": true
+	}
 }

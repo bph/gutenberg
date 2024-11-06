@@ -206,12 +206,24 @@ function CoverEdit( {
 
 			// Try to use the previous selected image size if it's available
 			// otherwise try the default image size or fallback to full size.
-			if ( sizeSlug && newMedia?.sizes?.[ sizeSlug ] ) {
+			if (
+				sizeSlug &&
+				( newMedia?.sizes?.[ sizeSlug ] ||
+					newMedia?.media_details?.sizes?.[ sizeSlug ] )
+			) {
 				mediaAttributes.sizeSlug = sizeSlug;
-				mediaAttributes.url = newMedia?.sizes?.[ sizeSlug ]?.url;
-			} else if ( newMedia?.sizes?.[ imageDefaultSize ] ) {
+				mediaAttributes.url =
+					newMedia?.sizes?.[ sizeSlug ]?.url ||
+					newMedia?.media_details?.sizes?.[ sizeSlug ]?.source_url;
+			} else if (
+				newMedia?.sizes?.[ imageDefaultSize ] ||
+				newMedia?.media_details?.sizes?.[ imageDefaultSize ]
+			) {
 				mediaAttributes.sizeSlug = imageDefaultSize;
-				mediaAttributes.url = newMedia?.sizes?.[ sizeSlug ]?.url;
+				mediaAttributes.url =
+					newMedia?.sizes?.[ imageDefaultSize ]?.url ||
+					newMedia?.media_details?.sizes?.[ imageDefaultSize ]
+						?.source_url;
 			} else {
 				mediaAttributes.sizeSlug = DEFAULT_MEDIA_SIZE_SLUG;
 			}

@@ -786,7 +786,7 @@ Return true if the current post has already been published.
 _Parameters_
 
 -   _state_ `Object`: Global application state.
--   _currentPost_ `Object?`: Explicit current post for bypassing registry selector.
+-   _currentPost_ `[Object]`: Explicit current post for bypassing registry selector.
 
 _Returns_
 

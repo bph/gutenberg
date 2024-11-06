@@ -270,7 +270,7 @@ test.describe( 'Post Editor Performance', () => {
 			const canvas = await perfUtils.getCanvas();
 
 			const paragraphs = canvas.getByRole( 'document', {
-				name: /Empty block/i,
+				name: /Block: Paragraph/i,
 			} );
 
 			const samples = 10;
