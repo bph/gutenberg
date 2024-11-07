@@ -33,7 +33,7 @@ function TabbedSidebar(
 						icon={ closeSmall }
 						label={ closeButtonLabel }
 						onClick={ () => onClose() }
-						size="small"
+						size="compact"
 					/>
 
 					<Tabs.TabList

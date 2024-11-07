@@ -562,8 +562,13 @@ export function createBlockEditFilter( features ) {
 	addFilter( 'editor.BlockEdit', 'core/editor/hooks', withBlockEditHooks );
 }
 
-function BlockProps( { index, useBlockProps, setAllWrapperProps, ...props } ) {
-	const wrapperProps = useBlockProps( props );
+function BlockProps( {
+	index,
+	useBlockProps: hook,
+	setAllWrapperProps,
+	...props
+} ) {
+	const wrapperProps = hook( props );
 	const setWrapperProps = ( next ) =>
 		setAllWrapperProps( ( prev ) => {
 			const nextAll = [ ...prev ];

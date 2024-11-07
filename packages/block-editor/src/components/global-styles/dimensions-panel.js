@@ -147,24 +147,30 @@ function splitStyleValue( value ) {
 	return value;
 }
 
-function splitGapValue( value ) {
+function splitGapValue( value, isAxialGap ) {
+	if ( ! value ) {
+		return value;
+	}
+
 	// Check for shorthand value (a string value).
-	if ( value && typeof value === 'string' ) {
-		// If the value is a string, treat it as a single side (top) for the spacing controls.
-		return {
-			top: value,
-		};
+	if ( typeof value === 'string' ) {
+		/*
+		 * Map the string value to appropriate sides for the spacing control depending
+		 * on whether the current block has axial gap support or not.
+		 *
+		 * Note: The axial value pairs must match for the spacing control to display
+		 * the appropriate horizontal/vertical sliders.
+		 */
+		return isAxialGap
+			? { top: value, right: value, bottom: value, left: value }
+			: { top: value };
 	}
 
-	if ( value ) {
-		return {
-			...value,
-			right: value?.left,
-			bottom: value?.top,
-		};
-	}
-
-	return value;
+	return {
+		...value,
+		right: value?.left,
+		bottom: value?.top,
+	};
 }
 
 function DimensionsToolsPanel( {
@@ -325,13 +331,13 @@ export default function DimensionsPanel( {
 
 	// Block Gap
 	const showGapControl = useHasGap( settings );
-	const gapValue = decodeValue( inheritedValue?.spacing?.blockGap );
-	const gapValues = splitGapValue( gapValue );
 	const gapSides = Array.isArray( settings?.spacing?.blockGap )
 		? settings?.spacing?.blockGap
 		: settings?.spacing?.blockGap?.sides;
 	const isAxialGap =
 		gapSides && gapSides.some( ( side ) => AXIAL_SIDES.includes( side ) );
+	const gapValue = decodeValue( inheritedValue?.spacing?.blockGap );
+	const gapValues = splitGapValue( gapValue, isAxialGap );
 	const setGapValue = ( newGapValue ) => {
 		onChange(
 			setImmutably( value, [ 'spacing', 'blockGap' ], newGapValue )

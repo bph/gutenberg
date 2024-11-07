@@ -209,11 +209,11 @@ function Store( registry, suspense ) {
 	};
 }
 
-function useStaticSelect( storeName ) {
+function _useStaticSelect( storeName ) {
 	return useRegistry().select( storeName );
 }
 
-function useMappingSelect( suspense, mapSelect, deps ) {
+function _useMappingSelect( suspense, mapSelect, deps ) {
 	const registry = useRegistry();
 	const isAsync = useAsyncMode();
 	const store = useMemo(
@@ -308,13 +308,11 @@ export default function useSelect( mapSelect, deps ) {
 		);
 	}
 
-	/* eslint-disable react-hooks/rules-of-hooks */
 	// `staticSelectMode` is not allowed to change during the hook instance's,
 	// lifetime, so the rules of hooks are not really violated.
 	return staticSelectMode
-		? useStaticSelect( mapSelect )
-		: useMappingSelect( false, mapSelect, deps );
-	/* eslint-enable react-hooks/rules-of-hooks */
+		? _useStaticSelect( mapSelect )
+		: _useMappingSelect( false, mapSelect, deps );
 }
 
 /**
@@ -337,5 +335,5 @@ export default function useSelect( mapSelect, deps ) {
  * @return {ReturnType<T>} Data object returned by the `mapSelect` function.
  */
 export function useSuspenseSelect( mapSelect, deps ) {
-	return useMappingSelect( true, mapSelect, deps );
+	return _useMappingSelect( true, mapSelect, deps );
 }

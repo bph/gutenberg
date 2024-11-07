@@ -245,7 +245,7 @@ test.describe( 'Block Style Variations', () => {
 
 		// Click on previous revision.
 		await page
-			.getByRole( 'button', {
+			.getByRole( 'option', {
 				name: /^Changes saved by /,
 			} )
 			.nth( 1 )

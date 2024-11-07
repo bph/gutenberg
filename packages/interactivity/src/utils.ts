@@ -54,7 +54,7 @@ const afterNextFrame = ( callback: () => void ) => {
 /**
  * Returns a promise that resolves after yielding to main.
  *
- * @return Promise
+ * @return Promise<void>
  */
 export const splitTask =
 	typeof window.scheduler?.yield === 'function'

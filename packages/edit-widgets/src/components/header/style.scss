@@ -94,12 +94,13 @@
 .edit-widgets-header__actions {
 	display: flex;
 	align-items: center;
-	padding-right: $grid-unit-20;
-	gap: $grid-unit-05;
+	padding-right: $grid-unit-05;
 
 	@include break-small() {
-		gap: $grid-unit-10;
+		padding-right: $grid-unit-10;
 	}
+
+	gap: $grid-unit-10;
 }
 
 .edit-widgets-header-toolbar {

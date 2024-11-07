@@ -18,75 +18,78 @@ import { unlock } from './lock-unlock';
 
 const { useHistory } = unlock( routerPrivateApis );
 
-function useAddNewPageCommand() {
-	const isSiteEditor = getPath( window.location.href )?.includes(
-		'site-editor.php'
-	);
-	const history = useHistory();
-	const isBlockBasedTheme = useSelect( ( select ) => {
-		return select( coreStore ).getCurrentTheme()?.is_block_theme;
-	}, [] );
-	const { saveEntityRecord } = useDispatch( coreStore );
-	const { createErrorNotice } = useDispatch( noticesStore );
+const getAddNewPageCommand = () =>
+	function useAddNewPageCommand() {
+		const isSiteEditor = getPath( window.location.href )?.includes(
+			'site-editor.php'
+		);
+		const history = useHistory();
+		const isBlockBasedTheme = useSelect( ( select ) => {
+			return select( coreStore ).getCurrentTheme()?.is_block_theme;
+		}, [] );
+		const { saveEntityRecord } = useDispatch( coreStore );
+		const { createErrorNotice } = useDispatch( noticesStore );
 
-	const createPageEntity = useCallback(
-		async ( { close } ) => {
-			try {
-				const page = await saveEntityRecord(
-					'postType',
-					'page',
-					{
-						status: 'draft',
-					},
-					{
-						throwOnError: true,
+		const createPageEntity = useCallback(
+			async ( { close } ) => {
+				try {
+					const page = await saveEntityRecord(
+						'postType',
+						'page',
+						{
+							status: 'draft',
+						},
+						{
+							throwOnError: true,
+						}
+					);
+					if ( page?.id ) {
+						history.push( {
+							postId: page.id,
+							postType: 'page',
+							canvas: 'edit',
+						} );
 					}
-				);
-				if ( page?.id ) {
-					history.push( {
-						postId: page.id,
-						postType: 'page',
-						canvas: 'edit',
+				} catch ( error ) {
+					const errorMessage =
+						error.message && error.code !== 'unknown_error'
+							? error.message
+							: __(
+									'An error occurred while creating the item.'
+							  );
+
+					createErrorNotice( errorMessage, {
+						type: 'snackbar',
 					} );
+				} finally {
+					close();
 				}
-			} catch ( error ) {
-				const errorMessage =
-					error.message && error.code !== 'unknown_error'
-						? error.message
-						: __( 'An error occurred while creating the item.' );
-
-				createErrorNotice( errorMessage, {
-					type: 'snackbar',
-				} );
-			} finally {
-				close();
-			}
-		},
-		[ createErrorNotice, history, saveEntityRecord ]
-	);
-
-	const commands = useMemo( () => {
-		const addNewPage =
-			isSiteEditor && isBlockBasedTheme
-				? createPageEntity
-				: () =>
-						( document.location.href =
-							'post-new.php?post_type=page' );
-		return [
-			{
-				name: 'core/add-new-page',
-				label: __( 'Add new page' ),
-				icon: plus,
-				callback: addNewPage,
 			},
-		];
-	}, [ createPageEntity, isSiteEditor, isBlockBasedTheme ] );
+			[ createErrorNotice, history, saveEntityRecord ]
+		);
 
-	return {
-		isLoading: false,
-		commands,
+		const commands = useMemo( () => {
+			const addNewPage =
+				isSiteEditor && isBlockBasedTheme
+					? createPageEntity
+					: () =>
+							( document.location.href =
+								'post-new.php?post_type=page' );
+			return [
+				{
+					name: 'core/add-new-page',
+					label: __( 'Add new page' ),
+					icon: plus,
+					callback: addNewPage,
+				},
+			];
+		}, [ createPageEntity, isSiteEditor, isBlockBasedTheme ] );
+
+		return {
+			isLoading: false,
+			commands,
+		};
 	};
-}
 
 export function useAdminNavigationCommands() {
 	useCommand( {
@@ -100,6 +103,6 @@ export function useAdminNavigationCommands() {
 
 	useCommandLoader( {
 		name: 'core/add-new-page',
-		hook: useAddNewPageCommand,
+		hook: getAddNewPageCommand(),
 	} );
 }
