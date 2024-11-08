@@ -131,7 +131,6 @@ export default function EditorInterface( {
 						customSaveButton={ customSaveButton }
 						forceDisableBlockTools={ forceDisableBlockTools }
 						title={ title }
-						isEditorIframed={ ! disableIframe }
 					/>
 				)
 			}

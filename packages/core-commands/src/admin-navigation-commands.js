@@ -97,7 +97,7 @@ export function useAdminNavigationCommands() {
 		label: __( 'Add new post' ),
 		icon: plus,
 		callback: () => {
-			document.location.href = 'post-new.php';
+			document.location.assign( 'post-new.php' );
 		},
 	} );
 

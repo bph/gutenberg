@@ -109,17 +109,16 @@ function getEnabledClientIdsTreeUnmemoized( state, rootClientId ) {
  *
  * @return {Object[]} Tree of block objects with only clientID and innerBlocks set.
  */
-export const getEnabledClientIdsTree = createSelector(
-	getEnabledClientIdsTreeUnmemoized,
-	( state ) => [
+export const getEnabledClientIdsTree = createRegistrySelector( ( select ) =>
+	createSelector( getEnabledClientIdsTreeUnmemoized, ( state ) => [
 		state.blocks.order,
 		state.blockEditingModes,
 		state.settings.templateLock,
 		state.blockListSettings,
-		state.editorMode,
+		select( STORE_NAME ).__unstableGetEditorMode( state ),
 		state.zoomLevel,
 		getSectionRootClientId( state ),
-	]
+	] )
 );
 
 /**
@@ -317,7 +316,7 @@ export const hasAllowedPatterns = createRegistrySelector( ( select ) =>
 		},
 		( state, rootClientId ) => [
 			...getAllPatternsDependants( select )( state ),
-			...getInsertBlockTypeDependants( state, rootClientId ),
+			...getInsertBlockTypeDependants( select )( state, rootClientId ),
 		]
 	)
 );

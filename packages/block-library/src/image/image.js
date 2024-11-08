@@ -135,6 +135,7 @@ function ContentOnlyControls( {
 										setIsAltDialogOpen( true );
 										onClose();
 									} }
+									aria-haspopup="dialog"
 								>
 									{ _x(
 										'Alternative text',
@@ -146,6 +147,7 @@ function ContentOnlyControls( {
 										setIsTitleDialogOpen( true );
 										onClose();
 									} }
+									aria-haspopup="dialog"
 								>
 									{ __( 'Title text' ) }
 								</MenuItem>
