@@ -188,7 +188,7 @@ const BorderControlDropdown = (
 			tooltipPosition={ dropdownPosition }
 			label={ __( 'Border color and style picker' ) }
 			showTooltip
-			__next40pxDefaultSize={ size === '__unstable-large' ? true : false }
+			__next40pxDefaultSize={ size === '__unstable-large' }
 		>
 			<span className={ indicatorWrapperClassName }>
 				<ColorIndicator

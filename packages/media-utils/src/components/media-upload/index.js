@@ -327,7 +327,7 @@ class MediaUpload extends Component {
 			state: currentState,
 			multiple,
 			selection,
-			editing: value && value.length ? true : false,
+			editing: !! value?.length,
 		} );
 		wp.media.frame = this.frame;
 		this.initializeListeners();

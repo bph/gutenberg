@@ -106,7 +106,7 @@ module.exports = ( sourceFile, options ) => {
 	}
 	sourceFile = path.join( processDir, sourceFile );
 
-	const debugMode = options.debug ? true : false;
+	const debugMode = options.debug;
 
 	const inputBase = path.join(
 		path.dirname( sourceFile ),

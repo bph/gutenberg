@@ -96,7 +96,7 @@ const ALLOWED_MEDIA_TYPES = [ 'image' ];
 
 const PLACEHOLDER_TEXT = Platform.isNative
 	? __( 'Add media' )
-	: __( 'Drag images, upload new ones or select files from your library.' );
+	: __( 'Drag and drop images, upload, or choose from your library.' );
 
 const MOBILE_CONTROL_PROPS_RANGE_CONTROL = Platform.isNative
 	? { type: 'stepper' }

@@ -201,7 +201,7 @@ function FileEdit( { attributes, isSelected, setAttributes, clientId } ) {
 					labels={ {
 						title: __( 'File' ),
 						instructions: __(
-							'Upload a file or pick one from your media library.'
+							'Drag and drop a file, upload, or choose from your library.'
 						),
 					} }
 					onSelect={ onSelectFile }

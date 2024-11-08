@@ -83,7 +83,7 @@ function DropCapControl( { clientId, attributes, setAttributes } ) {
 				checked={ !! dropCap }
 				onChange={ () => setAttributes( { dropCap: ! dropCap } ) }
 				help={ helpText }
-				disabled={ hasDropCapDisabled( align ) ? true : false }
+				disabled={ hasDropCapDisabled( align ) }
 			/>
 		</ToolsPanelItem>
 	);

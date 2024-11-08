@@ -1,5 +1,25 @@
 == Changelog ==
 
+= 19.6.1 =
+
+
+## Changelog
+
+### Bug Fixes
+
+#### List View
+- Block Editor: Fix stale dependencies of selectors depending on editorTool preference. ([66833](https://github.com/WordPress/gutenberg/pull/66833))
+
+
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@mcsf
+
+
 = 19.6.0 =
 
 

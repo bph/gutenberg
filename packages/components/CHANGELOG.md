@@ -17,6 +17,7 @@
 ### Internal
 
 -   `Snackbar`: Use link variant for action Button ([#66560](https://github.com/WordPress/gutenberg/pull/66560)).
+-   `BorderControl`: Remove unnecessary boolean assignments ([#66857](https://github.com/WordPress/gutenberg/pull/66857)).
 
 ## 28.11.0 (2024-10-30)
 
