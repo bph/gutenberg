@@ -38,6 +38,9 @@ const contextHandlers: ProxyHandler< object > = {
 	getOwnPropertyDescriptor: ( target, key ) =>
 		descriptor( target, key ) ||
 		descriptor( contextObjectToFallback.get( target ), key ),
+	has: ( target, key ) =>
+		Reflect.has( target, key ) ||
+		Reflect.has( contextObjectToFallback.get( target ), key ),
 };
 
 /**

@@ -63,6 +63,103 @@ function getColorExamples( colors: MultiOriginPalettes ): BlockExample[] {
 }
 
 /**
+ * Returns examples for the overview page.
+ *
+ * @param {MultiOriginPalettes} colors Global Styles color palettes per origin.
+ * @return {BlockExample[]} An array of block examples.
+ */
+function getOverviewBlockExamples(
+	colors: MultiOriginPalettes
+): BlockExample[] {
+	const examples: BlockExample[] = [];
+
+	// Get theme palette from colors.
+	const themePalette = colors.colors.find(
+		( origin: ColorOrigin ) => origin.slug === 'theme'
+	);
+
+	if ( themePalette ) {
+		const themeColorexample: BlockExample = {
+			name: 'theme-colors',
+			title: __( 'Colors' ),
+			category: 'overview',
+			content: (
+				<ColorExamples colors={ themePalette.colors } type={ colors } />
+			),
+		};
+
+		examples.push( themeColorexample );
+	}
+
+	const headingBlock = createBlock( 'core/heading', {
+		content: __(
+			`AaBbCcDdEeFfGgHhiiJjKkLIMmNnOoPpQakRrssTtUuVVWwXxxYyZzOl23356789X{(…)},2!*&:/A@HELFO™`
+		),
+		level: 1,
+	} );
+	const firstParagraphBlock = createBlock( 'core/paragraph', {
+		content: __(
+			`A paragraph in a website refers to a distinct block of text that is used to present and organize information. It is a fundamental unit of content in web design and is typically composed of a group of related sentences or thoughts focused on a particular topic or idea. Paragraphs play a crucial role in improving the readability and user experience of a website. They break down the text into smaller, manageable chunks, allowing readers to scan the content more easily.`
+		),
+	} );
+	const secondParagraphBlock = createBlock( 'core/paragraph', {
+		content: __(
+			`Additionally, paragraphs help structure the flow of information and provide logical breaks between different concepts or pieces of information. In terms of formatting, paragraphs in websites are commonly denoted by a vertical gap or indentation between each block of text. This visual separation helps visually distinguish one paragraph from another, creating a clear and organized layout that guides the reader through the content smoothly.`
+		),
+	} );
+
+	const textExample = {
+		name: 'typography',
+		title: __( 'Typography' ),
+		category: 'overview',
+		blocks: [
+			headingBlock,
+			createBlock(
+				'core/group',
+				{
+					layout: {
+						type: 'grid',
+						columnCount: 2,
+						minimumColumnWidth: '12rem',
+					},
+					style: {
+						spacing: {
+							blockGap: '1.5rem',
+						},
+					},
+				},
+				[ firstParagraphBlock, secondParagraphBlock ]
+			),
+		],
+	};
+	examples.push( textExample );
+
+	const otherBlockExamples = [
+		'core/image',
+		'core/separator',
+		'core/buttons',
+		'core/pullquote',
+		'core/search',
+	];
+
+	// Get examples for other blocks and put them in order of above array.
+	otherBlockExamples.forEach( ( blockName ) => {
+		const blockType = getBlockType( blockName );
+		if ( blockType && blockType.example ) {
+			const blockExample: BlockExample = {
+				name: blockName,
+				title: blockType.title,
+				category: 'overview',
+				blocks: getBlockFromExample( blockName, blockType.example ),
+			};
+			examples.push( blockExample );
+		}
+	} );
+
+	return examples;
+}
+
+/**
  * Returns a list of examples for registered block types.
  *
  * @param {MultiOriginPalettes} colors Global styles colors grouped by origin e.g. Core, Theme, and User.
@@ -109,5 +206,12 @@ export function getExamples( colors: MultiOriginPalettes ): BlockExample[] {
 	};
 	const colorExamples = getColorExamples( colors );
 
-	return [ headingsExample, ...colorExamples, ...nonHeadingBlockExamples ];
+	const overviewBlockExamples = getOverviewBlockExamples( colors );
+
+	return [
+		headingsExample,
+		...colorExamples,
+		...nonHeadingBlockExamples,
+		...overviewBlockExamples,
+	];
 }

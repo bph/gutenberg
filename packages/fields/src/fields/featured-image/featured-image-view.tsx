@@ -3,12 +3,12 @@
  */
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
+import type { DataViewRenderFieldProps } from '@wordpress/dataviews';
 
 /**
  * Internal dependencies
  */
 import type { BasePost } from '../../types';
-import type { DataViewRenderFieldProps } from '@wordpress/dataviews';
 
 export const FeaturedImageView = ( {
 	item,

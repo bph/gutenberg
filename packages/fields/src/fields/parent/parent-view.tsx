@@ -3,14 +3,14 @@
  */
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
+import type { DataViewRenderFieldProps } from '@wordpress/dataviews';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import type { BasePost } from '../../types';
-import type { DataViewRenderFieldProps } from '@wordpress/dataviews';
 import { getTitleWithFallbackName } from './utils';
-import { __ } from '@wordpress/i18n';
 
 export const ParentView = ( {
 	item,

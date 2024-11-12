@@ -393,6 +393,11 @@ test.describe( 'splitting and merging blocks (@firefox, @webkit)', () => {
 			attributes: { content: 'heading', level: 2 },
 			innerBlocks: [],
 		};
+		const paragraphWithContent = {
+			name: 'core/paragraph',
+			attributes: { content: 'heading', dropCap: false },
+			innerBlocks: [],
+		};
 		const placeholderBlock = { name: 'core/separator' };
 		await editor.insertBlock( {
 			name: 'core/group',
@@ -407,6 +412,9 @@ test.describe( 'splitting and merging blocks (@firefox, @webkit)', () => {
 			.getByRole( 'document', { name: 'Empty block' } )
 			.focus();
 
+		// Remove the alignment.
+		await page.keyboard.press( 'Backspace' );
+		// Remove the empty paragraph block.
 		await page.keyboard.press( 'Backspace' );
 		await expect
 			.poll( editor.getBlocks, 'Remove the default empty block' )
@@ -422,8 +430,7 @@ test.describe( 'splitting and merging blocks (@firefox, @webkit)', () => {
 				},
 			] );
 
-		// Move the caret to the beginning of the empty heading block.
-		await page.keyboard.press( 'ArrowDown' );
+		// Convert the heading to a default block.
 		await page.keyboard.press( 'Backspace' );
 		await expect
 			.poll(
@@ -441,6 +448,9 @@ test.describe( 'splitting and merging blocks (@firefox, @webkit)', () => {
 					],
 				},
 			] );
+		// Remove the alignment.
+		await page.keyboard.press( 'Backspace' );
+		// Remove the empty default block.
 		await page.keyboard.press( 'Backspace' );
 		await expect.poll( editor.getBlocks ).toEqual( [
 			{
@@ -453,17 +463,16 @@ test.describe( 'splitting and merging blocks (@firefox, @webkit)', () => {
 			},
 		] );
 
-		// Move the caret to the beginning of the "heading" heading block.
-		await page.keyboard.press( 'ArrowDown' );
+		// Convert a non-empty non-default block to a default block.
 		await page.keyboard.press( 'Backspace' );
 		await expect
 			.poll( editor.getBlocks, 'Lift the non-empty non-default block' )
 			.toEqual( [
-				headingWithContent,
 				{
 					name: 'core/group',
 					attributes: { tagName: 'div' },
 					innerBlocks: [
+						paragraphWithContent,
 						expect.objectContaining( placeholderBlock ),
 					],
 				},

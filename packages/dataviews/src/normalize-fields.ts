@@ -11,6 +11,22 @@ import type {
 import { getControl } from './dataform-controls';
 import DataFormCombinedEdit from './components/dataform-combined-edit';
 
+const getValueFromId =
+	( id: string ) =>
+	( { item }: { item: any } ) => {
+		const path = id.split( '.' );
+		let value = item;
+		for ( const segment of path ) {
+			if ( value.hasOwnProperty( segment ) ) {
+				value = value[ segment ];
+			} else {
+				value = undefined;
+			}
+		}
+
+		return value;
+	};
+
 /**
  * Apply default values and normalize the fields config.
  *
@@ -23,8 +39,7 @@ export function normalizeFields< Item >(
 	return fields.map( ( field ) => {
 		const fieldTypeDefinition = getFieldTypeDefinition( field.type );
 
-		const getValue =
-			field.getValue || ( ( { item } ) => ( item as any )[ field.id ] );
+		const getValue = field.getValue || getValueFromId( field.id );
 
 		const sort =
 			field.sort ??

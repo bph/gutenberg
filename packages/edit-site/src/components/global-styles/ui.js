@@ -202,6 +202,11 @@ function GlobalStylesStyleBook() {
 					navigator.goTo( '/colors/palette' );
 					return;
 				}
+				if ( blockName === 'typography' ) {
+					// Go to typography Global Styles.
+					navigator.goTo( '/typography' );
+					return;
+				}
 
 				// Now go to the selected block.
 				navigator.goTo( '/blocks/' + encodeURIComponent( blockName ) );

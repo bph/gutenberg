@@ -17,7 +17,7 @@ function getTermLabels( pattern, categories ) {
 	if ( pattern.type !== PATTERN_TYPES.user ) {
 		return categories.core
 			?.filter( ( category ) =>
-				pattern.categories.includes( category.name )
+				pattern.categories?.includes( category.name )
 			)
 			.map( ( category ) => category.label );
 	}

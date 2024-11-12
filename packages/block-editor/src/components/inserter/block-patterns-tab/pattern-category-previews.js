@@ -31,6 +31,7 @@ import {
 	isPatternFiltered,
 	allPatternsCategory,
 	myPatternsCategory,
+	starterPatternsCategory,
 	INSERTER_PATTERN_TYPES,
 } from './utils';
 import { store as blockEditorStore } from '../../../store';
@@ -82,6 +83,13 @@ export function PatternCategoryPreviews( {
 				if (
 					category.name === myPatternsCategory.name &&
 					pattern.type === INSERTER_PATTERN_TYPES.user
+				) {
+					return true;
+				}
+
+				if (
+					category.name === starterPatternsCategory.name &&
+					pattern.blockTypes?.includes( 'core/post-content' )
 				) {
 					return true;
 				}

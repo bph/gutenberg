@@ -6,11 +6,6 @@ import { Guide } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { store as preferencesStore } from '@wordpress/preferences';
 
-/**
- * Internal dependencies
- */
-import { store as editSiteStore } from '../../store';
-
 export default function WelcomeGuidePage() {
 	const { toggle } = useDispatch( preferencesStore );
 
@@ -23,8 +18,7 @@ export default function WelcomeGuidePage() {
 			'core/edit-site',
 			'welcomeGuide'
 		);
-		const { isPage } = select( editSiteStore );
-		return isPageActive && ! isEditorActive && isPage();
+		return isPageActive && ! isEditorActive;
 	}, [] );
 
 	if ( ! isVisible ) {

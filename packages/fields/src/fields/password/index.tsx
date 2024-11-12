@@ -12,7 +12,6 @@ import PasswordEdit from './edit';
 const passwordField: Field< BasePost > = {
 	id: 'password',
 	type: 'text',
-	getValue: ( { item } ) => item.password,
 	Edit: PasswordEdit,
 	enableSorting: false,
 	enableHiding: false,
