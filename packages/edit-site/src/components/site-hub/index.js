@@ -121,17 +121,27 @@ export const SiteHubMobile = memo(
 		const history = useHistory();
 		const { navigate } = useContext( SidebarNavigationContext );
 
-		const { homeUrl, siteTitle } = useSelect( ( select ) => {
-			const { getEntityRecord } = select( coreStore );
-			const _site = getEntityRecord( 'root', 'site' );
-			return {
-				homeUrl: getEntityRecord( 'root', '__unstableBase' )?.home,
-				siteTitle:
-					! _site?.title && !! _site?.url
-						? filterURLForDisplay( _site?.url )
-						: _site?.title,
-			};
-		}, [] );
+		const { dashboardLink, isBlockTheme, homeUrl, siteTitle } = useSelect(
+			( select ) => {
+				const { getSettings } = unlock( select( editSiteStore ) );
+
+				const { getEntityRecord, getCurrentTheme } =
+					select( coreStore );
+				const _site = getEntityRecord( 'root', 'site' );
+				return {
+					dashboardLink:
+						getSettings().__experimentalDashboardLink ||
+						'index.php',
+					isBlockTheme: getCurrentTheme()?.is_block_theme,
+					homeUrl: getEntityRecord( 'root', '__unstableBase' )?.home,
+					siteTitle:
+						! _site?.title && !! _site?.url
+							? filterURLForDisplay( _site?.url )
+							: _site?.title,
+				};
+			},
+			[]
+		);
 		const { open: openCommandCenter } = useDispatch( commandsStore );
 
 		return (
@@ -148,16 +158,23 @@ export const SiteHubMobile = memo(
 						<Button
 							__next40pxDefaultSize
 							ref={ ref }
-							label={ __( 'Go to Site Editor' ) }
 							className="edit-site-layout__view-mode-toggle"
 							style={ {
 								transform: 'scale(0.5)',
 								borderRadius: 4,
 							} }
-							onClick={ () => {
-								history.push( {} );
-								navigate( 'back' );
-							} }
+							{ ...( ! isBlockTheme
+								? {
+										href: dashboardLink,
+										label: __( 'Go to the Dashboard' ),
+								  }
+								: {
+										onClick: () => {
+											history.push( {} );
+											navigate( 'back' );
+										},
+										label: __( 'Go to Site Editor' ),
+								  } ) }
 						>
 							<SiteIcon className="edit-site-layout__view-mode-toggle-icon" />
 						</Button>

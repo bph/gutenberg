@@ -49,6 +49,7 @@ import useEditorIframeProps from '../block-editor/use-editor-iframe-props';
 import useEditorTitle from './use-editor-title';
 import { useIsSiteEditorLoading } from '../layout/hooks';
 import { useAdaptEditorToCanvas } from './use-adapt-editor-to-canvas';
+import { TEMPLATE_POST_TYPE } from '../../utils/constants';
 
 const { Editor, BackButton } = unlock( editorPrivateApis );
 const { useHistory, useLocation } = unlock( routerPrivateApis );
@@ -125,12 +126,15 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 			hasSiteIcon: !! siteData?.site_icon_url,
 		};
 	}, [] );
-	useEditorTitle();
+	const postWithTemplate = !! contextPostId;
+	useEditorTitle(
+		postWithTemplate ? contextPostType : editedPostType,
+		postWithTemplate ? contextPostId : editedPostId
+	);
 	const _isPreviewingTheme = isPreviewingTheme();
 	const hasDefaultEditorCanvasView = ! useHasEditorCanvasContainer();
 	const iframeProps = useEditorIframeProps();
 	const isEditMode = canvas === 'edit';
-	const postWithTemplate = !! contextPostId;
 	const loadingProgressId = useInstanceId(
 		CanvasLoader,
 		'edit-site-editor__loading-progress'
@@ -214,7 +218,9 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 
 	return (
 		<>
-			<GlobalStylesRenderer />
+			<GlobalStylesRenderer
+				disableRootPadding={ editedPostType !== TEMPLATE_POST_TYPE }
+			/>
 			<EditorKeyboardShortcutsRegister />
 			{ isEditMode && <BlockKeyboardShortcuts /> }
 			{ ! isReady ? <CanvasLoader id={ loadingProgressId } /> : null }

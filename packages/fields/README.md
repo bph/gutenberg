@@ -18,6 +18,10 @@ npm install @wordpress/fields --save
 
 Comment status field for BasePost.
 
+### dateField
+
+Date field for BasePost.
+
 ### deletePost
 
 Undocumented declaration.

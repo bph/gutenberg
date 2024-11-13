@@ -95,7 +95,7 @@ function TemplatesList( { area, clientId, isEntityAvailable, onSelect } ) {
 				label={ __( 'Templates' ) }
 				blockPatterns={ blockPatterns }
 				onClickPattern={ onSelect }
-				showTitle={ false }
+				showTitlesAsTooltip
 			/>
 		</PanelBody>
 	);

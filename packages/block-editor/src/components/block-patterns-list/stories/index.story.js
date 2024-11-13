@@ -31,7 +31,6 @@ export const Default = {
 		blockPatterns: patterns,
 		isDraggable: false,
 		label: 'Block patterns story',
-		showTitle: true,
 		showTitlesAsTooltip: false,
 	},
 	argTypes: {
@@ -40,18 +39,11 @@ export const Default = {
 			description:
 				'Usually this component is used with `useAsyncList` for performance reasons and you should provide the returned list from that hook. Alternatively it should have the same value with `blockPatterns`.',
 		},
-		showTitle: {
-			description: 'Whether to render the title of each pattern.',
-			table: {
-				defaultValue: { summary: true },
-				type: { summary: 'boolean' },
-			},
-		},
 		onClickPattern: { type: 'function' },
 		onHover: { type: 'function' },
 		showTitlesAsTooltip: {
 			description:
-				'Whether to render the title of each pattern as a tooltip. If enabled, it takes precedence over `showTitle` prop.',
+				'Whether to render the title of each pattern as a tooltip. If enabled',
 		},
 		orientation: {
 			description: 'Orientation for the underlying composite widget.',

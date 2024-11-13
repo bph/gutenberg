@@ -41,6 +41,7 @@
 		"@wordpress/core-data": "*",
 		"@wordpress/data": "*",
 		"@wordpress/dataviews": "*",
+		"@wordpress/date": "*",
 		"@wordpress/element": "*",
 		"@wordpress/hooks": "*",
 		"@wordpress/html-entities": "*",

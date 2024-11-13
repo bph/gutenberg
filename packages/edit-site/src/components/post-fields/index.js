@@ -6,8 +6,7 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
-import { decodeEntities } from '@wordpress/html-entities';
+import { __ } from '@wordpress/i18n';
 import {
 	featuredImageField,
 	slugField,
@@ -15,23 +14,14 @@ import {
 	passwordField,
 	statusField,
 	commentStatusField,
+	titleField,
+	dateField,
 } from '@wordpress/fields';
-import {
-	createInterpolateElement,
-	useMemo,
-	useState,
-} from '@wordpress/element';
-import { dateI18n, getDate, getSettings } from '@wordpress/date';
+import { useMemo, useState } from '@wordpress/element';
 import { commentAuthorAvatar as authorIcon } from '@wordpress/icons';
 import { __experimentalHStack as HStack, Icon } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useEntityRecords, store as coreStore } from '@wordpress/core-data';
-
-const getFormattedDate = ( dateToDisplay ) =>
-	dateI18n(
-		getSettings().formats.datetimeAbbreviated,
-		getDate( dateToDisplay )
-	);
 
 function PostAuthorField( { item } ) {
 	const { text, imageUrl } = useSelect(
@@ -75,63 +65,10 @@ function usePostFields() {
 	const { records: authors, isResolving: isLoadingAuthors } =
 		useEntityRecords( 'root', 'user', { per_page: -1 } );
 
-	const { frontPageId, postsPageId } = useSelect( ( select ) => {
-		const { getEntityRecord } = select( coreStore );
-		const siteSettings = getEntityRecord( 'root', 'site' );
-		return {
-			frontPageId: siteSettings?.page_on_front,
-			postsPageId: siteSettings?.page_for_posts,
-		};
-	}, [] );
-
 	const fields = useMemo(
 		() => [
 			featuredImageField,
-			{
-				label: __( 'Title' ),
-				id: 'title',
-				type: 'text',
-				getValue: ( { item } ) =>
-					typeof item.title === 'string'
-						? item.title
-						: item.title?.raw,
-				render: ( { item } ) => {
-					const renderedTitle =
-						typeof item.title === 'string'
-							? item.title
-							: item.title?.rendered;
-
-					let suffix = '';
-					if ( item.id === frontPageId ) {
-						suffix = (
-							<span className="edit-site-post-list__title-badge">
-								{ __( 'Homepage' ) }
-							</span>
-						);
-					} else if ( item.id === postsPageId ) {
-						suffix = (
-							<span className="edit-site-post-list__title-badge">
-								{ __( 'Posts Page' ) }
-							</span>
-						);
-					}
-
-					return (
-						<HStack
-							className="edit-site-post-list__title"
-							alignment="center"
-							justify="flex-start"
-						>
-							<span>
-								{ decodeEntities( renderedTitle ) ||
-									__( '(no title)' ) }
-							</span>
-							{ suffix }
-						</HStack>
-					);
-				},
-				enableHiding: false,
-			},
+			titleField,
 			{
 				label: __( 'Author' ),
 				id: 'author',
@@ -152,89 +89,13 @@ function usePostFields() {
 				},
 			},
 			statusField,
-			{
-				label: __( 'Date' ),
-				id: 'date',
-				type: 'datetime',
-				render: ( { item } ) => {
-					const isDraftOrPrivate = [ 'draft', 'private' ].includes(
-						item.status
-					);
-					if ( isDraftOrPrivate ) {
-						return createInterpolateElement(
-							sprintf(
-								/* translators: %s: page creation or modification date. */
-								__( '<span>Modified: <time>%s</time></span>' ),
-								getFormattedDate( item.date )
-							),
-							{
-								span: <span />,
-								time: <time />,
-							}
-						);
-					}
-
-					const isScheduled = item.status === 'future';
-					if ( isScheduled ) {
-						return createInterpolateElement(
-							sprintf(
-								/* translators: %s: page creation date */
-								__( '<span>Scheduled: <time>%s</time></span>' ),
-								getFormattedDate( item.date )
-							),
-							{
-								span: <span />,
-								time: <time />,
-							}
-						);
-					}
-
-					const isPublished = item.status === 'publish';
-					if ( isPublished ) {
-						return createInterpolateElement(
-							sprintf(
-								/* translators: %s: page creation time */
-								__( '<span>Published: <time>%s</time></span>' ),
-								getFormattedDate( item.date )
-							),
-							{
-								span: <span />,
-								time: <time />,
-							}
-						);
-					}
-
-					// Pending posts show the modified date if it's newer.
-					const dateToDisplay =
-						getDate( item.modified ) > getDate( item.date )
-							? item.modified
-							: item.date;
-
-					const isPending = item.status === 'pending';
-					if ( isPending ) {
-						return createInterpolateElement(
-							sprintf(
-								/* translators: %s: page creation or modification date. */
-								__( '<span>Modified: <time>%s</time></span>' ),
-								getFormattedDate( dateToDisplay )
-							),
-							{
-								span: <span />,
-								time: <time />,
-							}
-						);
-					}
-
-					// Unknow status.
-					return <time>{ getFormattedDate( item.date ) }</time>;
-				},
-			},
+			dateField,
 			slugField,
 			parentField,
 			commentStatusField,
 			passwordField,
 		],
-		[ authors, frontPageId, postsPageId ]
+		[ authors ]
 	);
 
 	return {

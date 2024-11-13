@@ -10,17 +10,11 @@ import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
  */
 import { store as editSiteStore } from '../../store';
 import { unlock } from '../../lock-unlock';
-import { TEMPLATE_POST_TYPE } from '../../utils/constants';
 
 const { useGlobalStylesOutput } = unlock( blockEditorPrivateApis );
 
-function useGlobalStylesRenderer() {
-	const postType = useSelect( ( select ) => {
-		return select( editSiteStore ).getEditedPostType();
-	} );
-	const [ styles, settings ] = useGlobalStylesOutput(
-		postType !== TEMPLATE_POST_TYPE
-	);
+function useGlobalStylesRenderer( disableRootPadding ) {
+	const [ styles, settings ] = useGlobalStylesOutput( disableRootPadding );
 	const { getSettings } = useSelect( editSiteStore );
 	const { updateSettings } = useDispatch( editSiteStore );
 
@@ -41,8 +35,8 @@ function useGlobalStylesRenderer() {
 	}, [ styles, settings, updateSettings, getSettings ] );
 }
 
-export function GlobalStylesRenderer() {
-	useGlobalStylesRenderer();
+export function GlobalStylesRenderer( { disableRootPadding } ) {
+	useGlobalStylesRenderer( disableRootPadding );
 
 	return null;
 }

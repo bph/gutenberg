@@ -52,7 +52,7 @@ function UnconnectedToggleGroupControl(
 	const [ controlElement, setControlElement ] = useState< HTMLElement >();
 	const refs = useMergeRefs( [ setControlElement, forwardedRef ] );
 	const selectedRect = useTrackElementOffsetRect(
-		value ? selectedElement : undefined
+		value || value === 0 ? selectedElement : undefined
 	);
 	useAnimatedOffsetRect( controlElement, selectedRect, {
 		prefix: 'selected',

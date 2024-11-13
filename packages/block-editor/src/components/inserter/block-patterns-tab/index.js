@@ -79,7 +79,6 @@ function BlockPatternsTab( {
 								onInsert={ onInsert }
 								rootClientId={ rootClientId }
 								category={ category }
-								showTitlesAsTooltip={ false }
 							/>
 						</div>
 					) }

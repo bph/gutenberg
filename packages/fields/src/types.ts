@@ -1,5 +1,5 @@
 type PostStatus =
-	| 'published'
+	| 'publish'
 	| 'draft'
 	| 'pending'
 	| 'private'
@@ -37,6 +37,8 @@ export interface BasePost extends CommonPost {
 	link?: string;
 	slug?: string;
 	permalink_template?: string;
+	date?: string;
+	modified?: string;
 }
 
 export interface Template extends CommonPost {
