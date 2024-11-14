@@ -344,6 +344,10 @@ class WP_Navigation_Block_Renderer {
 
 		$navigation_name = $attributes['ariaLabel'] ?? '';
 
+		if ( ! empty( $navigation_name ) ) {
+			return $navigation_name;
+		}
+
 		// Load the navigation post.
 		if ( array_key_exists( 'ref', $attributes ) ) {
 			$navigation_post = get_post( $attributes['ref'] );

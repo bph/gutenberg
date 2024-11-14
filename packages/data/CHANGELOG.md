@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Enhancements
+
+-   Upgrade `redux` dependency to `^5.0.1` ([#66966](https://github.com/WordPress/gutenberg/pull/66966))
+
 ## 10.11.0 (2024-10-30)
 
 ## 10.10.0 (2024-10-16)

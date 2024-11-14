@@ -5,7 +5,6 @@ import { useEffect, useMemo } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -30,7 +29,9 @@ const postTypesWithoutParentTemplate = [
 
 const authorizedPostTypes = [ 'page', 'post' ];
 
-function useResolveEditedEntityAndContext( { postId, postType } ) {
+export function useResolveEditedEntity() {
+	const { params = {} } = useLocation();
+	const { postId, postType } = params;
 	const { hasLoadedAllDependencies, homepageId, postsPageId } = useSelect(
 		( select ) => {
 			const { getEntityRecord } = select( coreDataStore );
@@ -233,25 +234,17 @@ function useResolveEditedEntityAndContext( { postId, postType } ) {
 	return { isReady: false };
 }
 
-export default function useInitEditedEntityFromURL() {
-	const { params = {} } = useLocation();
-	const { postType, postId, context, isReady } =
-		useResolveEditedEntityAndContext( params );
-
+export function useSyncDeprecatedEntityIntoState( {
+	postType,
+	postId,
+	context,
+	isReady,
+} ) {
 	const { setEditedEntity } = useDispatch( editSiteStore );
-	const { resetZoomLevel } = unlock( useDispatch( blockEditorStore ) );
 
 	useEffect( () => {
 		if ( isReady ) {
-			resetZoomLevel();
 			setEditedEntity( postType, postId, context );
 		}
-	}, [
-		isReady,
-		postType,
-		postId,
-		context,
-		setEditedEntity,
-		resetZoomLevel,
-	] );
+	}, [ isReady, postType, postId, context, setEditedEntity ] );
 }

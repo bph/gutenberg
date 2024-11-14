@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Fix focus loss when removing all filters or resetting ([#67003](https://github.com/WordPress/gutenberg/pull/67003)).
+
 ## 4.7.0 (2024-10-30)
 
 ## 4.6.0 (2024-10-16)
@@ -23,8 +27,7 @@
 ## Internal
 
 -   The "move left/move right" controls in the table layout (popup displayed on cliking header) are always visible. ([#64646](https://github.com/WordPress/gutenberg/pull/64646)). Before this, its visibility depending on filters, enableSorting, and enableHiding.
-- Filters no longer display the elements' description. ([#64674](https://github.com/WordPress/gutenberg/pull/64674))
-
+-   Filters no longer display the elements' description. ([#64674](https://github.com/WordPress/gutenberg/pull/64674))
 
 ## Enhancements
 

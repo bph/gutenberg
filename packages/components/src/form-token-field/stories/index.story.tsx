@@ -15,7 +15,8 @@ import FormTokenField from '../';
 
 const meta: Meta< typeof FormTokenField > = {
 	component: FormTokenField,
-	title: 'Components/FormTokenField',
+	title: 'Components/Selection & Input/Common/FormTokenField',
+	id: 'components-formtokenfield',
 	argTypes: {
 		value: {
 			control: { type: null },

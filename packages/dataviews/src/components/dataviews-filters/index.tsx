@@ -7,6 +7,7 @@ import {
 	useRef,
 	useMemo,
 	useCallback,
+	useEffect,
 } from '@wordpress/element';
 import { __experimentalHStack as HStack, Button } from '@wordpress/components';
 import { funnel } from '@wordpress/icons';
@@ -70,7 +71,7 @@ export function useFilters( fields: NormalizedField< any >[], view: View ) {
 	}, [ fields, view ] );
 }
 
-export function FilterVisibilityToggle( {
+export function FiltersToggle( {
 	filters,
 	view,
 	onChangeView,
@@ -85,6 +86,7 @@ export function FilterVisibilityToggle( {
 	isShowingFilter: boolean;
 	setIsShowingFilter: React.Dispatch< React.SetStateAction< boolean > >;
 } ) {
+	const buttonRef = useRef< HTMLButtonElement >( null );
 	const onChangeViewWithFilterVisibility = useCallback(
 		( _view: View ) => {
 			onChangeView( _view );
@@ -98,48 +100,81 @@ export function FilterVisibilityToggle( {
 	if ( filters.length === 0 ) {
 		return null;
 	}
-	if ( ! hasVisibleFilters ) {
-		return (
-			<AddFilterMenu
-				filters={ filters }
-				view={ view }
-				onChangeView={ onChangeViewWithFilterVisibility }
-				setOpenedFilter={ setOpenedFilter }
-				trigger={
-					<Button
-						className="dataviews-filters__visibility-toggle"
-						size="compact"
-						icon={ funnel }
-						label={ __( 'Add filter' ) }
-						isPressed={ false }
-						aria-expanded={ false }
-					/>
-				}
-			/>
-		);
-	}
+
+	const addFilterButtonProps = {
+		label: __( 'Add filter' ),
+		'aria-expanded': false,
+		isPressed: false,
+	};
+	const toggleFiltersButtonProps = {
+		label: _x( 'Filter', 'verb' ),
+		'aria-expanded': isShowingFilter,
+		isPressed: isShowingFilter,
+		onClick: () => {
+			if ( ! isShowingFilter ) {
+				setOpenedFilter( null );
+			}
+			setIsShowingFilter( ! isShowingFilter );
+		},
+	};
+	const buttonComponent = (
+		<Button
+			ref={ buttonRef }
+			className="dataviews-filters__visibility-toggle"
+			size="compact"
+			icon={ funnel }
+			{ ...( hasVisibleFilters
+				? toggleFiltersButtonProps
+				: addFilterButtonProps ) }
+		/>
+	);
 	return (
 		<div className="dataviews-filters__container-visibility-toggle">
-			<Button
-				className="dataviews-filters__visibility-toggle"
-				size="compact"
-				icon={ funnel }
-				label={ _x( 'Filter', 'verb' ) }
-				onClick={ () => {
-					if ( ! isShowingFilter ) {
-						setOpenedFilter( null );
-					}
-					setIsShowingFilter( ! isShowingFilter );
-				} }
-				isPressed={ isShowingFilter }
-				aria-expanded={ isShowingFilter }
-			/>
-			{ hasVisibleFilters && !! view.filters?.length && (
-				<span className="dataviews-filters-toggle__count">
-					{ view.filters?.length }
-				</span>
+			{ ! hasVisibleFilters ? (
+				<AddFilterMenu
+					filters={ filters }
+					view={ view }
+					onChangeView={ onChangeViewWithFilterVisibility }
+					setOpenedFilter={ setOpenedFilter }
+					trigger={ buttonComponent }
+				/>
+			) : (
+				<FilterVisibilityToggle
+					buttonRef={ buttonRef }
+					filtersCount={ view.filters?.length }
+				>
+					{ buttonComponent }
+				</FilterVisibilityToggle>
 			) }
 		</div>
+	);
+}
+
+function FilterVisibilityToggle( {
+	buttonRef,
+	filtersCount,
+	children,
+}: {
+	buttonRef: React.RefObject< HTMLButtonElement >;
+	filtersCount?: number;
+	children: React.ReactNode;
+} ) {
+	// Focus the `add filter` button when unmounts.
+	useEffect(
+		() => () => {
+			buttonRef.current?.focus();
+		},
+		[ buttonRef ]
+	);
+	return (
+		<>
+			{ children }
+			{ !! filtersCount && (
+				<span className="dataviews-filters-toggle__count">
+					{ filtersCount }
+				</span>
+			) }
+		</>
 	);
 }
 

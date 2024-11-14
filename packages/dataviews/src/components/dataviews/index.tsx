@@ -16,7 +16,7 @@ import DataViewsContext from '../dataviews-context';
 import {
 	default as DataViewsFilters,
 	useFilters,
-	FilterVisibilityToggle,
+	FiltersToggle,
 } from '../dataviews-filters';
 import DataViewsLayout from '../dataviews-layout';
 import DataViewsFooter from '../dataviews-footer';
@@ -135,7 +135,7 @@ export default function DataViews< Item >( {
 						className="dataviews__search"
 					>
 						{ search && <DataViewsSearch label={ searchLabel } /> }
-						<FilterVisibilityToggle
+						<FiltersToggle
 							filters={ filters }
 							view={ view }
 							onChangeView={ onChangeView }

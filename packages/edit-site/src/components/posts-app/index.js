@@ -10,7 +10,6 @@ import { privateApis as routerPrivateApis } from '@wordpress/router';
 /**
  * Internal dependencies
  */
-import useInitEditedEntityFromURL from '../sync-state-with-url/use-init-edited-entity-from-url';
 import Layout from '../layout';
 import useActiveRoute from './router';
 import { unlock } from '../../lock-unlock';
@@ -19,8 +18,6 @@ const { RouterProvider } = unlock( routerPrivateApis );
 const { GlobalStylesProvider } = unlock( editorPrivateApis );
 
 function PostsLayout() {
-	// This ensures the edited entity id and type are initialized properly.
-	useInitEditedEntityFromURL();
 	const route = useActiveRoute();
 	return <Layout route={ route } />;
 }

@@ -233,7 +233,14 @@ export function RichTextWrapper(
 				bindingsLabel: _bindingsLabel,
 			};
 		},
-		[ blockBindings, identifier, blockName, blockContext, adjustedValue ]
+		[
+			blockBindings,
+			identifier,
+			blockName,
+			adjustedValue,
+			clientId,
+			blockContext,
+		]
 	);
 
 	const shouldDisableEditing = readOnly || disableBoundBlock;

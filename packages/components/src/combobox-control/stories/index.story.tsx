@@ -34,7 +34,8 @@ const countries = [
 ];
 
 const meta: Meta< typeof ComboboxControl > = {
-	title: 'Components/ComboboxControl',
+	title: 'Components/Selection & Input/Common/ComboboxControl',
+	id: 'components-comboboxcontrol',
 	component: ComboboxControl,
 	argTypes: {
 		value: { control: { type: null } },

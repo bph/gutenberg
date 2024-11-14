@@ -14,7 +14,8 @@ import { useState } from '@wordpress/element';
 import NumberControl from '..';
 
 const meta: Meta< typeof NumberControl > = {
-	title: 'Components (Experimental)/NumberControl',
+	title: 'Components (Experimental)/Selection & Input/NumberControl',
+	id: 'components-experimental-numbercontrol',
 	component: NumberControl,
 	argTypes: {
 		onChange: { action: 'onChange' },

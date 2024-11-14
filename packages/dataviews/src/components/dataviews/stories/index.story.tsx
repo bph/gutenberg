@@ -65,6 +65,7 @@ export const Default = () => {
 	const [ view, setView ] = useState< View >( {
 		...DEFAULT_VIEW,
 		fields: [ 'title', 'description', 'categories' ],
+		layout: defaultLayouts[ DEFAULT_VIEW.type ].layout,
 	} );
 	const { data: shownData, paginationInfo } = useMemo( () => {
 		return filterSortAndPaginate( data, view, fields );
