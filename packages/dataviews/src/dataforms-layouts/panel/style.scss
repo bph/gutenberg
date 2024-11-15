@@ -44,3 +44,7 @@
 .dataforms-layouts-panel__dropdown-header {
 	margin-bottom: $grid-unit-20;
 }
+
+.components-popover.components-dropdown__content.dataforms-layouts-panel__field-dropdown {
+	z-index: z-index(".components-popover.components-dropdown__content.dataforms-layouts-panel__field-dropdown");
+}

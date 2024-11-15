@@ -59,6 +59,12 @@ interface CompactItemActionsProps< Item > {
 	actions: Action< Item >[];
 }
 
+interface PrimaryActionsProps< Item > {
+	item: Item;
+	actions: Action< Item >[];
+	registry: ReturnType< typeof useRegistry >;
+}
+
 function ButtonTrigger< Item >( {
 	action,
 	onClick,
@@ -179,6 +185,13 @@ export function ActionsMenuGroup< Item >( {
 	);
 }
 
+function hasOnlyOneActionAndIsPrimary< Item >(
+	primaryActions: Action< Item >[],
+	actions: Action< Item >[]
+) {
+	return primaryActions.length === 1 && actions.length;
+}
+
 export default function ItemActions< Item >( {
 	item,
 	actions,
@@ -199,9 +212,21 @@ export default function ItemActions< Item >( {
 			eligibleActions: _eligibleActions,
 		};
 	}, [ actions, item ] );
+
 	if ( isCompact ) {
 		return <CompactItemActions item={ item } actions={ eligibleActions } />;
 	}
+
+	if ( hasOnlyOneActionAndIsPrimary( primaryActions, actions ) ) {
+		return (
+			<PrimaryActions
+				item={ item }
+				actions={ primaryActions }
+				registry={ registry }
+			/>
+		);
+	}
+
 	return (
 		<HStack
 			spacing={ 1 }
@@ -212,29 +237,11 @@ export default function ItemActions< Item >( {
 				width: 'auto',
 			} }
 		>
-			{ !! primaryActions.length &&
-				primaryActions.map( ( action ) => {
-					if ( 'RenderModal' in action ) {
-						return (
-							<ActionWithModal
-								key={ action.id }
-								action={ action }
-								items={ [ item ] }
-								ActionTrigger={ ButtonTrigger }
-							/>
-						);
-					}
-					return (
-						<ButtonTrigger
-							key={ action.id }
-							action={ action }
-							onClick={ () => {
-								action.callback( [ item ], { registry } );
-							} }
-							items={ [ item ] }
-						/>
-					);
-				} ) }
+			<PrimaryActions
+				item={ item }
+				actions={ primaryActions }
+				registry={ registry }
+			/>
 			<CompactItemActions item={ item } actions={ eligibleActions } />
 		</HStack>
 	);
@@ -261,4 +268,37 @@ function CompactItemActions< Item >( {
 			<ActionsMenuGroup actions={ actions } item={ item } />
 		</Menu>
 	);
+}
+
+function PrimaryActions< Item >( {
+	item,
+	actions,
+	registry,
+}: PrimaryActionsProps< Item > ) {
+	if ( ! Array.isArray( actions ) || actions.length === 0 ) {
+		return null;
+	}
+
+	return actions.map( ( action ) => {
+		if ( 'RenderModal' in action ) {
+			return (
+				<ActionWithModal
+					key={ action.id }
+					action={ action }
+					items={ [ item ] }
+					ActionTrigger={ ButtonTrigger }
+				/>
+			);
+		}
+		return (
+			<ButtonTrigger
+				key={ action.id }
+				action={ action }
+				onClick={ () => {
+					action.callback( [ item ], { registry } );
+				} }
+				items={ [ item ] }
+			/>
+		);
+	} );
 }

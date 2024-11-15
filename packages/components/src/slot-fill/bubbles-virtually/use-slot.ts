@@ -21,8 +21,10 @@ export default function useSlot( name: SlotKey ) {
 
 	const api = useMemo(
 		() => ( {
-			updateSlot: ( fillProps: FillProps ) =>
-				registry.updateSlot( name, fillProps ),
+			updateSlot: (
+				ref: SlotFillBubblesVirtuallySlotRef,
+				fillProps: FillProps
+			) => registry.updateSlot( name, ref, fillProps ),
 			unregisterSlot: ( ref: SlotFillBubblesVirtuallySlotRef ) =>
 				registry.unregisterSlot( name, ref ),
 			registerFill: ( ref: SlotFillBubblesVirtuallyFillRef ) =>

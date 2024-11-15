@@ -18,10 +18,9 @@ import { privateApis as editorPrivateApis } from '@wordpress/editor';
  * Internal dependencies
  */
 import Page from '../page';
-import usePostFields from '../post-fields';
 import { unlock } from '../../lock-unlock';
 
-const { PostCardPanel } = unlock( editorPrivateApis );
+const { PostCardPanel, usePostFields } = unlock( editorPrivateApis );
 
 const fieldsWithBulkEditSupport = [
 	'title',

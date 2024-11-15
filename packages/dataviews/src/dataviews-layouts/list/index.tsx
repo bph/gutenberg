@@ -170,10 +170,12 @@ function ListItem< Item >( {
 			( action ) => action.isPrimary && !! action.icon
 		);
 		return {
-			primaryAction: _primaryActions?.[ 0 ],
+			primaryAction: _primaryActions[ 0 ],
 			eligibleActions: _eligibleActions,
 		};
 	}, [ actions, item ] );
+
+	const hasOnlyOnePrimaryAction = primaryAction && actions.length === 1;
 
 	const renderedMediaField = mediaField?.render ? (
 		<div className="dataviews-view-list__media-wrapper">
@@ -194,33 +196,35 @@ function ListItem< Item >( {
 					item={ item }
 				/>
 			) }
-			<div role="gridcell">
-				<Menu
-					trigger={
-						<Composite.Item
-							id={ generateDropdownTriggerCompositeId(
-								idPrefix
-							) }
-							render={
-								<Button
-									size="small"
-									icon={ moreVertical }
-									label={ __( 'Actions' ) }
-									accessibleWhenDisabled
-									disabled={ ! actions.length }
-									onKeyDown={ onDropdownTriggerKeyDown }
-								/>
-							}
+			{ ! hasOnlyOnePrimaryAction && (
+				<div role="gridcell">
+					<Menu
+						trigger={
+							<Composite.Item
+								id={ generateDropdownTriggerCompositeId(
+									idPrefix
+								) }
+								render={
+									<Button
+										size="small"
+										icon={ moreVertical }
+										label={ __( 'Actions' ) }
+										accessibleWhenDisabled
+										disabled={ ! actions.length }
+										onKeyDown={ onDropdownTriggerKeyDown }
+									/>
+								}
+							/>
+						}
+						placement="bottom-end"
+					>
+						<ActionsMenuGroup
+							actions={ eligibleActions }
+							item={ item }
 						/>
-					}
-					placement="bottom-end"
-				>
-					<ActionsMenuGroup
-						actions={ eligibleActions }
-						item={ item }
-					/>
-				</Menu>
-			</div>
+					</Menu>
+				</div>
+			) }
 		</HStack>
 	);
 

@@ -17,6 +17,8 @@
 
 		.dataviews-view-grid__primary-field {
 			min-height: $grid-unit-40; // Preserve layout when there is no ellipsis button
+			display: flex;
+			align-items: center;
 
 			&--clickable {
 				width: fit-content;

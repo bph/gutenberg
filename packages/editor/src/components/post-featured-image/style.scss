@@ -16,9 +16,14 @@
 	&:hover,
 	&:focus,
 	&:focus-within {
-		.editor-post-featured-image__actions {
+		.editor-post-featured-image__actions:not(.editor-post-featured-image__actions-is-requesting-image) {
 			opacity: 1;
 		}
+	}
+
+	.editor-post-featured-image__actions.editor-post-featured-image__actions-missing-image {
+		opacity: 1;
+		margin-top: $grid-unit-20;
 	}
 
 	.components-drop-zone__content {
@@ -72,17 +77,22 @@
 }
 
 .editor-post-featured-image__actions {
-	@include reduce-motion("transition");
-	bottom: 0;
-	opacity: 0; // Use opacity instead of visibility so that the buttons remain in the tab order.
-	padding: $grid-unit-10;
-	position: absolute;
-	transition: opacity 50ms ease-out;
-}
+	&:not(.editor-post-featured-image__actions-missing-image) {
+		@include reduce-motion("transition");
+		bottom: 0;
+		opacity: 0; // Use opacity instead of visibility so that the buttons remain in the tab order.
+		padding: $grid-unit-10;
+		position: absolute;
+		transition: opacity 50ms ease-out;
 
-.editor-post-featured-image__action {
-	backdrop-filter: blur(16px) saturate(180%);
-	background: rgba(255, 255, 255, 0.75);
-	flex-grow: 1;
-	justify-content: center;
+		.editor-post-featured-image__action {
+			backdrop-filter: blur(16px) saturate(180%);
+			background: rgba(255, 255, 255, 0.75);
+		}
+	}
+
+	.editor-post-featured-image__action {
+		flex-grow: 1;
+		justify-content: center;
+	}
 }

@@ -32,9 +32,8 @@ import AddNewPostModal from '../add-new-post';
 import { unlock } from '../../lock-unlock';
 import { useEditPostAction } from '../dataviews-actions';
 import { usePrevious } from '@wordpress/compose';
-import usePostFields from '../post-fields';
 
-const { usePostActions } = unlock( editorPrivateApis );
+const { usePostActions, usePostFields } = unlock( editorPrivateApis );
 const { useLocation, useHistory } = unlock( routerPrivateApis );
 const { useEntityRecordsWithPermissions } = unlock( coreDataPrivateApis );
 const EMPTY_ARRAY = [];

@@ -288,8 +288,10 @@ export function MediaPlaceholder( {
 		}
 	}
 
-	async function onHTMLDrop( HTML ) {
-		const blocks = pasteHandler( { HTML } );
+	async function onDrop( event ) {
+		const blocks = pasteHandler( {
+			HTML: event.dataTransfer?.getData( 'default' ),
+		} );
 		return await handleBlocksDrop( blocks );
 	}
 
@@ -379,9 +381,7 @@ export function MediaPlaceholder( {
 			return null;
 		}
 
-		return (
-			<DropZone onFilesDrop={ onFilesUpload } onHTMLDrop={ onHTMLDrop } />
-		);
+		return <DropZone onFilesDrop={ onFilesUpload } onDrop={ onDrop } />;
 	};
 
 	const renderCancelLink = () => {

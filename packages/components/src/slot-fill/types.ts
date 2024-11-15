@@ -131,7 +131,11 @@ export type SlotFillBubblesVirtuallyContext = {
 		name: SlotKey,
 		ref: SlotFillBubblesVirtuallySlotRef
 	) => void;
-	updateSlot: ( name: SlotKey, fillProps: FillProps ) => void;
+	updateSlot: (
+		name: SlotKey,
+		ref: SlotFillBubblesVirtuallySlotRef,
+		fillProps: FillProps
+	) => void;
 	registerFill: (
 		name: SlotKey,
 		ref: SlotFillBubblesVirtuallyFillRef
