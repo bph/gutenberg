@@ -22,6 +22,7 @@ export default function MyCustomDimensionControl() {
 	return (
 		<DimensionControl
 			__nextHasNoMarginBottom
+			__next40pxDefaultSize
 			label={ 'Padding' }
 			icon={ 'desktop' }
 			onChange={ ( value ) => setPaddingSize( value ) }

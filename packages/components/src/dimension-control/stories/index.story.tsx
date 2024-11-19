@@ -50,6 +50,7 @@ const Template: StoryFn< typeof DimensionControl > = ( args ) => (
 export const Default = Template.bind( {} );
 Default.args = {
 	__nextHasNoMarginBottom: true,
+	__next40pxDefaultSize: true,
 	label: 'Please select a size',
 	sizes,
 };

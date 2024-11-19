@@ -18,6 +18,7 @@ import type { DimensionControlProps, Size } from './types';
 import type { SelectControlSingleSelectionProps } from '../select-control/types';
 import { ContextSystemProvider } from '../context';
 import deprecated from '@wordpress/deprecated';
+import { maybeWarnDeprecated36pxSize } from '../utils/deprecated-36px-size';
 
 const CONTEXT_VALUE = {
 	BaseControl: {
@@ -41,6 +42,7 @@ const CONTEXT_VALUE = {
  *
  * 	return (
  * 		<DimensionControl
+ * 			__next40pxDefaultSize
  * 			__nextHasNoMarginBottom
  * 			label={ 'Padding' }
  * 			icon={ 'desktop' }
@@ -66,6 +68,12 @@ export function DimensionControl( props: DimensionControlProps ) {
 	deprecated( 'wp.components.DimensionControl', {
 		since: '6.7',
 		version: '7.0',
+	} );
+
+	maybeWarnDeprecated36pxSize( {
+		componentName: 'DimensionControl',
+		__next40pxDefaultSize,
+		size: undefined,
 	} );
 
 	const onChangeSpacingSize: SelectControlSingleSelectionProps[ 'onChange' ] =

@@ -47,9 +47,10 @@ export class PostPublishPanel extends Component {
 		// Automatically collapse the publish sidebar when a post
 		// is published and the user makes an edit.
 		if (
-			prevProps.isPublished &&
-			! this.props.isSaving &&
-			this.props.isDirty
+			( prevProps.isPublished &&
+				! this.props.isSaving &&
+				this.props.isDirty ) ||
+			this.props.currentPostId !== prevProps.currentPostId
 		) {
 			this.props.onClose();
 		}
@@ -75,6 +76,7 @@ export class PostPublishPanel extends Component {
 			onTogglePublishSidebar,
 			PostPublishExtension,
 			PrePublishExtension,
+			currentPostId,
 			...additionalProps
 		} = this.props;
 		const {
@@ -154,6 +156,7 @@ export default compose( [
 		const { getPostType } = select( coreStore );
 		const {
 			getCurrentPost,
+			getCurrentPostId,
 			getEditedPostAttribute,
 			isCurrentPostPublished,
 			isCurrentPostScheduled,
@@ -177,6 +180,7 @@ export default compose( [
 			isSaving: isSavingPost() && ! isAutosavingPost(),
 			isSavingNonPostEntityChanges: isSavingNonPostEntityChanges(),
 			isScheduled: isCurrentPostScheduled(),
+			currentPostId: getCurrentPostId(),
 		};
 	} ),
 	withDispatch( ( dispatch, { isPublishSidebarEnabled } ) => {

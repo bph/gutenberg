@@ -57,6 +57,7 @@ interface ItemActionsProps< Item > {
 interface CompactItemActionsProps< Item > {
 	item: Item;
 	actions: Action< Item >[];
+	isSmall?: boolean;
 }
 
 interface PrimaryActionsProps< Item > {
@@ -214,7 +215,13 @@ export default function ItemActions< Item >( {
 	}, [ actions, item ] );
 
 	if ( isCompact ) {
-		return <CompactItemActions item={ item } actions={ eligibleActions } />;
+		return (
+			<CompactItemActions
+				item={ item }
+				actions={ eligibleActions }
+				isSmall
+			/>
+		);
 	}
 
 	if ( hasOnlyOneActionAndIsPrimary( primaryActions, actions ) ) {
@@ -250,12 +257,13 @@ export default function ItemActions< Item >( {
 function CompactItemActions< Item >( {
 	item,
 	actions,
+	isSmall,
 }: CompactItemActionsProps< Item > ) {
 	return (
 		<Menu
 			trigger={
 				<Button
-					size="compact"
+					size={ isSmall ? 'small' : 'compact' }
 					icon={ moreVertical }
 					label={ __( 'Actions' ) }
 					accessibleWhenDisabled

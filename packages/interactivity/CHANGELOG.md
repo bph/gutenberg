@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 6.12.0 (2024-11-16)
+
 ### Bug Fixes
 
 -   Fix property modification from inherited context two or more levels above ([#66872](https://github.com/WordPress/gutenberg/pull/66872)).

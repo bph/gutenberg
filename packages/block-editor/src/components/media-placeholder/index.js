@@ -239,7 +239,7 @@ export function MediaPlaceholder( {
 				( block.name === 'core/image' ||
 					block.name === 'core/audio' ||
 					block.name === 'core/video' ) &&
-				block.attributes.url
+				( block.attributes.url || block.attributes.src )
 					? [ block ]
 					: recursivelyFindMediaFromBlocks( block.innerBlocks )
 			);
@@ -252,33 +252,37 @@ export function MediaPlaceholder( {
 		}
 
 		const uploadedMediaList = await Promise.all(
-			mediaBlocks.map( ( block ) =>
-				block.attributes.id
-					? block.attributes
-					: new Promise( ( resolve, reject ) => {
-							window
-								.fetch( block.attributes.url )
-								.then( ( response ) => response.blob() )
-								.then( ( blob ) =>
-									mediaUpload( {
-										filesList: [ blob ],
-										additionalData: {
-											title: block.attributes.title,
-											alt_text: block.attributes.alt,
-											caption: block.attributes.caption,
-										},
-										onFileChange: ( [ media ] ) => {
-											if ( media.id ) {
-												resolve( media );
-											}
-										},
-										allowedTypes,
-										onError: reject,
-									} )
-								)
-								.catch( () => resolve( block.attributes.url ) );
-					  } )
-			)
+			mediaBlocks.map( ( block ) => {
+				const blockType = block.name.split( '/' )[ 1 ];
+				if ( block.attributes.id ) {
+					block.attributes.type = blockType;
+					return block.attributes;
+				}
+				return new Promise( ( resolve, reject ) => {
+					window
+						.fetch( block.attributes.url )
+						.then( ( response ) => response.blob() )
+						.then( ( blob ) =>
+							mediaUpload( {
+								filesList: [ blob ],
+								additionalData: {
+									title: block.attributes.title,
+									alt_text: block.attributes.alt,
+									caption: block.attributes.caption,
+									type: blockType,
+								},
+								onFileChange: ( [ media ] ) => {
+									if ( media.id ) {
+										resolve( media );
+									}
+								},
+								allowedTypes,
+								onError: reject,
+							} )
+						)
+						.catch( () => resolve( block.attributes.url ) );
+				} );
+			} )
 		).catch( ( err ) => onError( err ) );
 
 		if ( multiple ) {

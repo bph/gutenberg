@@ -1,12 +1,19 @@
 /**
  * WordPress dependencies
  */
-import { useRef, useState, useEffect, createPortal } from '@wordpress/element';
+import { useObservableValue } from '@wordpress/compose';
+import {
+	useContext,
+	useRef,
+	useState,
+	useEffect,
+	createPortal,
+} from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import useSlot from './use-slot';
+import SlotFillContext from './slot-fill-context';
 import StyleProvider from '../../style-provider';
 import type { FillComponentProps } from '../types';
 
@@ -28,9 +35,9 @@ function useForceUpdate() {
 	};
 }
 
-export default function Fill( props: FillComponentProps ) {
-	const { name, children } = props;
-	const { registerFill, unregisterFill, ...slot } = useSlot( name );
+export default function Fill( { name, children }: FillComponentProps ) {
+	const registry = useContext( SlotFillContext );
+	const slot = useObservableValue( registry.slots, name );
 	const rerender = useForceUpdate();
 	const ref = useRef( { rerender } );
 
@@ -38,13 +45,13 @@ export default function Fill( props: FillComponentProps ) {
 		// We register fills so we can keep track of their existence.
 		// Some Slot implementations need to know if there're already fills
 		// registered so they can choose to render themselves or not.
-		registerFill( ref );
+		registry.registerFill( name, ref );
 		return () => {
-			unregisterFill( ref );
+			registry.unregisterFill( name, ref );
 		};
-	}, [ registerFill, unregisterFill ] );
+	}, [ registry, name ] );
 
-	if ( ! slot.ref || ! slot.ref.current ) {
+	if ( ! slot || ! slot.ref.current ) {
 		return null;
 	}
 

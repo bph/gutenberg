@@ -15,7 +15,13 @@ import { plus } from '@wordpress/icons';
 import { DimensionControl as _DimensionControl } from '../';
 
 const DimensionControl = ( props ) => {
-	return <_DimensionControl { ...props } __nextHasNoMarginBottom />;
+	return (
+		<_DimensionControl
+			{ ...props }
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
+		/>
+	);
 };
 
 describe( 'DimensionControl', () => {

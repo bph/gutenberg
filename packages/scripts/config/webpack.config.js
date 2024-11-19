@@ -75,7 +75,6 @@ const cssLoaders = [
 					plugins: isProduction
 						? [
 								...postcssPlugins,
-								require( 'postcss-import' ),
 								require( 'cssnano' )( {
 									// Provide a fallback configuration if there's not
 									// one explicitly available in the project.

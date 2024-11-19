@@ -38,6 +38,8 @@ const PluginSidebarExample = () => {
 					) }
 				</p>
 				<TextControl
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 					label={ __( 'Text Control' ) }
 					value={ text }
 					onChange={ ( newText ) => setText( newText ) }

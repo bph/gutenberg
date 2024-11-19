@@ -126,12 +126,12 @@ exports[`DimensionControl rendering renders with custom sizes 1`] = `
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 16px;
-  height: 32px;
-  min-height: 32px;
+  height: 40px;
+  min-height: 40px;
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 8px;
-  padding-right: 26px;
+  padding-left: 12px;
+  padding-right: 30px;
   overflow: hidden;
 }
 
@@ -157,8 +157,8 @@ exports[`DimensionControl rendering renders with custom sizes 1`] = `
 }
 
 .emotion-21 {
-  -webkit-padding-end: 8px;
-  padding-inline-end: 8px;
+  -webkit-padding-end: 12px;
+  padding-inline-end: 12px;
   position: absolute;
   pointer-events: none;
   right: 0;
@@ -408,12 +408,12 @@ exports[`DimensionControl rendering renders with defaults 1`] = `
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 16px;
-  height: 32px;
-  min-height: 32px;
+  height: 40px;
+  min-height: 40px;
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 8px;
-  padding-right: 26px;
+  padding-left: 12px;
+  padding-right: 30px;
   overflow: hidden;
 }
 
@@ -439,8 +439,8 @@ exports[`DimensionControl rendering renders with defaults 1`] = `
 }
 
 .emotion-21 {
-  -webkit-padding-end: 8px;
-  padding-inline-end: 8px;
+  -webkit-padding-end: 12px;
+  padding-inline-end: 12px;
   position: absolute;
   pointer-events: none;
   right: 0;
@@ -700,12 +700,12 @@ exports[`DimensionControl rendering renders with icon and custom icon label 1`] 
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 16px;
-  height: 32px;
-  min-height: 32px;
+  height: 40px;
+  min-height: 40px;
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 8px;
-  padding-right: 26px;
+  padding-left: 12px;
+  padding-right: 30px;
   overflow: hidden;
 }
 
@@ -731,8 +731,8 @@ exports[`DimensionControl rendering renders with icon and custom icon label 1`] 
 }
 
 .emotion-21 {
-  -webkit-padding-end: 8px;
-  padding-inline-end: 8px;
+  -webkit-padding-end: 12px;
+  padding-inline-end: 12px;
   position: absolute;
   pointer-events: none;
   right: 0;
@@ -1004,12 +1004,12 @@ exports[`DimensionControl rendering renders with icon and default icon label 1`]
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 16px;
-  height: 32px;
-  min-height: 32px;
+  height: 40px;
+  min-height: 40px;
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 8px;
-  padding-right: 26px;
+  padding-left: 12px;
+  padding-right: 30px;
   overflow: hidden;
 }
 
@@ -1035,8 +1035,8 @@ exports[`DimensionControl rendering renders with icon and default icon label 1`]
 }
 
 .emotion-21 {
-  -webkit-padding-end: 8px;
-  padding-inline-end: 8px;
+  -webkit-padding-end: 12px;
+  padding-inline-end: 12px;
   position: absolute;
   pointer-events: none;
   right: 0;

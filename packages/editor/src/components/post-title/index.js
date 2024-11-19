@@ -28,7 +28,7 @@ import usePostTitleFocus from './use-post-title-focus';
 import usePostTitle from './use-post-title';
 import PostTypeSupportCheck from '../post-type-support-check';
 
-function PostTitle( _, forwardedRef ) {
+const PostTitle = forwardRef( ( _, forwardedRef ) => {
 	const { placeholder } = useSelect( ( select ) => {
 		const { getSettings } = select( blockEditorStore );
 		const { titlePlaceholder } = getSettings();
@@ -171,23 +171,21 @@ function PostTitle( _, forwardedRef ) {
 
 	return (
 		/* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/no-noninteractive-element-to-interactive-role */
-		<PostTypeSupportCheck supportKeys="title">
-			<h1
-				ref={ useMergeRefs( [ richTextRef, focusRef ] ) }
-				contentEditable
-				className={ className }
-				aria-label={ decodedPlaceholder }
-				role="textbox"
-				aria-multiline="true"
-				onFocus={ onSelect }
-				onBlur={ onUnselect }
-				onKeyDown={ onKeyDown }
-				onPaste={ onPaste }
-			/>
-		</PostTypeSupportCheck>
+		<h1
+			ref={ useMergeRefs( [ richTextRef, focusRef ] ) }
+			contentEditable
+			className={ className }
+			aria-label={ decodedPlaceholder }
+			role="textbox"
+			aria-multiline="true"
+			onFocus={ onSelect }
+			onBlur={ onUnselect }
+			onKeyDown={ onKeyDown }
+			onPaste={ onPaste }
+		/>
 		/* eslint-enable jsx-a11y/heading-has-content, jsx-a11y/no-noninteractive-element-to-interactive-role */
 	);
-}
+} );
 
 /**
  * Renders the `PostTitle` component.
@@ -197,4 +195,8 @@ function PostTitle( _, forwardedRef ) {
  *
  * @return {Component} The rendered PostTitle component.
  */
-export default forwardRef( PostTitle );
+export default forwardRef( ( _, forwardedRef ) => (
+	<PostTypeSupportCheck supportKeys="title">
+		<PostTitle ref={ forwardedRef } />
+	</PostTypeSupportCheck>
+) );

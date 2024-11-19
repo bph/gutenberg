@@ -19,7 +19,7 @@ export default function DocumentOutlineCheck( { children } ) {
 		return getGlobalBlockCount( 'core/heading' ) > 0;
 	} );
 
-	if ( hasHeadings ) {
+	if ( ! hasHeadings ) {
 		return null;
 	}
 

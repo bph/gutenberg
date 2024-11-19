@@ -15,7 +15,6 @@ import { navigationViewRoute } from './navigation-view';
 import { navigationEditRoute } from './navigation-edit';
 import { navigationItemEditRoute } from './navigation-item-edit';
 import { navigationItemViewRoute } from './navigation-item-view';
-import { stylesEditRoute } from './styles-edit';
 import { stylesViewRoute } from './styles-view';
 import { patternsEditRoute } from './patterns-edit';
 import { patternsViewRoute } from './patterns-view';
@@ -40,7 +39,6 @@ const routes = [
 	patternsViewRoute,
 	patternsEditRoute,
 	stylesViewRoute,
-	stylesEditRoute,
 	navigationItemViewRoute,
 	navigationItemEditRoute,
 	navigationViewRoute,

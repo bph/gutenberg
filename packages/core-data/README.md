@@ -1083,6 +1083,8 @@ function PageRenameForm( { id } ) {
 	return (
 		<form onSubmit={ onRename }>
 			<TextControl
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Name' ) }
 				value={ page.editedRecord.title }
 				onChange={ setTitle }

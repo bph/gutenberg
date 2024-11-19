@@ -156,6 +156,7 @@ module.exports = {
 		'plugin:eslint-comments/recommended',
 		'plugin:storybook/recommended',
 	],
+	plugins: [ 'react-compiler' ],
 	globals: {
 		wp: 'off',
 		globalThis: 'readonly',
@@ -222,6 +223,15 @@ module.exports = {
 				definedTags: [ 'jest-environment' ],
 			},
 		],
+		'react-compiler/react-compiler': [
+			'error',
+			{
+				environment: {
+					enableTreatRefLikeIdentifiersAsRefs: true,
+					validateRefAccessDuringRender: false,
+				},
+			},
+		],
 	},
 	overrides: [
 		{
@@ -236,6 +246,7 @@ module.exports = {
 				'import/no-unresolved': 'off',
 				'import/named': 'off',
 				'@wordpress/data-no-store-string-literals': 'off',
+				'react-compiler/react-compiler': 'off',
 			},
 		},
 		{
@@ -551,6 +562,7 @@ module.exports = {
 		{
 			files: [ 'packages/interactivity*/src/**' ],
 			rules: {
+				'react-compiler/react-compiler': 'off',
 				'react/react-in-jsx-scope': 'error',
 			},
 		},

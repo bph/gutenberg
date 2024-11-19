@@ -201,7 +201,7 @@ function CoverEdit( {
 			averageBackgroundColor
 		);
 
-		if ( backgroundType === IMAGE_BACKGROUND_TYPE && mediaAttributes.id ) {
+		if ( backgroundType === IMAGE_BACKGROUND_TYPE && mediaAttributes?.id ) {
 			const { imageDefaultSize } = getSettings();
 
 			// Try to use the previous selected image size if it's available

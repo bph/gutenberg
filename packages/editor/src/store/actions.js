@@ -834,6 +834,9 @@ export const toggleDistractionFree =
 					.set( 'core', 'fixedToolbar', true );
 				dispatch.setIsInserterOpened( false );
 				dispatch.setIsListViewOpened( false );
+				unlock(
+					registry.dispatch( blockEditorStore )
+				).resetZoomLevel();
 			} );
 		}
 		registry.batch( () => {

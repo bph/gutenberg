@@ -1,5 +1,15 @@
 == Changelog ==
 
+= 19.6.4 =
+
+- PostTaxonomiesFlatTermSelector: abstract wrapper component (#66625)
+
+
+= 19.6.3 =
+
+- Revert "Set image width to fit-content to solve aspect ratio problems in Firefox. ([#66217](https://github.com/WordPress/gutenberg/pull/66804))
+
+
 = 19.7.0-rc.2 =
 
 
