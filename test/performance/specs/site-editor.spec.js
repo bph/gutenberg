@@ -64,6 +64,7 @@ test.describe( 'Site Editor Performance', () => {
 
 		test( 'Setup the test page', async ( { admin, perfUtils } ) => {
 			await admin.createNewPost( { postType: 'page' } );
+			await perfUtils.setRenderingMode( 'post-only' );
 			await perfUtils.loadBlocksForLargePost();
 
 			draftId = await perfUtils.saveDraft();
@@ -122,6 +123,7 @@ test.describe( 'Site Editor Performance', () => {
 
 		test( 'Setup the test post', async ( { admin, editor, perfUtils } ) => {
 			await admin.createNewPost( { postType: 'page' } );
+			await perfUtils.setRenderingMode( 'post-only' );
 			await perfUtils.loadBlocksForLargePost();
 			await editor.insertBlock( { name: 'core/paragraph' } );
 

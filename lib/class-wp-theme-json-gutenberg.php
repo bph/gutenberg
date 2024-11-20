@@ -615,10 +615,10 @@ class WP_Theme_JSON_Gutenberg {
 	 * @var string[]
 	 */
 	const BLOCK_SUPPORT_FEATURE_LEVEL_SELECTORS = array(
-		'__experimentalBorder' => 'border',
-		'color'                => 'color',
-		'spacing'              => 'spacing',
-		'typography'           => 'typography',
+		'border'     => 'border',
+		'color'      => 'color',
+		'spacing'    => 'spacing',
+		'typography' => 'typography',
 	);
 
 	/**
@@ -2874,8 +2874,14 @@ class WP_Theme_JSON_Gutenberg {
 
 				// Combine selectors with style variation's selector and add to overall style variation declarations.
 				foreach ( $variation_declarations as $current_selector => $new_declarations ) {
-					// If current selector includes block classname, remove it but leave the whitespace in.
-					$shortened_selector = str_replace( $block_metadata['selector'] . ' ', ' ', $current_selector );
+					/*
+					 * Clean up any whitespace between comma separated selectors.
+					 * This prevents these spaces breaking compound selectors such as:
+					 * - `.wp-block-list:not(.wp-block-list .wp-block-list)`
+					 * - `.wp-block-image img, .wp-block-image.my-class img`
+					 */
+					$clean_current_selector = preg_replace( '/,\s+/', ',', $current_selector );
+					$shortened_selector     = str_replace( $block_metadata['selector'], '', $clean_current_selector );
 
 					// Prepend the variation selector to the current selector.
 					$split_selectors    = explode( ',', $shortened_selector );

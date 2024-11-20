@@ -11,7 +11,6 @@ import InnerSelectControl from '../select-control';
 import InnerRangeControl from '../range-control';
 import { space } from '../utils/space';
 import { boxSizingReset } from '../utils';
-import Button from '../button';
 import { Flex } from '../flex';
 import { HStack } from '../h-stack';
 import CONFIG from '../utils/config-values';
@@ -22,7 +21,6 @@ export const NumberControlWrapper = styled( NumberControl )`
 
 export const SelectControl = styled( InnerSelectControl )`
 	margin-left: ${ space( -2 ) };
-	width: 5em;
 `;
 
 export const RangeControl = styled( InnerRangeControl )`
@@ -100,15 +98,4 @@ export const ColorfulWrapper = styled.div`
 	}
 
 	${ interactiveHueStyles }
-`;
-
-export const CopyButton = styled( Button )`
-	&&&&& {
-		min-width: ${ space( 6 ) };
-		padding: 0;
-
-		> svg {
-			margin-right: 0;
-		}
-	}
 `;

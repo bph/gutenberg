@@ -29,6 +29,7 @@ const MyFontSizePicker = () => {
 
 	return (
 		<FontSizePicker
+			__next40pxDefaultSize
 			fontSizes={ fontSizes }
 			value={ fontSize }
 			fallbackFontSize={ fallbackFontSize }

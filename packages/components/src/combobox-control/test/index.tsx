@@ -58,7 +58,13 @@ const getOptionSearchString = ( option: ComboboxControlOption ) =>
 	option.label.substring( 0, 11 );
 
 const ComboboxControl = ( props: ComboboxControlProps ) => {
-	return <_ComboboxControl { ...props } __nextHasNoMarginBottom />;
+	return (
+		<_ComboboxControl
+			{ ...props }
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
+		/>
+	);
 };
 
 const ControlledComboboxControl = ( {

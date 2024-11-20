@@ -150,7 +150,18 @@ function getOverviewBlockExamples(
 				name: blockName,
 				title: blockType.title,
 				category: 'overview',
-				blocks: getBlockFromExample( blockName, blockType.example ),
+				/*
+				 * CSS generated from style attributes will take precedence over global styles CSS,
+				 * so remove the style attribute from the example to ensure the example
+				 * demonstrates changes to global styles.
+				 */
+				blocks: getBlockFromExample( blockName, {
+					...blockType.example,
+					attributes: {
+						...blockType.example.attributes,
+						style: undefined,
+					},
+				} ),
 			};
 			examples.push( blockExample );
 		}
@@ -179,7 +190,18 @@ export function getExamples( colors: MultiOriginPalettes ): BlockExample[] {
 			name: blockType.name,
 			title: blockType.title,
 			category: blockType.category,
-			blocks: getBlockFromExample( blockType.name, blockType.example ),
+			/*
+			 * CSS generated from style attributes will take precedence over global styles CSS,
+			 * so remove the style attribute from the example to ensure the example
+			 * demonstrates changes to global styles.
+			 */
+			blocks: getBlockFromExample( blockType.name, {
+				...blockType.example,
+				attributes: {
+					...blockType.example.attributes,
+					style: undefined,
+				},
+			} ),
 		} ) );
 	const isHeadingBlockRegistered = !! getBlockType( 'core/heading' );
 

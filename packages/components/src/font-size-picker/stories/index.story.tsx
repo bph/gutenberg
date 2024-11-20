@@ -66,6 +66,7 @@ const TwoFontSizePickersWithState: StoryFn< typeof FontSizePicker > = ( {
 export const Default: StoryFn< typeof FontSizePicker > =
 	FontSizePickerWithState.bind( {} );
 Default.args = {
+	__next40pxDefaultSize: true,
 	disableCustomFontSizes: false,
 	fontSizes: [
 		{

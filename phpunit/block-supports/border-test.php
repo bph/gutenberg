@@ -459,4 +459,112 @@ class WP_Block_Supports_Border_Test extends WP_UnitTestCase {
 
 		$this->assertSame( $expected, $actual );
 	}
+	/**
+	 * Tests that stabilized border supports will also apply to blocks using
+	 * the experimental syntax, for backwards compatibility with existing blocks.
+	 *
+	 * @covers ::gutenberg_apply_border_support
+	 */
+	public function test_should_apply_experimental_border_supports() {
+		$this->test_block_name = 'test/experimental-border-supports';
+		register_block_type(
+			$this->test_block_name,
+			array(
+				'api_version' => 3,
+				'attributes'  => array(
+					'style' => array(
+						'type' => 'object',
+					),
+				),
+				'supports'    => array(
+					'__experimentalBorder' => array(
+						'color'                         => true,
+						'radius'                        => true,
+						'style'                         => true,
+						'width'                         => true,
+						'__experimentalDefaultControls' => array(
+							'color'  => true,
+							'radius' => true,
+							'style'  => true,
+							'width'  => true,
+						),
+					),
+				),
+			)
+		);
+		$registry   = WP_Block_Type_Registry::get_instance();
+		$block_type = $registry->get_registered( $this->test_block_name );
+		$block_atts = array(
+			'style' => array(
+				'border' => array(
+					'color'  => '#72aee6',
+					'radius' => '10px',
+					'style'  => 'dashed',
+					'width'  => '2px',
+				),
+			),
+		);
+
+		$actual   = gutenberg_apply_border_support( $block_type, $block_atts );
+		$expected = array(
+			'class' => 'has-border-color',
+			'style' => 'border-color:#72aee6;border-radius:10px;border-style:dashed;border-width:2px;',
+		);
+
+		$this->assertSame( $expected, $actual );
+	}
+
+	/**
+	 * Tests that stabilized border supports are applied correctly.
+	 *
+	 * @covers ::gutenberg_apply_border_support
+	 */
+	public function test_should_apply_stabilized_border_supports() {
+		$this->test_block_name = 'test/stabilized-border-supports';
+		register_block_type(
+			$this->test_block_name,
+			array(
+				'api_version' => 3,
+				'attributes'  => array(
+					'style' => array(
+						'type' => 'object',
+					),
+				),
+				'supports'    => array(
+					'border' => array(
+						'color'                         => true,
+						'radius'                        => true,
+						'style'                         => true,
+						'width'                         => true,
+						'__experimentalDefaultControls' => array(
+							'color'  => true,
+							'radius' => true,
+							'style'  => true,
+							'width'  => true,
+						),
+					),
+				),
+			)
+		);
+		$registry   = WP_Block_Type_Registry::get_instance();
+		$block_type = $registry->get_registered( $this->test_block_name );
+		$block_atts = array(
+			'style' => array(
+				'border' => array(
+					'color'  => '#72aee6',
+					'radius' => '10px',
+					'style'  => 'dashed',
+					'width'  => '2px',
+				),
+			),
+		);
+
+		$actual   = gutenberg_apply_border_support( $block_type, $block_atts );
+		$expected = array(
+			'class' => 'has-border-color',
+			'style' => 'border-color:#72aee6;border-radius:10px;border-style:dashed;border-width:2px;',
+		);
+
+		$this->assertSame( $expected, $actual );
+	}
 }

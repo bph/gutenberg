@@ -34,6 +34,7 @@ function MyComboboxControl() {
 	const [ filteredOptions, setFilteredOptions ] = useState( options );
 	return (
 		<ComboboxControl
+			__next40pxDefaultSize
 			__nextHasNoMarginBottom
 			label="Font Size"
 			value={ fontSize }

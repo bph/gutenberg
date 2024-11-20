@@ -26,7 +26,7 @@ describe( 'processBlockType', () => {
 		removeFilter( 'blocks.registerBlockType', 'test/filterSupports' );
 	} );
 
-	it( 'should return the block type with stabilized typography supports', () => {
+	it( 'should return the block type with stabilized supports', () => {
 		const blockSettings = {
 			...baseBlockSettings,
 			supports: {
@@ -46,6 +46,18 @@ describe( 'processBlockType', () => {
 						textTransform: true,
 					},
 				},
+				__experimentalBorder: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+					__experimentalDefaultControls: {
+						color: true,
+						radius: true,
+						style: true,
+						width: true,
+					},
+				},
 			},
 		};
 
@@ -54,25 +66,39 @@ describe( 'processBlockType', () => {
 			blockSettings
 		)( { select } );
 
-		expect( processedBlockType.supports.typography ).toEqual( {
-			fontSize: true,
-			lineHeight: true,
-			fontFamily: true,
-			fontStyle: true,
-			fontWeight: true,
-			letterSpacing: true,
-			textTransform: true,
-			textDecoration: true,
-			__experimentalWritingMode: true,
-			__experimentalDefaultControls: {
+		expect( processedBlockType.supports ).toEqual( {
+			typography: {
 				fontSize: true,
-				fontAppearance: true,
+				lineHeight: true,
+				fontFamily: true,
+				fontStyle: true,
+				fontWeight: true,
+				letterSpacing: true,
 				textTransform: true,
+				textDecoration: true,
+				__experimentalWritingMode: true,
+				__experimentalDefaultControls: {
+					fontSize: true,
+					fontAppearance: true,
+					textTransform: true,
+				},
+			},
+			border: {
+				color: true,
+				radius: true,
+				style: true,
+				width: true,
+				__experimentalDefaultControls: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+				},
 			},
 		} );
 	} );
 
-	it( 'should return the block type with stable typography supports', () => {
+	it( 'should return the block type with stable supports', () => {
 		const blockSettings = {
 			...baseBlockSettings,
 			supports: {
@@ -92,6 +118,18 @@ describe( 'processBlockType', () => {
 						textTransform: true,
 					},
 				},
+				__experimentalBorder: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+					__experimentalDefaultControls: {
+						color: true,
+						radius: true,
+						style: true,
+						width: true,
+					},
+				},
 			},
 		};
 
@@ -100,20 +138,34 @@ describe( 'processBlockType', () => {
 			blockSettings
 		)( { select } );
 
-		expect( processedBlockType.supports.typography ).toEqual( {
-			fontSize: true,
-			lineHeight: true,
-			fontFamily: true,
-			fontStyle: true,
-			fontWeight: true,
-			letterSpacing: true,
-			textTransform: true,
-			textDecoration: true,
-			__experimentalWritingMode: true,
-			__experimentalDefaultControls: {
+		expect( processedBlockType.supports ).toEqual( {
+			typography: {
 				fontSize: true,
-				fontAppearance: true,
+				lineHeight: true,
+				fontFamily: true,
+				fontStyle: true,
+				fontWeight: true,
+				letterSpacing: true,
 				textTransform: true,
+				textDecoration: true,
+				__experimentalWritingMode: true,
+				__experimentalDefaultControls: {
+					fontSize: true,
+					fontAppearance: true,
+					textTransform: true,
+				},
+			},
+			border: {
+				color: true,
+				radius: true,
+				style: true,
+				width: true,
+				__experimentalDefaultControls: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+				},
 			},
 		} );
 	} );
@@ -138,6 +190,18 @@ describe( 'processBlockType', () => {
 						textTransform: true,
 					},
 				},
+				__experimentalBorder: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+					__experimentalDefaultControls: {
+						color: true,
+						radius: true,
+						style: true,
+						width: true,
+					},
+				},
 			},
 		};
 
@@ -149,6 +213,10 @@ describe( 'processBlockType', () => {
 					settings.supports.typography.__experimentalFontFamily = false;
 					settings.supports.typography.__experimentalFontStyle = false;
 					settings.supports.typography.__experimentalFontWeight = false;
+					if ( ! settings.supports.__experimentalBorder ) {
+						settings.supports.__experimentalBorder = {};
+					}
+					settings.supports.__experimentalBorder.radius = false;
 				}
 				return settings;
 			}
@@ -159,25 +227,39 @@ describe( 'processBlockType', () => {
 			blockSettings
 		)( { select } );
 
-		expect( processedBlockType.supports.typography ).toEqual( {
-			fontSize: true,
-			lineHeight: true,
-			fontFamily: false,
-			fontStyle: false,
-			fontWeight: false,
-			letterSpacing: true,
-			textTransform: true,
-			textDecoration: true,
-			__experimentalWritingMode: true,
-			__experimentalDefaultControls: {
+		expect( processedBlockType.supports ).toEqual( {
+			typography: {
 				fontSize: true,
-				fontAppearance: true,
+				lineHeight: true,
+				fontFamily: false,
+				fontStyle: false,
+				fontWeight: false,
+				letterSpacing: true,
 				textTransform: true,
+				textDecoration: true,
+				__experimentalWritingMode: true,
+				__experimentalDefaultControls: {
+					fontSize: true,
+					fontAppearance: true,
+					textTransform: true,
+				},
+			},
+			border: {
+				color: true,
+				radius: false,
+				style: true,
+				width: true,
+				__experimentalDefaultControls: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+				},
 			},
 		} );
 	} );
 
-	it( 'should stabilize experimental typography supports within block deprecations', () => {
+	it( 'should stabilize experimental supports within block deprecations', () => {
 		const blockSettings = {
 			...baseBlockSettings,
 			supports: {
@@ -197,6 +279,18 @@ describe( 'processBlockType', () => {
 						textTransform: true,
 					},
 				},
+				border: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+					__experimentalDefaultControls: {
+						color: true,
+						radius: true,
+						style: true,
+						width: true,
+					},
+				},
 			},
 			deprecated: [
 				{
@@ -209,6 +303,18 @@ describe( 'processBlockType', () => {
 							__experimentalTextTransform: true,
 							__experimentalTextDecoration: true,
 							__experimentalWritingMode: true,
+						},
+						__experimentalBorder: {
+							color: true,
+							radius: true,
+							style: true,
+							width: true,
+							__experimentalDefaultControls: {
+								color: true,
+								radius: true,
+								style: true,
+								width: true,
+							},
 						},
 					},
 				},
@@ -226,16 +332,28 @@ describe( 'processBlockType', () => {
 			blockSettings
 		)( { select } );
 
-		expect(
-			processedBlockType.deprecated[ 0 ].supports.typography
-		).toEqual( {
-			fontFamily: true,
-			fontStyle: true,
-			fontWeight: true,
-			letterSpacing: true,
-			textTransform: true,
-			textDecoration: true,
-			__experimentalWritingMode: true,
+		expect( processedBlockType.deprecated[ 0 ].supports ).toEqual( {
+			typography: {
+				fontFamily: true,
+				fontStyle: true,
+				fontWeight: true,
+				letterSpacing: true,
+				textTransform: true,
+				textDecoration: true,
+				__experimentalWritingMode: true,
+			},
+			border: {
+				color: true,
+				radius: true,
+				style: true,
+				width: true,
+				__experimentalDefaultControls: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+				},
+			},
 		} );
 	} );
 
@@ -259,6 +377,18 @@ describe( 'processBlockType', () => {
 						textTransform: true,
 					},
 				},
+				border: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+					__experimentalDefaultControls: {
+						color: true,
+						radius: true,
+						style: true,
+						width: true,
+					},
+				},
 			},
 			deprecated: [
 				{
@@ -271,6 +401,18 @@ describe( 'processBlockType', () => {
 							__experimentalTextTransform: true,
 							__experimentalTextDecoration: true,
 							__experimentalWritingMode: true,
+						},
+						__experimentalBorder: {
+							color: true,
+							radius: true,
+							style: true,
+							width: true,
+							__experimentalDefaultControls: {
+								color: true,
+								radius: true,
+								style: true,
+								width: true,
+							},
 						},
 					},
 				},
@@ -285,6 +427,7 @@ describe( 'processBlockType', () => {
 					settings.supports.typography.__experimentalFontFamily = false;
 					settings.supports.typography.__experimentalFontStyle = false;
 					settings.supports.typography.__experimentalFontWeight = false;
+					settings.supports.__experimentalBorder = { radius: false };
 				}
 				return settings;
 			}
@@ -295,16 +438,28 @@ describe( 'processBlockType', () => {
 			blockSettings
 		)( { select } );
 
-		expect(
-			processedBlockType.deprecated[ 0 ].supports.typography
-		).toEqual( {
-			fontFamily: false,
-			fontStyle: false,
-			fontWeight: false,
-			letterSpacing: true,
-			textTransform: true,
-			textDecoration: true,
-			__experimentalWritingMode: true,
+		expect( processedBlockType.deprecated[ 0 ].supports ).toEqual( {
+			typography: {
+				fontFamily: false,
+				fontStyle: false,
+				fontWeight: false,
+				letterSpacing: true,
+				textTransform: true,
+				textDecoration: true,
+				__experimentalWritingMode: true,
+			},
+			border: {
+				color: true,
+				radius: false,
+				style: true,
+				width: true,
+				__experimentalDefaultControls: {
+					color: true,
+					radius: true,
+					style: true,
+					width: true,
+				},
+			},
 		} );
 	} );
 } );

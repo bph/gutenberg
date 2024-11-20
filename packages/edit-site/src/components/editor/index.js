@@ -131,9 +131,7 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 		'edit-site-editor__loading-progress'
 	);
 
-	const settings = useSpecificEditorSettings(
-		!! context?.postId && context?.postType !== 'post'
-	);
+	const settings = useSpecificEditorSettings();
 	const styles = useMemo(
 		() => [
 			...settings.styles,

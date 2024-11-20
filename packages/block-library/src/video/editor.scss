@@ -37,6 +37,7 @@
 	max-width: 240px;
 }
 
+.block-library-video-tracks-editor__tracks-informative-message-title,
 .block-library-video-tracks-editor__single-track-editor-edit-track-label {
 	margin-top: $grid-unit-05;
 	color: $gray-700;
@@ -54,5 +55,13 @@
 .block-library-video-tracks-editor__add-tracks-container {
 	.components-menu-group__label {
 		padding: 0;
+	}
+}
+
+.block-library-video-tracks-editor__tracks-informative-message {
+	padding: $grid-unit-10;
+
+	&-description {
+		margin-bottom: 0;
 	}
 }

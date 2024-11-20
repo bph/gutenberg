@@ -36,9 +36,7 @@ function useNavigateToPreviousEntityRecord() {
 	return goBack;
 }
 
-export function useSpecificEditorSettings(
-	shouldUseTemplateAsDefaultRenderingMode
-) {
+export function useSpecificEditorSettings() {
 	const { params } = useLocation();
 	const { canvas = 'view' } = params;
 	const onNavigateToEntityRecord = useNavigateToEntityRecord();
@@ -49,11 +47,6 @@ export function useSpecificEditorSettings(
 		};
 	}, [] );
 
-	// TODO: The `shouldUseTemplateAsDefaultRenderingMode` check should be removed when the default rendering mode per post type is merged.
-	// @see https://github.com/WordPress/gutenberg/pull/62304/
-	const defaultRenderingMode = shouldUseTemplateAsDefaultRenderingMode
-		? 'template-locked'
-		: 'post-only';
 	const onNavigateToPreviousEntityRecord =
 		useNavigateToPreviousEntityRecord();
 	const defaultEditorSettings = useMemo( () => {
@@ -63,7 +56,6 @@ export function useSpecificEditorSettings(
 			richEditingEnabled: true,
 			supportsTemplateMode: true,
 			focusMode: canvas !== 'view',
-			defaultRenderingMode,
 			onNavigateToEntityRecord,
 			onNavigateToPreviousEntityRecord,
 			isPreviewMode: canvas === 'view',
@@ -71,7 +63,6 @@ export function useSpecificEditorSettings(
 	}, [
 		settings,
 		canvas,
-		defaultRenderingMode,
 		onNavigateToEntityRecord,
 		onNavigateToPreviousEntityRecord,
 	] );
