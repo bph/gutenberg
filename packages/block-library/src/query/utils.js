@@ -272,32 +272,31 @@ export const getTransformedBlocksFromPattern = (
  * @return {string} The block name to be used in the patterns suggestions.
  */
 export function useBlockNameForPatterns( clientId, attributes ) {
-	const activeVariationName = useSelect(
-		( select ) =>
-			select( blocksStore ).getActiveBlockVariation(
-				'core/query',
-				attributes
-			)?.name,
-		[ attributes ]
-	);
-	const blockName = `core/query/${ activeVariationName }`;
-	const hasActiveVariationPatterns = useSelect(
+	return useSelect(
 		( select ) => {
+			const activeVariationName = select(
+				blocksStore
+			).getActiveBlockVariation( 'core/query', attributes )?.name;
+
 			if ( ! activeVariationName ) {
-				return false;
+				return 'core/query';
 			}
+
 			const { getBlockRootClientId, getPatternsByBlockTypes } =
 				select( blockEditorStore );
+
 			const rootClientId = getBlockRootClientId( clientId );
 			const activePatterns = getPatternsByBlockTypes(
-				blockName,
+				`core/query/${ activeVariationName }`,
 				rootClientId
 			);
-			return activePatterns.length > 0;
+
+			return activePatterns.length > 0
+				? `core/query/${ activeVariationName }`
+				: 'core/query';
 		},
-		[ clientId, activeVariationName, blockName ]
+		[ clientId, attributes ]
 	);
-	return hasActiveVariationPatterns ? blockName : 'core/query';
 }
 
 /**

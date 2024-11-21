@@ -6,6 +6,7 @@ import { __ } from '@wordpress/i18n';
 import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 import { useDispatch } from '@wordpress/data';
 import { store as editorStore } from '@wordpress/editor';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -22,7 +23,9 @@ function ScreenStyleVariations() {
 	// - "Desktop" device preview
 	const { setDeviceType } = useDispatch( editorStore );
 	useZoomOut();
-	setDeviceType( 'desktop' );
+	useEffect( () => {
+		setDeviceType( 'desktop' );
+	}, [ setDeviceType ] );
 
 	return (
 		<>

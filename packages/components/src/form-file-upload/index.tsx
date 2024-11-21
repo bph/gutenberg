@@ -50,9 +50,15 @@ export function FormFileUpload( {
 	// @todo: Temporary fix a bug that prevents Chromium browsers from selecting ".heic" files
 	// from the file upload. See https://core.trac.wordpress.org/ticket/62268#comment:4.
 	// This can be removed once the Chromium fix is in the stable channel.
-	const compatAccept = !! accept?.includes( 'image/*' )
-		? `${ accept }, image/heic, image/heif`
-		: accept;
+	// Prevent Safari from adding "image/heic" and "image/heif" to the accept attribute.
+	const isSafari =
+		globalThis.window?.navigator.userAgent.includes( 'Safari' ) &&
+		! globalThis.window?.navigator.userAgent.includes( 'Chrome' ) &&
+		! globalThis.window?.navigator.userAgent.includes( 'Chromium' );
+	const compatAccept =
+		! isSafari && !! accept?.includes( 'image/*' )
+			? `${ accept }, image/heic, image/heif`
+			: accept;
 
 	return (
 		<div className="components-form-file-upload">

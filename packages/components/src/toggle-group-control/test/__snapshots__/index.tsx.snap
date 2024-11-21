@@ -44,8 +44,8 @@ exports[`ToggleGroupControl controlled should render correctly with icons 1`] = 
   display: inline-flex;
   min-width: 0;
   position: relative;
-  min-height: 36px;
-  padding: 2px;
+  min-height: 40px;
+  padding: 3px;
 }
 
 .emotion-8:hover {
@@ -159,7 +159,7 @@ exports[`ToggleGroupControl controlled should render correctly with icons 1`] = 
   width: 100%;
   z-index: 2;
   color: #1e1e1e;
-  height: 30px;
+  height: 32px;
   aspect-ratio: 1;
   padding-left: 0;
   padding-right: 0;
@@ -236,7 +236,7 @@ exports[`ToggleGroupControl controlled should render correctly with icons 1`] = 
   width: 100%;
   z-index: 2;
   color: #1e1e1e;
-  height: 30px;
+  height: 32px;
   aspect-ratio: 1;
   padding-left: 0;
   padding-right: 0;
@@ -409,8 +409,8 @@ exports[`ToggleGroupControl controlled should render correctly with text options
   display: inline-flex;
   min-width: 0;
   position: relative;
-  min-height: 36px;
-  padding: 2px;
+  min-height: 40px;
+  padding: 3px;
 }
 
 .emotion-8:hover {
@@ -678,8 +678,8 @@ exports[`ToggleGroupControl uncontrolled should render correctly with icons 1`] 
   display: inline-flex;
   min-width: 0;
   position: relative;
-  min-height: 36px;
-  padding: 2px;
+  min-height: 40px;
+  padding: 3px;
 }
 
 .emotion-8:hover {
@@ -793,7 +793,7 @@ exports[`ToggleGroupControl uncontrolled should render correctly with icons 1`] 
   width: 100%;
   z-index: 2;
   color: #1e1e1e;
-  height: 30px;
+  height: 32px;
   aspect-ratio: 1;
   padding-left: 0;
   padding-right: 0;
@@ -870,7 +870,7 @@ exports[`ToggleGroupControl uncontrolled should render correctly with icons 1`] 
   width: 100%;
   z-index: 2;
   color: #1e1e1e;
-  height: 30px;
+  height: 32px;
   aspect-ratio: 1;
   padding-left: 0;
   padding-right: 0;
@@ -1037,8 +1037,8 @@ exports[`ToggleGroupControl uncontrolled should render correctly with text optio
   display: inline-flex;
   min-width: 0;
   position: relative;
-  min-height: 36px;
-  padding: 2px;
+  min-height: 40px;
+  padding: 3px;
 }
 
 .emotion-8:hover {

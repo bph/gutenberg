@@ -1,13 +1,14 @@
 /**
  * WordPress dependencies
  */
-import { useState } from '@wordpress/element';
+import { useMemo, useState } from '@wordpress/element';
+import { ToggleControl } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import DataForm from '../index';
-import type { CombinedFormField, Field } from '../../../types';
+import type { Field, Form } from '../../../types';
 
 type SamplePost = {
 	title: string;
@@ -27,8 +28,13 @@ const meta = {
 		type: {
 			control: { type: 'select' },
 			description:
-				'Chooses the layout of the form. "regular" is the default layout.',
-			options: [ 'regular', 'panel' ],
+				'Chooses the default layout of each field. "regular" is the default layout.',
+			options: [ 'default', 'regular', 'panel' ],
+		},
+		labelPosition: {
+			control: { type: 'select' },
+			description: 'Chooses the label position of the layout.',
+			options: [ 'default', 'top', 'side', 'none' ],
 		},
 	},
 };
@@ -97,9 +103,33 @@ const fields = [
 			return item.status !== 'private';
 		},
 	},
+	{
+		id: 'sticky',
+		label: 'Sticky',
+		type: 'integer',
+		Edit: ( { field, onChange, data, hideLabelFromVision } ) => {
+			const { id, getValue } = field;
+			return (
+				<ToggleControl
+					__nextHasNoMarginBottom
+					label={ hideLabelFromVision ? '' : field.label }
+					checked={ getValue( { item: data } ) }
+					onChange={ () =>
+						onChange( { [ id ]: ! getValue( { item: data } ) } )
+					}
+				/>
+			);
+		},
+	},
 ] as Field< SamplePost >[];
 
-export const Default = ( { type }: { type: 'panel' | 'regular' } ) => {
+export const Default = ( {
+	type,
+	labelPosition,
+}: {
+	type: 'default' | 'regular' | 'panel';
+	labelPosition: 'default' | 'top' | 'side' | 'none';
+} ) => {
 	const [ post, setPost ] = useState( {
 		title: 'Hello, World!',
 		order: 2,
@@ -108,29 +138,36 @@ export const Default = ( { type }: { type: 'panel' | 'regular' } ) => {
 		reviewer: 'fulano',
 		date: '2021-01-01T12:00:00',
 		birthdate: '1950-02-23T12:00:00',
+		sticky: false,
 	} );
 
-	const form = {
-		fields: [
-			'title',
-			'order',
-			'author',
-			'reviewer',
-			'status',
-			'password',
-			'date',
-			'birthdate',
-		],
-	};
+	const form = useMemo(
+		() => ( {
+			type,
+			labelPosition,
+			fields: [
+				'title',
+				'order',
+				{
+					id: 'sticky',
+					layout: 'regular',
+					labelPosition: 'side',
+				},
+				'author',
+				'reviewer',
+				'password',
+				'date',
+				'birthdate',
+			],
+		} ),
+		[ type, labelPosition ]
+	) as Form;
 
 	return (
 		<DataForm< SamplePost >
 			data={ post }
 			fields={ fields }
-			form={ {
-				...form,
-				type,
-			} }
+			form={ form }
 			onChange={ ( edits ) =>
 				setPost( ( prev ) => ( {
 					...prev,
@@ -142,40 +179,45 @@ export const Default = ( { type }: { type: 'panel' | 'regular' } ) => {
 };
 
 const CombinedFieldsComponent = ( {
-	type = 'regular',
-	combinedFieldDirection = 'vertical',
+	type,
+	labelPosition,
 }: {
-	type: 'panel' | 'regular';
-	combinedFieldDirection: 'vertical' | 'horizontal';
+	type: 'default' | 'regular' | 'panel';
+	labelPosition: 'default' | 'top' | 'side' | 'none';
 } ) => {
-	const [ post, setPost ] = useState( {
+	const [ post, setPost ] = useState< SamplePost >( {
 		title: 'Hello, World!',
 		order: 2,
 		author: 1,
 		status: 'draft',
+		reviewer: 'fulano',
+		date: '2021-01-01T12:00:00',
+		birthdate: '1950-02-23T12:00:00',
 	} );
 
-	const form = {
-		fields: [ 'title', 'status_and_visibility', 'order', 'author' ],
-		combinedFields: [
-			{
-				id: 'status_and_visibility',
-				label: 'Status & Visibility',
-				children: [ 'status', 'password' ],
-				direction: combinedFieldDirection,
-				render: ( { item } ) => item.status,
-			},
-		] as CombinedFormField< any >[],
-	};
+	const form = useMemo(
+		() => ( {
+			type,
+			labelPosition,
+			fields: [
+				'title',
+				{
+					id: 'status',
+					label: 'Status & Visibility',
+					children: [ 'status', 'password' ],
+				},
+				'order',
+				'author',
+			],
+		} ),
+		[ type, labelPosition ]
+	) as Form;
 
 	return (
-		<DataForm
+		<DataForm< SamplePost >
 			data={ post }
 			fields={ fields }
-			form={ {
-				...form,
-				type,
-			} }
+			form={ form }
 			onChange={ ( edits ) =>
 				setPost( ( prev ) => ( {
 					...prev,
@@ -191,11 +233,8 @@ export const CombinedFields = {
 	render: CombinedFieldsComponent,
 	argTypes: {
 		...meta.argTypes,
-		combinedFieldDirection: {
-			control: { type: 'select' },
-			description:
-				'Chooses the direction of the combined field. "vertical" is the default layout.',
-			options: [ 'vertical', 'horizontal' ],
-		},
+	},
+	args: {
+		type: 'panel',
 	},
 };

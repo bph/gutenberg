@@ -44,7 +44,7 @@ add_filter( 'gu_no_release_asset_branches', '__return_true' );
 define( 'GUTENBERG_VERSION', '9.6.2.20201230' );
 define( 'GUTENBERG_GIT_COMMIT', 'd516050927e6f7d8c4d1917f37c46bab00daacec' );
 ### END AUTO-GENERATED DEFINES
-defined( 'GUTENBERG_MINIMUM_WP_VERSION' ) or define( 'GUTENBERG_MINIMUM_WP_VERSION', '6.5' );
+defined( 'GUTENBERG_MINIMUM_WP_VERSION' ) or define( 'GUTENBERG_MINIMUM_WP_VERSION', '6.6' );
 
 
 gutenberg_pre_init();

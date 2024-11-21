@@ -190,7 +190,7 @@ function hasOnlyOneActionAndIsPrimary< Item >(
 	primaryActions: Action< Item >[],
 	actions: Action< Item >[]
 ) {
-	return primaryActions.length === 1 && actions.length;
+	return primaryActions.length === 1 && actions.length === 1;
 }
 
 export default function ItemActions< Item >( {

@@ -168,6 +168,8 @@ function DuotonePicker( {
 				!! clearable && (
 					<CircularOptionPicker.ButtonAction
 						onClick={ () => onChange( undefined ) }
+						accessibleWhenDisabled
+						disabled={ ! value }
 					>
 						{ __( 'Clear' ) }
 					</CircularOptionPicker.ButtonAction>

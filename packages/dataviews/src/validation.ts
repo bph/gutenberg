@@ -16,7 +16,7 @@ import type { Field, Form } from './types';
 export function isItemValid< Item >(
 	item: Item,
 	fields: Field< Item >[],
-	form: Form< Item >
+	form: Form
 ): boolean {
 	const _fields = normalizeFields(
 		fields.filter( ( { id } ) => !! form.fields?.includes( id ) )

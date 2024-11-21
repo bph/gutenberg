@@ -35,11 +35,6 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 		require_once __DIR__ . '/experimental/class-wp-rest-block-editor-settings-controller.php';
 	}
 
-	// WordPress 6.6 compat.
-	require __DIR__ . '/compat/wordpress-6.6/class-gutenberg-rest-global-styles-revisions-controller-6-6.php';
-	require __DIR__ . '/compat/wordpress-6.6/class-gutenberg-rest-templates-controller-6-6.php';
-	require __DIR__ . '/compat/wordpress-6.6/rest-api.php';
-
 	// WordPress 6.7 compat.
 	require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-rest-posts-controller-6-7.php';
 	require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-rest-templates-controller-6-7.php';
@@ -72,17 +67,8 @@ require __DIR__ . '/experimental/editor-settings.php';
 require __DIR__ . '/compat/plugin/edit-site-routes-backwards-compat.php';
 require __DIR__ . '/compat/plugin/fonts.php';
 
-// The Token Map was created during 6.6 in order to support the HTML API. It must be loaded before it.
-require __DIR__ . '/compat/wordpress-6.6/class-gutenberg-token-map-6-6.php';
+// The Token Map was created to support the HTML API. It must be loaded before it.
 require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-token-map-6-7.php';
-
-require __DIR__ . '/compat/wordpress-6.6/html-api/gutenberg-html5-named-character-references-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-decoder-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-tag-processor-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-open-elements-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-stack-event-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-processor-state-6-6.php';
-require __DIR__ . '/compat/wordpress-6.6/html-api/class-gutenberg-html-processor-6-6.php';
 
 // Type annotations were added in 6.7 so every file is updated.
 require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-active-formatting-elements-6-7.php';
@@ -97,17 +83,6 @@ require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-unsupport
 require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-tag-processor-6-7.php';
 require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-processor-state-6-7.php';
 require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-processor-6-7.php';
-
-// WordPress 6.6 compat.
-require __DIR__ . '/compat/wordpress-6.6/admin-bar.php';
-require __DIR__ . '/compat/wordpress-6.6/blocks.php';
-require __DIR__ . '/compat/wordpress-6.6/block-editor.php';
-require __DIR__ . '/compat/wordpress-6.6/compat.php';
-require __DIR__ . '/compat/wordpress-6.6/resolve-patterns.php';
-require __DIR__ . '/compat/wordpress-6.6/block-bindings/pattern-overrides.php';
-require __DIR__ . '/compat/wordpress-6.6/block-template-utils.php';
-require __DIR__ . '/compat/wordpress-6.6/option.php';
-require __DIR__ . '/compat/wordpress-6.6/post.php';
 
 // WordPress 6.7 compat.
 require __DIR__ . '/compat/wordpress-6.7/block-templates.php';

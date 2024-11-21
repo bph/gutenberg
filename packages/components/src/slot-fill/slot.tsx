@@ -7,8 +7,11 @@ import type { ReactElement, ReactNode, Key } from 'react';
  * WordPress dependencies
  */
 import {
+	useContext,
+	useEffect,
+	useReducer,
+	useRef,
 	Children,
-	Component,
 	cloneElement,
 	isEmptyElement,
 } from '@wordpress/element';
@@ -17,7 +20,7 @@ import {
  * Internal dependencies
  */
 import SlotFillContext from './context';
-import type { BaseSlotComponentProps, SlotComponentProps } from './types';
+import type { SlotComponentProps } from './types';
 
 /**
  * Whether the argument is a function.
@@ -29,90 +32,50 @@ function isFunction( maybeFunc: any ): maybeFunc is Function {
 	return typeof maybeFunc === 'function';
 }
 
-class SlotComponent extends Component< BaseSlotComponentProps > {
-	private isUnmounted: boolean;
+function Slot( props: Omit< SlotComponentProps, 'bubblesVirtually' > ) {
+	const registry = useContext( SlotFillContext );
+	const [ , rerender ] = useReducer( () => [], [] );
+	const ref = useRef( { rerender } );
 
-	constructor( props: BaseSlotComponentProps ) {
-		super( props );
+	const { name, children, fillProps = {} } = props;
 
-		this.isUnmounted = false;
-	}
+	useEffect( () => {
+		const refValue = ref.current;
+		registry.registerSlot( name, refValue );
+		return () => registry.unregisterSlot( name, refValue );
+	}, [ registry, name ] );
 
-	componentDidMount() {
-		const { registerSlot } = this.props;
-		this.isUnmounted = false;
-		registerSlot( this.props.name, this );
-	}
+	const fills: ReactNode[] = ( registry.getFills( name, ref.current ) ?? [] )
+		.map( ( fill ) => {
+			const fillChildren = isFunction( fill.children )
+				? fill.children( fillProps )
+				: fill.children;
+			return Children.map( fillChildren, ( child, childIndex ) => {
+				if ( ! child || typeof child === 'string' ) {
+					return child;
+				}
+				let childKey: Key = childIndex;
+				if (
+					typeof child === 'object' &&
+					'key' in child &&
+					child?.key
+				) {
+					childKey = child.key;
+				}
 
-	componentWillUnmount() {
-		const { unregisterSlot } = this.props;
-		this.isUnmounted = true;
-		unregisterSlot( this.props.name, this );
-	}
-
-	componentDidUpdate( prevProps: BaseSlotComponentProps ) {
-		const { name, unregisterSlot, registerSlot } = this.props;
-
-		if ( prevProps.name !== name ) {
-			unregisterSlot( prevProps.name, this );
-			registerSlot( name, this );
-		}
-	}
-
-	forceUpdate() {
-		if ( this.isUnmounted ) {
-			return;
-		}
-		super.forceUpdate();
-	}
-
-	render() {
-		const { children, name, fillProps = {}, getFills } = this.props;
-		const fills: ReactNode[] = ( getFills( name, this ) ?? [] )
-			.map( ( fill ) => {
-				const fillChildren = isFunction( fill.children )
-					? fill.children( fillProps )
-					: fill.children;
-				return Children.map( fillChildren, ( child, childIndex ) => {
-					if ( ! child || typeof child === 'string' ) {
-						return child;
-					}
-					let childKey: Key = childIndex;
-					if (
-						typeof child === 'object' &&
-						'key' in child &&
-						child?.key
-					) {
-						childKey = child.key;
-					}
-
-					return cloneElement( child as ReactElement, {
-						key: childKey,
-					} );
+				return cloneElement( child as ReactElement, {
+					key: childKey,
 				} );
-			} )
-			.filter(
-				// In some cases fills are rendered only when some conditions apply.
-				// This ensures that we only use non-empty fills when rendering, i.e.,
-				// it allows us to render wrappers only when the fills are actually present.
-				( element ) => ! isEmptyElement( element )
-			);
+			} );
+		} )
+		.filter(
+			// In some cases fills are rendered only when some conditions apply.
+			// This ensures that we only use non-empty fills when rendering, i.e.,
+			// it allows us to render wrappers only when the fills are actually present.
+			( element ) => ! isEmptyElement( element )
+		);
 
-		return <>{ isFunction( children ) ? children( fills ) : fills }</>;
-	}
+	return <>{ isFunction( children ) ? children( fills ) : fills }</>;
 }
-
-const Slot = ( props: Omit< SlotComponentProps, 'bubblesVirtually' > ) => (
-	<SlotFillContext.Consumer>
-		{ ( { registerSlot, unregisterSlot, getFills } ) => (
-			<SlotComponent
-				{ ...props }
-				registerSlot={ registerSlot }
-				unregisterSlot={ unregisterSlot }
-				getFills={ getFills }
-			/>
-		) }
-	</SlotFillContext.Consumer>
-);
 
 export default Slot;

@@ -51,6 +51,7 @@ const Template: StoryFn< typeof ToggleGroupControl > = ( {
 	return (
 		<ToggleGroupControl
 			__nextHasNoMarginBottom
+			__next40pxDefaultSize
 			{ ...props }
 			onChange={ ( ...changeArgs ) => {
 				setValue( ...changeArgs );

@@ -60,8 +60,9 @@ function DocumentTools( { className, disableBlockTools = false } ) {
 			isDistractionFree: get( 'core', 'distractionFree' ),
 			isVisualMode: getEditorMode() === 'visual',
 			showTools:
-				getRenderingMode() !== 'post-only' ||
-				getCurrentPostType() === 'wp_template',
+				!! window?.__experimentalEditorWriteMode &&
+				( getRenderingMode() !== 'post-only' ||
+					getCurrentPostType() === 'wp_template' ),
 		};
 	}, [] );
 

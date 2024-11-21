@@ -46,7 +46,7 @@ function _gutenberg_add_block_templates_from_registry( $query_result, $query, $t
 		// See: https://github.com/WordPress/gutenberg/issues/65584
 		$template_files_query = $query;
 		unset( $template_files_query['post_type'] );
-		$template_files = _gutenberg_get_block_templates_files( $template_type, $template_files_query );
+		$template_files = _get_block_templates_files( $template_type, $template_files_query );
 
 		/*
 		 * Add templates registered in the template registry. Filtering out the ones which have a theme file.

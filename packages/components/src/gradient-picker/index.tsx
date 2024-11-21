@@ -247,6 +247,8 @@ export function GradientPicker( {
 						! disableCustomGradients && (
 							<CircularOptionPicker.ButtonAction
 								onClick={ clearGradient }
+								accessibleWhenDisabled
+								disabled={ ! value }
 							>
 								{ __( 'Clear' ) }
 							</CircularOptionPicker.ButtonAction>

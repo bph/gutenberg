@@ -4615,68 +4615,97 @@ describe( 'getBlockEditingMode', () => {
 		).toBe( 'contentOnly' );
 	} );
 
-	it( 'in navigation mode, the root section container is default', () => {
-		dispatch( preferencesStore ).set( 'core', 'editorTool', 'navigation' );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'ef45d5fd-5234-4fd5-ac4f-c3736c7f9337'
-			)
-		).toBe( 'default' );
-	} );
+	describe( 'navigation mode', () => {
+		const writeModeExperiment = window.__experimentalEditorWriteMode;
+		beforeAll( () => {
+			window.__experimentalEditorWriteMode = true;
+		} );
+		afterAll( () => {
+			window.__experimentalEditorWriteMode = writeModeExperiment;
+		} );
+		it( 'in navigation mode, the root section container is default', () => {
+			dispatch( preferencesStore ).set(
+				'core',
+				'editorTool',
+				'navigation'
+			);
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'ef45d5fd-5234-4fd5-ac4f-c3736c7f9337'
+				)
+			).toBe( 'default' );
+		} );
 
-	it( 'in navigation mode, anything outside the section container is disabled', () => {
-		dispatch( preferencesStore ).set( 'core', 'editorTool', 'navigation' );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'6cf70164-9097-4460-bcbf-200560546988'
-			)
-		).toBe( 'disabled' );
-	} );
+		it( 'in navigation mode, anything outside the section container is disabled', () => {
+			dispatch( preferencesStore ).set(
+				'core',
+				'editorTool',
+				'navigation'
+			);
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'6cf70164-9097-4460-bcbf-200560546988'
+				)
+			).toBe( 'disabled' );
+		} );
 
-	it( 'in navigation mode, sections are contentOnly', () => {
-		dispatch( preferencesStore ).set( 'core', 'editorTool', 'navigation' );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'b26fc763-417d-4f01-b81c-2ec61e14a972'
-			)
-		).toBe( 'contentOnly' );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'9b9c5c3f-2e46-4f02-9e14-9fe9515b958f'
-			)
-		).toBe( 'contentOnly' );
-	} );
+		it( 'in navigation mode, sections are contentOnly', () => {
+			dispatch( preferencesStore ).set(
+				'core',
+				'editorTool',
+				'navigation'
+			);
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'b26fc763-417d-4f01-b81c-2ec61e14a972'
+				)
+			).toBe( 'contentOnly' );
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'9b9c5c3f-2e46-4f02-9e14-9fe9515b958f'
+				)
+			).toBe( 'contentOnly' );
+		} );
 
-	it( 'in navigation mode, blocks with content attributes within sections are contentOnly', () => {
-		dispatch( preferencesStore ).set( 'core', 'editorTool', 'navigation' );
-		hasContentRoleAttribute.mockReturnValueOnce( true );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'b3247f75-fd94-4fef-97f9-5bfd162cc416'
-			)
-		).toBe( 'contentOnly' );
+		it( 'in navigation mode, blocks with content attributes within sections are contentOnly', () => {
+			dispatch( preferencesStore ).set(
+				'core',
+				'editorTool',
+				'navigation'
+			);
+			hasContentRoleAttribute.mockReturnValueOnce( true );
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'b3247f75-fd94-4fef-97f9-5bfd162cc416'
+				)
+			).toBe( 'contentOnly' );
 
-		hasContentRoleAttribute.mockReturnValueOnce( true );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'e178812d-ce5e-48c7-a945-8ae4ffcbbb7c'
-			)
-		).toBe( 'contentOnly' );
-	} );
+			hasContentRoleAttribute.mockReturnValueOnce( true );
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'e178812d-ce5e-48c7-a945-8ae4ffcbbb7c'
+				)
+			).toBe( 'contentOnly' );
+		} );
 
-	it( 'in navigation mode, blocks without content attributes within sections are disabled', () => {
-		dispatch( preferencesStore ).set( 'core', 'editorTool', 'navigation' );
-		expect(
-			getBlockEditingMode(
-				navigationModeStateWithRootSection,
-				'9b9c5c3f-2e46-4f02-9e14-9fed515b958s'
-			)
-		).toBe( 'disabled' );
+		it( 'in navigation mode, blocks without content attributes within sections are disabled', () => {
+			dispatch( preferencesStore ).set(
+				'core',
+				'editorTool',
+				'navigation'
+			);
+			expect(
+				getBlockEditingMode(
+					navigationModeStateWithRootSection,
+					'9b9c5c3f-2e46-4f02-9e14-9fed515b958s'
+				)
+			).toBe( 'disabled' );
+		} );
 	} );
 } );

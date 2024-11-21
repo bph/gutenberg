@@ -29,7 +29,7 @@ export default function Fill( { name, children }: FillComponentProps ) {
 	useLayoutEffect( () => {
 		ref.current.children = children;
 		if ( slot ) {
-			slot.forceUpdate();
+			slot.rerender();
 		}
 	}, [ slot, children ] );
 
