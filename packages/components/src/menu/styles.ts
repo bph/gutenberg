@@ -380,7 +380,7 @@ export const MenuItemHelpText = styled( Truncate )`
 	font-size: ${ font( 'helpText.fontSize' ) };
 	line-height: 16px;
 	color: ${ LIGHTER_TEXT_COLOR };
-	word-break: break-all;
+	overflow-wrap: anywhere;
 
 	[data-active-item]:not( [data-focus-visible] )
 		*:not( ${ MenuPopoverInnerWrapper } )

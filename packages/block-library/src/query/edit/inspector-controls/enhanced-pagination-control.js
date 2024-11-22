@@ -18,14 +18,12 @@ export default function EnhancedPaginationControl( {
 	const fullPageClientSideNavigation =
 		window.__experimentalFullPageClientSideNavigation;
 
-	let help = __( 'Browsing between pages requires a full page reload.' );
+	let help = __(
+		'Reload the full page—instead of just the posts list—when visitors navigate between pages.'
+	);
 	if ( fullPageClientSideNavigation ) {
 		help = __(
 			'Experimental full-page client-side navigation setting enabled.'
-		);
-	} else if ( enhancedPagination ) {
-		help = __(
-			'Reload the full page—instead of just the posts list—when visitors navigate between pages.'
 		);
 	} else if ( hasUnsupportedBlocks ) {
 		help = __(
