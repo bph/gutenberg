@@ -558,6 +558,7 @@ export const themeFields: Field< Theme >[] = [
 	},
 	{ id: 'requires', label: 'Requires at least' },
 	{ id: 'tested', label: 'Tested up to' },
+	{ id: 'icon', label: 'Icon', render: () => <Icon icon={ image } /> },
 	{
 		id: 'tags',
 		label: 'Tags',

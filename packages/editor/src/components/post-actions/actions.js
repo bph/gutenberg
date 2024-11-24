@@ -21,10 +21,10 @@ export function usePostActions( { postType, onActionPerformed, context } ) {
 		[ postType ]
 	);
 
-	const { registerPostTypeActions } = unlock( useDispatch( editorStore ) );
+	const { registerPostTypeSchema } = unlock( useDispatch( editorStore ) );
 	useEffect( () => {
-		registerPostTypeActions( postType );
-	}, [ registerPostTypeActions, postType ] );
+		registerPostTypeSchema( postType );
+	}, [ registerPostTypeSchema, postType ] );
 
 	return useMemo( () => {
 		// Filter actions based on provided context. If not provided

@@ -48,24 +48,15 @@ export function SidebarNavigationItemGlobalStyles( props ) {
 export default function SidebarNavigationScreenGlobalStyles() {
 	const history = useHistory();
 	const { params } = useLocation();
-	const { revisions, isLoading: isLoadingRevisions } =
-		useGlobalStylesRevisions();
+	const {
+		revisions,
+		isLoading: isLoadingRevisions,
+		revisionsCount,
+	} = useGlobalStylesRevisions();
 	const { openGeneralSidebar } = useDispatch( editSiteStore );
 	const { setEditorCanvasContainerView } = unlock(
 		useDispatch( editSiteStore )
 	);
-	const { revisionsCount } = useSelect( ( select ) => {
-		const { getEntityRecord, __experimentalGetCurrentGlobalStylesId } =
-			select( coreStore );
-		const globalStylesId = __experimentalGetCurrentGlobalStylesId();
-		const globalStyles = globalStylesId
-			? getEntityRecord( 'root', 'globalStyles', globalStylesId )
-			: undefined;
-		return {
-			revisionsCount:
-				globalStyles?._links?.[ 'version-history' ]?.[ 0 ]?.count ?? 0,
-		};
-	}, [] );
 	const { set: setPreference } = useDispatch( preferencesStore );
 
 	const openGlobalStyles = useCallback( async () => {
@@ -95,10 +86,10 @@ export default function SidebarNavigationScreenGlobalStyles() {
 	}, [ openGlobalStyles, setEditorCanvasContainerView ] );
 
 	// If there are no revisions, do not render a footer.
-	const hasRevisions = revisionsCount > 0;
 	const modifiedDateTime = revisions?.[ 0 ]?.modified;
 	const shouldShowGlobalStylesFooter =
-		hasRevisions && ! isLoadingRevisions && modifiedDateTime;
+		revisionsCount > 0 && ! isLoadingRevisions && modifiedDateTime;
+
 	return (
 		<>
 			<SidebarNavigationScreen
@@ -114,6 +105,7 @@ export default function SidebarNavigationScreenGlobalStyles() {
 					shouldShowGlobalStylesFooter && (
 						<SidebarNavigationScreenDetailsFooter
 							record={ revisions?.[ 0 ] }
+							revisionsCount={ revisionsCount }
 							onClick={ openRevisions }
 						/>
 					)

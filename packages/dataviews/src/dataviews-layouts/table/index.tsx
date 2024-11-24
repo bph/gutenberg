@@ -147,7 +147,11 @@ function TableColumnCombined< Item >( {
 	) );
 
 	if ( field.direction === 'horizontal' ) {
-		return <HStack spacing={ 3 }>{ children }</HStack>;
+		return (
+			<HStack spacing={ 3 } justify="flex-start">
+				{ children }
+			</HStack>
+		);
 	}
 	return <VStack spacing={ 0 }>{ children }</VStack>;
 }

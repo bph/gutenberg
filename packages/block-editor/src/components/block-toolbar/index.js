@@ -36,6 +36,7 @@ import __unstableBlockNameContext from './block-name-context';
 import NavigableToolbar from '../navigable-toolbar';
 import { useHasBlockToolbar } from './use-has-block-toolbar';
 import ChangeDesign from './change-design';
+import SwitchSectionStyle from './switch-section-style';
 import { unlock } from '../../lock-unlock';
 
 /**
@@ -72,6 +73,7 @@ export function PrivateBlockToolbar( {
 		showSlots,
 		showGroupButtons,
 		showLockButtons,
+		showSwitchSectionStyleButton,
 	} = useSelect( ( select ) => {
 		const {
 			getBlockName,
@@ -141,6 +143,7 @@ export function PrivateBlockToolbar( {
 			showSlots: ! isZoomOut(),
 			showGroupButtons: ! isZoomOut(),
 			showLockButtons: ! isZoomOut(),
+			showSwitchSectionStyleButton: isZoomOut(),
 		};
 	}, [] );
 
@@ -221,6 +224,9 @@ export function PrivateBlockToolbar( {
 					showGroupButtons && <BlockGroupToolbar /> }
 				{ showShuffleButton && (
 					<ChangeDesign clientId={ blockClientIds[ 0 ] } />
+				) }
+				{ showSwitchSectionStyleButton && (
+					<SwitchSectionStyle clientId={ blockClientIds[ 0 ] } />
 				) }
 				{ shouldShowVisualToolbar && showSlots && (
 					<>

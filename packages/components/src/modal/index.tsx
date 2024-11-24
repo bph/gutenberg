@@ -335,10 +335,10 @@ function UnforwardedModal(
 									<>
 										<Spacer
 											marginBottom={ 0 }
-											marginLeft={ 3 }
+											marginLeft={ 2 }
 										/>
 										<Button
-											size="small"
+											size="compact"
 											onClick={ (
 												event: React.MouseEvent< HTMLButtonElement >
 											) =>
