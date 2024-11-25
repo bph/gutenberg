@@ -27,6 +27,14 @@
 			color: $white;
 		}
 	}
+
+	.block-editor-list-view-block__menu {
+		color: $gray-600;
+		&:hover,
+		&:focus {
+			color: $white;
+		}
+	}
 }
 
 .edit-site-sidebar-navigation-screen-navigation-menus__loading.components-spinner {

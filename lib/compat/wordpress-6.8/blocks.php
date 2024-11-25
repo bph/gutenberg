@@ -20,8 +20,13 @@ function gutenberg_stabilize_experimental_block_supports( $args ) {
 		return $args;
 	}
 
-	$experimental_to_stable_keys = array(
-		'typography'           => array(
+	$experimental_supports_map       = array( '__experimentalBorder' => 'border' );
+	$common_experimental_properties  = array(
+		'__experimentalDefaultControls'   => 'defaultControls',
+		'__experimentalSkipSerialization' => 'skipSerialization',
+	);
+	$experimental_support_properties = array(
+		'typography' => array(
 			'__experimentalFontFamily'     => 'fontFamily',
 			'__experimentalFontStyle'      => 'fontStyle',
 			'__experimentalFontWeight'     => 'fontWeight',
@@ -29,68 +34,108 @@ function gutenberg_stabilize_experimental_block_supports( $args ) {
 			'__experimentalTextDecoration' => 'textDecoration',
 			'__experimentalTextTransform'  => 'textTransform',
 		),
-		'__experimentalBorder' => 'border',
 	);
+	$done                            = array();
 
 	$updated_supports = array();
 	foreach ( $args['supports'] as $support => $config ) {
-		// Add the support's config as is when it's not in need of stabilization.
-		if ( empty( $experimental_to_stable_keys[ $support ] ) ) {
+		/*
+		 * If this support config has already been stabilized, skip it.
+		 * A stable support key occurring after an experimental key, gets
+		 * stabilized then so that the two configs can be merged effectively.
+		 */
+		if ( isset( $done[ $support ] ) ) {
+			continue;
+		}
+
+		$stable_support_key = $experimental_supports_map[ $support ] ?? $support;
+
+		/*
+		 * Use the support's config as is when it's not in need of stabilization.
+		 *
+		 * A support does not need stabilization if:
+		 * - The support key doesn't need stabilization AND
+		 * - Either:
+		 *     - The config isn't an array, so can't have experimental properties OR
+		 *     - The config is an array but has no experimental properties to stabilize.
+		 */
+		if ( $support === $stable_support_key &&
+			( ! is_array( $config ) ||
+				( ! isset( $experimental_support_properties[ $stable_support_key ] ) &&
+				empty( array_intersect_key( $common_experimental_properties, $config ) )
+				)
+			)
+		) {
 			$updated_supports[ $support ] = $config;
 			continue;
 		}
 
-		// Stabilize the support's key if needed e.g. __experimentalBorder => border.
-		if ( is_string( $experimental_to_stable_keys[ $support ] ) ) {
-			$stabilized_key = $experimental_to_stable_keys[ $support ];
+		$stabilize_config = function ( $unstable_config, $stable_support_key ) use ( $experimental_support_properties, $common_experimental_properties ) {
+			$stable_config = array();
+			foreach ( $unstable_config as $key => $value ) {
+				// Get stable key from support-specific map, common properties map, or keep original.
+				$stable_key = $experimental_support_properties[ $stable_support_key ][ $key ] ??
+							$common_experimental_properties[ $key ] ??
+							$key;
 
-			// If there is no stabilized key present, use the experimental config as is.
-			if ( ! array_key_exists( $stabilized_key, $args['supports'] ) ) {
-				$updated_supports[ $stabilized_key ] = $config;
-				continue;
-			}
+				$stable_config[ $stable_key ] = $value;
 
-			/*
-			 * Determine the order of keys, so the last defined can be preferred.
-			 *
-			 * The reason for preferring the last defined key is that after filters
-			 * are applied, the last inserted key is likely the most up-to-date value.
-			 * We cannot determine with certainty which value was "last modified" so
-			 * the insertion order is the best guess. The extreme edge case of multiple
-			 * filters tweaking the same support property will become less over time as
-			 * extenders migrate existing blocks and plugins to stable keys.
-			 */
-			$key_positions      = array_flip( array_keys( $args['supports'] ) );
-			$experimental_index = $key_positions[ $support ] ?? -1;
-			$stabilized_index   = $key_positions[ $stabilized_key ] ?? -1;
-			$experimental_first = $experimental_index < $stabilized_index;
-
-			// Update support config, prefer the last defined value.
-			if ( is_array( $config ) ) {
-				$updated_supports[ $stabilized_key ] = $experimental_first
-					? array_merge( $config, $args['supports'][ $stabilized_key ] )
-					: array_merge( $args['supports'][ $stabilized_key ], $config );
-			} else {
-				$updated_supports[ $stabilized_key ] = $experimental_first
-					? $args['supports'][ $stabilized_key ]
-					: $config;
-			}
-
-			continue;
-		}
-
-		// Stabilize individual support feature keys e.g. __experimentalFontFamily => fontFamily.
-		if ( is_array( $experimental_to_stable_keys[ $support ] ) ) {
-			$stable_support_config = array();
-			foreach ( $config as $key => $value ) {
-				if ( array_key_exists( $key, $experimental_to_stable_keys[ $support ] ) ) {
-					$stable_support_config[ $experimental_to_stable_keys[ $support ][ $key ] ] = $value;
-				} else {
-					$stable_support_config[ $key ] = $value;
+				/*
+				 * The `__experimentalSkipSerialization` key needs to be kept until
+				 * WP 6.8 becomes the minimum supported version. This is due to the
+				 * core `wp_should_skip_block_supports_serialization` function only
+				 * checking for `__experimentalSkipSerialization` in earlier versions.
+				 */
+				if ( '__experimentalSkipSerialization' === $key || 'skipSerialization' === $key ) {
+					$stable_config['__experimentalSkipSerialization'] = $value;
 				}
 			}
-			$updated_supports[ $support ] = $stable_support_config;
+			return $stable_config;
+		};
+
+		// Stabilize the config value.
+		$stable_config = is_array( $config ) ? $stabilize_config( $config, $stable_support_key ) : $config;
+
+		/*
+		 * If a plugin overrides the support config with the `register_block_type_args`
+		 * filter, both experimental and stable configs may be present. In that case,
+		 * use the order keys are defined in to determine the final value.
+		 *    - If config is an array, merge the arrays in their order of definition.
+		 *    - If config is not an array, use the value defined last.
+		 *
+		 * The reason for preferring the last defined key is that after filters
+		 * are applied, the last inserted key is likely the most up-to-date value.
+		 * We cannot determine with certainty which value was "last modified" so
+		 * the insertion order is the best guess. The extreme edge case of multiple
+		 * filters tweaking the same support property will become less over time as
+		 * extenders migrate existing blocks and plugins to stable keys.
+		 */
+		if ( $support !== $stable_support_key && isset( $args['supports'][ $stable_support_key ] ) ) {
+			$key_positions      = array_flip( array_keys( $args['supports'] ) );
+			$experimental_first =
+				( $key_positions[ $support ] ?? PHP_INT_MAX ) <
+				( $key_positions[ $stable_support_key ] ?? PHP_INT_MAX );
+
+			if ( is_array( $args['supports'][ $stable_support_key ] ) ) {
+				/*
+				 * To merge the alternative support config effectively, it also needs to be
+				 * stabilized before merging to keep stabilized and experimental flags in
+				 * sync.
+				 */
+				$args['supports'][ $stable_support_key ] = $stabilize_config( $args['supports'][ $stable_support_key ], $stable_support_key );
+				$stable_config                           = $experimental_first
+					? array_merge( $stable_config, $args['supports'][ $stable_support_key ] )
+					: array_merge( $args['supports'][ $stable_support_key ], $stable_config );
+				// Prevents reprocessing this support as it was merged above.
+				$done[ $stable_support_key ] = true;
+			} else {
+				$stable_config = $experimental_first
+					? $args['supports'][ $stable_support_key ]
+					: $stable_config;
+			}
 		}
+
+		$updated_supports[ $stable_support_key ] = $stable_config;
 	}
 
 	$args['supports'] = $updated_supports;

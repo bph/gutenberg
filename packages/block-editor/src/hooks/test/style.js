@@ -133,8 +133,7 @@ describe( 'addSaveProps', () => {
 	const applySkipSerialization = ( features ) => {
 		const updatedSettings = { ...blockSettings };
 		Object.keys( features ).forEach( ( key ) => {
-			updatedSettings.supports[ key ].__experimentalSkipSerialization =
-				features[ key ];
+			updatedSettings.supports[ key ].skipSerialization = features[ key ];
 		} );
 		return updatedSettings;
 	};

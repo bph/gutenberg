@@ -71,6 +71,9 @@
 
 // Specificity is necessary to override block toolbar button styles.
 .components-button.block-editor-block-mover-button {
+	// Prevent the SVGs inside the button from overflowing the button.
+	overflow: hidden;
+
 	// Focus and toggle pseudo elements.
 	&::before {
 		content: "";

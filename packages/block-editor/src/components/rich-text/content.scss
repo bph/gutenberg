@@ -20,12 +20,6 @@
 	}
 }
 
-.block-editor-rich-text__editable {
-	> p:first-child {
-		margin-top: 0;
-	}
-}
-
 // Captions may have lighter (gray) text, or be shown on a range of different background luminosites.
 // To ensure legibility, we increase the default placeholder opacity to ensure contrast.
 figcaption.block-editor-rich-text__editable [data-rich-text-placeholder]::before {

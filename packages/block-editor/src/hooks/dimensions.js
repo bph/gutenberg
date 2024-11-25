@@ -88,11 +88,11 @@ export function DimensionsPanel( { clientId, name, setAttributes, settings } ) {
 
 	const defaultDimensionsControls = getBlockSupport( name, [
 		DIMENSIONS_SUPPORT_KEY,
-		'__experimentalDefaultControls',
+		'defaultControls',
 	] );
 	const defaultSpacingControls = getBlockSupport( name, [
 		SPACING_SUPPORT_KEY,
-		'__experimentalDefaultControls',
+		'defaultControls',
 	] );
 	const defaultControls = {
 		...defaultDimensionsControls,

@@ -124,7 +124,7 @@ export function shouldSkipSerialization(
 	feature
 ) {
 	const support = getBlockSupport( blockNameOrType, featureSet );
-	const skipSerialization = support?.__experimentalSkipSerialization;
+	const skipSerialization = support?.skipSerialization;
 
 	if ( Array.isArray( skipSerialization ) ) {
 		return skipSerialization.includes( feature );

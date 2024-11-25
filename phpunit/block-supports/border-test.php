@@ -128,11 +128,11 @@ class WP_Block_Supports_Border_Test extends WP_UnitTestCase {
 			'test/flat-border-with-skipped-serialization',
 			array(
 				'__experimentalBorder' => array(
-					'color'                           => true,
-					'radius'                          => true,
-					'width'                           => true,
-					'style'                           => true,
-					'__experimentalSkipSerialization' => true,
+					'color'             => true,
+					'radius'            => true,
+					'width'             => true,
+					'style'             => true,
+					'skipSerialization' => true,
 				),
 			)
 		);
@@ -566,5 +566,168 @@ class WP_Block_Supports_Border_Test extends WP_UnitTestCase {
 		);
 
 		$this->assertSame( $expected, $actual );
+	}
+
+	/**
+	 * Tests that experimental border support configuration gets stabilized correctly.
+	 */
+	public function test_should_stabilize_border_supports() {
+		$block_type_args = array(
+			'supports' => array(
+				'__experimentalBorder' => array(
+					'color'                           => true,
+					'radius'                          => true,
+					'style'                           => true,
+					'width'                           => true,
+					'__experimentalSkipSerialization' => true,
+					'__experimentalDefaultControls'   => array(
+						'color'  => true,
+						'radius' => true,
+						'style'  => true,
+						'width'  => true,
+					),
+				),
+			),
+		);
+
+		$actual   = gutenberg_stabilize_experimental_block_supports( $block_type_args );
+		$expected = array(
+			'supports' => array(
+				'border' => array(
+					'color'                           => true,
+					'radius'                          => true,
+					'style'                           => true,
+					'width'                           => true,
+					'skipSerialization'               => true,
+					// Has to be kept due to core's `wp_should_skip_block_supports_serialization` only checking the experimental flag until 6.8.
+					'__experimentalSkipSerialization' => true,
+					'defaultControls'                 => array(
+						'color'  => true,
+						'radius' => true,
+						'style'  => true,
+						'width'  => true,
+					),
+				),
+			),
+		);
+
+		$this->assertSame( $expected, $actual, 'Stabilized border block support config does not match.' );
+	}
+
+	/**
+	 * Tests the merging of border support configuration when stabilizing
+	 * experimental config. Due to the ability to filter block type args, plugins
+	 * or themes could filter using outdated experimental keys. While not every
+	 * permutation of filtering can be covered, the majority of use cases are
+	 * served best by merging configs based on the order they were defined if possible.
+	 */
+	public function test_should_stabilize_border_supports_using_order_based_merge() {
+		$experimental_border_config = array(
+			'color'                           => true,
+			'radius'                          => true,
+			'style'                           => true,
+			'width'                           => true,
+			'__experimentalSkipSerialization' => true,
+			'__experimentalDefaultControls'   => array(
+				'color'  => true,
+				'radius' => true,
+				'style'  => true,
+				'width'  => true,
+			),
+
+			/*
+			 * The following simulates theme/plugin filtering using `__experimentalBorder`
+			 * key but stable serialization and default control keys.
+			 */
+			'skipSerialization'               => false,
+			'defaultControls'                 => array(
+				'color'  => true,
+				'radius' => false,
+				'style'  => true,
+				'width'  => true,
+			),
+		);
+		$stable_border_config = array(
+			'color'                           => true,
+			'radius'                          => true,
+			'style'                           => false,
+			'width'                           => true,
+			'skipSerialization'               => false,
+			'defaultControls'                 => array(
+				'color'  => true,
+				'radius' => false,
+				'style'  => false,
+				'width'  => true,
+			),
+
+			/*
+			 * The following simulates theme/plugin filtering using stable `border` key
+			 * but experimental serialization and default control keys.
+			 */
+			'__experimentalSkipSerialization' => true,
+			'__experimentalDefaultControls'   => array(
+				'color'  => false,
+				'radius' => false,
+				'style'  => false,
+				'width'  => false,
+			),
+		);
+
+		$experimental_first_args = array(
+			'supports' => array(
+				'__experimentalBorder' => $experimental_border_config,
+				'border'               => $stable_border_config,
+			),
+		);
+
+		$actual   = gutenberg_stabilize_experimental_block_supports( $experimental_first_args );
+		$expected = array(
+			'supports' => array(
+				'border' => array(
+					'color'                           => true,
+					'radius'                          => true,
+					'style'                           => false,
+					'width'                           => true,
+					'skipSerialization'               => true,
+					'__experimentalSkipSerialization' => true,
+					'defaultControls'                 => array(
+						'color'  => false,
+						'radius' => false,
+						'style'  => false,
+						'width'  => false,
+					),
+
+				),
+			),
+		);
+		$this->assertSame( $expected, $actual, 'Merged stabilized border block support config does not match when experimental keys are first.' );
+
+		$stable_first_args = array(
+			'supports' => array(
+				'border'               => $stable_border_config,
+				'__experimentalBorder' => $experimental_border_config,
+			),
+		);
+
+		$actual   = gutenberg_stabilize_experimental_block_supports( $stable_first_args );
+		$expected = array(
+			'supports' => array(
+				'border' => array(
+					'color'                           => true,
+					'radius'                          => true,
+					'style'                           => true,
+					'width'                           => true,
+					'skipSerialization'               => false,
+					'__experimentalSkipSerialization' => false,
+					'defaultControls'                 => array(
+						'color'  => true,
+						'radius' => false,
+						'style'  => true,
+						'width'  => true,
+					),
+				),
+			),
+		);
+		$this->assertSame( $expected, $actual, 'Merged stabilized border block support config does not match when stable keys are first.' );
 	}
 }
