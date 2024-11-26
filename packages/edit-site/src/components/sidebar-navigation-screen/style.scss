@@ -18,7 +18,7 @@
 .edit-site-sidebar-navigation-screen__content {
 	padding: 0 $grid-unit-20;
 
-	.components-item-group {
+	.edit-site-sidebar-navigation-screen-details-footer {
 		margin-left: -$grid-unit-20;
 		margin-right: -$grid-unit-20;
 	}
@@ -127,9 +127,14 @@
 	bottom: 0;
 	background-color: $gray-900;
 	gap: 0;
-	padding: $grid-unit-20 0;
+	padding: $grid-unit-10 $grid-unit-20;
 	margin: $grid-unit-20 0 0;
 	border-top: 1px solid $gray-800;
+
+	.components-item-group {
+		margin-left: -$grid-unit-20;
+		margin-right: -$grid-unit-20;
+	}
 }
 
 /* In general style overrides are discouraged.

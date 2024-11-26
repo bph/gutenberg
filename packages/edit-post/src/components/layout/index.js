@@ -392,7 +392,6 @@ function Layout( {
 		showIconLabels,
 		isDistractionFree,
 		showMetaBoxes,
-		hasHistory,
 		isWelcomeGuideVisible,
 		templateId,
 		enablePaddingAppender,
@@ -595,7 +594,7 @@ function Layout( {
 						<PostLockedModal />
 						<EditorInitialization />
 						<FullscreenMode isActive={ isFullscreenActive } />
-						<BrowserURL hasHistory={ hasHistory } />
+						<BrowserURL />
 						<UnsavedChangesWarning />
 						<AutosaveMonitor />
 						<LocalAutosaveMonitor />

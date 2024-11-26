@@ -35,7 +35,7 @@ import CommentForm from './comment-form';
  * @param {Function} props.onAddReply       - The function to add a reply to a comment.
  * @param {Function} props.onCommentDelete  - The function to delete a comment.
  * @param {Function} props.onCommentResolve - The function to mark a comment as resolved.
- * @return {JSX.Element} The rendered Comments component.
+ * @return {React.ReactNode} The rendered Comments component.
  */
 export function Comments( {
 	threads,
@@ -270,7 +270,7 @@ export function Comments( {
  * @param {Function} props.onDelete  - The function to delete the comment.
  * @param {Function} props.onReply   - The function to reply to the comment.
  * @param {string}   props.status    - The status of the comment.
- * @return {JSX.Element} The rendered comment header.
+ * @return {React.ReactNode} The rendered comment header.
  */
 function CommentHeader( {
 	thread,

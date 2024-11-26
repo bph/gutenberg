@@ -129,6 +129,7 @@ export default function AxialInputControls( {
 						<FlexedRangeControl
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize={ __next40pxDefaultSize }
+							__shouldNotWarnDeprecated36pxSize
 							aria-controls={ inputId }
 							label={ LABELS[ side ] }
 							hideLabelFromVision

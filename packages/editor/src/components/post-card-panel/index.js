@@ -22,6 +22,7 @@ import {
 import { unlock } from '../../lock-unlock';
 import PostActions from '../post-actions';
 import usePageTypeBadge from '../../utils/pageTypeBadge';
+import { getTemplateInfo } from '../../utils/get-template-info';
 
 export default function PostCardPanel( {
 	postType,
@@ -30,17 +31,29 @@ export default function PostCardPanel( {
 } ) {
 	const { title, icon } = useSelect(
 		( select ) => {
-			const { __experimentalGetTemplateInfo } = select( editorStore );
 			const { getEditedEntityRecord } = select( coreStore );
 			const _record = getEditedEntityRecord(
 				'postType',
 				postType,
 				postId
 			);
-			const _templateInfo =
-				[ TEMPLATE_POST_TYPE, TEMPLATE_PART_POST_TYPE ].includes(
-					postType
-				) && __experimentalGetTemplateInfo( _record );
+
+			const { default_template_types: templateTypes = [] } =
+				select( coreStore ).getEntityRecord(
+					'root',
+					'__unstableBase'
+				) ?? {};
+
+			const _templateInfo = [
+				TEMPLATE_POST_TYPE,
+				TEMPLATE_PART_POST_TYPE,
+			].includes( postType )
+				? getTemplateInfo( {
+						template: _record,
+						templateTypes,
+				  } )
+				: {};
+
 			return {
 				title: _templateInfo?.title || _record?.title,
 				icon: unlock( select( editorStore ) ).getPostIcon( postType, {

@@ -16,8 +16,9 @@ import MenuItemsChoice from '../../menu-items-choice';
 import type { Meta, StoryFn } from '@storybook/react';
 
 const meta: Meta< typeof MenuGroup > = {
-	title: 'Components/MenuGroup',
+	title: 'Components/Actions/MenuGroup',
 	component: MenuGroup,
+	id: 'components-menugroup',
 	argTypes: {
 		children: { control: { type: null } },
 	},

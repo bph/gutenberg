@@ -20,11 +20,7 @@ import { store as coreStore } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import {
-	getRenderingMode,
-	getCurrentPost,
-	__experimentalGetDefaultTemplatePartAreas,
-} from './selectors';
+import { getRenderingMode, getCurrentPost } from './selectors';
 import {
 	getEntityActions as _getEntityActions,
 	getEntityFields as _getEntityFields,
@@ -102,9 +98,13 @@ export const getPostIcon = createRegistrySelector(
 				postType === 'wp_template'
 			) {
 				return (
-					__experimentalGetDefaultTemplatePartAreas( state ).find(
-						( item ) => options.area === item.area
-					)?.icon || layout
+					(
+						select( coreStore ).getEntityRecord(
+							'root',
+							'__unstableBase'
+						)?.default_template_part_areas || []
+					).find( ( item ) => options.area === item.area )?.icon ||
+					layout
 				);
 			}
 			if ( CARD_ICONS[ postType ] ) {

@@ -1,24 +1,14 @@
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
-import { humanTimeDiff } from '@wordpress/date';
-import { createInterpolateElement } from '@wordpress/element';
+import { _n, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
-import {
-	Icon,
-	__experimentalItemGroup as ItemGroup,
-} from '@wordpress/components';
+import { __experimentalItemGroup as ItemGroup } from '@wordpress/components';
 import { backup } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import {
-	SidebarNavigationScreenDetailsPanelRow,
-	SidebarNavigationScreenDetailsPanelLabel,
-	SidebarNavigationScreenDetailsPanelValue,
-} from '../sidebar-navigation-screen-details-panel';
 import SidebarNavigationItem from '../sidebar-navigation-item';
 
 export default function SidebarNavigationScreenDetailsFooter( {
@@ -56,33 +46,20 @@ export default function SidebarNavigationScreenDetailsFooter( {
 		hrefProps.as = 'a';
 	}
 	return (
-		<ItemGroup className="edit-site-sidebar-navigation-screen-details-footer">
+		<ItemGroup
+			size="large"
+			className="edit-site-sidebar-navigation-screen-details-footer"
+		>
 			<SidebarNavigationItem
-				aria-label={ __( 'Revisions' ) }
+				icon={ backup }
 				{ ...hrefProps }
 				{ ...otherProps }
 			>
-				<SidebarNavigationScreenDetailsPanelRow justify="space-between">
-					<SidebarNavigationScreenDetailsPanelLabel>
-						{ __( 'Last modified' ) }
-					</SidebarNavigationScreenDetailsPanelLabel>
-					<SidebarNavigationScreenDetailsPanelValue>
-						{ createInterpolateElement(
-							sprintf(
-								/* translators: %s: is the relative time when the post was last modified. */
-								__( '<time>%s</time>' ),
-								humanTimeDiff( record.modified )
-							),
-							{
-								time: <time dateTime={ record.modified } />,
-							}
-						) }
-					</SidebarNavigationScreenDetailsPanelValue>
-					<Icon
-						className="edit-site-sidebar-navigation-screen-details-footer__icon"
-						icon={ backup }
-					/>
-				</SidebarNavigationScreenDetailsPanelRow>
+				{ sprintf(
+					/* translators: %d: Number of Styles revisions. */
+					_n( '%d Revision', '%d Revisions', revisionsCount ),
+					revisionsCount
+				) }
 			</SidebarNavigationItem>
 		</ItemGroup>
 	);

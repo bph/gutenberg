@@ -332,7 +332,13 @@ function ViewTable< Item >( {
 	return (
 		<>
 			<table
-				className="dataviews-view-table"
+				className={ clsx( 'dataviews-view-table', {
+					[ `has-${ view.layout?.density }-density` ]:
+						view.layout?.density &&
+						[ 'compact', 'comfortable' ].includes(
+							view.layout.density
+						),
+				} ) }
 				aria-busy={ isLoading }
 				aria-describedby={ tableNoticeId }
 			>

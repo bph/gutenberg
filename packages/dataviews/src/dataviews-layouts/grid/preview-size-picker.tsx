@@ -4,7 +4,13 @@
 import { RangeControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useViewportMatch } from '@wordpress/compose';
-import { useEffect, useMemo } from '@wordpress/element';
+import { useMemo, useContext } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
+import DataViewsContext from '../../components/dataviews-context';
+import type { ViewGrid } from '../../types';
 
 const viewportBreaks = {
 	xhuge: { min: 3, max: 6, default: 5 },
@@ -39,31 +45,32 @@ function useViewPortBreakpoint() {
 	return null;
 }
 
-export default function DensityPicker( {
-	density,
-	setDensity,
-}: {
-	density: number;
-	setDensity: React.Dispatch< React.SetStateAction< number > >;
-} ) {
+export function useUpdatedPreviewSizeOnViewportChange() {
 	const viewport = useViewPortBreakpoint();
-	useEffect( () => {
-		setDensity( ( _density ) => {
-			if ( ! viewport || ! _density ) {
-				return 0;
-			}
-			const breakValues = viewportBreaks[ viewport ];
-			if ( _density < breakValues.min ) {
-				return breakValues.min;
-			}
-			if ( _density > breakValues.max ) {
-				return breakValues.max;
-			}
-			return _density;
-		} );
-	}, [ setDensity, viewport ] );
+	const view = useContext( DataViewsContext ).view as ViewGrid;
+	return useMemo( () => {
+		const previewSize = view.layout?.previewSize;
+		let newPreviewSize;
+		if ( ! viewport || ! previewSize ) {
+			return;
+		}
+		const breakValues = viewportBreaks[ viewport ];
+		if ( previewSize < breakValues.min ) {
+			newPreviewSize = breakValues.min;
+		}
+		if ( previewSize > breakValues.max ) {
+			newPreviewSize = breakValues.max;
+		}
+		return newPreviewSize;
+	}, [ viewport, view ] );
+}
+
+export default function PreviewSizePicker() {
+	const viewport = useViewPortBreakpoint();
+	const context = useContext( DataViewsContext );
+	const view = context.view as ViewGrid;
 	const breakValues = viewportBreaks[ viewport || 'mobile' ];
-	const densityToUse = density || breakValues.default;
+	const previewSizeToUse = view.layout?.previewSize || breakValues.default;
 
 	const marks = useMemo(
 		() =>
@@ -88,13 +95,19 @@ export default function DensityPicker( {
 			__next40pxDefaultSize
 			showTooltip={ false }
 			label={ __( 'Preview size' ) }
-			value={ breakValues.max + breakValues.min - densityToUse }
+			value={ breakValues.max + breakValues.min - previewSizeToUse }
 			marks={ marks }
 			min={ breakValues.min }
 			max={ breakValues.max }
 			withInputField={ false }
 			onChange={ ( value = 0 ) => {
-				setDensity( breakValues.max + breakValues.min - value );
+				context.onChangeView( {
+					...view,
+					layout: {
+						...view.layout,
+						previewSize: breakValues.max + breakValues.min - value,
+					},
+				} );
 			} }
 			step={ 1 }
 		/>

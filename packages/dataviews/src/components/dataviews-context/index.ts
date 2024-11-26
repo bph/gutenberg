@@ -28,7 +28,6 @@ type DataViewsContextType< Item > = {
 	getItemId: ( item: Item ) => string;
 	onClickItem: ( item: Item ) => void;
 	isItemClickable: ( item: Item ) => boolean;
-	density: number;
 };
 
 const DataViewsContext = createContext< DataViewsContextType< any > >( {
@@ -47,7 +46,6 @@ const DataViewsContext = createContext< DataViewsContextType< any > >( {
 	getItemId: ( item ) => item.id,
 	onClickItem: () => {},
 	isItemClickable: () => false,
-	density: 0,
 } );
 
 export default DataViewsContext;

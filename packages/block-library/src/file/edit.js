@@ -128,15 +128,21 @@ function FileEdit( { attributes, isSelected, setAttributes, clientId } ) {
 		}
 
 		const isPdf = newMedia.url.endsWith( '.pdf' );
+		const pdfAttributes = {
+			displayPreview: isPdf
+				? attributes.displayPreview ?? true
+				: undefined,
+			previewHeight: isPdf ? attributes.previewHeight ?? 600 : undefined,
+		};
+
 		setAttributes( {
 			href: newMedia.url,
 			fileName: newMedia.title,
 			textLinkHref: newMedia.url,
 			id: newMedia.id,
-			displayPreview: isPdf ? true : undefined,
-			previewHeight: isPdf ? 600 : undefined,
 			fileId: `wp-block-file--media-${ clientId }`,
 			blob: undefined,
+			...pdfAttributes,
 		} );
 		setTemporaryURL();
 	}

@@ -67,6 +67,7 @@ const BorderBoxControlSplitControls = (
 		isCompact: true,
 		__experimentalIsRenderedInSidebar,
 		size,
+		__shouldNotWarnDeprecated36pxSize: true,
 	};
 
 	const mergedRef = useMergeRefs( [ setPopoverAnchor, forwardedRef ] );

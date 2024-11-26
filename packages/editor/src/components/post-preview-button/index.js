@@ -112,7 +112,7 @@ function writeInterstitialMessage( targetDocument ) {
  * @param {string}   props.role                The role attribute for the button.
  * @param {Function} props.onPreview           The callback function for preview event.
  *
- * @return {JSX.Element|null} The rendered button component.
+ * @return {React.ReactNode} The rendered button component.
  */
 export default function PostPreviewButton( {
 	className,

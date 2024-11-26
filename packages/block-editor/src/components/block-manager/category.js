@@ -71,7 +71,7 @@ function BlockManagerCategory( {
 			)
 		);
 
-	const titleId = 'editor-block-manager__category-title-' + instanceId;
+	const titleId = 'block-editor-block-manager__category-title-' + instanceId;
 
 	const isAllChecked = checkedBlockNames.length === blockTypes.length;
 	const isIndeterminate = ! isAllChecked && checkedBlockNames.length > 0;
@@ -80,13 +80,13 @@ function BlockManagerCategory( {
 		<div
 			role="group"
 			aria-labelledby={ titleId }
-			className="editor-block-manager__category"
+			className="block-editor-block-manager__category"
 		>
 			<CheckboxControl
 				__nextHasNoMarginBottom
 				checked={ isAllChecked }
 				onChange={ toggleAllVisible }
-				className="editor-block-manager__category-title"
+				className="block-editor-block-manager__category-title"
 				indeterminate={ isIndeterminate }
 				label={ <span id={ titleId }>{ title }</span> }
 			/>

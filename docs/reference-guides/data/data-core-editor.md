@@ -1148,7 +1148,8 @@ Action that autosaves the current post. This includes server-side autosaving (de
 
 _Parameters_
 
--   _options_ `Object?`: Extra flags to identify the autosave.
+-   _options_ `[Object]`: Extra flags to identify the autosave.
+-   _options.local_ `[boolean]`: Whether to perform a local autosave.
 
 ### clearSelectedBlock
 
@@ -1204,7 +1205,7 @@ const getFeaturedMediaUrl = useSelect( ( select ) => {
 _Parameters_
 
 -   _edits_ `Object`: Post attributes to edit.
--   _options_ `Object`: Options for the edit.
+-   _options_ `[Object]`: Options for the edit.
 
 _Returns_
 
@@ -1417,7 +1418,7 @@ Returns an action object used to signal that the blocks have been updated.
 _Parameters_
 
 -   _blocks_ `Array`: Block Array.
--   _options_ `?Object`: Optional options.
+-   _options_ `[Object]`: Optional options.
 
 ### resetPost
 
@@ -1431,7 +1432,7 @@ Action for saving the current post in the editor.
 
 _Parameters_
 
--   _options_ `Object`:
+-   _options_ `[Object]`:
 
 ### selectBlock
 
@@ -1519,7 +1520,7 @@ _Parameters_
 
 -   _post_ `Object`: Post object.
 -   _edits_ `Object`: Initial edited attributes object.
--   _template_ `Array?`: Block Template.
+-   _template_ `[Array]`: Block Template.
 
 ### setupEditorState
 

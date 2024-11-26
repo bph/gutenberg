@@ -27,7 +27,7 @@ const { PrivatePublishDateTimePicker } = unlock( blockEditorPrivateApis );
  * @param {Object}   props         Props.
  * @param {Function} props.onClose Function to close the component.
  *
- * @return {Component} The component to be rendered.
+ * @return {React.ReactNode} The rendered component.
  */
 export default function PostSchedule( props ) {
 	return (

@@ -22,7 +22,7 @@ import CommentForm from './comment-form';
  * @param {Function} props.onSubmit            - A callback function to be called when the user submits a comment.
  * @param {boolean}  props.showCommentBoard    - The function to edit the comment.
  * @param {Function} props.setShowCommentBoard - The function to delete the comment.
- * @return {JSX.Element} The rendered comment input UI.
+ * @return {React.ReactNode} The rendered comment input UI.
  */
 export function AddComment( {
 	onSubmit,

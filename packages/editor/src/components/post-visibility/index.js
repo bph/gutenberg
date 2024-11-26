@@ -22,7 +22,7 @@ import { store as editorStore } from '../../store';
  *
  * @param {Object}   props         The component props.
  * @param {Function} props.onClose Function to call when the popover is closed.
- * @return {JSX.Element} The rendered component.
+ * @return {React.ReactNode} The rendered component.
  */
 export default function PostVisibility( { onClose } ) {
 	const instanceId = useInstanceId( PostVisibility );

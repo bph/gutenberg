@@ -83,13 +83,10 @@ fieldset.fields-controls__featured-image {
 }
 
 .dataviews-view-table__cell-content-wrapper {
-	.fields-controls__featured-image-image {
-		width: 32px;
-		height: 32px;
-	}
-
+	.fields-controls__featured-image-image,
 	.fields-controls__featured-image-placeholder {
 		width: 32px;
 		height: 32px;
+		display: block;
 	}
 }

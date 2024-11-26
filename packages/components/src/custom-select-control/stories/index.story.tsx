@@ -14,8 +14,9 @@ import { useState } from '@wordpress/element';
 import CustomSelectControl from '..';
 
 const meta: Meta< typeof CustomSelectControl > = {
-	title: 'Components/CustomSelectControl',
+	title: 'Components/Selection & Input/Common/CustomSelectControl',
 	component: CustomSelectControl,
+	id: 'components-customselectcontrol',
 	argTypes: {
 		onChange: { control: { type: null } },
 		value: { control: { type: null } },

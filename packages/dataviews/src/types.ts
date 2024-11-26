@@ -329,6 +329,8 @@ export interface ColumnStyle {
 	minWidth?: string | number;
 }
 
+export type Density = 'compact' | 'balanced' | 'comfortable';
+
 export interface ViewTable extends ViewBase {
 	type: 'table';
 
@@ -347,6 +349,11 @@ export interface ViewTable extends ViewBase {
 		 * The styles for the columns.
 		 */
 		styles?: Record< string, ColumnStyle >;
+
+		/**
+		 * The density of the view.
+		 */
+		density?: Density;
 	};
 }
 
@@ -389,6 +396,11 @@ export interface ViewGrid extends ViewBase {
 		 * The fields to use as badge fields.
 		 */
 		badgeFields?: string[];
+
+		/**
+		 * The preview size of the grid.
+		 */
+		previewSize?: number;
 	};
 }
 
@@ -501,7 +513,6 @@ export interface ViewBaseProps< Item > {
 	onClickItem: ( item: Item ) => void;
 	isItemClickable: ( item: Item ) => boolean;
 	view: View;
-	density: number;
 }
 
 export interface ViewTableProps< Item > extends ViewBaseProps< Item > {

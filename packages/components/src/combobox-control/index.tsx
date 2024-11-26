@@ -26,7 +26,7 @@ import TokenInput from '../form-token-field/token-input';
 import SuggestionsList from '../form-token-field/suggestions-list';
 import BaseControl from '../base-control';
 import Button from '../button';
-import { FlexBlock, FlexItem } from '../flex';
+import { FlexBlock } from '../flex';
 import withFocusOutside from '../higher-order/with-focus-outside';
 import { useControlledValue } from '../utils/hooks';
 import { normalizeTextString } from '../utils/strings';
@@ -363,18 +363,16 @@ function ComboboxControl( props: ComboboxControlProps ) {
 							/>
 						</FlexBlock>
 						{ allowReset && (
-							<FlexItem>
-								<Button
-									className="components-combobox-control__reset"
-									icon={ closeSmall }
-									// Disable reason: Focus returns to input field when reset is clicked.
-									// eslint-disable-next-line no-restricted-syntax
-									disabled={ ! value }
-									onClick={ handleOnReset }
-									onKeyDown={ handleResetStopPropagation }
-									label={ __( 'Reset' ) }
-								/>
-							</FlexItem>
+							<Button
+								size="small"
+								icon={ closeSmall }
+								// Disable reason: Focus returns to input field when reset is clicked.
+								// eslint-disable-next-line no-restricted-syntax
+								disabled={ ! value }
+								onClick={ handleOnReset }
+								onKeyDown={ handleResetStopPropagation }
+								label={ __( 'Reset' ) }
+							/>
 						) }
 					</InputWrapperFlex>
 					{ isExpanded && (

@@ -53,9 +53,7 @@ const PositionControlsPanel = () => {
 };
 
 const PositionControls = () => {
-	const fills = useSlotFills(
-		InspectorControlsGroups.position.Slot.__unstableName
-	);
+	const fills = useSlotFills( InspectorControlsGroups.position.name );
 	const hasFills = Boolean( fills && fills.length );
 
 	if ( ! hasFills ) {

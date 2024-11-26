@@ -27,14 +27,13 @@ export class BrowserURL extends Component {
 	}
 
 	componentDidUpdate( prevProps ) {
-		const { postId, postStatus, hasHistory } = this.props;
+		const { postId, postStatus } = this.props;
 		const { historyId } = this.state;
 
 		if (
 			( postId !== prevProps.postId || postId !== historyId ) &&
 			postStatus !== 'auto-draft' &&
-			postId &&
-			! hasHistory
+			postId
 		) {
 			this.setBrowserURL( postId );
 		}

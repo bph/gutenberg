@@ -32,6 +32,8 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 				'site_logo',
 				'timezone_string',
 				'url',
+				'default_template_part_areas',
+				'default_template_types',
 			)
 		);
 		$paths[] = '/wp/v2/templates/lookup?slug=front-page';

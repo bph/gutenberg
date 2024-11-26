@@ -39,7 +39,7 @@ function PostAuthorToggle( { isOpen, onClick } ) {
 /**
  * Renders the Post Author Panel component.
  *
- * @return {Component} The component to be rendered.
+ * @return {React.ReactNode} The rendered component.
  */
 export function PostAuthor() {
 	// Use internal state instead of a ref to make sure that the component

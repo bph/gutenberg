@@ -35,9 +35,9 @@ import { unlock } from '../lock-unlock';
  * Returns an action generator used in signalling that editor has initialized with
  * the specified post object and editor settings.
  *
- * @param {Object} post     Post object.
- * @param {Object} edits    Initial edited attributes object.
- * @param {Array?} template Block Template.
+ * @param {Object} post       Post object.
+ * @param {Object} edits      Initial edited attributes object.
+ * @param {Array}  [template] Block Template.
  */
 export const setupEditor =
 	( post, edits, template ) =>
@@ -157,8 +157,8 @@ export function setEditedPost( postType, postId ) {
  * Returns an action object used in signalling that attributes of the post have
  * been edited.
  *
- * @param {Object} edits   Post attributes to edit.
- * @param {Object} options Options for the edit.
+ * @param {Object} edits     Post attributes to edit.
+ * @param {Object} [options] Options for the edit.
  *
  * @example
  * ```js
@@ -195,7 +195,7 @@ export const editPost =
 /**
  * Action for saving the current post in the editor.
  *
- * @param {Object} options
+ * @param {Object} [options]
  */
 export const savePost =
 	( options = {} ) =>
@@ -375,7 +375,8 @@ export const trashPost =
  * autosaving (e.g. on the Web, the post might be committed to Session
  * Storage).
  *
- * @param {Object?} options Extra flags to identify the autosave.
+ * @param {Object}  [options]       Extra flags to identify the autosave.
+ * @param {boolean} [options.local] Whether to perform a local autosave.
  */
 export const autosave =
 	( { local = false, ...options } = {} ) =>
@@ -598,8 +599,8 @@ export function unlockPostAutosaving( lockName ) {
 /**
  * Returns an action object used to signal that the blocks have been updated.
  *
- * @param {Array}   blocks  Block Array.
- * @param {?Object} options Optional options.
+ * @param {Array}  blocks    Block Array.
+ * @param {Object} [options] Optional options.
  */
 export const resetEditorBlocks =
 	( blocks, options = {} ) =>

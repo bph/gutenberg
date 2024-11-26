@@ -5,13 +5,15 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { store as preferencesStore } from '@wordpress/preferences';
 import { hasBlockSupport, store as blocksStore } from '@wordpress/blocks';
 import { useMemo } from '@wordpress/element';
+import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import { store as editorStore } from '../../store';
 import { unlock } from '../../lock-unlock';
-import BlockManager from '../block-manager';
+
+const { BlockManager } = unlock( blockEditorPrivateApis );
 
 export default function BlockVisibility() {
 	const { showBlockTypes, hideBlockTypes } = unlock(

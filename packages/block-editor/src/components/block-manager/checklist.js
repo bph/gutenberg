@@ -1,16 +1,20 @@
 /**
  * WordPress dependencies
  */
-import { BlockIcon } from '@wordpress/block-editor';
 import { CheckboxControl } from '@wordpress/components';
+
+/**
+ * Internal dependencies
+ */
+import BlockIcon from '../block-icon';
 
 function BlockTypesChecklist( { blockTypes, value, onItemChange } ) {
 	return (
-		<ul className="editor-block-manager__checklist">
+		<ul className="block-editor-block-manager__checklist">
 			{ blockTypes.map( ( blockType ) => (
 				<li
 					key={ blockType.name }
-					className="editor-block-manager__checklist-item"
+					className="block-editor-block-manager__checklist-item"
 				>
 					<CheckboxControl
 						__nextHasNoMarginBottom

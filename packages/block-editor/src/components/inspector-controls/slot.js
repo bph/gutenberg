@@ -34,14 +34,14 @@ export default function InspectorControlsSlot( {
 		);
 		group = __experimentalGroup;
 	}
-	const Slot = groups[ group ]?.Slot;
-	const fills = useSlotFills( Slot?.__unstableName );
+	const slotFill = groups[ group ];
+	const fills = useSlotFills( slotFill?.name );
 
 	const motionContextValue = useContext( MotionContext );
 
 	const computedFillProps = useMemo(
 		() => ( {
-			...( fillProps ?? {} ),
+			...fillProps,
 			forwardedContext: [
 				...( fillProps?.forwardedContext ?? [] ),
 				[ MotionContext.Provider, { value: motionContextValue } ],
@@ -50,7 +50,7 @@ export default function InspectorControlsSlot( {
 		[ motionContextValue, fillProps ]
 	);
 
-	if ( ! Slot ) {
+	if ( ! slotFill ) {
 		warning( `Unknown InspectorControls group "${ group }" provided.` );
 		return null;
 	}
@@ -58,6 +58,8 @@ export default function InspectorControlsSlot( {
 	if ( ! fills?.length ) {
 		return null;
 	}
+
+	const { Slot } = slotFill;
 
 	if ( label ) {
 		return (

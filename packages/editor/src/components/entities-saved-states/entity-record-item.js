@@ -12,6 +12,7 @@ import { decodeEntities } from '@wordpress/html-entities';
  */
 import { store as editorStore } from '../../store';
 import { unlock } from '../../lock-unlock';
+import { getTemplateInfo } from '../../utils/get-template-info';
 
 export default function EntityRecordItem( { record, checked, onChange } ) {
 	const { name, kind, title, key } = record;
@@ -33,11 +34,18 @@ export default function EntityRecordItem( { record, checked, onChange } ) {
 				name,
 				key
 			);
+
+			const { default_template_types: templateTypes = [] } =
+				select( coreStore ).getEntityRecord(
+					'root',
+					'__unstableBase'
+				) ?? {};
+
 			return {
-				entityRecordTitle:
-					select( editorStore ).__experimentalGetTemplateInfo(
-						template
-					).title,
+				entityRecordTitle: getTemplateInfo( {
+					template,
+					templateTypes,
+				} ).title,
 				hasPostMetaChanges: unlock(
 					select( editorStore )
 				).hasPostMetaChanges( name, key ),

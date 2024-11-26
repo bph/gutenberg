@@ -35,7 +35,6 @@ import { useInstanceId } from '@wordpress/compose';
  */
 import {
 	SORTING_DIRECTIONS,
-	LAYOUT_GRID,
 	LAYOUT_TABLE,
 	sortIcons,
 	sortLabels,
@@ -49,7 +48,6 @@ import {
 import type { SupportedLayouts, View, Field } from '../../types';
 import DataViewsContext from '../dataviews-context';
 import { unlock } from '../../lock-unlock';
-import DensityPicker from '../../dataviews-layouts/grid/density-picker';
 
 const { Menu } = unlock( componentsPrivateApis );
 
@@ -512,19 +510,15 @@ function SettingsSection( {
 	);
 }
 
-function DataviewsViewConfigDropdown( {
-	density,
-	setDensity,
-}: {
-	density: number;
-	setDensity: React.Dispatch< React.SetStateAction< number > >;
-} ) {
+function DataviewsViewConfigDropdown() {
 	const { view } = useContext( DataViewsContext );
 	const popoverId = useInstanceId(
 		_DataViewsViewConfig,
 		'dataviews-view-config-dropdown'
 	);
-
+	const activeLayout = VIEW_LAYOUTS.find(
+		( layout ) => layout.type === view.type
+	);
 	return (
 		<Dropdown
 			popoverProps={ {
@@ -551,11 +545,8 @@ function DataviewsViewConfigDropdown( {
 								<SortFieldControl />
 								<SortDirectionControl />
 							</HStack>
-							{ view.type === LAYOUT_GRID && (
-								<DensityPicker
-									density={ density }
-									setDensity={ setDensity }
-								/>
+							{ !! activeLayout?.viewConfigOptions && (
+								<activeLayout.viewConfigOptions />
 							) }
 							<ItemsPerPageControl />
 						</SettingsSection>
@@ -570,21 +561,14 @@ function DataviewsViewConfigDropdown( {
 }
 
 function _DataViewsViewConfig( {
-	density,
-	setDensity,
 	defaultLayouts = { list: {}, grid: {}, table: {} },
 }: {
-	density: number;
-	setDensity: React.Dispatch< React.SetStateAction< number > >;
 	defaultLayouts?: SupportedLayouts;
 } ) {
 	return (
 		<>
 			<ViewTypeMenu defaultLayouts={ defaultLayouts } />
-			<DataviewsViewConfigDropdown
-				density={ density }
-				setDensity={ setDensity }
-			/>
+			<DataviewsViewConfigDropdown />
 		</>
 	);
 }

@@ -16,7 +16,7 @@ import PostPanelRow from '../post-panel-row';
 /**
  * Displays the template controls based on the current editor settings and user permissions.
  *
- * @return {JSX.Element|null} The rendered PostTemplatePanel component.
+ * @return {React.ReactNode} The rendered PostTemplatePanel component.
  */
 export default function PostTemplatePanel() {
 	const { templateId, isBlockTheme } = useSelect( ( select ) => {

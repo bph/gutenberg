@@ -106,7 +106,7 @@ const isEmptyHeading = ( heading ) =>
  * @param {Function} props.onSelect                Function to be called when an outline item is selected
  * @param {boolean}  props.hasOutlineItemsDisabled Indicates whether the outline items are disabled.
  *
- * @return {Component} The component to be rendered.
+ * @return {React.ReactNode} The rendered component.
  */
 export default function DocumentOutline( {
 	onSelect,
