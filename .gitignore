@@ -3,6 +3,7 @@ build
 build-module
 build-style
 build-types
+build-wp
 node_modules
 gutenberg.zip
 coverage

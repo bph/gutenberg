@@ -67,8 +67,8 @@ $color-palette-circle-spacing: 12px;
 .components-circular-option-picker__option {
 	display: inline-block;
 	vertical-align: top;
-	height: 100%;
-	width: 100%;
+	height: 100% !important;
+	aspect-ratio: 1;
 	border: none;
 	border-radius: $radius-round;
 	background: transparent;

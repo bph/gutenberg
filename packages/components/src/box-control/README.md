@@ -1,106 +1,125 @@
 # BoxControl
 
-A control that lets users set values for top, right, bottom, and left. Can be used as an input control for values like `padding` or `margin`.
+<!-- This file is generated automatically and cannot be edited directly. Make edits via TypeScript types and TSDocs. -->
 
-## Usage
+<p class="callout callout-info">See the <a href="https://wordpress.github.io/gutenberg/?path=/docs/components-boxcontrol--docs">WordPress Storybook</a> for more detailed, interactive documentation.</p>
+
+A control that lets users set values for top, right, bottom, and left. Can be
+used as an input control for values like `padding` or `margin`.
 
 ```jsx
 import { useState } from 'react';
 import { BoxControl } from '@wordpress/components';
 
 function Example() {
-	const [ values, setValues ] = useState( {
-		top: '50px',
-		left: '10%',
-		right: '10%',
-		bottom: '50px',
-	} );
+  const [ values, setValues ] = useState( {
+    top: '50px',
+    left: '10%',
+    right: '10%',
+    bottom: '50px',
+  } );
 
-	return (
-		<BoxControl
-			values={ values }
-			onChange={ ( nextValues ) => setValues( nextValues ) }
-		/>
-	);
-}
+  return (
+    <BoxControl
+      values={ values }
+      onChange={ setValues }
+    />
+  );
+};
 ```
-
 ## Props
 
-### `allowReset`: `boolean`
+### `__next40pxDefaultSize`
+
+Start opting into the larger default height that will become the default size in a future version.
+
+ - Type: `boolean`
+ - Required: No
+ - Default: `false`
+
+### `allowReset`
 
 If this property is true, a button to reset the box control is rendered.
 
--   Required: No
--   Default: `true`
+ - Type: `boolean`
+ - Required: No
+ - Default: `true`
 
-### `splitOnAxis`: `boolean`
+### `id`
 
-If this property is true, when the box control is unlinked, vertical and horizontal controls can be used instead of updating individual sides.
+The id to use as a base for the unique HTML id attribute of the control.
 
--   Required: No
--   Default: `false`
+ - Type: `string`
+ - Required: No
 
-### `inputProps`: `object`
+### `inputProps`
 
-Props for the internal [UnitControl](../unit-control) components.
+Props for the internal `UnitControl` components.
 
--   Required: No
--   Default: `{ min: 0 }`
+ - Type: `UnitControlPassthroughProps`
+ - Required: No
+ - Default: `{
+    	min: 0,
+    }`
 
-### `label`: `string`
+### `label`
 
 Heading label for the control.
 
--   Required: No
--   Default: `__( 'Box Control' )`
+ - Type: `string`
+ - Required: No
+ - Default: `__( 'Box Control' )`
 
-### `onChange`: `(next: BoxControlValue) => void`
+### `onChange`
 
 A callback function when an input value changes.
 
--   Required: Yes
+ - Type: `(next: BoxControlValue) => void`
+ - Required: No
+ - Default: `() => {}`
 
-### `resetValues`: `object`
+### `resetValues`
 
 The `top`, `right`, `bottom`, and `left` box dimension values to use when the control is reset.
 
--   Required: No
--   Default: `{ top: undefined, right: undefined, bottom: undefined, left: undefined }`
+ - Type: `BoxControlValue`
+ - Required: No
+ - Default: `{
+    	top: undefined,
+    	right: undefined,
+    	bottom: undefined,
+    	left: undefined,
+    }`
 
-### `sides`: `string[]`
+### `sides`
 
-Collection of sides to allow control of. If omitted or empty, all sides will be available. Allowed values are "top", "right", "bottom", "left", "vertical", and "horizontal".
+Collection of sides to allow control of. If omitted or empty, all sides will be available.
 
--   Required: No
+Allowed values are "top", "right", "bottom", "left", "vertical", and "horizontal".
 
-### `units`: `WPUnitControlUnit[]`
+ - Type: `readonly (keyof BoxControlValue | "horizontal" | "vertical")[]`
+ - Required: No
 
-Collection of available units which are compatible with [UnitControl](../unit-control).
+### `splitOnAxis`
 
--   Required: No
+If this property is true, when the box control is unlinked, vertical and horizontal controls
+can be used instead of updating individual sides.
 
-### `values`: `object`
+ - Type: `boolean`
+ - Required: No
+ - Default: `false`
 
-The `top`, `right`, `bottom`, and `left` box dimension values.
+### `units`
 
--   Required: No
+Available units to select from.
 
-### `onMouseOver`: `function`
+ - Type: `WPUnitControlUnit[]`
+ - Required: No
+ - Default: `CSS_UNITS`
 
-A handler for onMouseOver events.
+### `values`
 
--   Required: No
+The current values of the control, expressed as an object of `top`, `right`, `bottom`, and `left` values.
 
-### `onMouseOut`: `function`
-
-A handler for onMouseOut events.
-
--   Required: No
-
-### `__next40pxDefaultSize`: `boolean`
-
-Start opting into the larger default size that will become the default size in a future version.
-
--   Required: No
--   Default: `false`
+ - Type: `BoxControlValue`
+ - Required: No

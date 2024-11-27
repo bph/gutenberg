@@ -58,6 +58,8 @@ export type BoxControlProps = Pick<
 	resetValues?: BoxControlValue;
 	/**
 	 * Collection of sides to allow control of. If omitted or empty, all sides will be available.
+	 *
+	 * Allowed values are "top", "right", "bottom", "left", "vertical", and "horizontal".
 	 */
 	sides?: readonly ( keyof BoxControlValue | 'horizontal' | 'vertical' )[];
 	/**

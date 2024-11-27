@@ -1,6 +1,6 @@
 {
 	"name": "@wordpress/dataviews",
-	"version": "4.8.0",
+	"version": "4.9.0",
 	"description": "DataViews is a component that provides an API to render datasets using different types of layouts (table, grid, list, etc.).",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
@@ -24,6 +24,20 @@
 	},
 	"main": "build/index.js",
 	"module": "build-module/index.js",
+	"exports": {
+		".": {
+			"types": "./build-types/index.d.ts",
+			"import": "./build-module/index.js"
+		},
+		"./wp": {
+			"types": "./build-types/index.d.ts",
+			"default": "./build-wp/index.js"
+		},
+		"./package.json": {
+			"default": "./package.json"
+		},
+		"./build-style/": "./build-style/"
+	},
 	"react-native": "src/index",
 	"wpScript": true,
 	"types": "build-types",
@@ -48,5 +62,8 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"scripts": {
+		"build:wp": "node build"
 	}
 }

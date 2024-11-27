@@ -10,18 +10,22 @@ import { DELETE, BACKSPACE, ENTER } from '@wordpress/keycodes';
 import { useDispatch } from '@wordpress/data';
 
 import {
+	BlockControls,
 	InspectorControls,
 	URLPopover,
 	URLInput,
+	useBlockEditingMode,
 	useBlockProps,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { useState, useRef } from '@wordpress/element';
 import {
 	Button,
+	Dropdown,
 	PanelBody,
 	PanelRow,
 	TextControl,
+	ToolbarButton,
 	__experimentalInputControlSuffixWrapper as InputControlSuffixWrapper,
 } from '@wordpress/components';
 import { useMergeRefs } from '@wordpress/compose';
@@ -130,6 +134,7 @@ const SocialLinkEdit = ( {
 	// Use internal state instead of a ref to make sure that the component
 	// re-renders when the popover's anchor updates.
 	const [ popoverAnchor, setPopoverAnchor ] = useState( null );
+	const isContentOnlyMode = useBlockEditingMode() === 'contentOnly';
 
 	const IconComponent = getIconBySite( service );
 	const socialLinkName = getNameBySite( service );
@@ -154,6 +159,41 @@ const SocialLinkEdit = ( {
 
 	return (
 		<>
+			{ isContentOnlyMode && showLabels && (
+				// Add an extra control to modify the label attribute when content only mode is active.
+				// With content only mode active, the inspector is hidden, so users need another way
+				// to edit this attribute.
+				<BlockControls group="other">
+					<Dropdown
+						popoverProps={ { position: 'bottom right' } }
+						renderToggle={ ( { isOpen, onToggle } ) => (
+							<ToolbarButton
+								onClick={ onToggle }
+								aria-haspopup="true"
+								aria-expanded={ isOpen }
+							>
+								{ __( 'Text' ) }
+							</ToolbarButton>
+						) }
+						renderContent={ () => (
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								className="wp-block-social-link__toolbar_content_text"
+								label={ __( 'Text' ) }
+								help={ __(
+									'Provide a text label or use the default.'
+								) }
+								value={ label }
+								onChange={ ( value ) =>
+									setAttributes( { label: value } )
+								}
+								placeholder={ socialLinkName }
+							/>
+						) }
+					/>
+				</BlockControls>
+			) }
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings' ) }>
 					<PanelRow>

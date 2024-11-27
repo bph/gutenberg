@@ -94,6 +94,7 @@ export function Option( {
 	const commonProps = {
 		id,
 		className: 'components-circular-option-picker__option',
+		__next40pxDefaultSize: true,
 		...additionalProps,
 	};
 

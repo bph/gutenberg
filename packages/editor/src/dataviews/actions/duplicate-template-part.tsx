@@ -15,7 +15,7 @@ import type { Action } from '@wordpress/dataviews';
 import { TEMPLATE_PART_POST_TYPE } from '../../store/constants';
 import { CreateTemplatePartModalContents } from '../../components/create-template-part-modal';
 import { getItemTitle } from './utils';
-import type { TemplatePart } from '../types';
+import type { Post, TemplatePart } from '../types';
 
 const duplicateTemplatePart: Action< TemplatePart > = {
 	id: 'duplicate-template-part',
@@ -38,12 +38,12 @@ const duplicateTemplatePart: Action< TemplatePart > = {
 			);
 		}, [ item.content, item.blocks ] );
 		const { createSuccessNotice } = useDispatch( noticesStore );
-		function onTemplatePartSuccess() {
+		function onTemplatePartSuccess( templatePart: Post ) {
 			createSuccessNotice(
 				sprintf(
 					// translators: %s: The new template part's title e.g. 'Call to action (copy)'.
 					_x( '"%s" duplicated.', 'template part' ),
-					getItemTitle( item )
+					getItemTitle( templatePart )
 				),
 				{ type: 'snackbar', id: 'edit-site-patterns-success' }
 			);

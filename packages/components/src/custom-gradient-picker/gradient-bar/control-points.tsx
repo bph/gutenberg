@@ -66,6 +66,7 @@ function ControlPointButton( {
 				aria-describedby={ descriptionId }
 				aria-haspopup="true"
 				aria-expanded={ isOpen }
+				__next40pxDefaultSize
 				className={ clsx(
 					'components-custom-gradient-picker__control-point-button',
 					{
@@ -349,6 +350,7 @@ function InsertPoint( {
 			} }
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
+					__next40pxDefaultSize
 					aria-expanded={ isOpen }
 					aria-haspopup="true"
 					onClick={ () => {

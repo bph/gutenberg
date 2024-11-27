@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 28.13.0 (2024-11-27)
+
 ### Deprecations
 
 -   `DimensionControl`: Deprecate 36px default size ([#66705](https://github.com/WordPress/gutenberg/pull/66705)).
@@ -30,6 +32,7 @@
 -   `ColorPicker`: Update sizes of color format select and copy button ([#67093](https://github.com/WordPress/gutenberg/pull/67093)).
 -   `ComboboxControl`: Update reset button size ([#67215](https://github.com/WordPress/gutenberg/pull/67215)).
 -   `Autocomplete`: Increase option height ([#67214](https://github.com/WordPress/gutenberg/pull/67214)).
+-   `CircularOptionPicker`: Update `Button` sizes to be ready for 40px default size ([#67285](https://github.com/WordPress/gutenberg/pull/67285)).
 
 ### Experimental
 
@@ -42,6 +45,7 @@
 -   `SlotFill`: rewrite the `Slot` component from class component to functional ([#67153](https://github.com/WordPress/gutenberg/pull/67153)).
 -   `Menu.ItemHelpText`: Fix text wrapping to prevent unintended word breaks ([#67011](https://github.com/WordPress/gutenberg/pull/67011)).
 -   `BorderBoxControl`: Suppress redundant warnings for deprecated 36px size ([#67213](https://github.com/WordPress/gutenberg/pull/67213)).
+-   `CustomGradientPicker`: Prepare `Button`s for 40px default size ([#67286](https://github.com/WordPress/gutenberg/pull/67286)).
 
 ## 28.12.0 (2024-11-16)
 
