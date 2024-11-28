@@ -16,16 +16,16 @@ import {
 	privateApis as blockEditorPrivateApis,
 } from '@wordpress/block-editor';
 import { EditorProvider } from '@wordpress/editor';
+import { privateApis as routerPrivateApis } from '@wordpress/router';
 
 /**
  * Internal dependencies
  */
-import { default as Link, useLink } from '../routes/link';
 import { useAddedBy } from './hooks';
-
 import usePatternSettings from '../page-patterns/use-pattern-settings';
 import { unlock } from '../../lock-unlock';
 
+const { useLink, Link } = unlock( routerPrivateApis );
 const { useGlobalStyle } = unlock( blockEditorPrivateApis );
 
 function PreviewField( { item } ) {
@@ -34,11 +34,7 @@ function PreviewField( { item } ) {
 	const blocks = useMemo( () => {
 		return parse( item.content.raw );
 	}, [ item.content.raw ] );
-	const { onClick } = useLink( {
-		postId: item.id,
-		postType: item.type,
-		canvas: 'edit',
-	} );
+	const { onClick } = useLink( `/${ item.type }/${ item.id }?canvas=edit` );
 
 	const isEmpty = ! blocks?.length;
 	// Wrap everything in a block editor provider to ensure 'styles' that are needed
@@ -80,15 +76,8 @@ export const previewField = {
 };
 
 function TitleField( { item } ) {
-	const linkProps = {
-		params: {
-			postId: item.id,
-			postType: item.type,
-			canvas: 'edit',
-		},
-	};
 	return (
-		<Link { ...linkProps }>
+		<Link to={ `/${ item.type }/${ item.id }?canvas=edit` }>
 			{ decodeEntities( item.title?.rendered ) || __( '(no title)' ) }
 		</Link>
 	);

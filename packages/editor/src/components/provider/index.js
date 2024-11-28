@@ -13,6 +13,7 @@ import {
 	BlockEditorProvider,
 	BlockContextProvider,
 	privateApis as blockEditorPrivateApis,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { store as noticesStore } from '@wordpress/notices';
 import { privateApis as editPatternsPrivateApis } from '@wordpress/patterns';
@@ -205,6 +206,15 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 			},
 			[ post.type ]
 		);
+
+		const isZoomOut = useSelect( ( select ) => {
+			const { isZoomOut: _isZoomOut } = unlock(
+				select( blockEditorStore )
+			);
+
+			return _isZoomOut();
+		} );
+
 		const shouldRenderTemplate = !! template && mode !== 'post-only';
 		const rootLevelPost = shouldRenderTemplate ? template : post;
 		const defaultBlockContext = useMemo( () => {
@@ -357,9 +367,13 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 							{ children }
 							{ ! settings.isPreviewMode && (
 								<>
-									<PatternsMenuItems />
-									<TemplatePartMenuItems />
-									<ContentOnlySettingsMenu />
+									{ ! isZoomOut && (
+										<>
+											<PatternsMenuItems />
+											<TemplatePartMenuItems />
+											<ContentOnlySettingsMenu />
+										</>
+									) }
 									{ mode === 'template-locked' && (
 										<DisableNonPageContentBlocks />
 									) }

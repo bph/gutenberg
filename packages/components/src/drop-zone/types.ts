@@ -26,4 +26,9 @@ export type DropZoneProps = {
 	 * It receives the HTML being dropped as an argument.
 	 */
 	onHTMLDrop?: ( html: string ) => void;
+	/**
+	 * A function to determine if the drop zone is eligible to handle the drop
+	 * data transfer items.
+	 */
+	isEligible?: ( dataTransfer: DataTransfer ) => boolean;
 };

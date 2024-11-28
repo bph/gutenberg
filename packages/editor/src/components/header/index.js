@@ -97,8 +97,10 @@ function Header( {
 		useState( true );
 
 	const hasCenter =
-		( ! hasBlockSelection || isBlockToolsCollapsed ) &&
-		! isTooNarrowForDocumentBar;
+		! isTooNarrowForDocumentBar &&
+		( ! hasFixedToolbar ||
+			( hasFixedToolbar &&
+				( ! hasBlockSelection || isBlockToolsCollapsed ) ) );
 	const hasBackButton = useHasBackButton();
 	/*
 	 * The edit-post-header classname is only kept for backward compatability

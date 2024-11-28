@@ -14,6 +14,7 @@ import {
 	getBlockLabel,
 	__experimentalSanitizeBlockAttributes,
 	getBlockAttributesNamesByRole,
+	isContentBlock,
 } from '../utils';
 
 const noop = () => {};
@@ -380,5 +381,42 @@ describe( 'getBlockAttributesNamesByRole', () => {
 		expect(
 			getBlockAttributesNamesByRole( 'core/test-block-2', 'content' )
 		).toEqual( [] );
+	} );
+} );
+
+describe( 'isContentBlock', () => {
+	it( 'returns true if the block has a content role attribute', () => {
+		registerBlockType( 'core/test-content-block', {
+			attributes: {
+				content: {
+					type: 'string',
+					role: 'content',
+				},
+				align: {
+					type: 'string',
+				},
+			},
+			save: noop,
+			category: 'text',
+			title: 'test content block',
+		} );
+		expect( isContentBlock( 'core/test-content-block' ) ).toBe( true );
+	} );
+
+	it( 'returns false if the block does not have a content role attribute', () => {
+		registerBlockType( 'core/test-non-content-block', {
+			attributes: {
+				content: {
+					type: 'string',
+				},
+				align: {
+					type: 'string',
+				},
+			},
+			save: noop,
+			category: 'text',
+			title: 'test non-content block',
+		} );
+		expect( isContentBlock( 'core/test-non-content-block' ) ).toBe( false );
 	} );
 } );

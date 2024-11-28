@@ -18,7 +18,6 @@ import { navigation } from '@wordpress/icons';
 import SidebarNavigationScreen from '../sidebar-navigation-screen';
 import SidebarNavigationItem from '../sidebar-navigation-item';
 import { PRELOADED_NAVIGATION_MENUS_QUERY } from './constants';
-import { useLink } from '../routes/link';
 import SingleNavigationMenu from '../sidebar-navigation-screen-navigation-menu/single-navigation-menu';
 import useNavigationMenuHandlers from '../sidebar-navigation-screen-navigation-menu/use-navigation-menu-handlers';
 import { unlock } from '../../lock-unlock';
@@ -152,9 +151,10 @@ export function SidebarNavigationScreenWrapper( {
 }
 
 const NavMenuItem = ( { postId, ...props } ) => {
-	const linkInfo = useLink( {
-		postId,
-		postType: 'wp_navigation',
-	} );
-	return <SidebarNavigationItem { ...linkInfo } { ...props } />;
+	return (
+		<SidebarNavigationItem
+			to={ `/wp_navigation/${ postId }` }
+			{ ...props }
+		/>
+	);
 };

@@ -528,14 +528,13 @@ test.describe( 'Image', () => {
 			name: 'Block: Image',
 		} );
 
-		const html = `
-			<figure>
-				<img src="https://live.staticflickr.com/3894/14962688165_04759a8b03_b.jpg" alt="Cat">
-				<figcaption>"Cat" by tomhouslay is licensed under <a href="https://creativecommons.org/licenses/by-nc/2.0/?ref=openverse">CC BY-NC 2.0</a>.</figcaption>
-			</figure>
-		`;
-
-		await page.evaluate( ( _html ) => {
+		await page.evaluate( () => {
+			const { createBlock } = window.wp.blocks;
+			const block = createBlock( 'core/image', {
+				url: 'https://live.staticflickr.com/3894/14962688165_04759a8b03_b.jpg',
+				alt: 'Cat',
+				caption: `"Cat" by tomhouslay is licensed under <a href="https://creativecommons.org/licenses/by-nc/2.0/?ref=openverse">CC BY-NC 2.0</a>.`,
+			} );
 			const dummy = document.createElement( 'div' );
 			dummy.style.width = '10px';
 			dummy.style.height = '10px';
@@ -545,13 +544,17 @@ test.describe( 'Image', () => {
 			dummy.style.left = 0;
 			dummy.draggable = 'true';
 			dummy.addEventListener( 'dragstart', ( event ) => {
-				event.dataTransfer.setData( 'default', _html );
+				event.dataTransfer.setData(
+					'wp-blocks',
+					JSON.stringify( { blocks: [ block ] } )
+				);
+				event.dataTransfer.setData( 'wp-block:core/image', '' );
 				setTimeout( () => {
 					dummy.remove();
 				}, 0 );
 			} );
 			document.body.appendChild( dummy );
-		}, html );
+		} );
 
 		await page.mouse.move( 0, 0 );
 		await page.mouse.down();

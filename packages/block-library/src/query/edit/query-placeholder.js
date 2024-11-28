@@ -18,7 +18,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { useScopedBlockVariations, useBlockNameForPatterns } from '../utils';
+import { useScopedBlockVariations } from '../utils';
+import { useBlockPatterns } from './pattern-selection';
 
 export default function QueryPlaceholder( {
 	attributes,
@@ -28,31 +29,21 @@ export default function QueryPlaceholder( {
 } ) {
 	const [ isStartingBlank, setIsStartingBlank ] = useState( false );
 	const blockProps = useBlockProps();
-	const blockNameForPatterns = useBlockNameForPatterns(
-		clientId,
-		attributes
-	);
-	const { blockType, activeBlockVariation, hasPatterns } = useSelect(
+	const { blockType, activeBlockVariation } = useSelect(
 		( select ) => {
 			const { getActiveBlockVariation, getBlockType } =
 				select( blocksStore );
-			const { getBlockRootClientId, getPatternsByBlockTypes } =
-				select( blockEditorStore );
-			const rootClientId = getBlockRootClientId( clientId );
 			return {
 				blockType: getBlockType( name ),
 				activeBlockVariation: getActiveBlockVariation(
 					name,
 					attributes
 				),
-				hasPatterns: !! getPatternsByBlockTypes(
-					blockNameForPatterns,
-					rootClientId
-				).length,
 			};
 		},
-		[ name, blockNameForPatterns, clientId, attributes ]
+		[ name, attributes ]
 	);
+	const hasPatterns = !! useBlockPatterns( clientId, attributes ).length;
 	const icon =
 		activeBlockVariation?.icon?.src ||
 		activeBlockVariation?.icon ||

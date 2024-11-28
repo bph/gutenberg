@@ -1,5 +1,5 @@
 type PostStatus =
-	| 'published'
+	| 'publish'
 	| 'draft'
 	| 'pending'
 	| 'private'
@@ -78,6 +78,9 @@ export interface PostType {
 		'page-attributes'?: boolean;
 		title?: boolean;
 		revisions?: boolean;
+		thumbnail?: boolean;
+		comments?: boolean;
+		author?: boolean;
 	};
 }
 

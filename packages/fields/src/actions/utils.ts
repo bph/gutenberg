@@ -30,7 +30,7 @@ export function isTemplateOrTemplatePart(
 	return p.type === TEMPLATE_POST_TYPE || p.type === TEMPLATE_PART_POST_TYPE;
 }
 
-export function getItemTitle( item: Post ) {
+export function getItemTitle( item: Post ): string {
 	if ( typeof item.title === 'string' ) {
 		return decodeEntities( item.title );
 	}

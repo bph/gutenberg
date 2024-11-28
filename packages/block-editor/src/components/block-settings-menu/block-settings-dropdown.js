@@ -57,6 +57,7 @@ export function BlockSettingsDropdown( {
 	const currentClientId = block?.clientId;
 	const count = clientIds.length;
 	const firstBlockClientId = clientIds[ 0 ];
+
 	const {
 		firstParentClientId,
 		parentBlockType,
@@ -64,6 +65,7 @@ export function BlockSettingsDropdown( {
 		selectedBlockClientIds,
 		openedBlockSettingsMenu,
 		isContentOnly,
+		isZoomOut,
 	} = useSelect(
 		( select ) => {
 			const {
@@ -74,6 +76,7 @@ export function BlockSettingsDropdown( {
 				getBlockAttributes,
 				getOpenedBlockSettingsMenu,
 				getBlockEditingMode,
+				isZoomOut: _isZoomOut,
 			} = unlock( select( blockEditorStore ) );
 
 			const { getActiveBlockVariation } = select( blocksStore );
@@ -98,10 +101,12 @@ export function BlockSettingsDropdown( {
 				openedBlockSettingsMenu: getOpenedBlockSettingsMenu(),
 				isContentOnly:
 					getBlockEditingMode( firstBlockClientId ) === 'contentOnly',
+				isZoomOut: _isZoomOut(),
 			};
 		},
 		[ firstBlockClientId ]
 	);
+
 	const { getBlockOrder, getSelectedBlockClientIds } =
 		useSelect( blockEditorStore );
 
@@ -248,7 +253,7 @@ export function BlockSettingsDropdown( {
 											clientId={ firstBlockClientId }
 										/>
 									) }
-									{ ! isContentOnly && (
+									{ ( ! isContentOnly || isZoomOut ) && (
 										<CopyMenuItem
 											clientIds={ clientIds }
 											onCopy={ onCopy }

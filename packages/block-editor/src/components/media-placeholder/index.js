@@ -19,7 +19,6 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { keyboardReturn } from '@wordpress/icons';
-import { pasteHandler } from '@wordpress/blocks';
 import deprecated from '@wordpress/deprecated';
 
 /**
@@ -29,6 +28,7 @@ import MediaUpload from '../media-upload';
 import MediaUploadCheck from '../media-upload/check';
 import URLPopover from '../url-popover';
 import { store as blockEditorStore } from '../../store';
+import { parseDropEvent } from '../use-on-block-drop';
 
 const noop = () => {};
 
@@ -229,30 +229,15 @@ export function MediaPlaceholder( {
 		} );
 	};
 
-	async function handleBlocksDrop( blocks ) {
-		if ( ! blocks || ! Array.isArray( blocks ) ) {
-			return;
-		}
+	async function handleBlocksDrop( event ) {
+		const { blocks } = parseDropEvent( event );
 
-		function recursivelyFindMediaFromBlocks( _blocks ) {
-			return _blocks.flatMap( ( block ) =>
-				( block.name === 'core/image' ||
-					block.name === 'core/audio' ||
-					block.name === 'core/video' ) &&
-				( block.attributes.url || block.attributes.src )
-					? [ block ]
-					: recursivelyFindMediaFromBlocks( block.innerBlocks )
-			);
-		}
-
-		const mediaBlocks = recursivelyFindMediaFromBlocks( blocks );
-
-		if ( ! mediaBlocks.length ) {
+		if ( ! blocks?.length ) {
 			return;
 		}
 
 		const uploadedMediaList = await Promise.all(
-			mediaBlocks.map( ( block ) => {
+			blocks.map( ( block ) => {
 				const blockType = block.name.split( '/' )[ 1 ];
 				if ( block.attributes.id ) {
 					block.attributes.type = blockType;
@@ -290,13 +275,6 @@ export function MediaPlaceholder( {
 		} else {
 			onSelect( uploadedMediaList[ 0 ] );
 		}
-	}
-
-	async function onDrop( event ) {
-		const blocks = pasteHandler( {
-			HTML: event.dataTransfer?.getData( 'default' ),
-		} );
-		return await handleBlocksDrop( blocks );
 	}
 
 	const onUpload = ( event ) => {
@@ -385,7 +363,26 @@ export function MediaPlaceholder( {
 			return null;
 		}
 
-		return <DropZone onFilesDrop={ onFilesUpload } onDrop={ onDrop } />;
+		return (
+			<DropZone
+				onFilesDrop={ onFilesUpload }
+				onDrop={ handleBlocksDrop }
+				isEligible={ ( dataTransfer ) => {
+					const prefix = 'wp-block:core/';
+					const types = [];
+					for ( const type of dataTransfer.types ) {
+						if ( type.startsWith( prefix ) ) {
+							types.push( type.slice( prefix.length ) );
+						}
+					}
+					return (
+						types.every( ( type ) =>
+							allowedTypes.includes( type )
+						) && ( multiple ? true : types.length === 1 )
+					);
+				} }
+			/>
+		);
 	};
 
 	const renderCancelLink = () => {

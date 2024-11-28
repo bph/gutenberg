@@ -9,6 +9,7 @@ import {
 	Button,
 	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -21,7 +22,6 @@ import { STYLE_BOOK_COLOR_GROUPS } from '../style-book/constants';
 
 const { useLocation, useHistory } = unlock( routerPrivateApis );
 const { Menu } = unlock( componentsPrivateApis );
-const GLOBAL_STYLES_PATH_PREFIX = '/wp_global_styles';
 
 const GlobalStylesPageActions = ( {
 	isStyleBookOpened,
@@ -63,28 +63,23 @@ const GlobalStylesPageActions = ( {
 };
 
 export default function GlobalStylesUIWrapper() {
-	const { params } = useLocation();
+	const { path, query } = useLocation();
 	const history = useHistory();
-	const { canvas = 'view' } = params;
+	const { canvas = 'view' } = query;
 	const [ isStyleBookOpened, setIsStyleBookOpened ] = useState( false );
 	const isMobileViewport = useViewportMatch( 'medium', '<' );
-	const pathWithPrefix = params.path;
-	const [ path, onPathChange ] = useMemo( () => {
-		const processedPath = pathWithPrefix.substring(
-			GLOBAL_STYLES_PATH_PREFIX.length
-		);
+	const [ section, onChangeSection ] = useMemo( () => {
 		return [
-			processedPath ? processedPath : '/',
-			( newPath ) => {
-				history.push( {
-					path:
-						! newPath || newPath === '/'
-							? GLOBAL_STYLES_PATH_PREFIX
-							: `${ GLOBAL_STYLES_PATH_PREFIX }${ newPath }`,
-				} );
+			query.section ?? '/',
+			( updatedSection ) => {
+				history.navigate(
+					addQueryArgs( path, {
+						section: updatedSection,
+					} )
+				);
 			},
 		];
-	}, [ pathWithPrefix, history ] );
+	}, [ path, query.section, history ] );
 
 	return (
 		<>
@@ -100,7 +95,10 @@ export default function GlobalStylesUIWrapper() {
 				className="edit-site-styles"
 				title={ __( 'Styles' ) }
 			>
-				<GlobalStylesUI path={ path } onPathChange={ onPathChange } />
+				<GlobalStylesUI
+					path={ section }
+					onPathChange={ onChangeSection }
+				/>
 			</Page>
 			{ canvas === 'view' && isStyleBookOpened && (
 				<StyleBook
@@ -111,17 +109,13 @@ export default function GlobalStylesUIWrapper() {
 						// Match '/blocks/core%2Fbutton' and
 						// '/blocks/core%2Fbutton/typography', but not
 						// '/blocks/core%2Fbuttons'.
-						path ===
-							`/wp_global_styles/blocks/${ encodeURIComponent(
-								blockName
-							) }` ||
-						path.startsWith(
-							`/wp_global_styles/blocks/${ encodeURIComponent(
-								blockName
-							) }/`
+						section ===
+							`/blocks/${ encodeURIComponent( blockName ) }` ||
+						section.startsWith(
+							`/blocks/${ encodeURIComponent( blockName ) }/`
 						)
 					}
-					path={ path }
+					path={ section }
 					onSelect={ ( blockName ) => {
 						if (
 							STYLE_BOOK_COLOR_GROUPS.find(
@@ -129,17 +123,17 @@ export default function GlobalStylesUIWrapper() {
 							)
 						) {
 							// Go to color palettes Global Styles.
-							onPathChange( '/colors/palette' );
+							onChangeSection( '/colors/palette' );
 							return;
 						}
 						if ( blockName === 'typography' ) {
 							// Go to typography Global Styles.
-							onPathChange( '/typography' );
+							onChangeSection( '/typography' );
 							return;
 						}
 
 						// Now go to the selected block.
-						onPathChange(
+						onChangeSection(
 							`/blocks/${ encodeURIComponent( blockName ) }`
 						);
 					} }

@@ -20,6 +20,7 @@ import { privateApis as routerPrivateApis } from '@wordpress/router';
  * Internal dependencies
  */
 import { unlock } from '../../lock-unlock';
+import { addQueryArgs } from '@wordpress/url';
 
 const { useLocation, useHistory } = unlock( routerPrivateApis );
 
@@ -88,8 +89,8 @@ function ResizableFrame( {
 	innerContentStyle,
 } ) {
 	const history = useHistory();
-	const { params } = useLocation();
-	const { canvas = 'view' } = params;
+	const { path, query } = useLocation();
+	const { canvas = 'view' } = query;
 	const disableMotion = useReducedMotion();
 	const [ frameSize, setFrameSize ] = useState( INITIAL_FRAME_SIZE );
 	// The width of the resizable frame when a new resize gesture starts.
@@ -158,12 +159,10 @@ function ResizableFrame( {
 			setFrameSize( INITIAL_FRAME_SIZE );
 		} else {
 			// Trigger full screen if the frame is resized far enough to the left.
-			history.push(
-				{
-					...params,
+			history.navigate(
+				addQueryArgs( path, {
 					canvas: 'edit',
-				},
-				undefined,
+				} ),
 				{
 					transition: 'canvas-mode-edit-transition',
 				}

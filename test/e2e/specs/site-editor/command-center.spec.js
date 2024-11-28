@@ -28,7 +28,7 @@ test.describe( 'Site editor command palette', () => {
 		await page.keyboard.type( 'new page' );
 		await page.getByRole( 'option', { name: 'Add new page' } ).click();
 		await expect( page ).toHaveURL(
-			/\/wp-admin\/site-editor.php\?postId=(\d+)&postType=page&canvas=edit/
+			/\/wp-admin\/site-editor.php\?p=%2Fpage%2F(\d+)&canvas=edit/
 		);
 		await expect(
 			editor.canvas

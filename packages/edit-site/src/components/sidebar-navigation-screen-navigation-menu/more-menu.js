@@ -58,11 +58,9 @@ export default function ScreenNavigationMoreMenu( props ) {
 							</MenuItem>
 							<MenuItem
 								onClick={ () => {
-									history.push( {
-										postId: menuId,
-										postType: 'wp_navigation',
-										canvas: 'edit',
-									} );
+									history.navigate(
+										`/wp_navigation/${ menuId }?canvas=edit`
+									);
 								} }
 							>
 								{ __( 'Edit' ) }

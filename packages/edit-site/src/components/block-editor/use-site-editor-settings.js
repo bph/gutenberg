@@ -22,11 +22,11 @@ function useNavigateToPreviousEntityRecord() {
 	const history = useHistory();
 	const goBack = useMemo( () => {
 		const isFocusMode =
-			location.params.focusMode ||
-			( location.params.postId &&
-				FOCUSABLE_ENTITIES.includes( location.params.postType ) );
+			location.query.focusMode ||
+			( location?.params?.postId &&
+				FOCUSABLE_ENTITIES.includes( location?.params?.postType ) );
 		const didComeFromEditorCanvas =
-			previousLocation?.params.canvas === 'edit';
+			previousLocation?.query.canvas === 'edit';
 		const showBackButton = isFocusMode && didComeFromEditorCanvas;
 		return showBackButton ? () => history.back() : undefined;
 		// `previousLocation` changes when the component updates for any reason, not
@@ -37,8 +37,8 @@ function useNavigateToPreviousEntityRecord() {
 }
 
 export function useSpecificEditorSettings() {
-	const { params } = useLocation();
-	const { canvas = 'view' } = params;
+	const { query } = useLocation();
+	const { canvas = 'view' } = query;
 	const onNavigateToEntityRecord = useNavigateToEntityRecord();
 	const { settings } = useSelect( ( select ) => {
 		const { getSettings } = select( editSiteStore );

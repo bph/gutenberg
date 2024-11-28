@@ -83,7 +83,7 @@ export default function SidebarNavigationScreen( {
 					{ ! isRoot && (
 						<SidebarButton
 							onClick={ () => {
-								history.push( backPath );
+								history.navigate( backPath );
 								navigate( 'back' );
 							} }
 							icon={ icon }
@@ -97,7 +97,7 @@ export default function SidebarNavigationScreen( {
 							label={
 								dashboardLinkText || __( 'Go to the Dashboard' )
 							}
-							href={ dashboardLink || 'index.php' }
+							href={ dashboardLink }
 						/>
 					) }
 					<Heading

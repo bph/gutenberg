@@ -4,13 +4,12 @@
 import Editor from '../editor';
 import SidebarNavigationScreenMain from '../sidebar-navigation-screen-main';
 
-export const homeViewRoute = {
-	name: 'home-view',
-	match: ( params ) => {
-		return params.canvas !== 'edit';
-	},
+export const homeRoute = {
+	name: 'home',
+	path: '/',
 	areas: {
 		sidebar: <SidebarNavigationScreenMain />,
 		preview: <Editor />,
+		mobile: <SidebarNavigationScreenMain />,
 	},
 };

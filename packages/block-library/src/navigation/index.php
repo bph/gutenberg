@@ -1437,20 +1437,6 @@ function block_core_navigation_get_most_recently_published_navigation() {
 }
 
 /**
- * Accepts the serialized markup of a block and its inner blocks, and returns serialized markup of the inner blocks.
- *
- * @since 6.5.0
- *
- * @param string $serialized_block The serialized markup of a block and its inner blocks.
- * @return string
- */
-function block_core_navigation_remove_serialized_parent_block( $serialized_block ) {
-	$start = strpos( $serialized_block, '-->' ) + strlen( '-->' );
-	$end   = strrpos( $serialized_block, '<!--' );
-	return substr( $serialized_block, $start, $end - $start );
-}
-
-/**
  * Mock a parsed block for the Navigation block given its inner blocks and the `wp_navigation` post object.
  * The `wp_navigation` post's `_wp_ignored_hooked_blocks` meta is queried to add the `metadata.ignoredHookedBlocks` attribute.
  *
@@ -1504,19 +1490,6 @@ function block_core_navigation_mock_parsed_block( $inner_blocks, $post ) {
 function block_core_navigation_insert_hooked_blocks( $inner_blocks, $post ) {
 	$mock_navigation_block = block_core_navigation_mock_parsed_block( $inner_blocks, $post );
 
-	if ( function_exists( 'apply_block_hooks_to_content' ) ) {
-		$mock_navigation_block_markup = serialize_block( $mock_navigation_block );
-		return apply_block_hooks_to_content( $mock_navigation_block_markup, $post, 'insert_hooked_blocks' );
-	}
-
-	$hooked_blocks        = get_hooked_blocks();
-	$before_block_visitor = null;
-	$after_block_visitor  = null;
-
-	if ( ! empty( $hooked_blocks ) || has_filter( 'hooked_block_types' ) ) {
-		$before_block_visitor = make_before_block_visitor( $hooked_blocks, $post, 'insert_hooked_blocks' );
-		$after_block_visitor  = make_after_block_visitor( $hooked_blocks, $post, 'insert_hooked_blocks' );
-	}
-
-	return traverse_and_serialize_block( $mock_navigation_block, $before_block_visitor, $after_block_visitor );
+	$mock_navigation_block_markup = serialize_block( $mock_navigation_block );
+	return apply_block_hooks_to_content( $mock_navigation_block_markup, $post, 'insert_hooked_blocks' );
 }

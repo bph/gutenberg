@@ -90,8 +90,8 @@ const _EntitiesSavedStates = ( { onClose, renderDialog = undefined } ) => {
 };
 
 export default function SavePanel() {
-	const { params } = useLocation();
-	const { canvas = 'view' } = params;
+	const { query } = useLocation();
+	const { canvas = 'view' } = query;
 	const { isSaveViewOpen, isDirty, isSaving } = useSelect( ( select ) => {
 		const {
 			__experimentalGetDirtyEntityRecords,

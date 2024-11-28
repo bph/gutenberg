@@ -54,6 +54,7 @@ import {
 	useResolveEditedEntity,
 	useSyncDeprecatedEntityIntoState,
 } from './use-resolve-edited-entity';
+import { addQueryArgs } from '@wordpress/url';
 
 const { Editor, BackButton } = unlock( editorPrivateApis );
 const { useHistory, useLocation } = unlock( routerPrivateApis );
@@ -83,10 +84,44 @@ const siteIconVariants = {
 	},
 };
 
+function getListPathForPostType( postType ) {
+	switch ( postType ) {
+		case 'navigation':
+			return '/navigation';
+		case 'wp_block':
+			return '/pattern?postType=wp_block';
+		case 'wp_template_part':
+			return '/pattern?postType=wp_template_part';
+		case 'wp_template':
+			return '/template';
+		case 'page':
+			return '/page';
+		case 'post':
+			return '/';
+	}
+	throw 'Unknown post type';
+}
+
+function getNavigationPath( location, postType ) {
+	const { path, name } = location;
+	if (
+		[
+			'pattern-item',
+			'template-part-item',
+			'page-item',
+			'template-item',
+			'post-item',
+		].includes( name )
+	) {
+		return getListPathForPostType( postType );
+	}
+	return addQueryArgs( path, { canvas: undefined } );
+}
+
 export default function EditSiteEditor( { isPostsList = false } ) {
 	const disableMotion = useReducedMotion();
-	const { params } = useLocation();
-	const { canvas = 'view' } = params;
+	const location = useLocation();
+	const { canvas = 'view' } = location.query;
 	const isLoading = useIsSiteEditorLoading();
 	useAdaptEditorToCanvas( canvas );
 	const entity = useResolveEditedEntity();
@@ -157,9 +192,11 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 				case 'move-to-trash':
 				case 'delete-post':
 					{
-						history.push( {
-							postType: items[ 0 ].type,
-						} );
+						history.navigate(
+							getListPathForPostType(
+								postWithTemplate ? context.postType : postType
+							)
+						);
 					}
 					break;
 				case 'duplicate-post':
@@ -182,11 +219,9 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 									{
 										label: __( 'Edit' ),
 										onClick: () => {
-											history.push( {
-												postId: newItem.id,
-												postType: newItem.type,
-												canvas: 'edit',
-											} );
+											history.navigate(
+												`/${ newItem.type }/${ newItem.id }?canvas=edit`
+											);
 										},
 									},
 								],
@@ -196,7 +231,13 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 					break;
 			}
 		},
-		[ history, createSuccessNotice ]
+		[
+			postType,
+			context?.postType,
+			postWithTemplate,
+			history,
+			createSuccessNotice,
+		]
 	);
 
 	// Replace the title and icon displayed in the DocumentBar when there's an overlay visible.
@@ -268,26 +309,20 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 												// come here through `posts list` and are in focus mode editing a template, template part etc..
 												if (
 													isPostsList &&
-													params?.focusMode
+													location.query?.focusMode
 												) {
-													history.push(
-														{
-															page: 'gutenberg-posts-dashboard',
-															postType: 'post',
-														},
-														undefined,
-														{
-															transition:
-																'canvas-mode-view-transition',
-														}
-													);
+													history.navigate( '/', {
+														transition:
+															'canvas-mode-view-transition',
+													} );
 												} else {
-													history.push(
-														{
-															...params,
-															canvas: undefined,
-														},
-														undefined,
+													history.navigate(
+														getNavigationPath(
+															location,
+															postWithTemplate
+																? context.postType
+																: postType
+														),
 														{
 															transition:
 																'canvas-mode-view-transition',

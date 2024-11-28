@@ -151,7 +151,6 @@ export const getHomePage = createRegistrySelector( ( select ) =>
 			return { postType: 'wp_template', postId: frontPageTemplateId };
 		},
 		( state ) => [
-			// @ts-expect-error
 			getEntityRecord( state, 'root', 'site' ),
 			getDefaultTemplateId( state, {
 				slug: 'front-page',

@@ -9,21 +9,10 @@ import { useEffect } from '@wordpress/element';
  */
 import { unlock } from '../../lock-unlock';
 import { store as siteEditorStore } from '../../store';
-import { homeRoute } from './home';
-import { postsListViewQuickEditRoute } from './posts-list-view-quick-edit';
-import { postsListViewRoute } from './posts-list-view';
-import { postsViewQuickEditRoute } from './posts-view-quick-edit';
-import { postsViewRoute } from './posts-view';
-import { postsEditRoute } from './posts-edit';
+import { postsRoute } from './posts';
+import { postItemRoute } from './post-item';
 
-const routes = [
-	postsListViewQuickEditRoute,
-	postsListViewRoute,
-	postsViewQuickEditRoute,
-	postsViewRoute,
-	postsEditRoute,
-	homeRoute,
-];
+const routes = [ postItemRoute, postsRoute ];
 
 export function useRegisterPostsAppRoutes() {
 	const registry = useRegistry();

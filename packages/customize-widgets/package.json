@@ -34,7 +34,6 @@
 		"@wordpress/core-data": "*",
 		"@wordpress/data": "*",
 		"@wordpress/dom": "*",
-		"@wordpress/editor": "*",
 		"@wordpress/element": "*",
 		"@wordpress/hooks": "*",
 		"@wordpress/i18n": "*",

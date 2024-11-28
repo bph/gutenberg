@@ -69,23 +69,16 @@ export default function AddNewPattern() {
 
 	function handleCreatePattern( { pattern } ) {
 		setShowPatternModal( false );
-
-		history.push( {
-			postId: pattern.id,
-			postType: PATTERN_TYPES.user,
-			canvas: 'edit',
-		} );
+		history.navigate(
+			`/${ PATTERN_TYPES.user }/${ pattern.id }?canvas=edit`
+		);
 	}
 
 	function handleCreateTemplatePart( templatePart ) {
 		setShowTemplatePartModal( false );
-
-		// Navigate to the created template part editor.
-		history.push( {
-			postId: templatePart.id,
-			postType: TEMPLATE_PART_POST_TYPE,
-			canvas: 'edit',
-		} );
+		history.navigate(
+			`/${ TEMPLATE_PART_POST_TYPE }/${ templatePart.id }?canvas=edit`
+		);
 	}
 
 	function handleError() {
@@ -203,10 +196,9 @@ export default function AddNewPattern() {
 							! currentCategoryId &&
 							categoryId !== 'my-patterns'
 						) {
-							history.push( {
-								postType: PATTERN_TYPES.user,
-								categoryId: PATTERN_DEFAULT_CATEGORY,
-							} );
+							history.navigate(
+								`/pattern?categoryId=${ PATTERN_DEFAULT_CATEGORY }`
+							);
 						}
 
 						createSuccessNotice(

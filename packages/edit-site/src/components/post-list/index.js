@@ -13,6 +13,8 @@ import { DataViews, filterSortAndPaginate } from '@wordpress/dataviews';
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { drawerRight } from '@wordpress/icons';
+import { usePrevious } from '@wordpress/compose';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -31,7 +33,6 @@ import {
 import AddNewPostModal from '../add-new-post';
 import { unlock } from '../../lock-unlock';
 import { useEditPostAction } from '../dataviews-actions';
-import { usePrevious } from '@wordpress/compose';
 
 const { usePostActions, usePostFields } = unlock( editorPrivateApis );
 const { useLocation, useHistory } = unlock( routerPrivateApis );
@@ -70,7 +71,8 @@ const getCustomView = ( editedEntityRecord ) => {
  */
 function useView( postType ) {
 	const {
-		params: { activeView = 'all', isCustom = 'false', layout },
+		path,
+		query: { activeView = 'all', isCustom = 'false', layout },
 	} = useLocation();
 	const history = useHistory();
 
@@ -112,16 +114,15 @@ function useView( postType ) {
 
 	const setViewWithUrlUpdate = useCallback(
 		( newView ) => {
-			const { params } = history.getLocationWithParams();
-
-			if ( newView.type === LAYOUT_LIST && ! params?.layout ) {
+			if ( newView.type === LAYOUT_LIST && ! layout ) {
 				// Skip updating the layout URL param if
 				// it is not present and the newView.type is LAYOUT_LIST.
-			} else if ( newView.type !== params?.layout ) {
-				history.push( {
-					...params,
-					layout: newView.type,
-				} );
+			} else if ( newView.type !== layout ) {
+				history.navigate(
+					addQueryArgs( path, {
+						layout: newView.type,
+					} )
+				);
 			}
 
 			setView( newView );
@@ -137,7 +138,14 @@ function useView( postType ) {
 				);
 			}
 		},
-		[ history, isCustom, editEntityRecord, editedEntityRecord?.id ]
+		[
+			history,
+			isCustom,
+			editEntityRecord,
+			editedEntityRecord?.id,
+			layout,
+			path,
+		]
 	);
 
 	// When layout URL param changes, update the view type
@@ -186,20 +194,20 @@ export default function PostList( { postType } ) {
 		quickEdit = false,
 		isCustom,
 		activeView = 'all',
-	} = location.params;
+	} = location.query;
 	const [ selection, setSelection ] = useState( postId?.split( ',' ) ?? [] );
 	const onChangeSelection = useCallback(
 		( items ) => {
 			setSelection( items );
-			const { params } = history.getLocationWithParams();
-			if ( ( params.isCustom ?? 'false' ) === 'false' ) {
-				history.push( {
-					...params,
-					postId: items.join( ',' ),
-				} );
+			if ( ( location.query.isCustom ?? 'false' ) === 'false' ) {
+				history.navigate(
+					addQueryArgs( location.path, {
+						postId: items.join( ',' ),
+					} )
+				);
 			}
 		},
-		[ history ]
+		[ location.path, location.query.isCustom, history ]
 	);
 
 	const getActiveViewFilters = ( views, match ) => {
@@ -207,7 +215,9 @@ export default function PostList( { postType } ) {
 		return found?.filters ?? [];
 	};
 
-	const { isLoading: isLoadingFields, fields: _fields } = usePostFields();
+	const { isLoading: isLoadingFields, fields: _fields } = usePostFields( {
+		postType,
+	} );
 	const fields = useMemo( () => {
 		const activeViewFilters = getActiveViewFilters(
 			defaultViews,
@@ -311,12 +321,13 @@ export default function PostList( { postType } ) {
 
 	useEffect( () => {
 		if ( postIdWasDeleted ) {
-			history.push( {
-				...history.getLocationWithParams().params,
-				postId: undefined,
-			} );
+			history.navigate(
+				addQueryArgs( location.path, {
+					postId: undefined,
+				} )
+			);
 		}
-	}, [ postIdWasDeleted, history ] );
+	}, [ history, postIdWasDeleted, location.path ] );
 
 	const paginationInfo = useMemo(
 		() => ( {
@@ -355,11 +366,7 @@ export default function PostList( { postType } ) {
 	const openModal = () => setShowAddPostModal( true );
 	const closeModal = () => setShowAddPostModal( false );
 	const handleNewPage = ( { type, id } ) => {
-		history.push( {
-			postId: id,
-			postType: type,
-			canvas: 'edit',
-		} );
+		history.navigate( `/${ type }/${ id }?canvas=edit` );
 		closeModal();
 	};
 
@@ -401,11 +408,7 @@ export default function PostList( { postType } ) {
 				onChangeSelection={ onChangeSelection }
 				isItemClickable={ ( item ) => item.status !== 'trash' }
 				onClickItem={ ( { id } ) => {
-					history.push( {
-						postId: id,
-						postType,
-						canvas: 'edit',
-					} );
+					history.navigate( `/${ postType }/${ id }?canvas=edit` );
 				} }
 				getItemId={ getItemId }
 				defaultLayouts={ defaultLayouts }
@@ -419,10 +422,11 @@ export default function PostList( { postType } ) {
 							icon={ drawerRight }
 							label={ __( 'Details' ) }
 							onClick={ () => {
-								history.push( {
-									...location.params,
-									quickEdit: quickEdit ? undefined : true,
-								} );
+								history.navigate(
+									addQueryArgs( location.path, {
+										quickEdit: quickEdit ? undefined : true,
+									} )
+								);
 							} }
 						/>
 					)

@@ -23,6 +23,7 @@ export function useAuthorsQuery( search ) {
 
 			if ( search ) {
 				query.search = search;
+				query.search_columns = [ 'name' ];
 			}
 
 			return {

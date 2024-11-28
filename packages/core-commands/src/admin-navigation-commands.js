@@ -44,11 +44,7 @@ const getAddNewPageCommand = () =>
 						}
 					);
 					if ( page?.id ) {
-						history.push( {
-							postId: page.id,
-							postType: 'page',
-							canvas: 'edit',
-						} );
+						history.navigate( `/page/${ page.id }?canvas=edit` );
 					}
 				} catch ( error ) {
 					const errorMessage =

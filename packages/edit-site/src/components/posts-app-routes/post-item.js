@@ -6,25 +6,21 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import PostList from '../post-list';
+import Editor from '../editor';
 import DataViewsSidebarContent from '../sidebar-dataviews';
 import SidebarNavigationScreen from '../sidebar-navigation-screen';
-import Editor from '../editor';
 
-export const postsEditRoute = {
-	name: 'posts-edit',
-	match: ( params ) => {
-		return params.postType === 'post' && params.canvas === 'edit';
-	},
+export const postItemRoute = {
+	name: 'post-item',
+	path: '/post/:postId',
 	areas: {
 		sidebar: (
 			<SidebarNavigationScreen
 				title={ __( 'Posts' ) }
 				isRoot
-				content={ <DataViewsSidebarContent /> }
+				content={ <DataViewsSidebarContent postType="post" /> }
 			/>
 		),
-		content: <PostList postType="post" />,
 		mobile: <Editor isPostsList />,
 		preview: <Editor isPostsList />,
 	},

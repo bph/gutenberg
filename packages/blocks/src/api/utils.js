@@ -370,6 +370,18 @@ export const __experimentalGetBlockAttributesNamesByRole = ( ...args ) => {
 	return getBlockAttributesNamesByRole( ...args );
 };
 
+export function isContentBlock( name ) {
+	const attributes = getBlockType( name )?.attributes;
+
+	return !! Object.keys( attributes )?.some( ( attributeKey ) => {
+		const attribute = attributes[ attributeKey ];
+		return (
+			attribute?.role === 'content' ||
+			attribute?.__experimentalRole === 'content'
+		);
+	} );
+}
+
 /**
  * Return a new object with the specified keys omitted.
  *

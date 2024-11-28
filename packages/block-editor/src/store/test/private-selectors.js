@@ -129,6 +129,7 @@ describe( 'private selectors', () => {
 		getBlockEditingMode.registry = {
 			select: jest.fn( () => ( {
 				hasContentRoleAttribute,
+				get,
 			} ) ),
 		};
 		__unstableGetEditorMode.registry = {

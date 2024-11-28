@@ -39,7 +39,6 @@
 		"@wordpress/data": "*",
 		"@wordpress/deprecated": "*",
 		"@wordpress/dom": "*",
-		"@wordpress/editor": "*",
 		"@wordpress/element": "*",
 		"@wordpress/hooks": "*",
 		"@wordpress/i18n": "*",

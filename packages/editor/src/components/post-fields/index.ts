@@ -23,9 +23,11 @@ interface Author {
 	name: string;
 }
 
-function usePostFields(): UsePostFieldsReturn {
-	const postType = 'page'; // TODO: this could be page or post (experimental).
-
+function usePostFields( {
+	postType,
+}: {
+	postType: string;
+} ): UsePostFieldsReturn {
 	const { registerPostTypeSchema } = unlock( useDispatch( editorStore ) );
 	useEffect( () => {
 		registerPostTypeSchema( postType );

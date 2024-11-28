@@ -39,8 +39,7 @@ const SiteHub = memo(
 			const { getEntityRecord } = select( coreStore );
 			const _site = getEntityRecord( 'root', 'site' );
 			return {
-				dashboardLink:
-					getSettings().__experimentalDashboardLink || 'index.php',
+				dashboardLink: getSettings().__experimentalDashboardLink,
 				homeUrl: getEntityRecord( 'root', '__unstableBase' )?.home,
 				siteTitle:
 					! _site?.title && !! _site?.url
@@ -129,9 +128,7 @@ export const SiteHubMobile = memo(
 					select( coreStore );
 				const _site = getEntityRecord( 'root', 'site' );
 				return {
-					dashboardLink:
-						getSettings().__experimentalDashboardLink ||
-						'index.php',
+					dashboardLink: getSettings().__experimentalDashboardLink,
 					isBlockTheme: getCurrentTheme()?.is_block_theme,
 					homeUrl: getEntityRecord( 'root', '__unstableBase' )?.home,
 					siteTitle:
@@ -170,7 +167,7 @@ export const SiteHubMobile = memo(
 								  }
 								: {
 										onClick: () => {
-											history.push( {} );
+											history.navigate( '/' );
 											navigate( 'back' );
 										},
 										label: __( 'Go to Site Editor' ),

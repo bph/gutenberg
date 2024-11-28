@@ -128,7 +128,11 @@ test.describe( 'Pattern Overrides', () => {
 				page.getByRole( 'button', { name: 'Dismiss this notice' } )
 			).toBeVisible();
 
-			patternId = new URL( page.url() ).searchParams.get( 'postId' );
+			patternId = await page.evaluate( () => {
+				return window.wp.data
+					.select( 'core/editor' )
+					.getCurrentPostId();
+			} );
 		} );
 
 		await test.step( 'Create a post and insert the pattern with overrides', async () => {
@@ -223,6 +227,321 @@ test.describe( 'Pattern Overrides', () => {
 				'This one is different',
 				'This one can’t',
 			] );
+		} );
+	} );
+
+	test.describe( 'block editing modes', () => {
+		test.beforeEach( async ( { page } ) => {
+			await page.addInitScript( () => {
+				window.__experimentalEditorWriteMode = true;
+			} );
+		} );
+
+		test( 'blocks with bindings in a synced pattern are editable, and all other blocks are disabled', async ( {
+			admin,
+			editor,
+			page,
+			requestUtils,
+		} ) => {
+			const content = `
+			<!-- wp:paragraph {"metadata":{"name":"Pattern Overrides","bindings":{"__default":{"source":"core/pattern-overrides"}}}} -->
+			<p>Pattern Overrides</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"metadata":{"name":"Post Meta Binding","bindings":{"content":{"source":"core/post-meta","args":{"key":"Post Meta Binding"}}}}} -->
+			<p>Post Meta Binding</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"metadata":{"name":"No Overrides or Binding"}} -->
+			<p>No Overrides or Binding</p>
+			<!-- /wp:paragraph -->
+			`;
+
+			const { id } = await requestUtils.createBlock( {
+				title: 'Pattern',
+				content,
+				status: 'publish',
+			} );
+
+			await admin.visitSiteEditor( {
+				postId: 'emptytheme//index',
+				postType: 'wp_template',
+				canvas: 'edit',
+			} );
+
+			await editor.setContent( '' );
+
+			await editor.insertBlock( {
+				name: 'core/block',
+				attributes: { ref: id },
+			} );
+
+			const patternBlock = editor.canvas.getByRole( 'document', {
+				name: 'Block: Pattern',
+			} );
+			const paragraphs = editor.canvas.getByRole( 'document', {
+				name: 'Block: Paragraph',
+			} );
+			const blockWithOverrides = paragraphs.filter( {
+				hasText: 'Pattern Overrides',
+			} );
+			const blockWithBindings = paragraphs.filter( {
+				hasText: 'Post Meta Binding',
+			} );
+			const blockWithoutOverridesOrBindings = paragraphs.filter( {
+				hasText: 'No Overrides or Binding',
+			} );
+
+			await test.step( 'Zoomed in / Design mode', async () => {
+				await editor.switchEditorTool( 'Design' );
+				// In zoomed in and design mode the pattern block and child blocks
+				// with bindings are editable.
+				await expect( patternBlock ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithOverrides ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed in / Write mode - pattern as a section', async () => {
+				await editor.switchEditorTool( 'Write' );
+				// The pattern block is still editable as a section.
+				await expect( patternBlock ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				// Child blocks of the pattern with bindings are editable.
+				await expect( blockWithOverrides ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed out / Write mode - pattern as a section', async () => {
+				await page.getByLabel( 'Zoom Out' ).click();
+				// In zoomed out only the pattern block is editable, as in this scenario it's a section.
+				await expect( patternBlock ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithOverrides ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed out / Design mode - pattern as a section', async () => {
+				await editor.switchEditorTool( 'Design' );
+				// In zoomed out only the pattern block is editable, as in this scenario it's a section.
+				await expect( patternBlock ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithOverrides ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			// Zoom out and group the pattern.
+			await page.getByLabel( 'Zoom Out' ).click();
+			await editor.selectBlocks( patternBlock );
+			await editor.clickBlockOptionsMenuItem( 'Group' );
+
+			await test.step( 'Zoomed in / Write mode - pattern nested in a section', async () => {
+				await editor.switchEditorTool( 'Write' );
+				// The pattern block is not inert as it has editable content, but it shouldn't be selectable.
+				// TODO: find a way to test that the block is not selectable.
+				await expect( patternBlock ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				// Child blocks of the pattern are editable as normal.
+				await expect( blockWithOverrides ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).not.toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed out / Write mode - pattern nested in a section', async () => {
+				await page.getByLabel( 'Zoom Out' ).click();
+				// None of the pattern is editable in zoomed out when nested in a section.
+				await expect( patternBlock ).toHaveAttribute( 'inert', 'true' );
+				await expect( blockWithOverrides ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed out / Design mode - pattern nested in a section', async () => {
+				await editor.switchEditorTool( 'Design' );
+				// None of the pattern is editable in zoomed out when nested in a section.
+				await expect( patternBlock ).toHaveAttribute( 'inert', 'true' );
+				await expect( blockWithOverrides ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+		} );
+
+		test( 'disables editing of nested patterns', async ( {
+			page,
+			admin,
+			requestUtils,
+			editor,
+		} ) => {
+			const paragraphName = 'Editable paragraph';
+			const headingName = 'Editable heading';
+			const innerPattern = await requestUtils.createBlock( {
+				title: 'Inner Pattern',
+				content: `<!-- wp:paragraph {"metadata":{"name":"${ paragraphName }","bindings":{"__default":{"source":"core/pattern-overrides"}}}} -->
+	<p>Inner paragraph</p>
+	<!-- /wp:paragraph -->`,
+				status: 'publish',
+			} );
+			const outerPattern = await requestUtils.createBlock( {
+				title: 'Outer Pattern',
+				content: `<!-- wp:heading {"metadata":{"name":"${ headingName }","bindings":{"__default":{"source":"core/pattern-overrides"}}}} -->
+	<h2 class="wp-block-heading">Outer heading</h2>
+	<!-- /wp:heading -->
+	<!-- wp:block {"ref":${ innerPattern.id },"content":{"${ paragraphName }":{"content":"Inner paragraph (edited)"}}} /-->`,
+				status: 'publish',
+			} );
+
+			await admin.createNewPost();
+
+			await editor.insertBlock( {
+				name: 'core/block',
+				attributes: { ref: outerPattern.id },
+			} );
+
+			// Make an edit to the outer pattern heading.
+			await editor.canvas
+				.getByRole( 'document', { name: 'Block: Heading' } )
+				.fill( 'Outer heading (edited)' );
+
+			const postId = await editor.publishPost();
+
+			// Check the pattern has the correct attributes.
+			await expect.poll( editor.getBlocks ).toMatchObject( [
+				{
+					name: 'core/block',
+					attributes: {
+						ref: outerPattern.id,
+						content: {
+							[ headingName ]: {
+								content: 'Outer heading (edited)',
+							},
+						},
+					},
+					innerBlocks: [],
+				},
+			] );
+			// Check it renders correctly.
+			const headingBlock = editor.canvas.getByRole( 'document', {
+				name: 'Block: Heading',
+			} );
+			const paragraphBlock = editor.canvas.getByRole( 'document', {
+				name: 'Block: Paragraph',
+			} );
+			await expect( headingBlock ).toHaveText( 'Outer heading (edited)' );
+			await expect( headingBlock ).not.toHaveAttribute( 'inert', 'true' );
+			await expect( paragraphBlock ).toHaveText(
+				'Inner paragraph (edited)'
+			);
+			await expect( paragraphBlock ).toHaveAttribute( 'inert', 'true' );
+
+			// Edit the outer pattern.
+			await editor.selectBlocks(
+				editor.canvas
+					.getByRole( 'document', { name: 'Block: Pattern' } )
+					.first()
+			);
+			await editor.showBlockToolbar();
+			await page
+				.getByRole( 'toolbar', { name: 'Block tools' } )
+				.getByRole( 'button', { name: 'Edit original' } )
+				.click();
+
+			// The inner paragraph should be editable in the pattern focus mode.
+			await editor.selectBlocks(
+				editor.canvas
+					.getByRole( 'document', { name: 'Block: Pattern' } )
+					.first()
+			);
+			await expect(
+				editor.canvas.getByRole( 'document', {
+					name: 'Block: Paragraph',
+				} ),
+				'The inner paragraph should be editable'
+			).not.toHaveAttribute( 'inert', 'true' );
+
+			// Visit the post on the frontend.
+			await page.goto( `/?p=${ postId }` );
+
+			await expect(
+				page.getByRole( 'heading', { level: 2 } )
+			).toHaveText( 'Outer heading (edited)' );
+			await expect(
+				page.getByText( 'Inner paragraph (edited)' )
+			).toBeVisible();
 		} );
 	} );
 
@@ -423,107 +742,6 @@ test.describe( 'Pattern Overrides', () => {
 		await previewPage.reload();
 		await expect( buttonLink ).toHaveAttribute( 'target', '' );
 		await expect( buttonLink ).toHaveAttribute( 'rel', /^\s*nofollow\s*$/ );
-	} );
-
-	test( 'disables editing of nested patterns', async ( {
-		page,
-		admin,
-		requestUtils,
-		editor,
-	} ) => {
-		const paragraphName = 'Editable paragraph';
-		const headingName = 'Editable heading';
-		const innerPattern = await requestUtils.createBlock( {
-			title: 'Inner Pattern',
-			content: `<!-- wp:paragraph {"metadata":{"name":"${ paragraphName }","bindings":{"__default":{"source":"core/pattern-overrides"}}}} -->
-<p>Inner paragraph</p>
-<!-- /wp:paragraph -->`,
-			status: 'publish',
-		} );
-		const outerPattern = await requestUtils.createBlock( {
-			title: 'Outer Pattern',
-			content: `<!-- wp:heading {"metadata":{"name":"${ headingName }","bindings":{"__default":{"source":"core/pattern-overrides"}}}} -->
-<h2 class="wp-block-heading">Outer heading</h2>
-<!-- /wp:heading -->
-<!-- wp:block {"ref":${ innerPattern.id },"content":{"${ paragraphName }":{"content":"Inner paragraph (edited)"}}} /-->`,
-			status: 'publish',
-		} );
-
-		await admin.createNewPost();
-
-		await editor.insertBlock( {
-			name: 'core/block',
-			attributes: { ref: outerPattern.id },
-		} );
-
-		// Make an edit to the outer pattern heading.
-		await editor.canvas
-			.getByRole( 'document', { name: 'Block: Heading' } )
-			.fill( 'Outer heading (edited)' );
-
-		const postId = await editor.publishPost();
-
-		// Check the pattern has the correct attributes.
-		await expect.poll( editor.getBlocks ).toMatchObject( [
-			{
-				name: 'core/block',
-				attributes: {
-					ref: outerPattern.id,
-					content: {
-						[ headingName ]: {
-							content: 'Outer heading (edited)',
-						},
-					},
-				},
-				innerBlocks: [],
-			},
-		] );
-		// Check it renders correctly.
-		const headingBlock = editor.canvas.getByRole( 'document', {
-			name: 'Block: Heading',
-		} );
-		const paragraphBlock = editor.canvas.getByRole( 'document', {
-			name: 'Block: Paragraph',
-		} );
-		await expect( headingBlock ).toHaveText( 'Outer heading (edited)' );
-		await expect( headingBlock ).not.toHaveAttribute( 'inert', 'true' );
-		await expect( paragraphBlock ).toHaveText( 'Inner paragraph (edited)' );
-		await expect( paragraphBlock ).toHaveAttribute( 'inert', 'true' );
-
-		// Edit the outer pattern.
-		await editor.selectBlocks(
-			editor.canvas
-				.getByRole( 'document', { name: 'Block: Pattern' } )
-				.first()
-		);
-		await editor.showBlockToolbar();
-		await page
-			.getByRole( 'toolbar', { name: 'Block tools' } )
-			.getByRole( 'button', { name: 'Edit original' } )
-			.click();
-
-		// The inner paragraph should be editable in the pattern focus mode.
-		await editor.selectBlocks(
-			editor.canvas
-				.getByRole( 'document', { name: 'Block: Pattern' } )
-				.first()
-		);
-		await expect(
-			editor.canvas.getByRole( 'document', {
-				name: 'Block: Paragraph',
-			} ),
-			'The inner paragraph should be editable'
-		).not.toHaveAttribute( 'inert', 'true' );
-
-		// Visit the post on the frontend.
-		await page.goto( `/?p=${ postId }` );
-
-		await expect( page.getByRole( 'heading', { level: 2 } ) ).toHaveText(
-			'Outer heading (edited)'
-		);
-		await expect(
-			page.getByText( 'Inner paragraph (edited)' )
-		).toBeVisible();
 	} );
 
 	test( 'resets overrides after clicking the reset button', async ( {
@@ -993,7 +1211,11 @@ test.describe( 'Pattern Overrides', () => {
 				page.getByRole( 'button', { name: 'Dismiss this notice' } )
 			).toBeVisible();
 
-			patternId = new URL( page.url() ).searchParams.get( 'postId' );
+			patternId = await page.evaluate( () => {
+				return window.wp.data
+					.select( 'core/editor' )
+					.getCurrentPostId();
+			} );
 		} );
 
 		await test.step( 'create a post and insert the pattern with synced values', async () => {

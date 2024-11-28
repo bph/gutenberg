@@ -17,11 +17,10 @@ import { getItemTitle } from '../../actions/utils';
 const TitleView = ( { item }: { item: BasePost } ) => {
 	const { frontPageId, postsPageId } = useSelect( ( select ) => {
 		const { getEntityRecord } = select( coreStore );
-		const siteSettings: Settings | undefined = getEntityRecord(
+		const siteSettings = getEntityRecord(
 			'root',
-			'site',
-			''
-		);
+			'site'
+		) as Partial< Settings >;
 		return {
 			frontPageId: siteSettings?.page_on_front,
 			postsPageId: siteSettings?.page_for_posts,

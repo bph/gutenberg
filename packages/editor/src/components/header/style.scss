@@ -7,7 +7,7 @@
 	&:has(> .editor-header__center) {
 		grid-template: auto / $header-height min-content 1fr min-content $header-height;
 		@include break-medium {
-			grid-template: auto / $header-height minmax(min-content, 1fr) 2fr minmax(min-content, 1fr) $header-height;
+			grid-template: auto / $header-height minmax(min-content, 2fr) 2.5fr minmax(min-content, 2fr) $header-height;
 		}
 	}
 	@include break-mobile {

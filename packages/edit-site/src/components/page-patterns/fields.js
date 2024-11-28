@@ -21,6 +21,7 @@ import {
 import { Icon, lockSmall } from '@wordpress/icons';
 import { parse } from '@wordpress/blocks';
 import { decodeEntities } from '@wordpress/html-entities';
+import { privateApis as routerPrivateApis } from '@wordpress/router';
 
 /**
  * Internal dependencies
@@ -32,10 +33,10 @@ import {
 	OPERATOR_IS,
 } from '../../utils/constants';
 import { unlock } from '../../lock-unlock';
-import { useLink } from '../routes/link';
 import { useAddedBy } from '../page-templates/hooks';
 import { defaultGetTitle } from './search-items';
 
+const { useLink } = unlock( routerPrivateApis );
 const { useGlobalStyle } = unlock( blockEditorPrivateApis );
 
 function PreviewWrapper( { item, onClick, ariaDescribedBy, children } ) {
@@ -59,11 +60,11 @@ function PreviewField( { item } ) {
 	const isUserPattern = item.type === PATTERN_TYPES.user;
 	const isTemplatePart = item.type === TEMPLATE_PART_POST_TYPE;
 	const [ backgroundColor ] = useGlobalStyle( 'color.background' );
-	const { onClick } = useLink( {
-		postType: item.type,
-		postId: isUserPattern || isTemplatePart ? item.id : item.name,
-		canvas: 'edit',
-	} );
+	const { onClick } = useLink(
+		`/${ item.type }/${
+			isUserPattern || isTemplatePart ? item.id : item.name
+		}?canvas=edit`
+	);
 	const blocks = useMemo( () => {
 		return (
 			item.blocks ??
@@ -114,11 +115,11 @@ export const previewField = {
 function TitleField( { item } ) {
 	const isUserPattern = item.type === PATTERN_TYPES.user;
 	const isTemplatePart = item.type === TEMPLATE_PART_POST_TYPE;
-	const { onClick } = useLink( {
-		postType: item.type,
-		postId: isUserPattern || isTemplatePart ? item.id : item.name,
-		canvas: 'edit',
-	} );
+	const { onClick } = useLink(
+		`/${ item.type }/${
+			isUserPattern || isTemplatePart ? item.id : item.name
+		}?canvas=edit`
+	);
 	const title = decodeEntities( defaultGetTitle( item ) );
 	return (
 		<HStack alignment="center" justify="flex-start" spacing={ 2 }>

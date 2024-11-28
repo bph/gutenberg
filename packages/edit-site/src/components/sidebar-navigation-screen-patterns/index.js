@@ -104,12 +104,11 @@ function CategoriesGroup( {
 
 export default function SidebarNavigationScreenPatterns( { backPath } ) {
 	const {
-		params: { postType, categoryId },
+		query: { postType = 'wp_block', categoryId },
 	} = useLocation();
-	const currentType = postType || PATTERN_TYPES.user;
 	const currentCategory =
 		categoryId ||
-		( currentType === PATTERN_TYPES.user
+		( postType === PATTERN_TYPES.user
 			? PATTERN_DEFAULT_CATEGORY
 			: TEMPLATE_PART_ALL_AREAS_CATEGORY );
 
@@ -143,7 +142,7 @@ export default function SidebarNavigationScreenPatterns( { backPath } ) {
 								templatePartAreas={ templatePartAreas }
 								patternCategories={ patternCategories }
 								currentCategory={ currentCategory }
-								currentType={ currentType }
+								currentType={ postType }
 							/>
 						</>
 					) }

@@ -1,11 +1,8 @@
 /**
  * WordPress dependencies
  */
-import {
-	UnsavedChangesWarning,
-	privateApis as editorPrivateApis,
-} from '@wordpress/editor';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -13,24 +10,18 @@ import { privateApis as routerPrivateApis } from '@wordpress/router';
 import Layout from '../layout';
 import { useRegisterPostsAppRoutes } from '../posts-app-routes';
 import { unlock } from '../../lock-unlock';
-import useActiveRoute from '../layout/router';
+import { store as editSiteStore } from '../../store';
 
 const { RouterProvider } = unlock( routerPrivateApis );
-const { GlobalStylesProvider } = unlock( editorPrivateApis );
-
-function PostsLayout() {
-	useRegisterPostsAppRoutes();
-	const route = useActiveRoute();
-	return <Layout route={ route } />;
-}
 
 export default function PostsApp() {
+	useRegisterPostsAppRoutes();
+	const routes = useSelect( ( select ) => {
+		return unlock( select( editSiteStore ) ).getRoutes();
+	}, [] );
 	return (
-		<GlobalStylesProvider>
-			<UnsavedChangesWarning />
-			<RouterProvider>
-				<PostsLayout />
-			</RouterProvider>
-		</GlobalStylesProvider>
+		<RouterProvider routes={ routes } pathArg="p">
+			<Layout />
+		</RouterProvider>
 	);
 }

@@ -72,17 +72,16 @@ const DEFAULT_VIEW = {
 
 export default function DataviewsPatterns() {
 	const {
-		params: { postType, categoryId: categoryIdFromURL },
+		query: { postType = 'wp_block', categoryId: categoryIdFromURL },
 	} = useLocation();
-	const type = postType || PATTERN_TYPES.user;
 	const categoryId = categoryIdFromURL || PATTERN_DEFAULT_CATEGORY;
 	const [ view, setView ] = useState( DEFAULT_VIEW );
 	const previousCategoryId = usePrevious( categoryId );
-	const previousPostType = usePrevious( type );
+	const previousPostType = usePrevious( postType );
 	const viewSyncStatus = view.filters?.find(
 		( { field } ) => field === 'sync-status'
 	)?.value;
-	const { patterns, isResolving } = usePatterns( type, categoryId, {
+	const { patterns, isResolving } = usePatterns( postType, categoryId, {
 		search: view.search,
 		syncStatus: viewSyncStatus,
 	} );
@@ -108,9 +107,9 @@ export default function DataviewsPatterns() {
 	const fields = useMemo( () => {
 		const _fields = [ previewField, titleField ];
 
-		if ( type === PATTERN_TYPES.user ) {
+		if ( postType === PATTERN_TYPES.user ) {
 			_fields.push( patternStatusField );
-		} else if ( type === TEMPLATE_PART_POST_TYPE ) {
+		} else if ( postType === TEMPLATE_PART_POST_TYPE ) {
 			_fields.push( {
 				...templatePartAuthorField,
 				elements: authors,
@@ -118,24 +117,27 @@ export default function DataviewsPatterns() {
 		}
 
 		return _fields;
-	}, [ type, authors ] );
+	}, [ postType, authors ] );
 
 	// Reset the page number when the category changes.
 	useEffect( () => {
-		if ( previousCategoryId !== categoryId || previousPostType !== type ) {
+		if (
+			previousCategoryId !== categoryId ||
+			previousPostType !== postType
+		) {
 			setView( ( prevView ) => ( { ...prevView, page: 1 } ) );
 		}
-	}, [ categoryId, previousCategoryId, previousPostType, type ] );
+	}, [ categoryId, previousCategoryId, previousPostType, postType ] );
 	const { data, paginationInfo } = useMemo( () => {
 		// Search is managed server-side as well as filters for patterns.
 		// However, the author filter in template parts is done client-side.
 		const viewWithoutFilters = { ...view };
 		delete viewWithoutFilters.search;
-		if ( type !== TEMPLATE_PART_POST_TYPE ) {
+		if ( postType !== TEMPLATE_PART_POST_TYPE ) {
 			viewWithoutFilters.filters = [];
 		}
 		return filterSortAndPaginate( patterns, viewWithoutFilters, fields );
-	}, [ patterns, view, fields, type ] );
+	}, [ patterns, view, fields, postType ] );
 
 	const dataWithPermissions = useAugmentPatternsWithPermissions( data );
 
@@ -150,11 +152,11 @@ export default function DataviewsPatterns() {
 	const editAction = useEditPostAction();
 
 	const actions = useMemo( () => {
-		if ( type === TEMPLATE_PART_POST_TYPE ) {
+		if ( postType === TEMPLATE_PART_POST_TYPE ) {
 			return [ editAction, ...templatePartActions ].filter( Boolean );
 		}
 		return [ editAction, ...patternActions ].filter( Boolean );
-	}, [ editAction, type, templatePartActions, patternActions ] );
+	}, [ editAction, postType, templatePartActions, patternActions ] );
 	const id = useId();
 	const settings = usePatternSettings();
 	// Wrap everything in a block editor provider.
@@ -169,7 +171,7 @@ export default function DataviewsPatterns() {
 			>
 				<PatternsHeader
 					categoryId={ categoryId }
-					type={ type }
+					type={ postType }
 					titleId={ `${ id }-title` }
 					descriptionId={ `${ id }-description` }
 				/>

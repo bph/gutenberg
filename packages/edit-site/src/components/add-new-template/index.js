@@ -203,11 +203,9 @@ function NewTemplateModal( { onClose } ) {
 			);
 
 			// Navigate to the created template editor.
-			history.push( {
-				postId: newTemplate.id,
-				postType: TEMPLATE_POST_TYPE,
-				canvas: 'edit',
-			} );
+			history.navigate(
+				`/${ TEMPLATE_POST_TYPE }/${ newTemplate.id }?canvas=edit`
+			);
 
 			createSuccessNotice(
 				sprintf(

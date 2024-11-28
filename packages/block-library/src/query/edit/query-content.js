@@ -19,10 +19,10 @@ import { store as coreStore } from '@wordpress/core-data';
  * Internal dependencies
  */
 import EnhancedPaginationControl from './inspector-controls/enhanced-pagination-control';
-import QueryToolbar from './query-toolbar';
 import QueryInspectorControls from './inspector-controls';
 import EnhancedPaginationModal from './enhanced-pagination-modal';
 import { getQueryContextFromTemplate } from '../utils';
+import QueryToolbar from './query-toolbar';
 
 const DEFAULTS_POSTS_PER_PAGE = 3;
 
@@ -30,10 +30,9 @@ const TEMPLATE = [ [ 'core/post-template' ] ];
 export default function QueryContent( {
 	attributes,
 	setAttributes,
-	openPatternSelectionModal,
-	name,
 	clientId,
 	context,
+	name,
 } ) {
 	const {
 		queryId,
@@ -154,6 +153,7 @@ export default function QueryContent( {
 			/>
 			<InspectorControls>
 				<QueryInspectorControls
+					name={ name }
 					attributes={ attributes }
 					setQuery={ updateQuery }
 					setDisplayLayout={ updateDisplayLayout }
@@ -163,13 +163,7 @@ export default function QueryContent( {
 				/>
 			</InspectorControls>
 			<BlockControls>
-				<QueryToolbar
-					name={ name }
-					clientId={ clientId }
-					attributes={ attributes }
-					setQuery={ updateQuery }
-					openPatternSelectionModal={ openPatternSelectionModal }
-				/>
+				<QueryToolbar attributes={ attributes } clientId={ clientId } />
 			</BlockControls>
 			<InspectorControls group="advanced">
 				<SelectControl
