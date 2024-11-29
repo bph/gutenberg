@@ -21,6 +21,7 @@ function Example() {
 
   return (
     <BoxControl
+      __next40pxDefaultSize
       values={ values }
       onChange={ setValues }
     />

@@ -17,6 +17,13 @@ export const MenuGroupLabel = forwardRef<
 	WordPressComponentProps< MenuGroupLabelProps, 'div', false >
 >( function MenuGroup( props, ref ) {
 	const menuContext = useContext( MenuContext );
+
+	if ( ! menuContext?.store ) {
+		throw new Error(
+			'Menu.GroupLabel can only be rendered inside a Menu component'
+		);
+	}
+
 	return (
 		<Styled.MenuGroupLabel
 			ref={ ref }
@@ -31,7 +38,7 @@ export const MenuGroupLabel = forwardRef<
 				/>
 			}
 			{ ...props }
-			store={ menuContext?.store }
+			store={ menuContext.store }
 		/>
 	);
 } );

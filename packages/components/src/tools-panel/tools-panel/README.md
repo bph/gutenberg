@@ -124,6 +124,7 @@ export function DimensionPanel() {
 				onDeselect={ () => setPadding( undefined ) }
 			>
 				<BoxControl
+					__next40pxDefaultSize
 					label={ __( 'Padding' ) }
 					onChange={ setPadding }
 					values={ padding }
@@ -136,6 +137,7 @@ export function DimensionPanel() {
 				onDeselect={ () => setMargin( undefined ) }
 			>
 				<BoxControl
+					__next40pxDefaultSize
 					label={ __( 'Margin' ) }
 					onChange={ setMargin }
 					values={ margin }

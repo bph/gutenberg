@@ -49,6 +49,7 @@ const TemplateControlled: StoryFn< typeof BoxControl > = ( props ) => {
 export const Default = TemplateUncontrolled.bind( {} );
 Default.args = {
 	label: 'Label',
+	__next40pxDefaultSize: true,
 };
 
 export const Controlled = TemplateControlled.bind( {} );

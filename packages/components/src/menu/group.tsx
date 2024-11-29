@@ -16,11 +16,18 @@ export const MenuGroup = forwardRef<
 	WordPressComponentProps< MenuGroupProps, 'div', false >
 >( function MenuGroup( props, ref ) {
 	const menuContext = useContext( MenuContext );
+
+	if ( ! menuContext?.store ) {
+		throw new Error(
+			'Menu.Group can only be rendered inside a Menu component'
+		);
+	}
+
 	return (
 		<Styled.MenuGroup
 			ref={ ref }
 			{ ...props }
-			store={ menuContext?.store }
+			store={ menuContext.store }
 		/>
 	);
 } );

@@ -1312,27 +1312,6 @@ _Returns_
 
 -   `React.ReactNode`: The rendered component.
 
-### PostSlug
-
-Renders the PostSlug component. It provide a control for editing the post slug.
-
-_Returns_
-
--   `React.ReactNode`: The rendered component.
-
-### PostSlugCheck
-
-Wrapper component that renders its children only if the post type supports the slug.
-
-_Parameters_
-
--   _props_ `Object`: Props.
--   _props.children_ `React.ReactNode`: Children to be rendered.
-
-_Returns_
-
--   `React.ReactNode`: The rendered component.
-
 ### PostSticky
 
 Renders the PostSticky component. It provides a checkbox control for the sticky post feature.

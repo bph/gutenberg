@@ -10,27 +10,29 @@ import type { WordPressComponentProps } from '../context';
 import type { MenuItemProps } from './types';
 import * as Styled from './styles';
 import { MenuContext } from './context';
-import { useTemporaryFocusVisibleFix } from './use-temporary-focus-visible-fix';
 
 export const MenuItem = forwardRef<
 	HTMLDivElement,
 	WordPressComponentProps< MenuItemProps, 'div', false >
 >( function MenuItem(
-	{ prefix, suffix, children, onBlur, hideOnClick = true, ...props },
+	{ prefix, suffix, children, hideOnClick = true, ...props },
 	ref
 ) {
-	// TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
-	const focusVisibleFixProps = useTemporaryFocusVisibleFix( { onBlur } );
 	const menuContext = useContext( MenuContext );
+
+	if ( ! menuContext?.store ) {
+		throw new Error(
+			'Menu.Item can only be rendered inside a Menu component'
+		);
+	}
 
 	return (
 		<Styled.MenuItem
 			ref={ ref }
 			{ ...props }
-			{ ...focusVisibleFixProps }
 			accessibleWhenDisabled
 			hideOnClick={ hideOnClick }
-			store={ menuContext?.store }
+			store={ menuContext.store }
 		>
 			<Styled.ItemPrefixWrapper>{ prefix }</Styled.ItemPrefixWrapper>
 

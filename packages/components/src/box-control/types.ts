@@ -17,69 +17,84 @@ export type CustomValueUnits = {
 
 type UnitControlPassthroughProps = Omit<
 	UnitControlProps,
-	'label' | 'onChange' | 'onFocus' | 'onMouseOver' | 'onMouseOut' | 'units'
+	'label' | 'onChange' | 'onFocus' | 'units'
 >;
 
-export type BoxControlProps = Pick<
-	UnitControlProps,
-	'onMouseOver' | 'onMouseOut' | 'units'
-> & {
+type DeprecatedBoxControlProps = {
 	/**
-	 * If this property is true, a button to reset the box control is rendered.
-	 *
-	 * @default true
+	 * @deprecated Pass to the `inputProps` prop instead.
+	 * @ignore
 	 */
-	allowReset?: boolean;
+	onMouseOver?: UnitControlProps[ 'onMouseOver' ];
 	/**
-	 * The id to use as a base for the unique HTML id attribute of the control.
+	 * @deprecated Pass to the `inputProps` prop instead.
+	 * @ignore
 	 */
-	id?: string;
-	/**
-	 * Props for the internal `UnitControl` components.
-	 *
-	 * @default { min: 0 }
-	 */
-	inputProps?: UnitControlPassthroughProps;
-	/**
-	 * Heading label for the control.
-	 *
-	 * @default __( 'Box Control' )
-	 */
-	label?: string;
-	/**
-	 * A callback function when an input value changes.
-	 */
-	onChange: ( next: BoxControlValue ) => void;
-	/**
-	 * The `top`, `right`, `bottom`, and `left` box dimension values to use when the control is reset.
-	 *
-	 * @default { top: undefined, right: undefined, bottom: undefined, left: undefined }
-	 */
-	resetValues?: BoxControlValue;
-	/**
-	 * Collection of sides to allow control of. If omitted or empty, all sides will be available.
-	 *
-	 * Allowed values are "top", "right", "bottom", "left", "vertical", and "horizontal".
-	 */
-	sides?: readonly ( keyof BoxControlValue | 'horizontal' | 'vertical' )[];
-	/**
-	 * If this property is true, when the box control is unlinked, vertical and horizontal controls
-	 * can be used instead of updating individual sides.
-	 *
-	 * @default false
-	 */
-	splitOnAxis?: boolean;
-	/**
-	 * The current values of the control, expressed as an object of `top`, `right`, `bottom`, and `left` values.
-	 */
-	values?: BoxControlValue;
-	/**
-	 * Start opting into the larger default height that will become the default size in a future version.
-	 *
-	 * @default false
-	 */
-	__next40pxDefaultSize?: boolean;
+	onMouseOut?: UnitControlProps[ 'onMouseOut' ];
 };
+
+export type BoxControlProps = Pick< UnitControlProps, 'units' > &
+	DeprecatedBoxControlProps & {
+		/**
+		 * If this property is true, a button to reset the box control is rendered.
+		 *
+		 * @default true
+		 */
+		allowReset?: boolean;
+		/**
+		 * The id to use as a base for the unique HTML id attribute of the control.
+		 */
+		id?: string;
+		/**
+		 * Props for the internal `UnitControl` components.
+		 *
+		 * @default { min: 0 }
+		 */
+		inputProps?: UnitControlPassthroughProps;
+		/**
+		 * Heading label for the control.
+		 *
+		 * @default __( 'Box Control' )
+		 */
+		label?: string;
+		/**
+		 * A callback function when an input value changes.
+		 */
+		onChange: ( next: BoxControlValue ) => void;
+		/**
+		 * The `top`, `right`, `bottom`, and `left` box dimension values to use when the control is reset.
+		 *
+		 * @default { top: undefined, right: undefined, bottom: undefined, left: undefined }
+		 */
+		resetValues?: BoxControlValue;
+		/**
+		 * Collection of sides to allow control of. If omitted or empty, all sides will be available.
+		 *
+		 * Allowed values are "top", "right", "bottom", "left", "vertical", and "horizontal".
+		 */
+		sides?: readonly (
+			| keyof BoxControlValue
+			| 'horizontal'
+			| 'vertical'
+		)[];
+		/**
+		 * If this property is true, when the box control is unlinked, vertical and horizontal controls
+		 * can be used instead of updating individual sides.
+		 *
+		 * @default false
+		 */
+		splitOnAxis?: boolean;
+		/**
+		 * The current values of the control, expressed as an object of `top`, `right`, `bottom`, and `left` values.
+		 */
+		values?: BoxControlValue;
+		/**
+		 * Start opting into the larger default height that will become the default size in a future version.
+		 *
+		 * @default false
+		 */
+		__next40pxDefaultSize?: boolean;
+	};
 
 export type BoxControlInputControlProps = UnitControlPassthroughProps & {
 	onChange?: ( nextValues: BoxControlValue ) => void;

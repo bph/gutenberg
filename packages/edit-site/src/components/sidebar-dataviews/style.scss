@@ -19,11 +19,11 @@
 	&:focus,
 	&[aria-current] {
 		color: $gray-200;
-		background: $gray-800;
 	}
 
 	&.is-selected {
-		background: var(--wp-admin-theme-color);
+		background: $gray-800;
+		font-weight: $font-weight-medium;
 		color: $white;
 	}
 }

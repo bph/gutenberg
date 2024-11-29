@@ -16,12 +16,19 @@ export const MenuSeparator = forwardRef<
 	WordPressComponentProps< MenuSeparatorProps, 'hr', false >
 >( function MenuSeparator( props, ref ) {
 	const menuContext = useContext( MenuContext );
+
+	if ( ! menuContext?.store ) {
+		throw new Error(
+			'Menu.Separator can only be rendered inside a Menu component'
+		);
+	}
+
 	return (
 		<Styled.MenuSeparator
 			ref={ ref }
 			{ ...props }
-			store={ menuContext?.store }
-			variant={ menuContext?.variant }
+			store={ menuContext.store }
+			variant={ menuContext.variant }
 		/>
 	);
 } );

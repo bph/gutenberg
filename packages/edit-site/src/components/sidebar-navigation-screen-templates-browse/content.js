@@ -6,6 +6,7 @@ import { useMemo } from '@wordpress/element';
 import { __experimentalItemGroup as ItemGroup } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -25,7 +26,7 @@ function TemplateDataviewItem( { template, isActive } ) {
 
 	return (
 		<SidebarNavigationItem
-			to={ `/template?activeView=${ text }` }
+			to={ addQueryArgs( '/template', { activeView: text } ) }
 			icon={ icon }
 			aria-current={ isActive }
 		>
