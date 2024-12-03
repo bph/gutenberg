@@ -164,6 +164,7 @@ function UnconnectedDropdownMenu( dropdownMenuProps: DropdownMenuProps ) {
 						{ controlSets?.flatMap( ( controlSet, indexOfSet ) =>
 							controlSet.map( ( control, indexOfControl ) => (
 								<Button
+									__next40pxDefaultSize
 									key={ [
 										indexOfSet,
 										indexOfControl,

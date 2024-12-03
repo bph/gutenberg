@@ -1,6 +1,7 @@
 .wp-block-image {
 
-	a {
+	> a,
+	> figure > a {
 		display: inline-block;
 	}
 
@@ -42,8 +43,8 @@
 		text-align: center;
 	}
 
-	&.alignfull a,
-	&.alignwide a {
+	&.alignfull > a,
+	&.alignwide > a {
 		width: 100%;
 	}
 

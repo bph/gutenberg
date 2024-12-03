@@ -151,6 +151,7 @@ export class PostPublishButton extends Component {
 			isBusy: ! isAutoSaving && isSaving,
 			variant: 'primary',
 			onClick: this.createOnClick( onClickButton ),
+			'aria-haspopup': hasNonPostEntityChanges ? 'dialog' : undefined,
 		};
 
 		const toggleProps = {
@@ -161,6 +162,7 @@ export class PostPublishButton extends Component {
 			variant: 'primary',
 			size: 'compact',
 			onClick: this.createOnClick( onClickToggle ),
+			'aria-haspopup': hasNonPostEntityChanges ? 'dialog' : undefined,
 		};
 		const componentProps = isToggle ? toggleProps : buttonProps;
 		return (

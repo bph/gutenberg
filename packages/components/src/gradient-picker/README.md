@@ -100,6 +100,14 @@ gradients from `gradients` will be shown.
  - Required: No
  - Default: `false`
 
+### `enableAlpha`
+
+Whether to enable alpha transparency options in the picker.
+
+ - Type: `boolean`
+ - Required: No
+ - Default: `true`
+
 ### `gradients`
 
 An array of objects as predefined gradients displayed above the gradient

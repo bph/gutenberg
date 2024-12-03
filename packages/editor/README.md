@@ -401,7 +401,7 @@ _Parameters_
 
 -   _props_ `Object`: The component props.
 -   _props.close_ `Function`: The function to close the dialog.
--   _props.renderDialog_ `Function`: The function to render the dialog.
+-   _props.renderDialog_ `boolean`: Whether to render the component with modal dialog behavior.
 
 _Returns_
 
@@ -1462,11 +1462,11 @@ Wrapper component that renders its children only if the post can trashed.
 _Parameters_
 
 -   _props_ `Object`: - The component props.
--   _props.children_ `React.ReactEl`: - The child components to render.
+-   _props.children_ `React.ReactNode`: - The child components to render.
 
 _Returns_
 
--   `React.ReactElement`: The rendered child components or null if the post can not trashed.
+-   `React.ReactNode`: The rendered child components or null if the post can not trashed.
 
 ### PostTypeSupportCheck
 
@@ -1494,7 +1494,8 @@ _Usage_
 
 _Parameters_
 
--   _onClose_ `Function`: Callback function to be executed when the popover is closed.
+-   _props_ `{ onClose: () => void }`: The props for the component.
+-   _props.onClose_ `() => void`: Callback function to be executed when the popover is closed.
 
 _Returns_
 

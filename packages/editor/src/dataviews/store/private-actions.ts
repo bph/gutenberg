@@ -8,9 +8,9 @@ import { doAction } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import type { PostType } from '../types';
 import { store as editorStore } from '../../store';
 import { unlock } from '../../lock-unlock';
+import type { PostType } from '@wordpress/fields';
 import {
 	viewPost,
 	viewPostRevisions,
@@ -24,6 +24,7 @@ import {
 	renamePost,
 	resetPost,
 	deletePost,
+	duplicateTemplatePart,
 	featuredImageField,
 	dateField,
 	parentField,
@@ -34,7 +35,6 @@ import {
 	authorField,
 	titleField,
 } from '@wordpress/fields';
-import duplicateTemplatePart from '../actions/duplicate-template-part';
 
 export function registerEntityAction< Item >(
 	kind: string,

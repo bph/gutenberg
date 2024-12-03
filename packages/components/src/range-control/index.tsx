@@ -350,6 +350,7 @@ function UnforwardedRangeControl(
 						step={ step }
 						// @ts-expect-error TODO: Investigate if the `null` value is necessary
 						value={ inputSliderValue }
+						__shouldNotWarnDeprecated36pxSize
 					/>
 				) }
 				{ allowReset && (

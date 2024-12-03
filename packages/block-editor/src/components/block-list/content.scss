@@ -427,3 +427,9 @@ _::-webkit-full-page-media, _:future, :root [data-has-multi-selection="true"] .b
 	// Additional -1px is required to avoid sub pixel rounding errors allowing background to show.
 	margin: 0 calc(-1 * var(--wp--style--root--padding-right) - 1px) 0 calc(-1 * var(--wp--style--root--padding-left) - 1px) !important;
 }
+
+// This only works in Firefox, Chrome and Safari don't accept a custom cursor
+// during drag.
+.is-dragging {
+	cursor: grabbing;
+}

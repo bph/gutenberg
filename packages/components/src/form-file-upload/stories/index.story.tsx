@@ -36,6 +36,7 @@ const Template: StoryFn< typeof FormFileUpload > = ( props ) => {
 export const Default = Template.bind( {} );
 Default.args = {
 	children: 'Select file',
+	__next40pxDefaultSize: true,
 };
 
 export const RestrictFileTypes = Template.bind( {} );

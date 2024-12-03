@@ -17,7 +17,7 @@ export default function useNavigateToEntityRecord() {
 	const onNavigateToEntityRecord = useCallback(
 		( params ) => {
 			history.navigate(
-				`/${ params.postType }/${ params.id }?canvas=edit&focusMode=true`
+				`/${ params.postType }/${ params.postId }?canvas=edit&focusMode=true`
 			);
 		},
 		[ history ]

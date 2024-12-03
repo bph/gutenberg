@@ -474,6 +474,11 @@ export default function NavigationSubmenuEdit( {
 							}
 						} }
 					/>
+					{ description && (
+						<span className="wp-block-navigation-item__description">
+							{ description }
+						</span>
+					) }
 					{ ! openSubmenusOnClick && isLinkOpen && (
 						<LinkUI
 							clientId={ clientId }

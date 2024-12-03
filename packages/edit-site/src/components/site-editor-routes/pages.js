@@ -44,7 +44,7 @@ export const pagesRoute = {
 		mobile: <MobilePagesView />,
 		edit( { query } ) {
 			const hasQuickEdit =
-				( query.layout ?? 'list' ) === 'list' && !! query.quickEdit;
+				( query.layout ?? 'list' ) !== 'list' && !! query.quickEdit;
 			return hasQuickEdit ? (
 				<PostEdit postType="page" postId={ query.postId } />
 			) : undefined;
@@ -59,7 +59,7 @@ export const pagesRoute = {
 		},
 		edit( { query } ) {
 			const hasQuickEdit =
-				( query.layout ?? 'list' ) === 'list' && !! query.quickEdit;
+				( query.layout ?? 'list' ) !== 'list' && !! query.quickEdit;
 			return hasQuickEdit ? 380 : undefined;
 		},
 	},

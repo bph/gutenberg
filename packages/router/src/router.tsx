@@ -146,6 +146,7 @@ export function useHistory() {
 	return useMemo(
 		() => ( {
 			navigate,
+			back: history.back,
 		} ),
 		[ navigate ]
 	);

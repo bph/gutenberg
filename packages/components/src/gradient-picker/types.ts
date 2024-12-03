@@ -56,6 +56,12 @@ type GradientPickerBaseProps = {
 	 * @default true
 	 */
 	loop?: boolean;
+	/**
+	 * Whether to enable alpha transparency options in the picker.
+	 *
+	 * @default true
+	 */
+	enableAlpha?: boolean;
 } & (
 	| {
 			// TODO: [#54055] Either this or `aria-labelledby` should be required

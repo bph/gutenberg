@@ -9,6 +9,7 @@ import { useState, Fragment } from '@wordpress/element';
 import Icon from '../';
 import check from '../../library/check';
 import * as icons from '../../';
+import keywords from './keywords';
 
 const { Icon: _Icon, ...availableIcons } = icons;
 
@@ -46,14 +47,23 @@ const LibraryExample = () => {
 	const [ filter, setFilter ] = useState( '' );
 	const filteredIcons = filter.length
 		? Object.fromEntries(
-				Object.entries( availableIcons ).filter( ( [ name ] ) =>
-					name.toLowerCase().includes( filter.toLowerCase() )
-				)
+				Object.entries( availableIcons ).filter( ( [ name ] ) => {
+					const normalizedName = name.toLowerCase();
+					const normalizedFilter = filter.toLowerCase();
+
+					return (
+						normalizedName.includes( normalizedFilter ) ||
+						// @ts-expect-error - Not worth the effort to cast `name`
+						keywords[ name ]?.some( ( keyword ) =>
+							keyword.toLowerCase().includes( normalizedFilter )
+						)
+					);
+				} )
 		  )
 		: availableIcons;
 	return (
 		<div style={ { padding: 20 } }>
-			<label htmlFor="filter-icon" style={ { paddingRight: 10 } }>
+			<label htmlFor="filter-icons" style={ { paddingRight: 10 } }>
 				Filter Icons
 			</label>
 			<input

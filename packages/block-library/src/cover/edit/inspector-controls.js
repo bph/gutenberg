@@ -96,6 +96,7 @@ export default function CoverInspectorControls( {
 	coverRef,
 	currentSettings,
 	updateDimRatio,
+	featuredImage,
 } ) {
 	const {
 		useFeaturedImage,
@@ -132,8 +133,12 @@ export default function CoverInspectorControls( {
 		[ id, isImageBackground ]
 	);
 
+	const currentBackgroundImage = useFeaturedImage ? featuredImage : image;
+
 	function updateImage( newSizeSlug ) {
-		const newUrl = image?.media_details?.sizes?.[ newSizeSlug ]?.source_url;
+		const newUrl =
+			currentBackgroundImage?.media_details?.sizes?.[ newSizeSlug ]
+				?.source_url;
 		if ( ! newUrl ) {
 			return null;
 		}
@@ -146,7 +151,9 @@ export default function CoverInspectorControls( {
 
 	const imageSizeOptions = imageSizes
 		?.filter(
-			( { slug } ) => image?.media_details?.sizes?.[ slug ]?.source_url
+			( { slug } ) =>
+				currentBackgroundImage?.media_details?.sizes?.[ slug ]
+					?.source_url
 		)
 		?.map( ( { name, slug } ) => ( { value: slug, label: name } ) );
 
@@ -321,7 +328,7 @@ export default function CoverInspectorControls( {
 								/>
 							</ToolsPanelItem>
 						) }
-						{ ! useFeaturedImage && !! imageSizeOptions?.length && (
+						{ !! imageSizeOptions?.length && (
 							<ResolutionTool
 								value={ sizeSlug }
 								onChange={ updateImage }

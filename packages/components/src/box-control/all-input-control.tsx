@@ -74,6 +74,7 @@ export default function AllInputControl( {
 		<>
 			<StyledUnitControl
 				{ ...props }
+				__shouldNotWarnDeprecated36pxSize
 				__next40pxDefaultSize={ __next40pxDefaultSize }
 				className="component-box-control__unit-control"
 				disableUnits={ isMixed }

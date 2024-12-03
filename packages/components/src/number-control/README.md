@@ -16,6 +16,7 @@ const Example = () => {
 
 	return (
 		<NumberControl
+			__next40pxDefaultSize
 			isShiftStepEnabled={ true }
 			onChange={ setValue }
 			shiftStep={ 10 }

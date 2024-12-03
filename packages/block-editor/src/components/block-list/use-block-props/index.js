@@ -29,7 +29,8 @@ import { useBlockRefProvider } from './use-block-refs';
 import { useIntersectionObserver } from './use-intersection-observer';
 import { useScrollIntoView } from './use-scroll-into-view';
 import { useFlashEditableBlocks } from '../../use-flash-editable-blocks';
-import { canBindBlock } from '../../../hooks/use-bindings-attributes';
+import { canBindBlock } from '../../../utils/block-bindings';
+import { useFirefoxDraggableCompatibility } from './use-firefox-draggable-compatibility';
 
 /**
  * This hook is used to lightly mark an element as a block element. The element
@@ -100,11 +101,15 @@ export function useBlockProps( props = {}, { __unstableIsHtml } = {} ) {
 		isTemporarilyEditingAsBlocks,
 		defaultClassName,
 		isSectionBlock,
+		canMove,
 	} = useContext( PrivateBlockContext );
+
+	const canDrag = canMove && ! hasChildSelected;
 
 	// translators: %s: Type of block (i.e. Text, Image etc)
 	const blockLabel = sprintf( __( 'Block: %s' ), blockTitle );
 	const htmlSuffix = mode === 'html' && ! __unstableIsHtml ? '-visual' : '';
+	const ffDragRef = useFirefoxDraggableCompatibility();
 	const mergedRefs = useMergeRefs( [
 		props.ref,
 		useFocusFirstElement( { clientId, initialPosition } ),
@@ -120,6 +125,7 @@ export function useBlockProps( props = {}, { __unstableIsHtml } = {} ) {
 			isEnabled: isSectionBlock,
 		} ),
 		useScrollIntoView( { isSelected } ),
+		canDrag ? ffDragRef : undefined,
 	] );
 
 	const blockEditContext = useBlockEditContext();
@@ -152,6 +158,7 @@ export function useBlockProps( props = {}, { __unstableIsHtml } = {} ) {
 
 	return {
 		tabIndex: blockEditingMode === 'disabled' ? -1 : 0,
+		draggable: canDrag ? true : undefined,
 		...wrapperProps,
 		...props,
 		ref: mergedRefs,

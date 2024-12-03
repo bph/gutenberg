@@ -23,15 +23,15 @@ import { useViewportMatch } from '@wordpress/compose';
 /**
  * Internal dependencies
  */
-import {
-	canBindAttribute,
-	getBindableAttributes,
-} from '../hooks/use-bindings-attributes';
 import { unlock } from '../lock-unlock';
 import InspectorControls from '../components/inspector-controls';
 import BlockContext from '../components/block-context';
 import { useBlockEditContext } from '../components/block-edit';
-import { useBlockBindingsUtils } from '../utils/block-bindings';
+import {
+	canBindAttribute,
+	getBindableAttributes,
+	useBlockBindingsUtils,
+} from '../utils/block-bindings';
 import { store as blockEditorStore } from '../store';
 
 const { Menu } = unlock( componentsPrivateApis );
@@ -300,13 +300,17 @@ export const BlockBindingsPanel = ( { name: blockName, metadata } ) => {
 						/>
 					) }
 				</ItemGroup>
-				<ItemGroup>
-					<Text variant="muted">
+				{ /*
+					Use a div element to make the ToolsPanelHiddenInnerWrapper
+					toggle the visibility of this help text automatically.
+				*/ }
+				<Text as="div" variant="muted">
+					<p>
 						{ __(
 							'Attributes connected to custom fields or other dynamic data.'
 						) }
-					</Text>
-				</ItemGroup>
+					</p>
+				</Text>
 			</ToolsPanel>
 		</InspectorControls>
 	);

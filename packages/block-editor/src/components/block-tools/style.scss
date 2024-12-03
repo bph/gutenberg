@@ -157,6 +157,11 @@
 			&:focus::before {
 				box-shadow: inset 0 0 0 1px $gray-900, 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
 			}
+
+			&:disabled,
+			&[aria-disabled="true"] {
+				color: $gray-700;
+			}
 		}
 
 		.block-editor-block-parent-selector .block-editor-block-parent-selector__button {

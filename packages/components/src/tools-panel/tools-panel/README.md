@@ -101,6 +101,7 @@ export function DimensionPanel() {
 				isShownByDefault
 			>
 				<UnitControl
+					__next40pxDefaultSize
 					label={ __( 'Height' ) }
 					onChange={ setHeight }
 					value={ height }
@@ -113,6 +114,7 @@ export function DimensionPanel() {
 				isShownByDefault
 			>
 				<UnitControl
+					__next40pxDefaultSize
 					label={ __( 'Width' ) }
 					onChange={ setWidth }
 					value={ width }

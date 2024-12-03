@@ -121,4 +121,59 @@ test.describe( 'Write/Design mode', () => {
 			editorSettings.getByRole( 'button', { name: 'Content' } )
 		).toBeVisible();
 	} );
+
+	test( 'hides the blocks that cannot be interacted with in List View', async ( {
+		editor,
+		page,
+		pageUtils,
+	} ) => {
+		await editor.setContent( '' );
+
+		// Insert a section with a nested block and an editable block.
+		await editor.insertBlock( {
+			name: 'core/group',
+			attributes: {},
+			innerBlocks: [
+				{
+					name: 'core/group',
+					attributes: {
+						metadata: {
+							name: 'Non-content block',
+						},
+					},
+					innerBlocks: [
+						{
+							name: 'core/paragraph',
+							attributes: {
+								content: 'Something',
+							},
+						},
+					],
+				},
+			],
+		} );
+
+		// Select the inner paragraph block so that List View is expanded.
+		await editor.canvas
+			.getByRole( 'document', {
+				name: 'Block: Paragraph',
+			} )
+			.click();
+
+		// Open List View.
+		await pageUtils.pressKeys( 'access+o' );
+		const listView = page.getByRole( 'treegrid', {
+			name: 'Block navigation structure',
+		} );
+		const nonContentBlock = listView.getByRole( 'link', {
+			name: 'Non-content block',
+		} );
+
+		await expect( nonContentBlock ).toBeVisible();
+
+		// Switch to write mode.
+		await editor.switchEditorTool( 'Write' );
+
+		await expect( nonContentBlock ).toBeHidden();
+	} );
 } );

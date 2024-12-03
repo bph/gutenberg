@@ -153,6 +153,7 @@ export default function FontAppearanceControl( props ) {
 				{ ...otherProps }
 				className="components-font-appearance-control"
 				__next40pxDefaultSize={ __next40pxDefaultSize }
+				__shouldNotWarnDeprecated36pxSize
 				label={ label }
 				describedBy={ getDescribedBy() }
 				options={ selectOptions }

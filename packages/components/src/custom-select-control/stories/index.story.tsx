@@ -63,6 +63,7 @@ const Template: StoryFn< typeof CustomSelectControl > = ( props ) => {
 
 export const Default = Template.bind( {} );
 Default.args = {
+	__next40pxDefaultSize: true,
 	label: 'Label',
 	options: [
 		{

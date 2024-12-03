@@ -39,7 +39,7 @@ import FormatEdit from './format-edit';
 import { getAllowedFormats } from './utils';
 import { Content, valueToHTMLString } from './content';
 import { withDeprecations } from './with-deprecations';
-import { canBindBlock } from '../../hooks/use-bindings-attributes';
+import { canBindBlock } from '../../utils/block-bindings';
 import BlockContext from '../block-context';
 
 export const keyboardShortcutContext = createContext();
@@ -431,6 +431,11 @@ export function RichTextWrapper(
 				aria-multiline={ ! disableLineBreaks }
 				aria-readonly={ shouldDisableEditing }
 				{ ...props }
+				// Unset draggable (coming from block props) for contentEditable
+				// elements because it will interfere with multi block selection
+				// when the contentEditable and draggable elements are the same
+				// element.
+				draggable={ undefined }
 				aria-label={
 					bindingsLabel || props[ 'aria-label' ] || placeholder
 				}

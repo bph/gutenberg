@@ -168,7 +168,10 @@ test.describe( 'Registered sources', () => {
 					name: 'Block: Image',
 				} )
 				.locator( 'img' );
-			await imageBlockImg.click();
+			// Playwright will complain that the pointer events are captured by
+			// the parent, but that's fine.
+			// eslint-disable-next-line playwright/no-force-option
+			await imageBlockImg.click( { force: true } );
 
 			// Image src is the custom field value.
 			await expect( imageBlockImg ).toHaveAttribute(
@@ -735,7 +738,10 @@ test.describe( 'Registered sources', () => {
 					name: 'Block: Image',
 				} )
 				.locator( 'img' );
-			await imageBlockImg.click();
+			// Playwright will complain that the pointer events are captured by
+			// the parent, but that's fine.
+			// eslint-disable-next-line playwright/no-force-option
+			await imageBlockImg.click( { force: true } );
 
 			// Edit the custom field value in the alt textarea.
 			const altInputArea = page

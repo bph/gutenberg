@@ -268,12 +268,25 @@ test.describe( 'Pattern Overrides', () => {
 			} );
 
 			await editor.setContent( '' );
+			await editor.switchEditorTool( 'Design' );
 
+			// Insert a `<main>` group block.
+			// In zoomed out and write mode it acts as the section root.
+			// Inside is a pattern that acts as a section.
 			await editor.insertBlock( {
-				name: 'core/block',
-				attributes: { ref: id },
+				name: 'core/group',
+				attributes: { tagName: 'main' },
+				innerBlocks: [
+					{
+						name: 'core/block',
+						attributes: { ref: id },
+					},
+				],
 			} );
 
+			const groupBlock = editor.canvas.getByRole( 'document', {
+				name: 'Block: Group',
+			} );
 			const patternBlock = editor.canvas.getByRole( 'document', {
 				name: 'Block: Pattern',
 			} );
@@ -290,14 +303,35 @@ test.describe( 'Pattern Overrides', () => {
 				hasText: 'No Overrides or Binding',
 			} );
 
-			await test.step( 'Zoomed in / Design mode', async () => {
-				await editor.switchEditorTool( 'Design' );
-				// In zoomed in and design mode the pattern block and child blocks
-				// with bindings are editable.
+			await test.step( 'Click-through behavior', async () => {
+				// With the group block selected, all the inner blocks of the pattern
+				// are inert due to the 'click-through' behavior, that requires the
+				// pattern block be selected first before its inner blocks are selectable.
+				await editor.selectBlocks( groupBlock );
 				await expect( patternBlock ).not.toHaveAttribute(
 					'inert',
 					'true'
 				);
+				await expect( blockWithOverrides ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+				await expect( blockWithoutOverridesOrBindings ).toHaveAttribute(
+					'inert',
+					'true'
+				);
+			} );
+
+			await test.step( 'Zoomed in / Design mode', async () => {
+				await editor.selectBlocks( patternBlock );
+
+				// Once selected and in zoomed in/design mode the child blocks
+				// of the pattern with bindings are editable, but unbound
+				// blocks are inert.
 				await expect( blockWithOverrides ).not.toHaveAttribute(
 					'inert',
 					'true'
@@ -314,11 +348,16 @@ test.describe( 'Pattern Overrides', () => {
 
 			await test.step( 'Zoomed in / Write mode - pattern as a section', async () => {
 				await editor.switchEditorTool( 'Write' );
+
 				// The pattern block is still editable as a section.
 				await expect( patternBlock ).not.toHaveAttribute(
 					'inert',
 					'true'
 				);
+
+				// Ensure the pattern block is selected.
+				await editor.selectBlocks( patternBlock );
+
 				// Child blocks of the pattern with bindings are editable.
 				await expect( blockWithOverrides ).not.toHaveAttribute(
 					'inert',
@@ -336,11 +375,18 @@ test.describe( 'Pattern Overrides', () => {
 
 			await test.step( 'Zoomed out / Write mode - pattern as a section', async () => {
 				await page.getByLabel( 'Zoom Out' ).click();
-				// In zoomed out only the pattern block is editable, as in this scenario it's a section.
+				// In zoomed out only the pattern block is editable,
+				// as in this scenario it's a section.
 				await expect( patternBlock ).not.toHaveAttribute(
 					'inert',
 					'true'
 				);
+
+				// Ensure the pattern block is selected before checking the child blocks
+				// to ensure the click-through behavior isn't interfering.
+				await editor.selectBlocks( patternBlock );
+
+				// None of the child blocks are editable in zoomed out mode.
 				await expect( blockWithOverrides ).toHaveAttribute(
 					'inert',
 					'true'
@@ -357,11 +403,17 @@ test.describe( 'Pattern Overrides', () => {
 
 			await test.step( 'Zoomed out / Design mode - pattern as a section', async () => {
 				await editor.switchEditorTool( 'Design' );
-				// In zoomed out only the pattern block is editable, as in this scenario it's a section.
+				// In zoomed out only the pattern block is editable,
+				// as in this scenario it's a section.
 				await expect( patternBlock ).not.toHaveAttribute(
 					'inert',
 					'true'
 				);
+
+				// Ensure the pattern block is selected before checking the child blocks
+				// to ensure the click-through behavior isn't interfering.
+				await editor.selectBlocks( patternBlock );
+
 				await expect( blockWithOverrides ).toHaveAttribute(
 					'inert',
 					'true'
@@ -376,7 +428,7 @@ test.describe( 'Pattern Overrides', () => {
 				);
 			} );
 
-			// Zoom out and group the pattern.
+			// Zoom out and group the pattern so that it's no longer a section.
 			await page.getByLabel( 'Zoom Out' ).click();
 			await editor.selectBlocks( patternBlock );
 			await editor.clickBlockOptionsMenuItem( 'Group' );

@@ -213,6 +213,7 @@ export function GradientPicker( {
 	onChange,
 	value,
 	clearable = true,
+	enableAlpha = true,
 	disableCustomGradients = false,
 	__experimentalIsRenderedInSidebar,
 	headingLevel = 2,
@@ -230,6 +231,7 @@ export function GradientPicker( {
 					__experimentalIsRenderedInSidebar={
 						__experimentalIsRenderedInSidebar
 					}
+					enableAlpha={ enableAlpha }
 					value={ value }
 					onChange={ onChange }
 				/>

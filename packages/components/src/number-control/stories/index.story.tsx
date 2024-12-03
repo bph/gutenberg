@@ -62,4 +62,5 @@ const Template: StoryFn< typeof NumberControl > = ( {
 export const Default = Template.bind( {} );
 Default.args = {
 	label: 'Value',
+	__next40pxDefaultSize: true,
 };

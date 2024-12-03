@@ -89,6 +89,11 @@ const scrollToSection = ( anchorId, iframe ) => {
  */
 const getStyleBookNavigationFromPath = ( path ) => {
 	if ( path && typeof path === 'string' ) {
+		if ( path.startsWith( '/typography' ) ) {
+			return {
+				block: 'typography',
+			};
+		}
 		let block = path.includes( '/blocks/' )
 			? decodeURIComponent( path.split( '/blocks/' )[ 1 ] )
 			: null;

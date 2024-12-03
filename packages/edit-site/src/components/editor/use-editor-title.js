@@ -22,6 +22,10 @@ function useEditorTitle( postType, postId ) {
 			const { getEditedEntityRecord, hasFinishedResolution } =
 				select( coreStore );
 
+			if ( ! postId ) {
+				return { isLoaded: false };
+			}
+
 			const _record = getEditedEntityRecord(
 				'postType',
 				postType,

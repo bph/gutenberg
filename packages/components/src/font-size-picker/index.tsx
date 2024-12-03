@@ -212,6 +212,7 @@ const UnforwardedFontSizePicker = (
 						<FlexItem isBlock>
 							<UnitControl
 								__next40pxDefaultSize={ __next40pxDefaultSize }
+								__shouldNotWarnDeprecated36pxSize
 								label={ __( 'Custom' ) }
 								labelPosition="top"
 								hideLabelFromVision

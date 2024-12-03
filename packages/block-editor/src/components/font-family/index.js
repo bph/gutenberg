@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import clsx from 'clsx';
+
+/**
  * WordPress dependencies
  */
 import { CustomSelectControl } from '@wordpress/components';
@@ -18,6 +23,7 @@ export default function FontFamilyControl( {
 	value = '',
 	onChange,
 	fontFamilies,
+	className,
 	...props
 } ) {
 	const [ blockLevelFontFamilies ] = useSettings( 'typography.fontFamilies' );
@@ -55,10 +61,14 @@ export default function FontFamilyControl( {
 	return (
 		<CustomSelectControl
 			__next40pxDefaultSize={ __next40pxDefaultSize }
+			__shouldNotWarnDeprecated36pxSize
 			label={ __( 'Font' ) }
 			value={ value }
 			onChange={ ( { selectedItem } ) => onChange( selectedItem.key ) }
 			options={ options }
+			className={ clsx( 'block-editor-font-family-control', className, {
+				'is-next-has-no-margin-bottom': __nextHasNoMarginBottom,
+			} ) }
 			{ ...props }
 		/>
 	);

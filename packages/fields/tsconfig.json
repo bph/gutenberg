@@ -12,6 +12,7 @@
 		{ "path": "../components" },
 		{ "path": "../compose" },
 		{ "path": "../core-data" },
+		{ "path": "../block-editor" },
 		{ "path": "../data" },
 		{ "path": "../dataviews" },
 		{ "path": "../date" },

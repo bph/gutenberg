@@ -30,6 +30,7 @@ import {
 	PATTERN_POST_TYPE,
 	NAVIGATION_POST_TYPE,
 } from '../../store/constants';
+import { unlock } from '../../lock-unlock';
 
 const toolbarVariations = {
 	distractionFreeDisabled: { y: '-50px' },
@@ -102,6 +103,13 @@ function Header( {
 			( hasFixedToolbar &&
 				( ! hasBlockSelection || isBlockToolsCollapsed ) ) );
 	const hasBackButton = useHasBackButton();
+
+	const hasSectionRootClientId = useSelect(
+		( select ) =>
+			!! unlock( select( blockEditorStore ) ).getSectionRootClientId(),
+		[]
+	);
+
 	/*
 	 * The edit-post-header classname is only kept for backward compatability
 	 * as some plugins might be relying on its presence.
@@ -169,9 +177,11 @@ function Header( {
 					forceIsAutosaveable={ forceIsDirty }
 				/>
 
-				{ canBeZoomedOut && isWideViewport && (
-					<ZoomOutToggle disabled={ forceDisableBlockTools } />
-				) }
+				{ canBeZoomedOut &&
+					isWideViewport &&
+					hasSectionRootClientId && (
+						<ZoomOutToggle disabled={ forceDisableBlockTools } />
+					) }
 
 				{ ( isWideViewport || ! showIconLabels ) && (
 					<PinnedItems.Slot scope="core" />

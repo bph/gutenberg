@@ -1,10 +1,15 @@
-export default function getClickableItemProps< Item >(
-	item: Item,
-	isItemClickable: ( item: Item ) => boolean,
-	onClickItem: ( item: Item ) => void,
-	className: string
-) {
-	if ( ! isItemClickable( item ) ) {
+export default function getClickableItemProps< Item >( {
+	item,
+	isItemClickable,
+	onClickItem,
+	className,
+}: {
+	item: Item;
+	isItemClickable: ( item: Item ) => boolean;
+	onClickItem?: ( item: Item ) => void;
+	className: string;
+} ) {
+	if ( ! isItemClickable( item ) || ! onClickItem ) {
 		return { className };
 	}
 

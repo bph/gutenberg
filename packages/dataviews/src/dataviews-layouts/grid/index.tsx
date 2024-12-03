@@ -31,7 +31,7 @@ interface GridItemProps< Item > {
 	selection: string[];
 	onChangeSelection: SetSelection;
 	getItemId: ( item: Item ) => string;
-	onClickItem: ( item: Item ) => void;
+	onClickItem?: ( item: Item ) => void;
 	isItemClickable: ( item: Item ) => boolean;
 	item: Item;
 	actions: Action< Item >[];
@@ -66,19 +66,19 @@ function GridItem< Item >( {
 		<primaryField.render item={ item } />
 	) : null;
 
-	const clickableMediaItemProps = getClickableItemProps(
+	const clickableMediaItemProps = getClickableItemProps( {
 		item,
 		isItemClickable,
 		onClickItem,
-		'dataviews-view-grid__media'
-	);
+		className: 'dataviews-view-grid__media',
+	} );
 
-	const clickablePrimaryItemProps = getClickableItemProps(
+	const clickablePrimaryItemProps = getClickableItemProps( {
 		item,
 		isItemClickable,
 		onClickItem,
-		'dataviews-view-grid__primary-field'
-	);
+		className: 'dataviews-view-grid__primary-field',
+	} );
 
 	return (
 		<VStack

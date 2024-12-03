@@ -60,5 +60,9 @@
 				}
 			}
 		}
+
+		.wp-block[draggable] {
+			cursor: grab;
+		}
 	}
 }

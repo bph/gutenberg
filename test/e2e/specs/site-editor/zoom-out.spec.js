@@ -4,7 +4,8 @@
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 
 const EDITOR_ZOOM_OUT_CONTENT = `
-<!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"}},"dimensions":{"minHeight":"100vh"}},"backgroundColor":"base-2","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
+<!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
+<main class="wp-block-group"><!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"}},"dimensions":{"minHeight":"100vh"}},"backgroundColor":"base-2","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
 <div class="wp-block-group has-base-2-background-color has-background" style="min-height:100vh;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:paragraph -->
 <p>First Section Start</p>
 <!-- /wp:paragraph -->
@@ -58,6 +59,21 @@ const EDITOR_ZOOM_OUT_CONTENT = `
 <!-- wp:paragraph -->
 <p>Fourth Section End</p>
 <!-- /wp:paragraph --></div>
+<!-- /wp:group --></main>
+<!-- /wp:group -->`;
+
+const EDITOR_ZOOM_OUT_CONTENT_NO_SECTION_ROOT = `<!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"}},"dimensions":{"minHeight":"100vh"}},"backgroundColor":"base-2","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
+<div class="wp-block-group has-base-2-background-color has-background" style="min-height:100vh;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:paragraph -->
+<p>First Section Start</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"style":{"layout":{"selfStretch":"fit","flexSize":null}}} -->
+<p>First Section Center</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>First Section End</p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
 
 test.describe( 'Zoom Out', () => {
@@ -67,6 +83,8 @@ test.describe( 'Zoom Out', () => {
 
 	test.afterAll( async ( { requestUtils } ) => {
 		await requestUtils.activateTheme( 'twentytwentyone' );
+		await requestUtils.deleteAllTemplates( 'wp_template' );
+		await requestUtils.deleteAllTemplates( 'wp_template_part' );
 	} );
 
 	test.beforeEach( async ( { admin } ) => {
@@ -214,5 +232,30 @@ test.describe( 'Zoom Out', () => {
 		await expect( thirdSectionStart ).toBeInViewport();
 		await expect( thirdSectionEnd ).toBeInViewport();
 		await expect( fourthSectionStart ).not.toBeInViewport();
+	} );
+
+	test( 'Zoom Out cannot be activated when the section root is missing', async ( {
+		page,
+		editor,
+	} ) => {
+		await editor.setContent( EDITOR_ZOOM_OUT_CONTENT_NO_SECTION_ROOT );
+
+		// Check that the Zoom Out toggle button is not visible.
+		await expect(
+			page.getByRole( 'button', { name: 'Zoom Out' } )
+		).toBeHidden();
+
+		// Check that activating the Patterns tab in the Inserter does not activate
+		// Zoom Out.
+		await page
+			.getByRole( 'button', {
+				name: 'Block Inserter',
+				exact: true,
+			} )
+			.click();
+
+		await page.getByRole( 'tab', { name: 'Patterns' } ).click();
+
+		await expect( page.locator( '.is-zoomed-out' ) ).toBeHidden();
 	} );
 } );

@@ -797,6 +797,7 @@ function BlockListBlockProvider( props ) {
 		mayDisplayParentControls,
 		originalBlockClientId,
 		themeSupportsLayout,
+		canMove,
 	};
 
 	// Here we separate between the props passed to BlockListBlock and any other

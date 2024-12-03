@@ -74,6 +74,7 @@ import useEditPostCommands from '../../commands/use-commands';
 import { usePaddingAppender } from './use-padding-appender';
 import { useShouldIframe } from './use-should-iframe';
 import useNavigateToEntityRecord from '../../hooks/use-navigate-to-entity-record';
+import { useMetaBoxInitialization } from '../meta-boxes/use-meta-box-initialization';
 
 const { getLayoutStyles } = unlock( blockEditorPrivateApis );
 const { useCommands } = unlock( coreCommandsPrivateApis );
@@ -413,6 +414,8 @@ function Layout( {
 			const { isZoomOut } = unlock( select( blockEditorStore ) );
 			const { getEditorMode, getRenderingMode } = select( editorStore );
 			const isRenderingPostOnly = getRenderingMode() === 'post-only';
+			const isNotDesignPostType =
+				! DESIGN_POST_TYPES.includes( currentPostType );
 
 			return {
 				mode: getEditorMode(),
@@ -423,9 +426,7 @@ function Layout( {
 					!! select( blockEditorStore ).getBlockSelectionStart(),
 				showIconLabels: get( 'core', 'showIconLabels' ),
 				isDistractionFree: get( 'core', 'distractionFree' ),
-				showMetaBoxes:
-					! DESIGN_POST_TYPES.includes( currentPostType ) &&
-					! isZoomOut(),
+				showMetaBoxes: isNotDesignPostType && ! isZoomOut(),
 				isWelcomeGuideVisible: isFeatureActive( 'welcomeGuide' ),
 				templateId:
 					supportsTemplateMode &&
@@ -435,9 +436,7 @@ function Layout( {
 						? getTemplateId( currentPostType, currentPostId )
 						: null,
 				enablePaddingAppender:
-					! isZoomOut() &&
-					isRenderingPostOnly &&
-					! DESIGN_POST_TYPES.includes( currentPostType ),
+					! isZoomOut() && isRenderingPostOnly && isNotDesignPostType,
 			};
 		},
 		[
@@ -447,6 +446,8 @@ function Layout( {
 			settings.supportsTemplateMode,
 		]
 	);
+	useMetaBoxInitialization( hasActiveMetaboxes );
+
 	const [ paddingAppenderRef, paddingStyle ] = usePaddingAppender(
 		enablePaddingAppender
 	);

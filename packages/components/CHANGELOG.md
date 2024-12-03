@@ -2,10 +2,26 @@
 
 ## Unreleased
 
+### Enhancements
+
+-   `GradientPicker`: Add `enableAlpha` prop ([#66974](https://github.com/WordPress/gutenberg/pull/66974))
+-   `CustomGradientPicker`: Add `enableAlpha` prop ([#66974](https://github.com/WordPress/gutenberg/pull/66974))
+
 ### Deprecations
 
 -   `BoxControl`: Passive deprecate `onMouseOver`/`onMouseOut`. Pass to the `inputProps` prop instead ([#67332](https://github.com/WordPress/gutenberg/pull/67332)).
 -   `BoxControl`: Deprecate 36px default size ([#66704](https://github.com/WordPress/gutenberg/pull/66704)).
+-   `CustomSelectControl`: Deprecate 36px default size ([#67441](https://github.com/WordPress/gutenberg/pull/67441)).
+-   `NumberControl`: Deprecate 36px default size ([#66730](https://github.com/WordPress/gutenberg/pull/66730)).
+-   `UnitControl`: Deprecate 36px default size ([#66791](https://github.com/WordPress/gutenberg/pull/66791)).
+-   `FormFileUpload`: Deprecate 36px default size ([#67438](https://github.com/WordPress/gutenberg/pull/67438)).
+
+### Enhancements
+
+-   `BorderBoxControl`: Reduce gap value when unlinked ([#67049](https://github.com/WordPress/gutenberg/pull/67049)).
+-   `DropdownMenu`: Increase option height to 40px ([#67435](https://github.com/WordPress/gutenberg/pull/67435)).
+-   `MenuItem`: Increase height to 40px ([#67435](https://github.com/WordPress/gutenberg/pull/67435)).
+-   `MenuItemsChoice`: Increase option height to 40px ([#67435](https://github.com/WordPress/gutenberg/pull/67435)).
 
 ### Experimental
 
@@ -15,6 +31,13 @@
 
 -   Upgraded `@ariakit/react` (v0.4.13) and `@ariakit/test` (v0.4.5) ([#65907](https://github.com/WordPress/gutenberg/pull/65907)).
 -   Upgraded `@ariakit/react` (v0.4.15) and `@ariakit/test` (v0.4.7) ([#67404](https://github.com/WordPress/gutenberg/pull/67404)).
+-   `ToolbarButton`: Set size to "compact" ([#67440](https://github.com/WordPress/gutenberg/pull/67440)).
+-   Exported the `WPCompleter` type as it was being used in block-editor/autocompleters ([#67410](https://github.com/WordPress/gutenberg/pull/67410)).
+-   `SlotFill`: remove manual rerenders from the portal `Fill` component ([#67471](https://github.com/WordPress/gutenberg/pull/67471)).
+
+### Bug Fixes
+
+-   `ResizableBox`: Make drag handles focusable ([#67305](https://github.com/WordPress/gutenberg/pull/67305)).
 
 ## 28.13.0 (2024-11-27)
 

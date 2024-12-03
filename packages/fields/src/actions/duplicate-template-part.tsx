@@ -12,15 +12,17 @@ import type { Action } from '@wordpress/dataviews';
 /**
  * Internal dependencies
  */
-import { TEMPLATE_PART_POST_TYPE } from '../../store/constants';
-import { CreateTemplatePartModalContents } from '../../components/create-template-part-modal';
-import { getItemTitle } from './utils';
 import type { Post, TemplatePart } from '../types';
+import { CreateTemplatePartModalContents } from '../components/create-template-part-modal';
+import { getItemTitle } from './utils';
 
+/**
+ * This action is used to duplicate a template part.
+ */
 const duplicateTemplatePart: Action< TemplatePart > = {
 	id: 'duplicate-template-part',
 	label: _x( 'Duplicate', 'action label' ),
-	isEligible: ( item ) => item.type === TEMPLATE_PART_POST_TYPE,
+	isEligible: ( item ) => item.type === 'wp_template_part',
 	modalHeader: _x( 'Duplicate template part', 'action label' ),
 	RenderModal: ( { items, closeModal } ) => {
 		const [ item ] = items;
@@ -61,7 +63,7 @@ const duplicateTemplatePart: Action< TemplatePart > = {
 				onCreate={ onTemplatePartSuccess }
 				onError={ closeModal }
 				confirmLabel={ _x( 'Duplicate', 'action label' ) }
-				closeModal={ closeModal }
+				closeModal={ closeModal ?? ( () => {} ) }
 			/>
 		);
 	},

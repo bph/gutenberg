@@ -15,6 +15,14 @@ $resize-handler-container-size: $resize-handler-size + ($grid-unit-05 * 2); // M
 	.components-resizable-box__container.has-show-handle & {
 		display: block;
 	}
+
+	> div {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		z-index: z-index(".components-resizable-box__handle");
+		outline: none;
+	}
 }
 
 // Make the image inside the resize to get the full width

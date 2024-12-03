@@ -5,31 +5,19 @@ import { store as blocksStore } from '@wordpress/blocks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { useRegistry, useSelect } from '@wordpress/data';
 import { useCallback, useMemo, useContext } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies
  */
-import isURLLike from '../components/link-control/is-url-like';
-import { unlock } from '../lock-unlock';
-import BlockContext from '../components/block-context';
+import isURLLike from '../link-control/is-url-like';
+import { unlock } from '../../lock-unlock';
+import BlockContext from '../block-context';
+import {
+	BLOCK_BINDINGS_ALLOWED_BLOCKS,
+	canBindAttribute,
+} from '../../utils/block-bindings';
 
 /** @typedef {import('@wordpress/compose').WPHigherOrderComponent} WPHigherOrderComponent */
-/** @typedef {import('@wordpress/blocks').WPBlockSettings} WPBlockSettings */
-
-/**
- * Given a binding of block attributes, returns a higher order component that
- * overrides its `attributes` and `setAttributes` props to sync any changes needed.
- *
- * @return {WPHigherOrderComponent} Higher-order component.
- */
-
-const BLOCK_BINDINGS_ALLOWED_BLOCKS = {
-	'core/paragraph': [ 'content' ],
-	'core/heading': [ 'content' ],
-	'core/image': [ 'id', 'url', 'title', 'alt' ],
-	'core/button': [ 'url', 'text', 'linkTarget', 'rel' ],
-};
 
 const DEFAULT_ATTRIBUTE = '__default';
 
@@ -67,36 +55,12 @@ function replacePatternOverrideDefaultBindings( blockName, bindings ) {
 }
 
 /**
- * Based on the given block name,
- * check if it is possible to bind the block.
+ * Given a binding of block attributes, returns a higher order component that
+ * overrides its `attributes` and `setAttributes` props to sync any changes needed.
  *
- * @param {string} blockName - The block name.
- * @return {boolean} Whether it is possible to bind the block to sources.
+ * @return {WPHigherOrderComponent} Higher-order component.
  */
-export function canBindBlock( blockName ) {
-	return blockName in BLOCK_BINDINGS_ALLOWED_BLOCKS;
-}
-
-/**
- * Based on the given block name and attribute name,
- * check if it is possible to bind the block attribute.
- *
- * @param {string} blockName     - The block name.
- * @param {string} attributeName - The attribute name.
- * @return {boolean} Whether it is possible to bind the block attribute.
- */
-export function canBindAttribute( blockName, attributeName ) {
-	return (
-		canBindBlock( blockName ) &&
-		BLOCK_BINDINGS_ALLOWED_BLOCKS[ blockName ].includes( attributeName )
-	);
-}
-
-export function getBindableAttributes( blockName ) {
-	return BLOCK_BINDINGS_ALLOWED_BLOCKS[ blockName ];
-}
-
-export const withBlockBindingSupport = createHigherOrderComponent(
+export const withBlockBindingsSupport = createHigherOrderComponent(
 	( BlockEdit ) => ( props ) => {
 		const registry = useRegistry();
 		const blockContext = useContext( BlockContext );
@@ -108,9 +72,9 @@ export const withBlockBindingSupport = createHigherOrderComponent(
 			() =>
 				replacePatternOverrideDefaultBindings(
 					name,
-					props.attributes.metadata?.bindings
+					props.attributes?.metadata?.bindings
 				),
-			[ props.attributes.metadata?.bindings, name ]
+			[ props.attributes?.metadata?.bindings, name ]
 		);
 
 		// While this hook doesn't directly call any selectors, `useSelect` is
@@ -196,7 +160,7 @@ export const withBlockBindingSupport = createHigherOrderComponent(
 
 		const hasParentPattern = !! updatedContext[ 'pattern/overrides' ];
 		const hasPatternOverridesDefaultBinding =
-			props.attributes.metadata?.bindings?.[ DEFAULT_ATTRIBUTE ]
+			props.attributes?.metadata?.bindings?.[ DEFAULT_ATTRIBUTE ]
 				?.source === 'core/pattern-overrides';
 
 		const _setAttributes = useCallback(
@@ -283,40 +247,13 @@ export const withBlockBindingSupport = createHigherOrderComponent(
 		);
 
 		return (
-			<>
-				<BlockEdit
-					{ ...props }
-					attributes={ { ...props.attributes, ...boundAttributes } }
-					setAttributes={ _setAttributes }
-					context={ { ...context, ...updatedContext } }
-				/>
-			</>
+			<BlockEdit
+				{ ...props }
+				attributes={ { ...props.attributes, ...boundAttributes } }
+				setAttributes={ _setAttributes }
+				context={ { ...context, ...updatedContext } }
+			/>
 		);
 	},
 	'withBlockBindingSupport'
-);
-
-/**
- * Filters a registered block's settings to enhance a block's `edit` component
- * to upgrade bound attributes.
- *
- * @param {WPBlockSettings} settings - Registered block settings.
- * @param {string}          name     - Block name.
- * @return {WPBlockSettings} Filtered block settings.
- */
-function shimAttributeSource( settings, name ) {
-	if ( ! canBindBlock( name ) ) {
-		return settings;
-	}
-
-	return {
-		...settings,
-		edit: withBlockBindingSupport( settings.edit ),
-	};
-}
-
-addFilter(
-	'blocks.registerBlockType',
-	'core/editor/custom-sources-backwards-compatibility/shim-attribute-source',
-	shimAttributeSource
 );

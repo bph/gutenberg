@@ -59,6 +59,7 @@ export const Default: StoryFn< typeof UnitControl > = DefaultTemplate.bind(
 );
 Default.args = {
 	label: 'Label',
+	__next40pxDefaultSize: true,
 };
 
 /**

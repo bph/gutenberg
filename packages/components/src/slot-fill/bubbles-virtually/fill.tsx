@@ -4,7 +4,6 @@
 import { useObservableValue } from '@wordpress/compose';
 import {
 	useContext,
-	useReducer,
 	useRef,
 	useEffect,
 	createPortal,
@@ -20,18 +19,15 @@ import type { FillComponentProps } from '../types';
 export default function Fill( { name, children }: FillComponentProps ) {
 	const registry = useContext( SlotFillContext );
 	const slot = useObservableValue( registry.slots, name );
-	const [ , rerender ] = useReducer( () => [], [] );
-	const ref = useRef( { rerender } );
+	const instanceRef = useRef( {} );
 
+	// We register fills so we can keep track of their existence.
+	// Slots can use the `useSlotFills` hook to know if there're already fills
+	// registered so they can choose to render themselves or not.
 	useEffect( () => {
-		// We register fills so we can keep track of their existence.
-		// Some Slot implementations need to know if there're already fills
-		// registered so they can choose to render themselves or not.
-		const refValue = ref.current;
-		registry.registerFill( name, refValue );
-		return () => {
-			registry.unregisterFill( name, refValue );
-		};
+		const instance = instanceRef.current;
+		registry.registerFill( name, instance );
+		return () => registry.unregisterFill( name, instance );
 	}, [ registry, name ] );
 
 	if ( ! slot || ! slot.ref.current ) {

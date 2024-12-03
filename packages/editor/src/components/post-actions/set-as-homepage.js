@@ -12,11 +12,20 @@ import {
 import { useDispatch, useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import { store as noticesStore } from '@wordpress/notices';
+import { decodeEntities } from '@wordpress/html-entities';
 
-/**
- * Internal dependencies
- */
-import { getItemTitle } from '../../dataviews/actions/utils';
+const getItemTitle = ( item ) => {
+	if ( typeof item.title === 'string' ) {
+		return decodeEntities( item.title );
+	}
+	if ( item.title && 'rendered' in item.title ) {
+		return decodeEntities( item.title.rendered );
+	}
+	if ( item.title && 'raw' in item.title ) {
+		return decodeEntities( item.title.raw );
+	}
+	return '';
+};
 
 const SetAsHomepageModal = ( { items, closeModal } ) => {
 	const [ item ] = items;

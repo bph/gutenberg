@@ -108,6 +108,7 @@ export { Heading as __experimentalHeading } from './heading';
 export { HStack as __experimentalHStack } from './h-stack';
 export { default as Icon } from './icon';
 export type { IconType } from './icon';
+export type { WPCompleter } from './autocomplete/types.ts';
 export { default as IconButton } from './button/deprecated';
 export {
 	ItemGroup as __experimentalItemGroup,

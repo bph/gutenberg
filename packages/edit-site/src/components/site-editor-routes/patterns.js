@@ -10,6 +10,6 @@ export const patternsRoute = {
 	areas: {
 		sidebar: <SidebarNavigationScreenPatterns backPath="/" />,
 		content: <PagePatterns />,
-		mobile: <SidebarNavigationScreenPatterns backPath="/" />,
+		mobile: <PagePatterns />,
 	},
 };

@@ -110,15 +110,16 @@ export type SlotFillProviderProps = {
 
 export type SlotRef = RefObject< HTMLElement >;
 export type Rerenderable = { rerender: () => void };
+export type FillInstance = {};
 
 export type SlotFillBubblesVirtuallyContext = {
 	slots: ObservableMap< SlotKey, { ref: SlotRef; fillProps: FillProps } >;
-	fills: ObservableMap< SlotKey, Rerenderable[] >;
+	fills: ObservableMap< SlotKey, FillInstance[] >;
 	registerSlot: ( name: SlotKey, ref: SlotRef, fillProps: FillProps ) => void;
 	unregisterSlot: ( name: SlotKey, ref: SlotRef ) => void;
 	updateSlot: ( name: SlotKey, ref: SlotRef, fillProps: FillProps ) => void;
-	registerFill: ( name: SlotKey, ref: Rerenderable ) => void;
-	unregisterFill: ( name: SlotKey, ref: Rerenderable ) => void;
+	registerFill: ( name: SlotKey, instance: FillInstance ) => void;
+	unregisterFill: ( name: SlotKey, instance: FillInstance ) => void;
 
 	/**
 	 * This helps the provider know if it's using the default context value or not.

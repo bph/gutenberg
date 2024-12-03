@@ -43,7 +43,9 @@ test.describe( 'Spacer', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 
 		await expect(
-			editor.canvas.locator( 'role=document[name="Block: Spacer"i]' )
+			editor.canvas.locator(
+				'role=document[name="Block: Spacer"i] >> css=.components-resizable-box__handle >> [tabindex]'
+			)
 		).toBeFocused();
 	} );
 } );

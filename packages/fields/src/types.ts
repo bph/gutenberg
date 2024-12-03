@@ -97,6 +97,9 @@ export interface PostType {
 		'page-attributes'?: boolean;
 		title?: boolean;
 		revisions?: boolean;
+		author?: string;
+		thumbnail?: string;
+		comments?: string;
 	};
 }
 

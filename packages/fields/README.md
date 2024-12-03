@@ -18,9 +18,22 @@ npm install @wordpress/fields --save
 
 Author field for BasePost.
 
+### BasePostWithEmbeddedAuthor
+
+Undocumented declaration.
+
 ### commentStatusField
 
 Comment status field for BasePost.
+
+### CreateTemplatePartModal
+
+A React component that renders a modal for creating a template part. The modal displays a title and the contents for creating the template part. This component should not live in this package, it should be moved to a dedicated package responsible for managing template.
+
+_Parameters_
+
+-   _props_ `Object`: The component props.
+-   _props.modalTitle_ `{ modalTitle: string; } & CreateTemplatePartModalContentsProps[ 'modalTitle' ]`:
 
 ### dateField
 
@@ -41,6 +54,14 @@ Undocumented declaration.
 ### duplicatePostNative
 
 Undocumented declaration.
+
+### duplicateTemplatePart
+
+This action is used to duplicate a template part.
+
+_Type_
+
+-   `Action< TemplatePart >`
 
 ### exportPattern
 
@@ -67,6 +88,10 @@ This field is used to display the post parent.
 This field is used to display the post password.
 
 ### permanentlyDeletePost
+
+Undocumented declaration.
+
+### PostType
 
 Undocumented declaration.
 

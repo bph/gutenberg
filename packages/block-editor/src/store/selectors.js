@@ -3041,9 +3041,7 @@ export const getBlockEditingMode = createRegistrySelector(
 				clientId = '';
 			}
 
-			const isNavMode =
-				select( preferencesStore )?.get( 'core', 'editorTool' ) ===
-				'navigation';
+			const isNavMode = isNavigationMode( state );
 
 			// If the editor is currently not in navigation mode, check if the clientId
 			// has an editing mode set in the regular derived map.

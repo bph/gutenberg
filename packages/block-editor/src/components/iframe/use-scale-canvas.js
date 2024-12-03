@@ -6,11 +6,11 @@ import { useReducedMotion, useResizeObserver } from '@wordpress/compose';
 
 /**
  * @typedef {Object} TransitionState
- * @property {number} scaleValue   Scale of the canvas.
- * @property {number} frameSize    Size of the frame/offset around the canvas.
- * @property {number} clientHeight ClientHeight of the iframe.
- * @property {number} scrollTop    ScrollTop of the iframe.
- * @property {number} scrollHeight ScrollHeight of the iframe.
+ * @property {number} scaleValue      Scale of the canvas.
+ * @property {number} frameSize       Size of the frame/offset around the canvas.
+ * @property {number} containerHeight containerHeight of the iframe.
+ * @property {number} scrollTop       ScrollTop of the iframe.
+ * @property {number} scrollHeight    ScrollHeight of the iframe.
  */
 
 /**
@@ -44,27 +44,28 @@ function calculateScale( {
  */
 function computeScrollTopNext( transitionFrom, transitionTo ) {
 	const {
-		clientHeight: prevClientHeight,
+		containerHeight: prevContainerHeight,
 		frameSize: prevFrameSize,
 		scaleValue: prevScale,
 		scrollTop,
 		scrollHeight,
 	} = transitionFrom;
-	const { clientHeight, frameSize, scaleValue } = transitionTo;
+	const { containerHeight, frameSize, scaleValue } = transitionTo;
 	// Step 0: Start with the current scrollTop.
 	let scrollTopNext = scrollTop;
 	// Step 1: Undo the effects of the previous scale and frame around the
 	// midpoint of the visible area.
 	scrollTopNext =
-		( scrollTopNext + prevClientHeight / 2 - prevFrameSize ) / prevScale -
-		prevClientHeight / 2;
+		( scrollTopNext + prevContainerHeight / 2 - prevFrameSize ) /
+			prevScale -
+		prevContainerHeight / 2;
 
 	// Step 2: Apply the new scale and frame around the midpoint of the
 	// visible area.
 	scrollTopNext =
-		( scrollTopNext + clientHeight / 2 ) * scaleValue +
+		( scrollTopNext + containerHeight / 2 ) * scaleValue +
 		frameSize -
-		clientHeight / 2;
+		containerHeight / 2;
 
 	// Step 3: Handle an edge case so that you scroll to the top of the
 	// iframe if the top of the iframe content is visible in the container.
@@ -78,7 +79,7 @@ function computeScrollTopNext( transitionFrom, transitionTo ) {
 	const maxScrollTop =
 		scrollHeight * ( scaleValue / prevScale ) +
 		frameSize * 2 -
-		clientHeight;
+		containerHeight;
 
 	// Step 4: Clamp the scrollTopNext between the minimum and maximum
 	// possible scrollTop positions. Round the value to avoid subpixel
@@ -146,8 +147,10 @@ export function useScaleCanvas( {
 } ) {
 	const [ contentResizeListener, { height: contentHeight } ] =
 		useResizeObserver();
-	const [ containerResizeListener, { width: containerWidth } ] =
-		useResizeObserver();
+	const [
+		containerResizeListener,
+		{ width: containerWidth, height: containerHeight },
+	] = useResizeObserver();
 
 	const initialContainerWidthRef = useRef( 0 );
 	const isZoomedOut = scale !== 1;
@@ -186,7 +189,7 @@ export function useScaleCanvas( {
 	const transitionFromRef = useRef( {
 		scaleValue,
 		frameSize,
-		clientHeight: 0,
+		containerHeight: 0,
 		scrollTop: 0,
 		scrollHeight: 0,
 	} );
@@ -198,7 +201,7 @@ export function useScaleCanvas( {
 	const transitionToRef = useRef( {
 		scaleValue,
 		frameSize,
-		clientHeight: 0,
+		containerHeight: 0,
 		scrollTop: 0,
 		scrollHeight: 0,
 	} );
@@ -280,6 +283,8 @@ export function useScaleCanvas( {
 		transitionFromRef.current = transitionToRef.current;
 	}, [ iframeDocument ] );
 
+	const previousIsZoomedOut = useRef( false );
+
 	/**
 	 * Runs when zoom out mode is toggled, and sets the startAnimation flag
 	 * so the animation will start when the next useEffect runs. We _only_
@@ -287,16 +292,22 @@ export function useScaleCanvas( {
 	 * changes due to the container resizing.
 	 */
 	useEffect( () => {
-		if ( ! iframeDocument ) {
-			return;
-		}
+		const trigger =
+			iframeDocument && previousIsZoomedOut.current !== isZoomedOut;
 
-		if ( isZoomedOut ) {
-			iframeDocument.documentElement.classList.add( 'is-zoomed-out' );
+		previousIsZoomedOut.current = isZoomedOut;
+
+		if ( ! trigger ) {
+			return;
 		}
 
 		startAnimationRef.current = true;
 
+		if ( ! isZoomedOut ) {
+			return;
+		}
+
+		iframeDocument.documentElement.classList.add( 'is-zoomed-out' );
 		return () => {
 			iframeDocument.documentElement.classList.remove( 'is-zoomed-out' );
 		};
@@ -325,40 +336,41 @@ export function useScaleCanvas( {
 			} );
 		}
 
-		// If we are not going to animate the transition, set the scale and frame size directly.
-		// If we are animating, these values will be set when the animation is finished.
-		// Example: Opening sidebars that reduce the scale of the canvas, but we don't want to
-		// animate the transition.
-		if ( ! startAnimationRef.current ) {
+		if ( scaleValue < 1 ) {
+			// If we are not going to animate the transition, set the scale and frame size directly.
+			// If we are animating, these values will be set when the animation is finished.
+			// Example: Opening sidebars that reduce the scale of the canvas, but we don't want to
+			// animate the transition.
+			if ( ! startAnimationRef.current ) {
+				iframeDocument.documentElement.style.setProperty(
+					'--wp-block-editor-iframe-zoom-out-scale',
+					scaleValue
+				);
+				iframeDocument.documentElement.style.setProperty(
+					'--wp-block-editor-iframe-zoom-out-frame-size',
+					`${ frameSize }px`
+				);
+			}
+
 			iframeDocument.documentElement.style.setProperty(
-				'--wp-block-editor-iframe-zoom-out-scale',
-				scaleValue
+				'--wp-block-editor-iframe-zoom-out-content-height',
+				`${ contentHeight }px`
+			);
+
+			iframeDocument.documentElement.style.setProperty(
+				'--wp-block-editor-iframe-zoom-out-inner-height',
+				`${ containerHeight }px`
+			);
+
+			iframeDocument.documentElement.style.setProperty(
+				'--wp-block-editor-iframe-zoom-out-container-width',
+				`${ containerWidth }px`
 			);
 			iframeDocument.documentElement.style.setProperty(
-				'--wp-block-editor-iframe-zoom-out-frame-size',
-				`${ frameSize }px`
+				'--wp-block-editor-iframe-zoom-out-scale-container-width',
+				`${ scaleContainerWidth }px`
 			);
 		}
-
-		iframeDocument.documentElement.style.setProperty(
-			'--wp-block-editor-iframe-zoom-out-content-height',
-			`${ contentHeight }px`
-		);
-
-		const clientHeight = iframeDocument.documentElement.clientHeight;
-		iframeDocument.documentElement.style.setProperty(
-			'--wp-block-editor-iframe-zoom-out-inner-height',
-			`${ clientHeight }px`
-		);
-
-		iframeDocument.documentElement.style.setProperty(
-			'--wp-block-editor-iframe-zoom-out-container-width',
-			`${ containerWidth }px`
-		);
-		iframeDocument.documentElement.style.setProperty(
-			'--wp-block-editor-iframe-zoom-out-scale-container-width',
-			`${ scaleContainerWidth }px`
-		);
 
 		/**
 		 * Handle the zoom out animation:
@@ -397,8 +409,9 @@ export function useScaleCanvas( {
 				// the iframe at this point when we're about to animate the zoom out.
 				// The iframe scrollTop, scrollHeight, and clientHeight will all be
 				// the most accurate.
-				transitionFromRef.current.clientHeight =
-					transitionFromRef.current.clientHeight ?? clientHeight;
+				transitionFromRef.current.containerHeight =
+					transitionFromRef.current.containerHeight ??
+					containerHeight; // Use containerHeight, as it's the previous container height value if none was set.
 				transitionFromRef.current.scrollTop =
 					iframeDocument.documentElement.scrollTop;
 				transitionFromRef.current.scrollHeight =
@@ -407,7 +420,8 @@ export function useScaleCanvas( {
 				transitionToRef.current = {
 					scaleValue,
 					frameSize,
-					clientHeight,
+					containerHeight:
+						iframeDocument.documentElement.clientHeight, // use clientHeight to get the actual height of the new container, as it will be the most up-to-date.
 				};
 				transitionToRef.current.scrollTop = computeScrollTopNext(
 					transitionFromRef.current,
@@ -424,27 +438,6 @@ export function useScaleCanvas( {
 				}
 			}
 		}
-
-		return () => {
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-scale'
-			);
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-frame-size'
-			);
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-content-height'
-			);
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-inner-height'
-			);
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-container-width'
-			);
-			iframeDocument.documentElement.style.removeProperty(
-				'--wp-block-editor-iframe-zoom-out-scale-container-width'
-			);
-		};
 	}, [
 		startZoomOutAnimation,
 		finishZoomOutAnimation,
@@ -455,6 +448,7 @@ export function useScaleCanvas( {
 		iframeDocument,
 		contentHeight,
 		containerWidth,
+		containerHeight,
 		maxContainerWidth,
 		scaleContainerWidth,
 	] );
