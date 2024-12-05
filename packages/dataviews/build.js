@@ -7,8 +7,15 @@ const esbuild = require( 'esbuild' );
 const wpExternals = {
 	name: 'wordpress-externals',
 	setup( build ) {
+		build.onResolve(
+			{ filter: /^@wordpress\/(data|hooks|i18n)(\/|$)/ },
+			( args ) => {
+				// Don't bundle WordPress signleton packages
+				return { path: args.path, external: true };
+			}
+		);
 		build.onResolve( { filter: /^@wordpress\// }, () => {
-			// Bundle wordpress packages
+			// Bundle WordPress packages
 			return { external: false };
 		} );
 		build.onResolve( { filter: /^\.[\.\/]/ }, () => {

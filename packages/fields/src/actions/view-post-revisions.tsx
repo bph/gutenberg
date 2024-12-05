@@ -44,4 +44,7 @@ const viewPostRevisions: Action< Post > = {
 	},
 };
 
+/**
+ * View post revisions action for Post.
+ */
 export default viewPostRevisions;

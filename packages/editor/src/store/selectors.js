@@ -206,7 +206,7 @@ export function getCurrentPostId( state ) {
  *
  * @param {Object} state Global application state.
  *
- * @return {string?} Template ID.
+ * @return {?string} Template ID.
  */
 export function getCurrentTemplateId( state ) {
 	return state.templateId;

@@ -18,8 +18,6 @@ import { useContext, useMemo } from '@wordpress/element';
  * Internal dependencies
  */
 import BlockContext from '../block-context';
-import { withBlockBindingsSupport } from './with-block-bindings-support';
-import { canBindBlock } from '../../utils/block-bindings';
 
 /**
  * Default value used for blocks which do not define their own context needs,
@@ -49,8 +47,6 @@ const Edit = ( props ) => {
 
 const EditWithFilters = withFilters( 'editor.BlockEdit' )( Edit );
 
-const EditWithFiltersAndBindings = withBlockBindingsSupport( EditWithFilters );
-
 const EditWithGeneratedProps = ( props ) => {
 	const { attributes = {}, name } = props;
 	const blockType = getBlockType( name );
@@ -71,12 +67,8 @@ const EditWithGeneratedProps = ( props ) => {
 		return null;
 	}
 
-	const EditComponent = canBindBlock( name )
-		? EditWithFiltersAndBindings
-		: EditWithFilters;
-
 	if ( blockType.apiVersion > 1 ) {
-		return <EditComponent { ...props } context={ context } />;
+		return <EditWithFilters { ...props } context={ context } />;
 	}
 
 	// Generate a class name for the block's editable form.
@@ -90,7 +82,7 @@ const EditWithGeneratedProps = ( props ) => {
 	);
 
 	return (
-		<EditComponent
+		<EditWithFilters
 			{ ...props }
 			context={ context }
 			className={ className }

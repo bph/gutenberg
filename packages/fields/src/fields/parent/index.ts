@@ -21,6 +21,6 @@ const parentField: Field< BasePost > = {
 };
 
 /**
- * This field is used to display the post parent.
+ * Parent field for BasePost.
  */
 export default parentField;

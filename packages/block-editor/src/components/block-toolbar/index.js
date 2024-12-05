@@ -124,6 +124,8 @@ export function PrivateBlockToolbar( {
 			( id ) => getTemplateLock( id ) === 'contentOnly'
 		);
 
+		const _isZoomOut = isZoomOut();
+
 		return {
 			blockClientId: selectedBlockClientId,
 			blockClientIds: selectedBlockClientIds,
@@ -132,7 +134,7 @@ export function PrivateBlockToolbar( {
 			shouldShowVisualToolbar: isValid && isVisual,
 			toolbarKey: `${ selectedBlockClientId }${ parentClientId }`,
 			showParentSelector:
-				! isZoomOut() &&
+				! _isZoomOut &&
 				parentBlockType &&
 				getBlockEditingMode( parentClientId ) !== 'disabled' &&
 				hasBlockSupport(
@@ -144,11 +146,11 @@ export function PrivateBlockToolbar( {
 			isUsingBindings: _isUsingBindings,
 			hasParentPattern: _hasParentPattern,
 			hasContentOnlyLocking: _hasTemplateLock,
-			showShuffleButton: isZoomOut(),
-			showSlots: ! isZoomOut(),
-			showGroupButtons: ! isZoomOut(),
-			showLockButtons: ! isZoomOut(),
-			showSwitchSectionStyleButton: isZoomOut(),
+			showShuffleButton: _isZoomOut,
+			showSlots: ! _isZoomOut,
+			showGroupButtons: ! _isZoomOut,
+			showLockButtons: ! _isZoomOut,
+			showSwitchSectionStyleButton: _isZoomOut,
 			hasFixedToolbar: getSettings().hasFixedToolbar,
 			isNavigationMode: _isNavigationMode(),
 		};

@@ -16,4 +16,7 @@ const orderField: Field< BasePost > = {
 	description: __( 'Determines the order of pages.' ),
 };
 
+/**
+ * Order field for BasePost.
+ */
 export default orderField;

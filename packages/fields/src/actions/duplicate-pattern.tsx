@@ -37,4 +37,7 @@ const duplicatePattern: Action< Pattern > = {
 	},
 };
 
+/**
+ * Duplicate action for Pattern.
+ */
 export default duplicatePattern;

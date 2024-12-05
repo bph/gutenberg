@@ -41,11 +41,7 @@ function gutenberg_test_block_bindings_registration() {
 		plugins_url( 'block-bindings/index.js', __FILE__ ),
 		array(
 			'wp-blocks',
-			'wp-block-editor',
-			'wp-components',
-			'wp-compose',
-			'wp-element',
-			'wp-hooks',
+			'wp-private-apis',
 		),
 		filemtime( plugin_dir_path( __FILE__ ) . 'block-bindings/index.js' ),
 		true

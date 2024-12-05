@@ -22,6 +22,7 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 			$route_for_post = rest_get_route_for_post( $post );
 			if ( $route_for_post ) {
 				$paths[] = add_query_arg( 'context', 'edit', $route_for_post );
+				$paths[] = add_query_arg( 'context', 'edit', '/wp/v2/types/' . $post->post_type );
 				if ( 'page' === $post->post_type ) {
 					$paths[] = add_query_arg(
 						'slug',

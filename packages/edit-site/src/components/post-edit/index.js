@@ -19,6 +19,8 @@ import { privateApis as editorPrivateApis } from '@wordpress/editor';
  */
 import Page from '../page';
 import { unlock } from '../../lock-unlock';
+import usePatternSettings from '../page-patterns/use-pattern-settings';
+import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 
 const { PostCardPanel, usePostFields } = unlock( editorPrivateApis );
 
@@ -85,6 +87,12 @@ function PostEditForm( { postType, postId } ) {
 				'slug',
 				'parent',
 				'comment_status',
+				{
+					label: __( 'Template' ),
+					labelPosition: 'side',
+					id: 'template',
+					layout: 'regular',
+				},
 			].filter(
 				( field ) =>
 					ids.length === 1 ||
@@ -123,6 +131,32 @@ function PostEditForm( { postType, postId } ) {
 		setMultiEdits( {} );
 	}, [ ids ] );
 
+	const { ExperimentalBlockEditorProvider } = unlock(
+		blockEditorPrivateApis
+	);
+	const settings = usePatternSettings();
+
+	/**
+	 * The template field depends on the block editor settings.
+	 * This is a workaround to ensure that the block editor settings are available.
+	 * For more information, see: https://github.com/WordPress/gutenberg/issues/67521
+	 */
+	const fieldsWithDependency = useMemo( () => {
+		return fields.map( ( field ) => {
+			if ( field.id === 'template' ) {
+				return {
+					...field,
+					Edit: ( data ) => (
+						<ExperimentalBlockEditorProvider settings={ settings }>
+							<field.Edit { ...data } />
+						</ExperimentalBlockEditorProvider>
+					),
+				};
+			}
+			return field;
+		} );
+	}, [ fields, settings ] );
+
 	return (
 		<VStack spacing={ 4 }>
 			{ ids.length === 1 && (
@@ -130,7 +164,7 @@ function PostEditForm( { postType, postId } ) {
 			) }
 			<DataForm
 				data={ ids.length === 1 ? record : multiEdits }
-				fields={ fields }
+				fields={ fieldsWithDependency }
 				form={ form }
 				onChange={ onChange }
 			/>

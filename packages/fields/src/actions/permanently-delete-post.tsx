@@ -115,4 +115,7 @@ const permanentlyDeletePost: Action< PostWithPermissions > = {
 	},
 };
 
+/**
+ * Delete action for PostWithPermissions.
+ */
 export default permanentlyDeletePost;

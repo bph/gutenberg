@@ -34,6 +34,7 @@ import {
 	statusField,
 	authorField,
 	titleField,
+	templateField,
 } from '@wordpress/fields';
 
 export function registerEntityAction< Item >(
@@ -161,7 +162,7 @@ export const registerPostTypeSchema =
 
 		const fields = [
 			postTypeConfig.supports?.thumbnail &&
-				currentTheme?.[ 'theme-supports' ]?.[ 'post-thumbnails' ] &&
+				currentTheme?.theme_supports?.[ 'post-thumbnails' ] &&
 				featuredImageField,
 			titleField,
 			postTypeConfig.supports?.author && authorField,
@@ -171,6 +172,7 @@ export const registerPostTypeSchema =
 			postTypeConfig.supports?.[ 'page-attributes' ] && parentField,
 			postTypeConfig.supports?.comments && commentStatusField,
 			passwordField,
+			templateField,
 		].filter( Boolean );
 
 		registry.batch( () => {

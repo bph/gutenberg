@@ -10,6 +10,7 @@
 	&.zoom-out-animation {
 		$scroll-top: var(--wp-block-editor-iframe-zoom-out-scroll-top, 0);
 		$scroll-top-next: var(--wp-block-editor-iframe-zoom-out-scroll-top-next, 0);
+		$overflow-behavior: var(--wp-block-editor-iframe-zoom-out-overflow-behavior, scroll);
 
 		position: fixed;
 		left: 0;
@@ -18,7 +19,7 @@
 		bottom: 0;
 		// Force preserving a scrollbar gutter as scrollbar-gutter isn't supported in all browsers yet,
 		// and removing the scrollbar causes the content to shift.
-		overflow-y: scroll;
+		overflow-y: $overflow-behavior;
 	}
 
 	&.is-zoomed-out {

@@ -13,9 +13,9 @@ import { store as editPostStore } from '../../store';
 export default function MetaBoxes( { location } ) {
 	const metaBoxes = useSelect(
 		( select ) =>
-			select( editPostStore ).getMetaBoxesPerLocation[ location ]
+			select( editPostStore ).getMetaBoxesPerLocation( location ),
+		[ location ]
 	);
-
 	return (
 		<>
 			{ ( metaBoxes ?? [] ).map( ( { id } ) => (

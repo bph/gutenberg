@@ -203,4 +203,7 @@ const deletePostAction: Action< Template | TemplatePart | Pattern > = {
 	},
 };
 
+/**
+ * Delete action for Templates, Patterns and Template Parts.
+ */
 export default deletePostAction;

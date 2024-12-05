@@ -37,8 +37,8 @@ const duplicatePost: Action< BasePost > = {
 		const [ item, setItem ] = useState< BasePost >( {
 			...items[ 0 ],
 			title: sprintf(
-				/* translators: %s: Existing template title */
-				_x( '%s (Copy)', 'template' ),
+				/* translators: %s: Existing post title */
+				_x( '%s (Copy)', 'post' ),
 				getItemTitle( items[ 0 ] )
 			),
 		} );
@@ -104,7 +104,7 @@ const duplicatePost: Action< BasePost > = {
 
 				createSuccessNotice(
 					sprintf(
-						// translators: %s: Title of the created post or template, e.g: "Hello world".
+						// translators: %s: Title of the created post, e.g: "Hello world".
 						__( '"%s" successfully created.' ),
 						decodeEntities( newItem.title?.rendered || item.title )
 					),
@@ -171,4 +171,7 @@ const duplicatePost: Action< BasePost > = {
 	},
 };
 
+/**
+ * Duplicate action for BasePost.
+ */
 export default duplicatePost;

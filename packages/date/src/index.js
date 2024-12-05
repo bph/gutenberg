@@ -588,7 +588,7 @@ export function isInTheFuture( dateValue ) {
 /**
  * Create and return a JavaScript Date Object from a date string in the WP timezone.
  *
- * @param {string?} dateString Date formatted in the WP timezone.
+ * @param {?string} dateString Date formatted in the WP timezone.
  *
  * @return {Date} Date
  */

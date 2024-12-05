@@ -195,4 +195,7 @@ const trashPost: Action< PostWithPermissions > = {
 	},
 };
 
+/**
+ * Trash action for PostWithPermissions.
+ */
 export default trashPost;

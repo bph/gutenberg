@@ -30,6 +30,7 @@ import {
 import { Spacer } from '../spacer';
 import { useDeprecated36pxDefaultSizeProp } from '../utils/use-deprecated-props';
 import { withIgnoreIMEEvents } from '../utils/with-ignore-ime-events';
+import { maybeWarnDeprecated36pxSize } from '../utils/deprecated-36px-size';
 
 const identity = ( value: string ) => value;
 
@@ -85,6 +86,12 @@ export function FormTokenField( props: FormTokenFieldProps ) {
 			hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version.',
 		} );
 	}
+
+	maybeWarnDeprecated36pxSize( {
+		componentName: 'FormTokenField',
+		size: undefined,
+		__next40pxDefaultSize,
+	} );
 
 	const instanceId = useInstanceId( FormTokenField );
 

@@ -1,10 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { store as noticesStore } from '@wordpress/notices';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { __, sprintf } from '@wordpress/i18n';
-import { PluginArea } from '@wordpress/plugins';
+import { useSelect } from '@wordpress/data';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
 import { useCallback } from '@wordpress/element';
 
@@ -33,21 +30,9 @@ function AppLayout() {
 
 export default function App() {
 	useRegisterSiteEditorRoutes();
-	const { createErrorNotice } = useDispatch( noticesStore );
 	const routes = useSelect( ( select ) => {
 		return unlock( select( editSiteStore ) ).getRoutes();
 	}, [] );
-	function onPluginAreaError( name ) {
-		createErrorNotice(
-			sprintf(
-				/* translators: %s: plugin name */
-				__(
-					'The "%s" plugin has encountered an error and cannot be rendered.'
-				),
-				name
-			)
-		);
-	}
 	const beforeNavigate = useCallback( ( { path, query } ) => {
 		if ( ! isPreviewingTheme() ) {
 			return { path, query };
@@ -72,7 +57,6 @@ export default function App() {
 			beforeNavigate={ beforeNavigate }
 		>
 			<AppLayout />
-			<PluginArea onError={ onPluginAreaError } />
 		</RouterProvider>
 	);
 }

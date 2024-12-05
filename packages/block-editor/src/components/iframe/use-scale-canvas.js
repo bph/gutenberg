@@ -36,6 +36,21 @@ function calculateScale( {
 }
 
 /**
+ * Compute the next scrollHeight based on the transition states.
+ *
+ * @param {TransitionState} transitionFrom Starting point of the transition
+ * @param {TransitionState} transitionTo   Ending state of the transition
+ * @return {number} Next scrollHeight based on scale and frame value changes.
+ */
+function computeScrollHeightNext( transitionFrom, transitionTo ) {
+	const { scaleValue: prevScale, scrollHeight: prevScrollHeight } =
+		transitionFrom;
+	const { frameSize, scaleValue } = transitionTo;
+
+	return prevScrollHeight * ( scaleValue / prevScale ) + frameSize * 2;
+}
+
+/**
  * Compute the next scrollTop position after scaling the iframe content.
  *
  * @param {TransitionState} transitionFrom Starting point of the transition
@@ -47,12 +62,12 @@ function computeScrollTopNext( transitionFrom, transitionTo ) {
 		containerHeight: prevContainerHeight,
 		frameSize: prevFrameSize,
 		scaleValue: prevScale,
-		scrollTop,
-		scrollHeight,
+		scrollTop: prevScrollTop,
 	} = transitionFrom;
-	const { containerHeight, frameSize, scaleValue } = transitionTo;
+	const { containerHeight, frameSize, scaleValue, scrollHeight } =
+		transitionTo;
 	// Step 0: Start with the current scrollTop.
-	let scrollTopNext = scrollTop;
+	let scrollTopNext = prevScrollTop;
 	// Step 1: Undo the effects of the previous scale and frame around the
 	// midpoint of the visible area.
 	scrollTopNext =
@@ -71,15 +86,12 @@ function computeScrollTopNext( transitionFrom, transitionTo ) {
 	// iframe if the top of the iframe content is visible in the container.
 	// The same edge case for the bottom is skipped because changing content
 	// makes calculating it impossible.
-	scrollTopNext = scrollTop <= prevFrameSize ? 0 : scrollTopNext;
+	scrollTopNext = prevScrollTop <= prevFrameSize ? 0 : scrollTopNext;
 
 	// This is the scrollTop value if you are scrolled to the bottom of the
 	// iframe. We can't just let the browser handle it because we need to
 	// animate the scaling.
-	const maxScrollTop =
-		scrollHeight * ( scaleValue / prevScale ) +
-		frameSize * 2 -
-		containerHeight;
+	const maxScrollTop = scrollHeight - containerHeight;
 
 	// Step 4: Clamp the scrollTopNext between the minimum and maximum
 	// possible scrollTop positions. Round the value to avoid subpixel
@@ -226,6 +238,15 @@ export function useScaleCanvas( {
 			`${ scrollTopNext }px`
 		);
 
+		// If the container has a scrolllbar, force a scrollbar to prevent the content from shifting while animating.
+		iframeDocument.documentElement.style.setProperty(
+			'--wp-block-editor-iframe-zoom-out-overflow-behavior',
+			transitionFromRef.current.scrollHeight ===
+				transitionFromRef.current.containerHeight
+				? 'auto'
+				: 'scroll'
+		);
+
 		iframeDocument.documentElement.classList.add( 'zoom-out-animation' );
 
 		return iframeDocument.documentElement.animate(
@@ -277,6 +298,9 @@ export function useScaleCanvas( {
 		);
 		iframeDocument.documentElement.style.removeProperty(
 			'--wp-block-editor-iframe-zoom-out-scroll-top-next'
+		);
+		iframeDocument.documentElement.style.removeProperty(
+			'--wp-block-editor-iframe-zoom-out-overflow-behavior'
 		);
 
 		// Update previous values.
@@ -409,20 +433,24 @@ export function useScaleCanvas( {
 				// the iframe at this point when we're about to animate the zoom out.
 				// The iframe scrollTop, scrollHeight, and clientHeight will all be
 				// the most accurate.
-				transitionFromRef.current.containerHeight =
-					transitionFromRef.current.containerHeight ??
-					containerHeight; // Use containerHeight, as it's the previous container height value if none was set.
 				transitionFromRef.current.scrollTop =
 					iframeDocument.documentElement.scrollTop;
 				transitionFromRef.current.scrollHeight =
 					iframeDocument.documentElement.scrollHeight;
+				// Use containerHeight, as it's the previous container height before the zoom out animation starts.
+				transitionFromRef.current.containerHeight = containerHeight;
 
 				transitionToRef.current = {
 					scaleValue,
 					frameSize,
 					containerHeight:
-						iframeDocument.documentElement.clientHeight, // use clientHeight to get the actual height of the new container, as it will be the most up-to-date.
+						iframeDocument.documentElement.clientHeight, // use clientHeight to get the actual height of the new container after zoom state changes have rendered, as it will be the most up-to-date.
 				};
+
+				transitionToRef.current.scrollHeight = computeScrollHeightNext(
+					transitionFromRef.current,
+					transitionToRef.current
+				);
 				transitionToRef.current.scrollTop = computeScrollTopNext(
 					transitionFromRef.current,
 					transitionToRef.current

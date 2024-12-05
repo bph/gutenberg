@@ -21,7 +21,11 @@ import { useState } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import FormTokenField from '../';
+import _FormTokenField from '../';
+
+const FormTokenField = ( props: ComponentProps< typeof _FormTokenField > ) => (
+	<_FormTokenField __next40pxDefaultSize { ...props } />
+);
 
 const FormTokenFieldWithState = ( {
 	onChange,

@@ -122,4 +122,7 @@ const reorderPage: Action< BasePost > = {
 	RenderModal: ReorderModal,
 };
 
+/**
+ * Reorder action for BasePost.
+ */
 export default reorderPage;

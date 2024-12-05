@@ -253,8 +253,8 @@ _Parameters_
 
 -   _slug_ `string`: Theme slug.
 -   _settings_ `Object?`: Optional settings object.
--   _settings.newThemeSlug_ `string?`: A theme to switch to if the theme to delete is active. Required if the theme to delete is active.
--   _settings.newThemeSearchTerm_ `string?`: A search term to use if the new theme is not findable by its slug.
+-   _settings.newThemeSlug_ `?string`: A theme to switch to if the theme to delete is active. Required if the theme to delete is active.
+-   _settings.newThemeSearchTerm_ `?string`: A search term to use if the new theme is not findable by its slug.
 
 ### deleteUser
 
@@ -479,7 +479,7 @@ Installs a plugin from the WP.org repository.
 _Parameters_
 
 -   _slug_ `string`: Plugin slug.
--   _searchTerm_ `string?`: If the plugin is not findable by its slug use an alternative term to search.
+-   _searchTerm_ `?string`: If the plugin is not findable by its slug use an alternative term to search.
 
 ### installTheme
 
@@ -489,7 +489,7 @@ _Parameters_
 
 -   _slug_ `string`: Theme slug.
 -   _settings_ `Object?`: Optional settings object.
--   _settings.searchTerm_ `string?`: Search term to use if the theme is not findable by its slug.
+-   _settings.searchTerm_ `?string`: Search term to use if the theme is not findable by its slug.
 
 ### isCurrentURL
 

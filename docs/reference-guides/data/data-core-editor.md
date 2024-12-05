@@ -272,7 +272,7 @@ _Parameters_
 
 _Returns_
 
--   `string?`: Template ID.
+-   `?string`: Template ID.
 
 ### getDeviceType
 

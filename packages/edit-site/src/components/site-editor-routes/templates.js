@@ -1,28 +1,9 @@
 /**
- * WordPress dependencies
- */
-import { privateApis as routerPrivateApis } from '@wordpress/router';
-
-/**
  * Internal dependencies
  */
 import Editor from '../editor';
 import SidebarNavigationScreenTemplatesBrowse from '../sidebar-navigation-screen-templates-browse';
-import { unlock } from '../../lock-unlock';
 import PageTemplates from '../page-templates';
-
-const { useLocation } = unlock( routerPrivateApis );
-
-function MobileTemplatesView() {
-	const { query = {} } = useLocation();
-	const { canvas = 'view' } = query;
-
-	return canvas === 'edit' ? (
-		<Editor />
-	) : (
-		<SidebarNavigationScreenTemplatesBrowse backPath="/" />
-	);
-}
 
 export const templatesRoute = {
 	name: 'templates',
@@ -34,7 +15,7 @@ export const templatesRoute = {
 			const isListView = query.layout === 'list';
 			return isListView ? <Editor /> : undefined;
 		},
-		mobile: <MobileTemplatesView />,
+		mobile: <PageTemplates />,
 	},
 	widths: {
 		content( { query } ) {

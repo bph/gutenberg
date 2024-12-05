@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const webpack = require( 'webpack' );
 const browserslist = require( 'browserslist' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
-const { basename, dirname, resolve } = require( 'path' );
+const { basename, dirname, relative, resolve, sep } = require( 'path' );
 const ReactRefreshWebpackPlugin = require( '@pmmmwh/react-refresh-webpack-plugin' );
 const RtlCssPlugin = require( 'rtlcss-webpack-plugin' );
 const TerserPlugin = require( 'terser-webpack-plugin' );
@@ -115,6 +115,7 @@ const baseConfig = {
 	optimization: {
 		// Only concatenate modules in production, when not analyzing bundles.
 		concatenateModules: isProduction && ! process.env.WP_BUNDLE_ANALYZER,
+		runtimeChunk: hasReactFastRefresh && 'single',
 		splitChunks: {
 			cacheGroups: {
 				style: {
@@ -339,6 +340,32 @@ const scriptConfig = {
 									}
 								}
 							} );
+
+							if ( hasReactFastRefresh ) {
+								// Prepends the file reference to the shared runtime chunk to every script type defined for the block.
+								const runtimePath = relative(
+									dirname( absoluteFrom ),
+									fromProjectRoot(
+										getWordPressSrcDirectory() +
+											sep +
+											'runtime.js'
+									)
+								);
+								const fields =
+									getBlockJsonScriptFields( blockJson );
+								for ( const [ fieldName ] of Object.entries(
+									fields
+								) ) {
+									blockJson[ fieldName ] = [
+										`file:${ runtimePath }`,
+										...( Array.isArray(
+											blockJson[ fieldName ]
+										)
+											? blockJson[ fieldName ]
+											: [ blockJson[ fieldName ] ] ),
+									];
+								}
+							}
 
 							return JSON.stringify( blockJson, null, 2 );
 						}

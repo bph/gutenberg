@@ -18,7 +18,7 @@ import {
 	useResizeObserver,
 	usePrevious,
 } from '@wordpress/compose';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { CommandMenu } from '@wordpress/commands';
 import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
@@ -29,6 +29,9 @@ import {
 } from '@wordpress/editor';
 import { privateApis as coreCommandsPrivateApis } from '@wordpress/core-commands';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
+import { PluginArea } from '@wordpress/plugins';
+import { store as noticesStore } from '@wordpress/notices';
+import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -235,9 +238,24 @@ function Layout() {
 }
 
 export default function LayoutWithGlobalStylesProvider( props ) {
+	const { createErrorNotice } = useDispatch( noticesStore );
+	function onPluginAreaError( name ) {
+		createErrorNotice(
+			sprintf(
+				/* translators: %s: plugin name */
+				__(
+					'The "%s" plugin has encountered an error and cannot be rendered.'
+				),
+				name
+			)
+		);
+	}
+
 	return (
 		<SlotFillProvider>
 			<GlobalStylesProvider>
+				{ /** This needs to be within the SlotFillProvider */ }
+				<PluginArea onError={ onPluginAreaError } />
 				<Layout { ...props } />
 			</GlobalStylesProvider>
 		</SlotFillProvider>

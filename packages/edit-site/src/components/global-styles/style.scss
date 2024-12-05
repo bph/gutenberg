@@ -226,6 +226,10 @@
 	// The &#{&} is a workaround for the specificity of the Card component.
 	&#{&},
 	&#{&} .edit-site-global-styles-screen-root__active-style-tile-preview {
+		box-shadow: none;
 		border-radius: $radius-small;
+		.block-editor-iframe__container {
+			border: 1px solid $gray-200;
+		}
 	}
 }

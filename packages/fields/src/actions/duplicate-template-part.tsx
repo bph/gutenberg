@@ -68,5 +68,7 @@ const duplicateTemplatePart: Action< TemplatePart > = {
 		);
 	},
 };
-
+/**
+ * Duplicate action for TemplatePart.
+ */
 export default duplicateTemplatePart;

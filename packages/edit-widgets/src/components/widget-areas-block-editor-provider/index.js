@@ -94,6 +94,7 @@ export default function WidgetAreasBlockEditorProvider( {
 			__experimentalSetIsInserterOpened: setIsInserterOpened,
 			pageOnFront,
 			pageForPosts,
+			editorTool: 'edit',
 		};
 	}, [
 		hasUploadPermissions,

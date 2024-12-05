@@ -131,4 +131,7 @@ const restorePost: Action< PostWithPermissions > = {
 	},
 };
 
+/**
+ * Restore action for PostWithPermissions.
+ */
 export default restorePost;

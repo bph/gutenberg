@@ -60,7 +60,7 @@ export default function useResizeCanvas( deviceType ) {
 					marginLeft: marginHorizontal,
 					marginRight: marginHorizontal,
 					height,
-					overflowY: 'auto',
+					maxWidth: '100%',
 				};
 			default:
 				return {

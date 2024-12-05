@@ -20,4 +20,7 @@ const featuredImageField: Field< BasePost > = {
 	enableSorting: false,
 };
 
+/**
+ * Featured Image field for BasePost.
+ */
 export default featuredImageField;

@@ -13,8 +13,8 @@ import { isThemeInstalled } from './theme-installed';
  *
  * @param {string}  slug                        Theme slug.
  * @param {Object?} settings                    Optional settings object.
- * @param {string?} settings.newThemeSlug       A theme to switch to if the theme to delete is active. Required if the theme to delete is active.
- * @param {string?} settings.newThemeSearchTerm A search term to use if the new theme is not findable by its slug.
+ * @param {?string} settings.newThemeSlug       A theme to switch to if the theme to delete is active. Required if the theme to delete is active.
+ * @param {?string} settings.newThemeSearchTerm A search term to use if the new theme is not findable by its slug.
  */
 export async function deleteTheme(
 	slug,

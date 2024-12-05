@@ -1457,16 +1457,16 @@ _Returns_
 
 ### PostTrashCheck
 
-Wrapper component that renders its children only if the post can trashed.
+Wrapper component that renders its children only if the post can be trashed.
 
 _Parameters_
 
--   _props_ `Object`: - The component props.
--   _props.children_ `React.ReactNode`: - The child components to render.
+-   _props_ `Object`: The component props.
+-   _props.children_ `React.ReactElement`: The child components.
 
 _Returns_
 
--   `React.ReactNode`: The rendered child components or null if the post can not trashed.
+-   `React.ReactElement | null`: The rendered child components or null if the post can't be trashed.
 
 ### PostTypeSupportCheck
 
@@ -1762,7 +1762,7 @@ A user mentions completer.
 
 _Type_
 
--   `WPCompleter`
+-   `Object`
 
 ### VisualEditorGlobalKeyboardShortcuts
 

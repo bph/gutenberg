@@ -139,4 +139,7 @@ const renamePost: Action< PostWithPermissions > = {
 	},
 };
 
+/**
+ * Rename action for PostWithPermissions.
+ */
 export default renamePost;

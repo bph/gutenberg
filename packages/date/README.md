@@ -75,7 +75,7 @@ Create and return a JavaScript Date Object from a date string in the WP timezone
 
 _Parameters_
 
--   _dateString_ `string?`: Date formatted in the WP timezone.
+-   _dateString_ `?string`: Date formatted in the WP timezone.
 
 _Returns_
 

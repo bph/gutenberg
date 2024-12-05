@@ -6,13 +6,7 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import {
-	memo,
-	useCallback,
-	RawHTML,
-	useContext,
-	useMemo,
-} from '@wordpress/element';
+import { memo, RawHTML, useContext, useMemo } from '@wordpress/element';
 import {
 	getBlockType,
 	getSaveContent,
@@ -28,7 +22,7 @@ import {
 	store as blocksStore,
 } from '@wordpress/blocks';
 import { withFilters } from '@wordpress/components';
-import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
+import { withDispatch, useSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { safeHTML } from '@wordpress/dom';
 
@@ -103,6 +97,7 @@ function BlockListBlock( {
 	wrapperProps,
 	setAttributes,
 	onReplace,
+	onRemove,
 	onInsertBlocksAfter,
 	onMerge,
 	toggleSelection,
@@ -113,11 +108,6 @@ function BlockListBlock( {
 		themeSupportsLayout,
 		...context
 	} = useContext( PrivateBlockContext );
-	const { removeBlock } = useDispatch( blockEditorStore );
-	const onRemove = useCallback(
-		() => removeBlock( clientId ),
-		[ clientId, removeBlock ]
-	);
 
 	const parentLayout = useLayout() || {};
 
@@ -536,6 +526,9 @@ const applyWithDispatch = withDispatch( ( dispatch, ownProps, registry ) => {
 				indexToSelect,
 				initialPosition
 			);
+		},
+		onRemove() {
+			removeBlock( ownProps.clientId );
 		},
 		toggleSelection( selectionEnabled ) {
 			toggleSelection( selectionEnabled );

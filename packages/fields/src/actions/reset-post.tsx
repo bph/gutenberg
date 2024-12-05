@@ -292,4 +292,7 @@ const resetPostAction: Action< Template | TemplatePart > = {
 	},
 };
 
+/**
+ * Reset action for Template and TemplatePart.
+ */
 export default resetPostAction;

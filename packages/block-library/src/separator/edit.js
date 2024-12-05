@@ -6,20 +6,28 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import { HorizontalRule } from '@wordpress/components';
+import { HorizontalRule, SelectControl } from '@wordpress/components';
 import {
 	useBlockProps,
 	getColorClassName,
 	__experimentalUseColorProps as useColorProps,
+	InspectorControls,
 } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import useDeprecatedOpacity from './use-deprecated-opacity';
 
+const htmlElementMessages = {
+	div: __(
+		'The <div> element should only be used if the separator is a design element that should not be announced.'
+	),
+};
+
 export default function SeparatorEdit( { attributes, setAttributes } ) {
-	const { backgroundColor, opacity, style } = attributes;
+	const { backgroundColor, opacity, style, tagName } = attributes;
 	const colorProps = useColorProps( attributes );
 	const currentColor = colorProps?.style?.backgroundColor;
 	const hasCustomColor = !! style?.color?.background;
@@ -44,10 +52,27 @@ export default function SeparatorEdit( { attributes, setAttributes } ) {
 		color: currentColor,
 		backgroundColor: currentColor,
 	};
+	const Wrapper = tagName === 'hr' ? HorizontalRule : tagName;
 
 	return (
 		<>
-			<HorizontalRule
+			<InspectorControls group="advanced">
+				<SelectControl
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+					label={ __( 'HTML element' ) }
+					options={ [
+						{ label: __( 'Default (<hr>)' ), value: 'hr' },
+						{ label: '<div>', value: 'div' },
+					] }
+					value={ tagName }
+					onChange={ ( value ) =>
+						setAttributes( { tagName: value } )
+					}
+					help={ htmlElementMessages[ tagName ] }
+				/>
+			</InspectorControls>
+			<Wrapper
 				{ ...useBlockProps( {
 					className,
 					style: hasCustomColor ? styles : undefined,

@@ -19,4 +19,7 @@ const slugField: Field< BasePost > = {
 	render: SlugView,
 };
 
+/**
+ * Slug field for BasePost.
+ */
 export default slugField;

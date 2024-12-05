@@ -60,11 +60,6 @@ module.exports = {
 		name: '@storybook/react-webpack5',
 		options: {},
 	},
-	features: {
-		babelModeV7: true,
-		emotionAlias: false,
-		storyStoreV7: true,
-	},
 	docs: {
 		autodocs: true,
 	},

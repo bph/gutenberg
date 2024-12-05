@@ -385,6 +385,7 @@ function VisualEditor( {
 					'has-padding': isFocusedEntity || enableResizing,
 					'is-resizable': enableResizing,
 					'is-iframed': ! disableIframe,
+					'is-scrollable': disableIframe || deviceType !== 'Desktop',
 				}
 			) }
 		>

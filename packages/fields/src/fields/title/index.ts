@@ -21,4 +21,7 @@ const titleField: Field< BasePost > = {
 	enableHiding: false,
 };
 
+/**
+ * Title field for BasePost.
+ */
 export default titleField;

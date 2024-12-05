@@ -27,6 +27,7 @@
 		{ "path": "../private-apis" },
 		{ "path": "../router" },
 		{ "path": "../url" },
+		{ "path": "../block-editor" },
 		{ "path": "../warning" }
 	],
 	"include": [ "src" ]
