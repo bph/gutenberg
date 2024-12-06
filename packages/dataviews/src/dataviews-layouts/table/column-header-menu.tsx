@@ -27,7 +27,6 @@ import type {
 	ViewTable as ViewTableType,
 	Operator,
 } from '../../types';
-import { getVisibleFieldIds } from '../index';
 
 const { Menu } = unlock( componentsPrivateApis );
 
@@ -38,6 +37,7 @@ interface HeaderMenuProps< Item > {
 	onChangeView: ( view: ViewTableType ) => void;
 	onHide: ( field: NormalizedField< Item > ) => void;
 	setOpenedFilter: ( fieldId: string ) => void;
+	canMove?: boolean;
 }
 
 function WithMenuSeparators( { children }: { children: ReactNode } ) {
@@ -59,46 +59,38 @@ const _HeaderMenu = forwardRef( function HeaderMenu< Item >(
 		onChangeView,
 		onHide,
 		setOpenedFilter,
+		canMove = true,
 	}: HeaderMenuProps< Item >,
 	ref: Ref< HTMLButtonElement >
 ) {
-	const visibleFieldIds = getVisibleFieldIds( view, fields );
+	const visibleFieldIds = view.fields ?? [];
 	const index = visibleFieldIds?.indexOf( fieldId ) as number;
 	const isSorted = view.sort?.field === fieldId;
 	let isHidable = false;
 	let isSortable = false;
 	let canAddFilter = false;
-	let header;
 	let operators: Operator[] = [];
-
-	const combinedField = view.layout?.combinedFields?.find(
-		( f ) => f.id === fieldId
-	);
 	const field = fields.find( ( f ) => f.id === fieldId );
 
-	if ( ! combinedField ) {
-		if ( ! field ) {
-			// No combined or regular field found.
-			return null;
-		}
-
-		isHidable = field.enableHiding !== false;
-		isSortable = field.enableSorting !== false;
-		header = field.header;
-
-		operators = sanitizeOperators( field );
-		// Filter can be added:
-		// 1. If the field is not already part of a view's filters.
-		// 2. If the field meets the type and operator requirements.
-		// 3. If it's not primary. If it is, it should be already visible.
-		canAddFilter =
-			! view.filters?.some( ( _filter ) => fieldId === _filter.field ) &&
-			!! field.elements?.length &&
-			!! operators.length &&
-			! field.filterBy?.isPrimary;
-	} else {
-		header = combinedField.header || combinedField.label;
+	if ( ! field ) {
+		// No combined or regular field found.
+		return null;
 	}
+
+	isHidable = field.enableHiding !== false;
+	isSortable = field.enableSorting !== false;
+	const header = field.header;
+
+	operators = sanitizeOperators( field );
+	// Filter can be added:
+	// 1. If the field is not already part of a view's filters.
+	// 2. If the field meets the type and operator requirements.
+	// 3. If it's not primary. If it is, it should be already visible.
+	canAddFilter =
+		! view.filters?.some( ( _filter ) => fieldId === _filter.field ) &&
+		!! field.elements?.length &&
+		!! operators.length &&
+		! field.filterBy?.isPrimary;
 
 	return (
 		<Menu
@@ -188,64 +180,80 @@ const _HeaderMenu = forwardRef( function HeaderMenu< Item >(
 						</Menu.Item>
 					</Menu.Group>
 				) }
-				<Menu.Group>
-					<Menu.Item
-						prefix={ <Icon icon={ arrowLeft } /> }
-						disabled={ index < 1 }
-						onClick={ () => {
-							onChangeView( {
-								...view,
-								fields: [
-									...( visibleFieldIds.slice(
-										0,
-										index - 1
-									) ?? [] ),
-									fieldId,
-									visibleFieldIds[ index - 1 ],
-									...visibleFieldIds.slice( index + 1 ),
-								],
-							} );
-						} }
-					>
-						<Menu.ItemLabel>{ __( 'Move left' ) }</Menu.ItemLabel>
-					</Menu.Item>
-					<Menu.Item
-						prefix={ <Icon icon={ arrowRight } /> }
-						disabled={ index >= visibleFieldIds.length - 1 }
-						onClick={ () => {
-							onChangeView( {
-								...view,
-								fields: [
-									...( visibleFieldIds.slice( 0, index ) ??
-										[] ),
-									visibleFieldIds[ index + 1 ],
-									fieldId,
-									...visibleFieldIds.slice( index + 2 ),
-								],
-							} );
-						} }
-					>
-						<Menu.ItemLabel>{ __( 'Move right' ) }</Menu.ItemLabel>
-					</Menu.Item>
-					{ isHidable && field && (
-						<Menu.Item
-							prefix={ <Icon icon={ unseen } /> }
-							onClick={ () => {
-								onHide( field );
-								onChangeView( {
-									...view,
-									fields: visibleFieldIds.filter(
-										( id ) => id !== fieldId
-									),
-								} );
-							} }
-						>
-							<Menu.ItemLabel>
-								{ __( 'Hide column' ) }
-							</Menu.ItemLabel>
-						</Menu.Item>
-					) }
-				</Menu.Group>
+				{ ( canMove || isHidable ) && field && (
+					<Menu.Group>
+						{ canMove && (
+							<Menu.Item
+								prefix={ <Icon icon={ arrowLeft } /> }
+								disabled={ index < 1 }
+								onClick={ () => {
+									onChangeView( {
+										...view,
+										fields: [
+											...( visibleFieldIds.slice(
+												0,
+												index - 1
+											) ?? [] ),
+											fieldId,
+											visibleFieldIds[ index - 1 ],
+											...visibleFieldIds.slice(
+												index + 1
+											),
+										],
+									} );
+								} }
+							>
+								<Menu.ItemLabel>
+									{ __( 'Move left' ) }
+								</Menu.ItemLabel>
+							</Menu.Item>
+						) }
+						{ canMove && (
+							<Menu.Item
+								prefix={ <Icon icon={ arrowRight } /> }
+								disabled={ index >= visibleFieldIds.length - 1 }
+								onClick={ () => {
+									onChangeView( {
+										...view,
+										fields: [
+											...( visibleFieldIds.slice(
+												0,
+												index
+											) ?? [] ),
+											visibleFieldIds[ index + 1 ],
+											fieldId,
+											...visibleFieldIds.slice(
+												index + 2
+											),
+										],
+									} );
+								} }
+							>
+								<Menu.ItemLabel>
+									{ __( 'Move right' ) }
+								</Menu.ItemLabel>
+							</Menu.Item>
+						) }
+						{ isHidable && field && (
+							<Menu.Item
+								prefix={ <Icon icon={ unseen } /> }
+								onClick={ () => {
+									onHide( field );
+									onChangeView( {
+										...view,
+										fields: visibleFieldIds.filter(
+											( id ) => id !== fieldId
+										),
+									} );
+								} }
+							>
+								<Menu.ItemLabel>
+									{ __( 'Hide column' ) }
+								</Menu.ItemLabel>
+							</Menu.Item>
+						) }
+					</Menu.Group>
+				) }
 			</WithMenuSeparators>
 		</Menu>
 	);

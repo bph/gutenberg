@@ -22,7 +22,7 @@ const meta: Meta< typeof TreeSelect > = {
 		label: { control: { type: 'text' } },
 		prefix: { control: { type: 'text' } },
 		suffix: { control: { type: 'text' } },
-		selectedId: { control: { type: null } },
+		selectedId: { control: false },
 	},
 	parameters: {
 		controls: {

@@ -7,14 +7,16 @@ export default function getClickableItemProps< Item >( {
 	item: Item;
 	isItemClickable: ( item: Item ) => boolean;
 	onClickItem?: ( item: Item ) => void;
-	className: string;
+	className?: string;
 } ) {
 	if ( ! isItemClickable( item ) || ! onClickItem ) {
 		return { className };
 	}
 
 	return {
-		className: `${ className } ${ className }--clickable`,
+		className: className
+			? `${ className } ${ className }--clickable`
+			: undefined,
 		role: 'button',
 		tabIndex: 0,
 		onClick: ( event: React.MouseEvent ) => {

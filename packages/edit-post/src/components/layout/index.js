@@ -548,7 +548,7 @@ function Layout( {
 
 	return (
 		<SlotFillProvider>
-			<ErrorBoundary>
+			<ErrorBoundary canCopyContent>
 				<CommandMenu />
 				<WelcomeGuide postType={ currentPostType } />
 				<div

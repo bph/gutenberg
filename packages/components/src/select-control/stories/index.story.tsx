@@ -23,7 +23,7 @@ const meta: Meta< typeof SelectControl > = {
 		label: { control: { type: 'text' } },
 		prefix: { control: { type: 'text' } },
 		suffix: { control: { type: 'text' } },
-		value: { control: { type: null } },
+		value: { control: false },
 	},
 	parameters: {
 		actions: { argTypesRegex: '^on.*' },

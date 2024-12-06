@@ -25,6 +25,7 @@ import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 import {
 	EditorSnackbars,
 	UnsavedChangesWarning,
+	ErrorBoundary,
 	privateApis as editorPrivateApis,
 } from '@wordpress/editor';
 import { privateApis as coreCommandsPrivateApis } from '@wordpress/core-commands';
@@ -36,7 +37,6 @@ import { useDispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import ErrorBoundary from '../error-boundary';
 import { default as SiteHub, SiteHubMobile } from '../site-hub';
 import ResizableFrame from '../resizable-frame';
 import { unlock } from '../../lock-unlock';
@@ -136,7 +136,9 @@ function Layout() {
 											}
 											routeKey={ routeKey }
 										>
-											{ areas.sidebar }
+											<ErrorBoundary>
+												{ areas.sidebar }
+											</ErrorBoundary>
 										</SidebarContent>
 										<SaveHub />
 										<SavePanel />
@@ -160,7 +162,7 @@ function Layout() {
 									/>
 								</SidebarContent>
 							) }
-							{ areas.mobile }
+							<ErrorBoundary>{ areas.mobile }</ErrorBoundary>
 						</div>
 					) }
 
@@ -173,7 +175,7 @@ function Layout() {
 									maxWidth: widths?.content,
 								} }
 							>
-								{ areas.content }
+								<ErrorBoundary>{ areas.content }</ErrorBoundary>
 							</div>
 						) }
 
@@ -184,7 +186,7 @@ function Layout() {
 								maxWidth: widths?.edit,
 							} }
 						>
-							{ areas.edit }
+							<ErrorBoundary>{ areas.edit }</ErrorBoundary>
 						</div>
 					) }
 

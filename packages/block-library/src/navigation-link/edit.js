@@ -527,12 +527,6 @@ export default function NavigationLinkEdit( {
 											) }
 											placeholder={ itemLabelPlaceholder }
 											withoutInteractiveFormatting
-											allowedFormats={ [
-												'core/bold',
-												'core/italic',
-												'core/image',
-												'core/strikethrough',
-											] }
 										/>
 										{ description && (
 											<span className="wp-block-navigation-item__description">

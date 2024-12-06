@@ -319,7 +319,9 @@ test.describe( 'Block template registration', () => {
 			.getByLabel( 'Dismiss this notice' )
 			.getByText( `"Author: Admin" reset.` );
 		await page.getByPlaceholder( 'Search' ).fill( 'Author: admin' );
-		await page.getByRole( 'link', { name: 'Author: Admin' } ).click();
+		await page
+			.locator( '.fields-field__title', { hasText: 'Author: Admin' } )
+			.click();
 		const actions = page.getByLabel( 'Actions' );
 		await actions.first().click();
 		await page.getByRole( 'menuitem', { name: 'Reset' } ).click();

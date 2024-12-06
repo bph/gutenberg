@@ -4,12 +4,6 @@
 import { store as coreStore } from '@wordpress/core-data';
 import type { Action, Field } from '@wordpress/dataviews';
 import { doAction } from '@wordpress/hooks';
-
-/**
- * Internal dependencies
- */
-import { store as editorStore } from '../../store';
-import { unlock } from '../../lock-unlock';
 import type { PostType } from '@wordpress/fields';
 import {
 	viewPost,
@@ -35,7 +29,16 @@ import {
 	authorField,
 	titleField,
 	templateField,
+	templateTitleField,
+	pageTitleField,
+	patternTitleField,
 } from '@wordpress/fields';
+
+/**
+ * Internal dependencies
+ */
+import { store as editorStore } from '../../store';
+import { unlock } from '../../lock-unlock';
 
 export function registerEntityAction< Item >(
 	kind: string,
@@ -164,16 +167,28 @@ export const registerPostTypeSchema =
 			postTypeConfig.supports?.thumbnail &&
 				currentTheme?.theme_supports?.[ 'post-thumbnails' ] &&
 				featuredImageField,
-			titleField,
 			postTypeConfig.supports?.author && authorField,
 			statusField,
 			dateField,
 			slugField,
 			postTypeConfig.supports?.[ 'page-attributes' ] && parentField,
 			postTypeConfig.supports?.comments && commentStatusField,
-			passwordField,
 			templateField,
+			passwordField,
 		].filter( Boolean );
+		if ( postTypeConfig.supports?.title ) {
+			let _titleField;
+			if ( postType === 'page' ) {
+				_titleField = pageTitleField;
+			} else if ( postType === 'wp_template' ) {
+				_titleField = templateTitleField;
+			} else if ( postType === 'wp_block' ) {
+				_titleField = patternTitleField;
+			} else {
+				_titleField = titleField;
+			}
+			fields.push( _titleField );
+		}
 
 		registry.batch( () => {
 			actions.forEach( ( action ) => {

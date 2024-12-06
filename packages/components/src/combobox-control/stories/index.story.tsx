@@ -38,7 +38,7 @@ const meta: Meta< typeof ComboboxControl > = {
 	id: 'components-comboboxcontrol',
 	component: ComboboxControl,
 	argTypes: {
-		value: { control: { type: null } },
+		value: { control: false },
 	},
 	parameters: {
 		actions: { argTypesRegex: '^on.*' },

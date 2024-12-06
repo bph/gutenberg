@@ -22,7 +22,7 @@ const meta: Meta< typeof Scrollable > = {
 			control: { type: 'text' },
 		},
 		children: {
-			control: { type: null },
+			control: false,
 		},
 	},
 	parameters: {
@@ -70,6 +70,7 @@ const Template: StoryFn< typeof Scrollable > = ( { ...args } ) => {
 					} }
 					type="text"
 					value="Focus me"
+					readOnly
 				/>
 			</View>
 		</Scrollable>

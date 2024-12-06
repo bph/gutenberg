@@ -211,6 +211,10 @@
 	flex-direction: column;
 }
 
+.edit-site-global-styles-sidebar__navigator-screen .single-column {
+	grid-column: span 1;
+}
+
 .edit-site-global-styles-screen-root.edit-site-global-styles-screen-root,
 .edit-site-global-styles-screen-style-variations.edit-site-global-styles-screen-style-variations {
 	background: unset;

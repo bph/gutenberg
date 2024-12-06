@@ -67,3 +67,12 @@
 		top: unset;
 	}
 }
+
+.dataviews-field-control__icon {
+	display: flex;
+	width: $icon-size;
+}
+
+.dataviews-field-control__label {
+	flex-grow: 1;
+}

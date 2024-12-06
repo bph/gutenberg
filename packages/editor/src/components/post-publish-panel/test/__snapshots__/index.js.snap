@@ -466,7 +466,7 @@ exports[`PostPublishPanel should render the pre-publish panel if post status is 
           </strong>
         </div>
         <p>
-          When you’re ready, submit your work for review, and an Editor will be able to approve it for you.
+          Your work will be reviewed and then approved.
         </p>
         <div
           class="components-site-card"
@@ -619,7 +619,7 @@ exports[`PostPublishPanel should render the pre-publish panel if the post is not
           </strong>
         </div>
         <p>
-          When you’re ready, submit your work for review, and an Editor will be able to approve it for you.
+          Your work will be reviewed and then approved.
         </p>
         <div
           class="components-site-card"

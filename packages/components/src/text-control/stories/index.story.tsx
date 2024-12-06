@@ -21,7 +21,7 @@ const meta: Meta< typeof TextControl > = {
 		help: { control: { type: 'text' } },
 		label: { control: { type: 'text' } },
 		onChange: { action: 'onChange' },
-		value: { control: { type: null } },
+		value: { control: false },
 	},
 	parameters: {
 		controls: {

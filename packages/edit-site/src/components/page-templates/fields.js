@@ -25,7 +25,7 @@ import { useAddedBy } from './hooks';
 import usePatternSettings from '../page-patterns/use-pattern-settings';
 import { unlock } from '../../lock-unlock';
 
-const { useLink, Link } = unlock( routerPrivateApis );
+const { useLink } = unlock( routerPrivateApis );
 const { useGlobalStyle } = unlock( blockEditorPrivateApis );
 
 function PreviewField( { item } ) {
@@ -73,23 +73,6 @@ export const previewField = {
 	id: 'preview',
 	render: PreviewField,
 	enableSorting: false,
-};
-
-function TitleField( { item } ) {
-	return (
-		<Link to={ `/${ item.type }/${ item.id }?canvas=edit` }>
-			{ decodeEntities( item.title?.rendered ) || __( '(no title)' ) }
-		</Link>
-	);
-}
-
-export const titleField = {
-	label: __( 'Template' ),
-	id: 'title',
-	getValue: ( { item } ) => item.title?.rendered,
-	render: TitleField,
-	enableHiding: false,
-	enableGlobalSearch: true,
 };
 
 export const descriptionField = {

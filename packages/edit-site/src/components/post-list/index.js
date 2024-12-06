@@ -55,7 +55,7 @@ const getCustomView = ( editedEntityRecord ) => {
 
 	return {
 		...content,
-		layout: defaultLayouts[ content.type ]?.layout,
+		...defaultLayouts[ content.type ],
 	};
 };
 

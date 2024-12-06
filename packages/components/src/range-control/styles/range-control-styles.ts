@@ -130,6 +130,10 @@ export const Track = styled.span`
 	margin-top: ${ ( rangeHeightValue - railHeight ) / 2 }px;
 	top: 0;
 
+	@media not ( prefers-reduced-motion ) {
+		transition: width ease 0.1s;
+	}
+
 	${ trackBackgroundColor };
 `;
 
@@ -139,28 +143,18 @@ export const MarksWrapper = styled.span`
 	position: relative;
 	width: 100%;
 	user-select: none;
+	margin-top: 17px;
 `;
 
-const markFill = ( { disabled, isFilled }: RangeMarkProps ) => {
-	let backgroundColor = isFilled ? 'currentColor' : COLORS.gray[ 300 ];
-
-	if ( disabled ) {
-		backgroundColor = COLORS.gray[ 400 ];
-	}
-
-	return css( {
-		backgroundColor,
-	} );
-};
-
 export const Mark = styled.span`
-	height: ${ thumbSize }px;
-	left: 0;
 	position: absolute;
-	top: 9px;
-	width: 1px;
-
-	${ markFill };
+	left: 0;
+	top: -4px;
+	height: 4px;
+	width: 2px;
+	transform: translateX( -50% );
+	background-color: ${ COLORS.ui.background };
+	z-index: 1;
 `;
 
 const markLabelFill = ( { isFilled }: RangeMarkProps ) => {
@@ -173,7 +167,7 @@ export const MarkLabel = styled.span`
 	color: ${ COLORS.gray[ 300 ] };
 	font-size: 11px;
 	position: absolute;
-	top: 22px;
+	top: 8px;
 	white-space: nowrap;
 
 	${ rtl( { left: 0 } ) };
@@ -207,6 +201,11 @@ export const ThumbWrapper = styled.span`
 	user-select: none;
 	width: ${ thumbSize }px;
 	border-radius: ${ CONFIG.radiusRound };
+	z-index: 3;
+
+	@media not ( prefers-reduced-motion ) {
+		transition: left ease 0.1s;
+	}
 
 	${ thumbColor };
 	${ rtl( { marginLeft: -10 } ) };

@@ -16,7 +16,7 @@ export default {
 	title: 'BlockEditor (Private APIs)/DimensionsTool',
 	component: DimensionsTool,
 	argTypes: {
-		panelId: { control: { type: null } },
+		panelId: { control: false },
 		onChange: { action: 'changed' },
 	},
 };

@@ -37,18 +37,18 @@ const meta: Meta< typeof Popover > = {
 	id: 'components-popover',
 	component: Popover,
 	argTypes: {
-		anchor: { control: { type: null } },
-		anchorRef: { control: { type: null } },
-		anchorRect: { control: { type: null } },
-		children: { control: { type: null } },
+		anchor: { control: false },
+		anchorRef: { control: false },
+		anchorRect: { control: false },
+		children: { control: false },
 		focusOnMount: {
 			control: { type: 'select' },
 			options: [ 'firstElement', true, false ],
 		},
-		getAnchorRect: { control: { type: null } },
+		getAnchorRect: { control: false },
 		onClose: { action: 'onClose' },
 		onFocusOutside: { action: 'onFocusOutside' },
-		__unstableSlotName: { control: { type: null } },
+		__unstableSlotName: { control: false },
 	},
 	parameters: {
 		controls: { expanded: true },
@@ -58,7 +58,9 @@ const meta: Meta< typeof Popover > = {
 export default meta;
 
 const PopoverWithAnchor = ( args: PopoverProps ) => {
-	const anchorRef = useRef( null );
+	const [ popoverAnchor, setPopoverAnchor ] = useState< Element | null >(
+		null
+	);
 
 	return (
 		<div
@@ -71,11 +73,11 @@ const PopoverWithAnchor = ( args: PopoverProps ) => {
 		>
 			<p
 				style={ { padding: '8px', background: 'salmon' } }
-				ref={ anchorRef }
+				ref={ setPopoverAnchor }
 			>
 				Popover&apos;s anchor
 			</p>
-			<Popover { ...args } anchorRef={ anchorRef } />
+			<Popover { ...args } anchor={ popoverAnchor } />
 		</div>
 	);
 };

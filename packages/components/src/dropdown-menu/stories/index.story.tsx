@@ -37,9 +37,9 @@ const meta: Meta< typeof DropdownMenu > = {
 			mapping: { menu, chevronDown, more },
 			control: { type: 'select' },
 		},
-		open: { control: { type: null } },
-		defaultOpen: { control: { type: null } },
-		onToggle: { control: { type: null } },
+		open: { control: false },
+		defaultOpen: { control: false },
+		onToggle: { control: false },
 	},
 };
 export default meta;

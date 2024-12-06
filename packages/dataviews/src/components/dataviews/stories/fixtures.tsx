@@ -637,9 +637,6 @@ export const fields: Field< SpaceObject >[] = [
 		id: 'title',
 		enableHiding: false,
 		enableGlobalSearch: true,
-		render: ( { item } ) => {
-			return <a href="#nothing">{ item.title }</a>;
-		},
 	},
 	{
 		id: 'date',

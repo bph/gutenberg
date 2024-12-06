@@ -54,6 +54,7 @@ const MotionButton = motion( Button );
  */
 export default function DocumentBar( props ) {
 	const {
+		postId,
 		postType,
 		postTypeLabel,
 		documentTitle,
@@ -93,6 +94,7 @@ export default function DocumentBar( props ) {
 		const _postTypeLabel = getPostType( _postType )?.labels?.singular_name;
 
 		return {
+			postId: _postId,
 			postType: _postType,
 			postTypeLabel: _postTypeLabel,
 			documentTitle: _document.title,
@@ -120,7 +122,7 @@ export default function DocumentBar( props ) {
 	const title = props.title || entityTitle;
 	const icon = props.icon;
 
-	const pageTypeBadge = usePageTypeBadge();
+	const pageTypeBadge = usePageTypeBadge( postId );
 
 	const mountedRef = useRef( false );
 	useEffect( () => {

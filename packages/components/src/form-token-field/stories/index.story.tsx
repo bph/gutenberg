@@ -19,10 +19,10 @@ const meta: Meta< typeof FormTokenField > = {
 	id: 'components-formtokenfield',
 	argTypes: {
 		value: {
-			control: { type: null },
+			control: false,
 		},
 		__experimentalValidateInput: {
-			control: { type: null },
+			control: false,
 		},
 	},
 	parameters: {

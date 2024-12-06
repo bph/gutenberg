@@ -3,6 +3,68 @@
  */
 import { useRefEffect } from '@wordpress/compose';
 
+const nodesByDocument = new Map();
+
+function add( doc, node ) {
+	let set = nodesByDocument.get( doc );
+	if ( ! set ) {
+		set = new Set();
+		nodesByDocument.set( doc, set );
+		doc.addEventListener( 'pointerdown', down );
+	}
+	set.add( node );
+}
+
+function remove( doc, node ) {
+	const set = nodesByDocument.get( doc );
+	if ( set ) {
+		set.delete( node );
+		restore( node );
+		if ( set.size === 0 ) {
+			nodesByDocument.delete( doc );
+			doc.removeEventListener( 'pointerdown', down );
+		}
+	}
+}
+
+function restore( node ) {
+	const prevDraggable = node.getAttribute( 'data-draggable' );
+	if ( prevDraggable ) {
+		node.removeAttribute( 'data-draggable' );
+		// Only restore if `draggable` is still removed. It could have been
+		// changed by React in the meantime.
+		if ( prevDraggable === 'true' && ! node.getAttribute( 'draggable' ) ) {
+			node.setAttribute( 'draggable', 'true' );
+		}
+	}
+}
+
+function down( event ) {
+	const { target } = event;
+	const { ownerDocument, isContentEditable } = target;
+	const nodes = nodesByDocument.get( ownerDocument );
+
+	if ( isContentEditable ) {
+		// Whenever an editable element is clicked, check which draggable
+		// blocks contain this element, and temporarily disable draggability.
+		for ( const node of nodes ) {
+			if (
+				node.getAttribute( 'draggable' ) === 'true' &&
+				node.contains( target )
+			) {
+				node.removeAttribute( 'draggable' );
+				node.setAttribute( 'data-draggable', 'true' );
+			}
+		}
+	} else {
+		// Whenever a non-editable element is clicked, re-enable draggability
+		// for any blocks that were previously disabled.
+		for ( const node of nodes ) {
+			restore( node );
+		}
+	}
+}
+
 /**
  * In Firefox, the `draggable` and `contenteditable` attributes don't play well
  * together. When `contenteditable` is within a `draggable` element, selection
@@ -13,13 +75,9 @@ import { useRefEffect } from '@wordpress/compose';
  */
 export function useFirefoxDraggableCompatibility() {
 	return useRefEffect( ( node ) => {
-		function onDown( event ) {
-			node.draggable = ! event.target.isContentEditable;
-		}
-		const { ownerDocument } = node;
-		ownerDocument.addEventListener( 'pointerdown', onDown );
+		add( node.ownerDocument, node );
 		return () => {
-			ownerDocument.removeEventListener( 'pointerdown', onDown );
+			remove( node.ownerDocument, node );
 		};
 	}, [] );
 }

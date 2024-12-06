@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## Breaking Changes
+
+-   Support showing or hiding title, media and description fields ([#67477](https://github.com/WordPress/gutenberg/pull/67477)).
+-   Unify the `title`, `media` and `description` fields for the different layouts. So instead of the previous `view.layout.mediaField`, `view.layout.primaryField` and `view.layout.columnFields`, all the layouts now support these three fields with the following config ([#67477](https://github.com/WordPress/gutenberg/pull/67477)): 
+
+```js
+const view = {
+    type: 'table',
+    titleField: 'title',
+    mediaField: 'media',
+    descriptionField: 'description',
+    fields: [ 'author', 'date' ],
+}
+```
+
 ## Internal
 
 -   Upgraded `@ariakit/react` (v0.4.13) and `@ariakit/test` (v0.4.5) ([#65907](https://github.com/WordPress/gutenberg/pull/65907)).

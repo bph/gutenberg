@@ -103,7 +103,7 @@ const baseConfig = {
 	target,
 	output: {
 		filename: '[name].js',
-		chunkFilename: '[name].js?v=[chunkhash]',
+		chunkFilename: '[name].js?ver=[chunkhash]',
 		path: resolve( process.cwd(), 'build' ),
 	},
 	resolve: {
@@ -392,7 +392,9 @@ const scriptConfig = {
 		// bundle content as a convenient interactive zoomable treemap.
 		process.env.WP_BUNDLE_ANALYZER && new BundleAnalyzerPlugin(),
 		// MiniCSSExtractPlugin to extract the CSS thats gets imported into JavaScript.
-		new MiniCSSExtractPlugin( { filename: '[name].css' } ),
+		new MiniCSSExtractPlugin( {
+			filename: '[name].css',
+		} ),
 		// RtlCssPlugin to generate RTL CSS files.
 		new RtlCssPlugin( {
 			filename: `[name]-rtl.css`,

@@ -8,7 +8,7 @@ const wpExternals = {
 	name: 'wordpress-externals',
 	setup( build ) {
 		build.onResolve(
-			{ filter: /^@wordpress\/(data|hooks|i18n)(\/|$)/ },
+			{ filter: /^@wordpress\/(data|hooks|i18n|date)(\/|$)/ },
 			( args ) => {
 				// Don't bundle WordPress signleton packages
 				return { path: args.path, external: true };

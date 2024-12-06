@@ -17,7 +17,7 @@ const meta: Meta< typeof FontSizePicker > = {
 	title: 'Components/FontSizePicker',
 	component: FontSizePicker,
 	argTypes: {
-		value: { control: { type: null } },
+		value: { control: false },
 	},
 	parameters: {
 		actions: { argTypesRegex: '^on.*' },

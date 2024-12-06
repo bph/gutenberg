@@ -17,8 +17,8 @@ const meta: Meta< typeof ItemGroup > = {
 	subcomponents: { Item },
 	title: 'Components (Experimental)/ItemGroup',
 	argTypes: {
-		as: { control: { type: null } },
-		children: { control: { type: null } },
+		as: { control: false },
+		children: { control: false },
 	},
 	parameters: {
 		controls: { expanded: true },

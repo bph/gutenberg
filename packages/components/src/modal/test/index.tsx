@@ -269,7 +269,8 @@ describe( 'Modal', () => {
 	} );
 
 	describe( 'Focus handling', () => {
-		let originalGetClientRects: () => DOMRectList;
+		const originalGetClientRects =
+			window.HTMLElement.prototype.getClientRects;
 
 		const FocusMountDemo = ( {
 			focusOnMount,

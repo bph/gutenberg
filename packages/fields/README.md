@@ -67,6 +67,10 @@ Featured Image field for BasePost.
 
 Order field for BasePost.
 
+### pageTitleField
+
+Title for the page entity.
+
 ### parentField
 
 Parent field for BasePost.
@@ -74,6 +78,10 @@ Parent field for BasePost.
 ### passwordField
 
 Password field for BasePost.
+
+### patternTitleField
+
+Title for the pattern entity.
 
 ### permanentlyDeletePost
 
@@ -111,9 +119,13 @@ Status field for BasePost.
 
 Template field for BasePost.
 
+### templateTitleField
+
+Title for the template entity.
+
 ### titleField
 
-Title field for BasePost.
+Title for the any entity with a `title` property. For patterns, pages or templates you should use the respective field because there are some differences in the rendering, labels, etc.
 
 ### trashPost
 

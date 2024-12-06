@@ -65,6 +65,12 @@ interface PrimaryActionsProps< Item > {
 	actions: Action< Item >[];
 	registry: ReturnType< typeof useRegistry >;
 }
+interface ActionsListProps< Item > {
+	item: Item;
+	actions: Action< Item >[];
+	registry: ReturnType< typeof useRegistry >;
+	ActionTrigger: ( props: ActionTriggerProps< Item > ) => ReactElement;
+}
 
 function ButtonTrigger< Item >( {
 	action,
@@ -160,28 +166,12 @@ export function ActionsMenuGroup< Item >( {
 	const registry = useRegistry();
 	return (
 		<Menu.Group>
-			{ actions.map( ( action ) => {
-				if ( 'RenderModal' in action ) {
-					return (
-						<ActionWithModal
-							key={ action.id }
-							action={ action }
-							items={ [ item ] }
-							ActionTrigger={ MenuItemTrigger }
-						/>
-					);
-				}
-				return (
-					<MenuItemTrigger
-						key={ action.id }
-						action={ action }
-						onClick={ () => {
-							action.callback( [ item ], { registry } );
-						} }
-						items={ [ item ] }
-					/>
-				);
-			} ) }
+			<ActionsList
+				actions={ actions }
+				item={ item }
+				registry={ registry }
+				ActionTrigger={ MenuItemTrigger }
+			/>
 		</Menu.Group>
 	);
 }
@@ -286,7 +276,22 @@ function PrimaryActions< Item >( {
 	if ( ! Array.isArray( actions ) || actions.length === 0 ) {
 		return null;
 	}
+	return (
+		<ActionsList
+			actions={ actions }
+			item={ item }
+			registry={ registry }
+			ActionTrigger={ ButtonTrigger }
+		/>
+	);
+}
 
+function ActionsList< Item >( {
+	item,
+	actions,
+	registry,
+	ActionTrigger,
+}: ActionsListProps< Item > ) {
 	return actions.map( ( action ) => {
 		if ( 'RenderModal' in action ) {
 			return (
@@ -294,12 +299,12 @@ function PrimaryActions< Item >( {
 					key={ action.id }
 					action={ action }
 					items={ [ item ] }
-					ActionTrigger={ ButtonTrigger }
+					ActionTrigger={ ActionTrigger }
 				/>
 			);
 		}
 		return (
-			<ButtonTrigger
+			<ActionTrigger
 				key={ action.id }
 				action={ action }
 				onClick={ () => {

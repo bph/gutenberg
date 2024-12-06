@@ -6,21 +6,15 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import {
-	__experimentalHStack as HStack,
-	Button,
-	Tooltip,
-	FlexBlock,
-} from '@wordpress/components';
+import { __experimentalHStack as HStack } from '@wordpress/components';
 import { __, _x } from '@wordpress/i18n';
 import { useState, useMemo, useId } from '@wordpress/element';
 import {
 	BlockPreview,
 	privateApis as blockEditorPrivateApis,
 } from '@wordpress/block-editor';
-import { Icon, lockSmall } from '@wordpress/icons';
+import { Icon } from '@wordpress/icons';
 import { parse } from '@wordpress/blocks';
-import { decodeEntities } from '@wordpress/html-entities';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
 
 /**
@@ -110,57 +104,6 @@ export const previewField = {
 	id: 'preview',
 	render: PreviewField,
 	enableSorting: false,
-};
-
-function TitleField( { item } ) {
-	const isUserPattern = item.type === PATTERN_TYPES.user;
-	const isTemplatePart = item.type === TEMPLATE_PART_POST_TYPE;
-	const { onClick } = useLink(
-		`/${ item.type }/${
-			isUserPattern || isTemplatePart ? item.id : item.name
-		}?canvas=edit`
-	);
-	const title = decodeEntities( defaultGetTitle( item ) );
-	return (
-		<HStack alignment="center" justify="flex-start" spacing={ 2 }>
-			<FlexBlock className="edit-site-patterns__pattern-title">
-				{ item.type === PATTERN_TYPES.theme ? (
-					title
-				) : (
-					<Button
-						__next40pxDefaultSize
-						variant="link"
-						onClick={ onClick }
-						// Required for the grid's roving tab index system.
-						// See https://github.com/WordPress/gutenberg/pull/51898#discussion_r1243399243.
-						tabIndex="-1"
-					>
-						{ title }
-					</Button>
-				) }
-			</FlexBlock>
-			{ item.type === PATTERN_TYPES.theme && (
-				<Tooltip
-					placement="top"
-					text={ __( 'This pattern cannot be edited.' ) }
-				>
-					<Icon
-						className="edit-site-patterns__pattern-lock-icon"
-						icon={ lockSmall }
-						size={ 24 }
-					/>
-				</Tooltip>
-			) }
-		</HStack>
-	);
-}
-
-export const titleField = {
-	label: __( 'Title' ),
-	id: 'title',
-	getValue: ( { item } ) => item.title?.raw || item.title,
-	render: TitleField,
-	enableHiding: false,
 };
 
 const SYNC_FILTERS = [

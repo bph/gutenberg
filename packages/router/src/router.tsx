@@ -120,7 +120,6 @@ export function useHistory() {
 				window.matchMedia( '(min-width: 782px)' ).matches;
 			if (
 				! isMediumOrBigger ||
-				// @ts-expect-error
 				! document.startViewTransition ||
 				! options.transition
 			) {
@@ -131,7 +130,6 @@ export function useHistory() {
 			await new Promise< void >( ( resolve ) => {
 				const classname = options.transition ?? '';
 				document.documentElement.classList.add( classname );
-				// @ts-expect-error
 				const transition = document.startViewTransition( () =>
 					performPush()
 				);

@@ -165,6 +165,7 @@ const view = {
 		field: 'date',
 		direction: 'desc',
 	},
+	titleField: 'title',
 	fields: [ 'author', 'status' ],
 	layout: {},
 };
@@ -184,49 +185,21 @@ Properties:
 
     -   `field`: the field used for sorting the dataset.
     -   `direction`: the direction to use for sorting, one of `asc` or `desc`.
-
--   `fields`: a list of field `id` that are visible in the UI and the specific order in which they are displayed.
+-   `titleField`: The id of the field reprensenting the title of the record.
+-   `mediaField`: The id of the field reprensenting the media of the record.
+-   `descriptionField`: The id of field the reprensenting the description of the record.
+-   `showTitle`: Whether the title should be shown in the UI. `true` by default.
+-   `showMedia`: Whether the media should be shown in the UI. `true` by default.
+-   `showDescription`: Whether the description should be shown in the UI. `true` by default.
+-   `fields`: a list of remaining field `id` that are visible in the UI and the specific order in which they are displayed.
 -   `layout`: config that is specific to a particular layout type.
 
 ##### Properties of `layout`
 
 | Properties of `layout`                                                                                          | Table | Grid | List |
 | --------------------------------------------------------------------------------------------------------------- | ----- | ---- | ---- |
-| `primaryField`: the field's `id` to be highlighted in each layout. It's not hidable.                            | ✓     | ✓    | ✓    |
-| `mediaField`: the field's `id` to be used for rendering each card's media. It's not hiddable.                   |       | ✓    | ✓    |
-| `columnFields`: a list of field's `id` to render vertically stacked instead of horizontally (the default).      |       | ✓    |      |
 | `badgeFields`: a list of field's `id` to render without label and styled as badges.                             |       | ✓    |      |
-| `combinedFields`: a list of "virtual" fields that are made by combining others. See "Combining fields" section. | ✓     |      |      |
 | `styles`: additional `width`, `maxWidth`, `minWidth` styles for each field column.                              | ✓     |      |      |
-
-##### Combining fields
-
-The `table` layout has the ability to create "virtual" fields that are made out by combining existing ones.
-
-Each "virtual field", has to provide an `id` and `label` (optionally a `header` instead), which have the same meaning as any other field.
-
-Additionally, they need to provide:
-
--   `children`: a list of field's `id` to combine
--   `direction`: how should they be stacked, `vertical` or `horizontal`
-
-For example, this is how you'd define a `site` field which is a combination of a `title` and `description` fields, which are not displayed:
-
-```js
-{
-	fields: [ 'site', 'status' ],
-	layout: {
-		combinedFields: [
-			{
-				id: 'site',
-				label: 'Site',
-				children: [ 'title', 'description' ],
-				direction: 'vertical',
-			}
-		]
-	}
-}
-```
 
 #### `onChangeView`: `function`
 
@@ -255,6 +228,7 @@ function MyCustomPageTable() {
 				value: [ 'publish', 'draft' ],
 			},
 		],
+		titleField: 'title',
 		fields: [ 'author', 'status' ],
 		layout: {},
 	} );
@@ -370,14 +344,15 @@ For example, this is how you'd enable only the table view type:
 ```js
 const defaultLayouts = {
 	table: {
-		layout: {
-			primaryField: 'my-key',
-		},
+		showMedia: false,
 	},
+	grid: {
+		showMedia: true,
+	}
 };
 ```
 
-The `defaultLayouts` property should be an object that includes properties named `table`, `grid`, or `list`. Each of these properties should contain a `layout` property, which holds the configuration for each specific layout type. Check "Properties of layout" for the full list of properties available for each layout's configuration
+The `defaultLayouts` property should be an object that includes properties named `table`, `grid`, or `list`. These properties are applied to the view object each time the user switches to the corresponding layout.
 
 #### `selection`: `string[]`
 

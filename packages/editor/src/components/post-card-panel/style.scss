@@ -7,6 +7,7 @@
 		width: 100%;
 
 		&.editor-post-card-panel__title {
+			@include heading-medium();
 			margin: 0;
 			padding: 2px 0;
 			display: flex;

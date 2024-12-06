@@ -64,7 +64,7 @@ export default function PostCardPanel( {
 		[ postId, postType ]
 	);
 
-	const pageTypeBadge = usePageTypeBadge();
+	const pageTypeBadge = usePageTypeBadge( postId );
 
 	return (
 		<div className="editor-post-card-panel">
@@ -78,9 +78,7 @@ export default function PostCardPanel( {
 					numberOfLines={ 2 }
 					truncate
 					className="editor-post-card-panel__title"
-					weight={ 500 }
 					as="h2"
-					lineHeight="20px"
 				>
 					{ title ? decodeEntities( title ) : __( 'No title' ) }
 					{ pageTypeBadge && (
