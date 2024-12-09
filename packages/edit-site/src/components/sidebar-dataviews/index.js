@@ -26,7 +26,7 @@ export default function DataViewsSidebarContent( { postType } ) {
 
 	return (
 		<>
-			<ItemGroup>
+			<ItemGroup className="edit-site-sidebar-dataviews">
 				{ defaultViews.map( ( dataview ) => {
 					return (
 						<DataViewItem

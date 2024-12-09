@@ -116,7 +116,7 @@ export default function SidebarNavigationScreenNavigationMenus( { backPath } ) {
 
 	return (
 		<SidebarNavigationScreenWrapper backPath={ backPath }>
-			<ItemGroup>
+			<ItemGroup className="edit-site-sidebar-navigation-screen-navigation-menus">
 				{ navigationMenus?.map( ( { id, title, status }, index ) => (
 					<NavMenuItem
 						postId={ id }

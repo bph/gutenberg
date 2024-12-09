@@ -6,6 +6,14 @@
 	line-height: $default-line-height;
 }
 
+.dataviews-config__popover.is-expanded .dataviews-config__popover-content-wrapper {
+	overflow-y: scroll;
+	height: 100%;
+	.dataviews-view-config {
+		width: auto;
+	}
+}
+
 .dataviews-view-config__sort-direction .components-toggle-group-control-option-base {
 	text-transform: uppercase;
 }

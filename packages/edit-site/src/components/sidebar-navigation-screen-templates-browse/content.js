@@ -57,7 +57,7 @@ export default function DataviewsTemplatesSidebarContent() {
 	}, [ records ] );
 
 	return (
-		<ItemGroup>
+		<ItemGroup className="edit-site-sidebar-navigation-screen-templates-browse">
 			<SidebarNavigationItem
 				to="/template"
 				icon={ layout }

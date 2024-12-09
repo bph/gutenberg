@@ -6,7 +6,7 @@
 	cursor: pointer;
 }
 
-.edit-site-global-styles-preview__iframe {
+.edit-site-global-styles-preview__wrapper {
 	max-width: 100%;
 	display: block;
 	width: 100%;
@@ -230,10 +230,6 @@
 	// The &#{&} is a workaround for the specificity of the Card component.
 	&#{&},
 	&#{&} .edit-site-global-styles-screen-root__active-style-tile-preview {
-		box-shadow: none;
 		border-radius: $radius-small;
-		.block-editor-iframe__container {
-			border: 1px solid $gray-200;
-		}
 	}
 }

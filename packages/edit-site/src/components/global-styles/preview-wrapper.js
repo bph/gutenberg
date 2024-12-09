@@ -1,27 +1,21 @@
 /**
  * WordPress dependencies
  */
-import {
-	__unstableIframe as Iframe,
-	__unstableEditorStyles as EditorStyles,
-	privateApis as blockEditorPrivateApis,
-} from '@wordpress/block-editor';
+import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 import { __unstableMotion as motion } from '@wordpress/components';
 import {
 	useThrottle,
 	useReducedMotion,
 	useResizeObserver,
 } from '@wordpress/compose';
-import { useLayoutEffect, useState, useMemo } from '@wordpress/element';
+import { useLayoutEffect, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { unlock } from '../../lock-unlock';
 
-const { useGlobalStyle, useGlobalStylesOutput } = unlock(
-	blockEditorPrivateApis
-);
+const { useGlobalStyle } = unlock( blockEditorPrivateApis );
 
 const normalizedWidth = 248;
 const normalizedHeight = 152;
@@ -33,7 +27,7 @@ const THROTTLE_OPTIONS = {
 	trailing: true,
 };
 
-export default function PreviewIframe( {
+export default function PreviewWrapper( {
 	children,
 	label,
 	isFocused,
@@ -41,7 +35,6 @@ export default function PreviewIframe( {
 } ) {
 	const [ backgroundColor = 'white' ] = useGlobalStyle( 'color.background' );
 	const [ gradientValue ] = useGlobalStyle( 'color.gradient' );
-	const [ styles ] = useGlobalStylesOutput();
 	const disableMotion = useReducedMotion();
 	const [ isHovered, setIsHovered ] = useState( false );
 	const [ containerResizeListener, { width } ] = useResizeObserver();
@@ -54,7 +47,7 @@ export default function PreviewIframe( {
 		THROTTLE_OPTIONS
 	);
 
-	// Must use useLayoutEffect to avoid a flash of the iframe at the wrong
+	// Must use useLayoutEffect to avoid a flash of the container  at the wrong
 	// size before the width is set.
 	useLayoutEffect( () => {
 		if ( width ) {
@@ -62,7 +55,7 @@ export default function PreviewIframe( {
 		}
 	}, [ width, setThrottledWidth ] );
 
-	// Must use useLayoutEffect to avoid a flash of the iframe at the wrong
+	// Must use useLayoutEffect to avoid a flash of the container at the wrong
 	// size before the width is set.
 	useLayoutEffect( () => {
 		const newRatio = throttledWidth ? throttledWidth / normalizedWidth : 1;
@@ -89,24 +82,6 @@ export default function PreviewIframe( {
 	 */
 	const ratio = ratioState ? ratioState : fallbackRatio;
 
-	/*
-	 * Reset leaked styles from WP common.css and remove main content layout padding and border.
-	 * Add pointer cursor to the body to indicate the iframe is interactive,
-	 * similar to Typography variation previews.
-	 */
-	const editorStyles = useMemo( () => {
-		if ( styles ) {
-			return [
-				...styles,
-				{
-					css: 'html{overflow:hidden}body{min-width: 0;padding: 0;border: none;cursor: pointer;}',
-					isGlobalStyles: true,
-				},
-			];
-		}
-
-		return styles;
-	}, [ styles ] );
 	const isReady = !! width;
 
 	return (
@@ -115,8 +90,8 @@ export default function PreviewIframe( {
 				{ containerResizeListener }
 			</div>
 			{ isReady && (
-				<Iframe
-					className="edit-site-global-styles-preview__iframe"
+				<div
+					className="edit-site-global-styles-preview__wrapper"
 					style={ {
 						height: normalizedHeight * ratio,
 					} }
@@ -124,7 +99,6 @@ export default function PreviewIframe( {
 					onMouseLeave={ () => setIsHovered( false ) }
 					tabIndex={ -1 }
 				>
-					<EditorStyles styles={ editorStyles } />
 					<motion.div
 						style={ {
 							height: normalizedHeight * ratio,
@@ -145,7 +119,7 @@ export default function PreviewIframe( {
 							.concat( children ) // This makes sure children is always an array.
 							.map( ( child, key ) => child( { ratio, key } ) ) }
 					</motion.div>
-				</Iframe>
+				</div>
 			) }
 		</>
 	);

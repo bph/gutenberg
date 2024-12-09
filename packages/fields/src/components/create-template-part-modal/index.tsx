@@ -28,7 +28,7 @@ import {
 	symbolFilled as symbolFilledIcon,
 } from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
-// @ts-ignore
+// @ts-expect-error serialize is not typed
 import { serialize } from '@wordpress/blocks';
 
 /**
@@ -64,7 +64,7 @@ export default function CreateTemplatePartModal( {
 } & CreateTemplatePartModalContentsProps ) {
 	const defaultModalTitle = useSelect(
 		( select ) =>
-			// @ts-ignore
+			// @ts-expect-error getPostType is not typed with 'wp_template_part' as argument.
 			select( coreStore ).getPostType( 'wp_template_part' )?.labels
 				?.add_new_item,
 		[]
@@ -77,7 +77,6 @@ export default function CreateTemplatePartModal( {
 			focusOnMount="firstContentElement"
 			size="medium"
 		>
-			{ /* @ts-ignore */ }
 			<CreateTemplatePartModalContents { ...restProps } />
 		</Modal>
 	);

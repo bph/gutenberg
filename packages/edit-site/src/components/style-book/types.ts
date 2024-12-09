@@ -1,4 +1,4 @@
-type Block = {
+export type Block = {
 	name: string;
 	attributes: Record< string, unknown >;
 	innerBlocks?: Block[];

@@ -63,7 +63,7 @@ test.describe( 'Columns', () => {
 		);
 		await editor.clickBlockToolbarButton( 'Options' );
 		await page.click( 'role=menuitem[name="Lock"i]' );
-		await page.locator( 'role=checkbox[name="Prevent removal"i]' ).check();
+		await page.locator( 'role=checkbox[name="Lock removal"i]' ).check();
 		await page.click( 'role=button[name="Apply"i]' );
 
 		// Select columns block

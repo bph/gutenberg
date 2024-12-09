@@ -53,7 +53,11 @@ interface ViewTypeMenuProps {
 	defaultLayouts?: SupportedLayouts;
 }
 
-const DATAVIEWS_CONFIG_POPOVER_PROPS = { placement: 'bottom-end', offset: 9 };
+const DATAVIEWS_CONFIG_POPOVER_PROPS = {
+	className: 'dataviews-config__popover',
+	placement: 'bottom-end',
+	offset: 9,
+};
 
 function ViewTypeMenu( {
 	defaultLayouts = { list: {}, grid: {}, table: {} },
@@ -619,6 +623,7 @@ function DataviewsViewConfigDropdown() {
 	);
 	return (
 		<Dropdown
+			expandOnMobile
 			popoverProps={ {
 				...DATAVIEWS_CONFIG_POPOVER_PROPS,
 				id: popoverId,
@@ -636,7 +641,10 @@ function DataviewsViewConfigDropdown() {
 				);
 			} }
 			renderContent={ () => (
-				<DropdownContentWrapper paddingSize="medium">
+				<DropdownContentWrapper
+					paddingSize="medium"
+					className="dataviews-config__popover-content-wrapper"
+				>
 					<VStack className="dataviews-view-config" spacing={ 6 }>
 						<SettingsSection title={ __( 'Appearance' ) }>
 							<HStack expanded className="is-divided-in-two">

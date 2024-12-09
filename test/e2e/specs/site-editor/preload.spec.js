@@ -6,6 +6,7 @@ const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 test.describe( 'Preload', () => {
 	test.beforeAll( async ( { requestUtils } ) => {
 		await requestUtils.activateTheme( 'emptytheme' );
+		await requestUtils.resetPreferences();
 	} );
 
 	test.afterAll( async ( { requestUtils } ) => {
