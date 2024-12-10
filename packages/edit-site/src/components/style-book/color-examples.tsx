@@ -18,13 +18,25 @@ import {
  */
 import type { Color, Gradient } from './types';
 
-const ColorExamples = ( { colors, type } ): JSX.Element | null => {
+type Props = {
+	colors: Color[] | Gradient[];
+	type: 'colors' | 'gradients';
+	templateColumns?: string | number;
+	itemHeight?: string;
+};
+
+const ColorExamples = ( {
+	colors,
+	type,
+	templateColumns = '1fr 1fr',
+	itemHeight = '52px',
+}: Props ): JSX.Element | null => {
 	if ( ! colors ) {
 		return null;
 	}
 
 	return (
-		<Grid columns={ 2 } rowGap={ 8 } columnGap={ 16 }>
+		<Grid templateColumns={ templateColumns } rowGap={ 8 } columnGap={ 16 }>
 			{ colors.map( ( color: Color | Gradient ) => {
 				const className =
 					type === 'gradients'
@@ -35,7 +47,13 @@ const ColorExamples = ( { colors, type } ): JSX.Element | null => {
 					className
 				);
 
-				return <View key={ color.slug } className={ classes } />;
+				return (
+					<View
+						key={ color.slug }
+						className={ classes }
+						style={ { height: itemHeight } }
+					/>
+				);
 			} ) }
 		</Grid>
 	);

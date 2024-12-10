@@ -33,6 +33,10 @@
 	&.has-description &__header {
 		margin-bottom: $grid-unit-10;
 	}
+
+	.editor-post-card-panel__description {
+		color: $gray-700;
+	}
 }
 
 .editor-post-card-panel__title-badge {

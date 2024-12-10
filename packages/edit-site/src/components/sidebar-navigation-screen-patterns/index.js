@@ -7,8 +7,6 @@ import {
 } from '@wordpress/components';
 import { getTemplatePartIcon } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
-import { store as coreStore } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
 import { file } from '@wordpress/icons';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
 
@@ -115,14 +113,9 @@ export default function SidebarNavigationScreenPatterns( { backPath } ) {
 	const { templatePartAreas, hasTemplateParts, isLoading } =
 		useTemplatePartAreas();
 	const { patternCategories, hasPatterns } = usePatternCategories();
-	const isBlockBasedTheme = useSelect(
-		( select ) => select( coreStore ).getCurrentTheme()?.is_block_theme,
-		[]
-	);
 
 	return (
 		<SidebarNavigationScreen
-			isRoot={ ! isBlockBasedTheme }
 			title={ __( 'Patterns' ) }
 			description={ __(
 				'Manage what patterns are available when editing the site.'

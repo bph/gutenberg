@@ -17,13 +17,18 @@ const { CommentIconSlotFill } = unlock( blockEditorPrivateApis );
 const AddCommentButton = ( { onClick } ) => {
 	return (
 		<CommentIconSlotFill.Fill>
-			<MenuItem
-				icon={ commentIcon }
-				onClick={ onClick }
-				aria-haspopup="dialog"
-			>
-				{ _x( 'Comment', 'Add comment button' ) }
-			</MenuItem>
+			{ ( { onClose } ) => (
+				<MenuItem
+					icon={ commentIcon }
+					onClick={ () => {
+						onClick();
+						onClose();
+					} }
+					aria-haspopup="dialog"
+				>
+					{ _x( 'Comment', 'Add comment button' ) }
+				</MenuItem>
+			) }
 		</CommentIconSlotFill.Fill>
 	);
 };

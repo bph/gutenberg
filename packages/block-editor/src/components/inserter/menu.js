@@ -82,6 +82,8 @@ function InserterMenu(
 		if ( isZoomOutMode ) {
 			return 'patterns';
 		}
+
+		return 'blocks';
 	}
 	const [ selectedTab, setSelectedTab ] = useState( getInitialTab() );
 

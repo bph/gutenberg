@@ -223,6 +223,7 @@ interface Store {
 	state: {
 		url: string;
 		navigation: {
+			isLoading: boolean;
 			hasStarted: boolean;
 			hasFinished: boolean;
 		};
@@ -237,6 +238,7 @@ export const { state, actions } = store< Store >( 'core/router', {
 	state: {
 		url: window.location.href,
 		navigation: {
+			isLoading: false,
 			hasStarted: false,
 			hasFinished: false,
 		},
@@ -289,6 +291,7 @@ export const { state, actions } = store< Store >( 'core/router', {
 					return;
 				}
 
+				navigation.isLoading = true;
 				if ( loadingAnimation ) {
 					navigation.hasStarted = true;
 					navigation.hasFinished = false;
@@ -328,6 +331,7 @@ export const { state, actions } = store< Store >( 'core/router', {
 
 				// Update the navigation status once the the new page rendering
 				// has been completed.
+				navigation.isLoading = false;
 				if ( loadingAnimation ) {
 					navigation.hasStarted = false;
 					navigation.hasFinished = true;

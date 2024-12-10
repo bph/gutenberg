@@ -42,7 +42,10 @@ function CommentForm( { onSubmit, onCancel, thread, submitButtonText } ) {
 					__next40pxDefaultSize
 					accessibleWhenDisabled
 					variant="primary"
-					onClick={ () => onSubmit( inputComment ) }
+					onClick={ () => {
+						onSubmit( inputComment );
+						setInputComment( '' );
+					} }
 					disabled={
 						0 === sanitizeCommentString( inputComment ).length
 					}

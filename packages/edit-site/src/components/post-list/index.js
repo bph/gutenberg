@@ -13,7 +13,7 @@ import { DataViews, filterSortAndPaginate } from '@wordpress/dataviews';
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { drawerRight } from '@wordpress/icons';
-import { usePrevious } from '@wordpress/compose';
+import { useEvent, usePrevious } from '@wordpress/compose';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -112,53 +112,50 @@ function useView( postType ) {
 		};
 	} );
 
-	const setViewWithUrlUpdate = useCallback(
-		( newView ) => {
-			if ( newView.type === LAYOUT_LIST && ! layout ) {
-				// Skip updating the layout URL param if
-				// it is not present and the newView.type is LAYOUT_LIST.
-			} else if ( newView.type !== layout ) {
-				history.navigate(
-					addQueryArgs( path, {
-						layout: newView.type,
-					} )
-				);
-			}
+	const setViewWithUrlUpdate = useEvent( ( newView ) => {
+		setView( newView );
 
-			setView( newView );
+		if ( isCustom === 'true' && editedEntityRecord?.id ) {
+			editEntityRecord(
+				'postType',
+				'wp_dataviews',
+				editedEntityRecord?.id,
+				{
+					content: JSON.stringify( newView ),
+				}
+			);
+		}
 
-			if ( isCustom === 'true' && editedEntityRecord?.id ) {
-				editEntityRecord(
-					'postType',
-					'wp_dataviews',
-					editedEntityRecord?.id,
-					{
-						content: JSON.stringify( newView ),
-					}
-				);
-			}
-		},
-		[
-			history,
-			isCustom,
-			editEntityRecord,
-			editedEntityRecord?.id,
-			layout,
-			path,
-		]
-	);
+		const currentUrlLayout = layout ?? LAYOUT_LIST;
+		if ( newView.type !== currentUrlLayout ) {
+			history.navigate(
+				addQueryArgs( path, {
+					layout: newView.type,
+				} )
+			);
+		}
+	} );
 
 	// When layout URL param changes, update the view type
 	// without affecting any other config.
+	const onUrlLayoutChange = useEvent( () => {
+		setView( ( prevView ) => {
+			const layoutToApply = layout ?? LAYOUT_LIST;
+			if ( layoutToApply === prevView.type ) {
+				return prevView;
+			}
+			return {
+				...prevView,
+				type: layout ?? LAYOUT_LIST,
+			};
+		} );
+	} );
 	useEffect( () => {
-		setView( ( prevView ) => ( {
-			...prevView,
-			type: layout ?? LAYOUT_LIST,
-		} ) );
-	}, [ layout ] );
+		onUrlLayoutChange();
+	}, [ onUrlLayoutChange, layout ] );
 
 	// When activeView or isCustom URL parameters change, reset the view.
-	useEffect( () => {
+	const onUrlActiveViewChange = useEvent( () => {
 		let newView;
 		if ( isCustom === 'true' ) {
 			newView = getCustomView( editedEntityRecord );
@@ -173,9 +170,18 @@ function useView( postType ) {
 				type,
 			} );
 		}
-	}, [ activeView, isCustom, layout, defaultViews, editedEntityRecord ] );
+	} );
+	useEffect( () => {
+		onUrlActiveViewChange();
+	}, [
+		onUrlActiveViewChange,
+		activeView,
+		isCustom,
+		defaultViews,
+		editedEntityRecord,
+	] );
 
-	return [ view, setViewWithUrlUpdate, setViewWithUrlUpdate ];
+	return [ view, setViewWithUrlUpdate ];
 }
 
 const DEFAULT_STATUSES = 'draft,future,pending,private,publish'; // All but 'trash'.

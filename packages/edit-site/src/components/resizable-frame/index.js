@@ -15,6 +15,8 @@ import {
 import { useInstanceId, useReducedMotion } from '@wordpress/compose';
 import { __, isRTL } from '@wordpress/i18n';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
+import { useSelect } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -106,6 +108,10 @@ function ResizableFrame( {
 		'edit-site-resizable-frame-handle-help'
 	);
 	const defaultAspectRatio = defaultSize.width / defaultSize.height;
+	const isBlockTheme = useSelect( ( select ) => {
+		const { getCurrentTheme } = select( coreStore );
+		return getCurrentTheme()?.is_block_theme;
+	}, [] );
 
 	const handleResizeStart = ( _event, _direction, ref ) => {
 		// Remember the starting width so we don't have to get `ref.offsetWidth` on
@@ -153,7 +159,10 @@ function ResizableFrame( {
 		const remainingWidth =
 			ref.ownerDocument.documentElement.offsetWidth - ref.offsetWidth;
 
-		if ( remainingWidth > SNAP_TO_EDIT_CANVAS_MODE_THRESHOLD ) {
+		if (
+			remainingWidth > SNAP_TO_EDIT_CANVAS_MODE_THRESHOLD ||
+			! isBlockTheme
+		) {
 			// Reset the initial aspect ratio if the frame is resized slightly
 			// above the sidebar but not far enough to trigger full screen.
 			setFrameSize( INITIAL_FRAME_SIZE );

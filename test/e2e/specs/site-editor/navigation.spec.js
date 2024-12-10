@@ -45,13 +45,6 @@ test.describe( 'Site editor navigation', () => {
 			page.getByRole( 'button', { name: 'Pages' } )
 		).toBeFocused();
 
-		// Navigate to the Saved button first, as it precedes the editor iframe.
-		await editorNavigationUtils.tabToLabel( 'Saved' );
-		const savedButton = page.getByRole( 'button', {
-			name: 'Saved',
-		} );
-		await expect( savedButton ).toBeFocused();
-
 		// Get the iframe when it has a role=button and Edit label.
 		const editorCanvasRegion = page.getByRole( 'region', {
 			name: 'Editor content',
@@ -59,6 +52,15 @@ test.describe( 'Site editor navigation', () => {
 		const editorCanvasButton = editorCanvasRegion.getByRole( 'button', {
 			name: 'Edit',
 		} );
+
+		await expect( editorCanvasButton ).toBeVisible();
+
+		// Navigate to the Saved button first, as it precedes the editor iframe.
+		await editorNavigationUtils.tabToLabel( 'Saved' );
+		const savedButton = page.getByRole( 'button', {
+			name: 'Saved',
+		} );
+		await expect( savedButton ).toBeFocused();
 
 		// Test that there are no tab stops between the Saved button and the
 		// focusable iframe with role=button.

@@ -20,38 +20,57 @@ import { usePostActions } from './actions';
 
 const { Menu, kebabCase } = unlock( componentsPrivateApis );
 
-export default function PostActions( { postType, postId, onActionPerformed } ) {
-	const [ activeModalAction, setActiveModalAction ] = useState( null );
-	const { item, permissions } = useSelect(
+function useEditedEntityRecordsWithPermissions( postType, postIds ) {
+	const { items, permissions } = useSelect(
 		( select ) => {
 			const { getEditedEntityRecord, getEntityRecordPermissions } =
 				unlock( select( coreStore ) );
 			return {
-				item: getEditedEntityRecord( 'postType', postType, postId ),
-				permissions: getEntityRecordPermissions(
-					'postType',
-					postType,
-					postId
+				items: postIds.map( ( postId ) =>
+					getEditedEntityRecord( 'postType', postType, postId )
+				),
+				permissions: postIds.map( ( postId ) =>
+					getEntityRecordPermissions( 'postType', postType, postId )
 				),
 			};
 		},
-		[ postId, postType ]
+		[ postIds, postType ]
 	);
-	const itemWithPermissions = useMemo( () => {
-		return {
+
+	return useMemo( () => {
+		return items.map( ( item, index ) => ( {
 			...item,
-			permissions,
-		};
-	}, [ item, permissions ] );
+			permissions: permissions[ index ],
+		} ) );
+	}, [ items, permissions ] );
+}
+
+export default function PostActions( { postType, postId, onActionPerformed } ) {
+	const [ activeModalAction, setActiveModalAction ] = useState( null );
+	const _postIds = useMemo( () => {
+		if ( Array.isArray( postId ) ) {
+			return postId;
+		}
+		return postId ? [ postId ] : [];
+	}, [ postId ] );
+
+	const itemsWithPermissions = useEditedEntityRecordsWithPermissions(
+		postType,
+		_postIds
+	);
 	const allActions = usePostActions( { postType, onActionPerformed } );
 
 	const actions = useMemo( () => {
 		return allActions.filter( ( action ) => {
 			return (
-				! action.isEligible || action.isEligible( itemWithPermissions )
+				( ! action.isEligible ||
+					itemsWithPermissions.some( ( itemWithPermissions ) =>
+						action.isEligible( itemWithPermissions )
+					) ) &&
+				( itemsWithPermissions.length < 2 || action.supportsBulk )
 			);
 		} );
-	}, [ allActions, itemWithPermissions ] );
+	}, [ allActions, itemsWithPermissions ] );
 
 	return (
 		<>
@@ -70,14 +89,14 @@ export default function PostActions( { postType, postId, onActionPerformed } ) {
 			>
 				<ActionsDropdownMenuGroup
 					actions={ actions }
-					item={ itemWithPermissions }
+					items={ itemsWithPermissions }
 					setActiveModalAction={ setActiveModalAction }
 				/>
 			</Menu>
 			{ !! activeModalAction && (
 				<ActionModal
 					action={ activeModalAction }
-					items={ [ item ] }
+					items={ itemsWithPermissions }
 					closeModal={ () => setActiveModalAction( null ) }
 				/>
 			) }
@@ -119,7 +138,7 @@ export function ActionModal( { action, items, closeModal } ) {
 	);
 }
 
-function ActionsDropdownMenuGroup( { actions, item, setActiveModalAction } ) {
+function ActionsDropdownMenuGroup( { actions, items, setActiveModalAction } ) {
 	const registry = useRegistry();
 	return (
 		<Menu.Group>
@@ -133,9 +152,9 @@ function ActionsDropdownMenuGroup( { actions, item, setActiveModalAction } ) {
 								setActiveModalAction( action );
 								return;
 							}
-							action.callback( [ item ], { registry } );
+							action.callback( items, { registry } );
 						} }
-						items={ [ item ] }
+						items={ items }
 					/>
 				);
 			} ) }

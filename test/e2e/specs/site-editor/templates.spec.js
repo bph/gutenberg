@@ -40,4 +40,27 @@ test.describe( 'Templates', () => {
 			)
 		).toBeVisible();
 	} );
+
+	test( 'Persists filter/search when switching layout', async ( {
+		page,
+		admin,
+	} ) => {
+		await admin.visitSiteEditor();
+		await page.getByRole( 'button', { name: 'Templates' } ).click();
+
+		// Search templates
+		await page.getByRole( 'searchbox', { name: 'Search' } ).fill( 'Index' );
+
+		// Switch layout
+		await page.getByRole( 'button', { name: 'Layout' } ).click();
+		await page.getByRole( 'menuitemradio', { name: 'Table' } ).click();
+
+		// Confirm the table is visible
+		await expect( page.getByRole( 'table' ) ).toContainText( 'Index' );
+
+		// The search should still contain the search term
+		await expect(
+			page.getByRole( 'searchbox', { name: 'Search' } )
+		).toHaveValue( 'Index' );
+	} );
 } );

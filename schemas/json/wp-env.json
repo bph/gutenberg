@@ -62,6 +62,10 @@
 					"description": "Mapping of WordPress directories to local directories to be mounted in the WordPress instance.",
 					"type": "object",
 					"default": {}
+				},
+				"phpmyadminPort": {
+					"description": "The port number to access phpMyAdmin.",
+					"type": "integer"
 				}
 			}
 		},
@@ -73,7 +77,8 @@
 				"themes",
 				"port",
 				"config",
-				"mappings"
+				"mappings",
+				"phpmyadminPort"
 			]
 		}
 	},

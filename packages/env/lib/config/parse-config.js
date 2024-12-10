@@ -46,14 +46,15 @@ const mergeConfigs = require( './merge-configs' );
  * The environment-specific configuration options. (development/tests/etc)
  *
  * @typedef WPEnvironmentConfig
- * @property {WPSource}                  coreSource    The WordPress installation to load in the environment.
- * @property {WPSource[]}                pluginSources Plugins to load in the environment.
- * @property {WPSource[]}                themeSources  Themes to load in the environment.
- * @property {number}                    port          The port to use.
- * @property {number}                    mysqlPort     The port to use for MySQL. Random if empty.
- * @property {Object}                    config        Mapping of wp-config.php constants to their desired values.
- * @property {Object.<string, WPSource>} mappings      Mapping of WordPress directories to local directories which should be mounted.
- * @property {string|null}               phpVersion    Version of PHP to use in the environments, of the format 0.0.
+ * @property {WPSource}                  coreSource     The WordPress installation to load in the environment.
+ * @property {WPSource[]}                pluginSources  Plugins to load in the environment.
+ * @property {WPSource[]}                themeSources   Themes to load in the environment.
+ * @property {number}                    port           The port to use.
+ * @property {number}                    mysqlPort      The port to use for MySQL. Random if empty.
+ * @property {number}                    phpmyadminPort The port to use for phpMyAdmin. If empty, disabled phpMyAdmin.
+ * @property {Object}                    config         Mapping of wp-config.php constants to their desired values.
+ * @property {Object.<string, WPSource>} mappings       Mapping of WordPress directories to local directories which should be mounted.
+ * @property {string|null}               phpVersion     Version of PHP to use in the environments, of the format 0.0.
  */
 
 /**
@@ -87,6 +88,7 @@ const DEFAULT_ENVIRONMENT_CONFIG = {
 	port: 8888,
 	testsPort: 8889,
 	mysqlPort: null,
+	phpmyadminPort: null,
 	mappings: {},
 	config: {
 		FS_METHOD: 'direct',
@@ -282,6 +284,11 @@ function getEnvironmentVarOverrides( cacheDirectoryPath ) {
 		overrideConfig.env.development.mysqlPort = overrides.mysqlPort;
 	}
 
+	if ( overrides.phpmyadminPort ) {
+		overrideConfig.env.development.phpmyadminPort =
+			overrides.phpmyadminPort;
+	}
+
 	if ( overrides.testsPort ) {
 		overrideConfig.testsPort = overrides.testsPort;
 		overrideConfig.env.tests.port = overrides.testsPort;
@@ -453,6 +460,10 @@ async function parseEnvironmentConfig(
 
 	if ( config.mysqlPort !== undefined ) {
 		parsedConfig.mysqlPort = config.mysqlPort;
+	}
+
+	if ( config.phpmyadminPort !== undefined ) {
+		parsedConfig.phpmyadminPort = config.phpmyadminPort;
 	}
 
 	if ( config.phpVersion !== undefined ) {

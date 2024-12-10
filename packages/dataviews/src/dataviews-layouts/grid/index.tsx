@@ -82,11 +82,11 @@ function GridItem< Item >( {
 		className: 'dataviews-view-grid__media',
 	} );
 
-	const clickablePrimaryItemProps = getClickableItemProps( {
+	const clickableTitleItemProps = getClickableItemProps( {
 		item,
 		isItemClickable,
 		onClickItem,
-		className: 'dataviews-view-grid__primary-field dataviews-title-field',
+		className: 'dataviews-view-grid__title-field dataviews-title-field',
 	} );
 
 	return (
@@ -128,9 +128,7 @@ function GridItem< Item >( {
 				justify="space-between"
 				className="dataviews-view-grid__title-actions"
 			>
-				<div { ...clickablePrimaryItemProps }>
-					{ renderedTitleField }
-				</div>
+				<div { ...clickableTitleItemProps }>{ renderedTitleField }</div>
 				<ItemActions item={ item } actions={ actions } isCompact />
 			</HStack>
 			<VStack spacing={ 1 }>

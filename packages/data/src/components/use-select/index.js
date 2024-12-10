@@ -174,7 +174,7 @@ function Store( registry, suspense ) {
 				listeningStores
 			);
 
-			if ( process.env.NODE_ENV === 'development' ) {
+			if ( globalThis.SCRIPT_DEBUG ) {
 				if ( ! didWarnUnstableReference ) {
 					const secondMapResult = mapSelect( select, registry );
 					if ( ! isShallowEqual( mapResult, secondMapResult ) ) {

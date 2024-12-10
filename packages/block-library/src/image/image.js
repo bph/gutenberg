@@ -1126,7 +1126,7 @@ export default function Image( {
 				id &&
 				clientId === selectedClientIds[ 0 ] && (
 					<MenuItem onClick={ setPostFeatureImage }>
-						{ __( 'Set featured image' ) }
+						{ __( 'Set as featured image' ) }
 					</MenuItem>
 				)
 			}

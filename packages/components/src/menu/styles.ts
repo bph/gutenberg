@@ -201,7 +201,7 @@ const baseItem = css`
 			[aria-disabled='true']
 		) {
 		background-color: ${ COLORS.theme.accent };
-		color: ${ COLORS.white };
+		color: ${ COLORS.theme.accentInverted };
 	}
 
 	/* Keyboard focus (focus-visible) */

@@ -189,6 +189,30 @@ test.describe( 'Style Book', () => {
 	} );
 } );
 
+test.describe( 'Style Book for classic themes', () => {
+	test( 'Should show Style Book for a theme that supports it', async ( {
+		page,
+		admin,
+		requestUtils,
+	} ) => {
+		// Make sure a classic theme is active.
+		await requestUtils.activateTheme( 'twentytwentyone' );
+		// Go to site editor.
+		await admin.visitAdminPage( 'site-editor.php' );
+
+		// Open the Style Book.
+		await page.getByRole( 'button', { name: 'Styles' } ).click();
+
+		// Block examples should be visible.
+		const blockExamples = page
+			.frameLocator( '[name="style-book-canvas"]' )
+			.getByRole( 'grid', {
+				name: 'Examples of blocks',
+			} );
+		await expect( blockExamples ).toBeVisible();
+	} );
+} );
+
 class StyleBook {
 	constructor( { page } ) {
 		this.page = page;

@@ -1,15 +1,15 @@
 /**
  * Internal dependencies
  */
-import Editor from '../editor';
 import SidebarNavigationScreenMain from '../sidebar-navigation-screen-main';
+import { MaybeEditor } from '../maybe-editor';
 
 export const homeRoute = {
 	name: 'home',
 	path: '/',
 	areas: {
 		sidebar: <SidebarNavigationScreenMain />,
-		preview: <Editor />,
+		preview: <MaybeEditor showEditor={ false } />,
 		mobile: <SidebarNavigationScreenMain />,
 	},
 };

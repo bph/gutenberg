@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Enhancements
+
+- Add phpMyAdmin as an optional service. Enabled via the new `phpmyadminPort` environment config, as well as env vars `WP_ENV_PHPMYADMIN_PORT` and `WP_ENV_TESTS_PHPMYADMIN_PORT`.
+
 ## 10.13.0 (2024-11-27)
 
 ## 10.12.0 (2024-11-16)

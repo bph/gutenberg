@@ -116,9 +116,33 @@ add_action( 'admin_init', 'gutenberg_redirect_site_editor_deprecated_urls' );
  * @return callable The default handler or a custom handler.
  */
 function gutenberg_styles_wp_die_handler( $default_handler ) {
-	if ( ! wp_is_block_theme() && str_contains( $_SERVER['REQUEST_URI'], 'site-editor.php' ) && isset( $_GET['p'] ) ) {
+	if ( ! wp_is_block_theme() && str_contains( $_SERVER['REQUEST_URI'], 'site-editor.php' ) && current_user_can( 'edit_theme_options' ) ) {
 		return '__return_false';
 	}
 	return $default_handler;
 }
 add_filter( 'wp_die_handler', 'gutenberg_styles_wp_die_handler' );
+
+/**
+ * Add a Styles submenu under the Appearance menu
+ * for Classic themes.
+ *
+ * @global array $submenu
+ */
+function gutenberg_add_styles_submenu_item() {
+	if ( ! wp_is_block_theme() && ( current_theme_supports( 'editor-styles' ) || wp_theme_has_theme_json() ) ) {
+		global $submenu;
+
+		$styles_menu_item = array(
+			__( 'Design', 'gutenberg' ),
+			'edit_theme_options',
+			'site-editor.php',
+		);
+		// If $submenu exists, insert the Styles submenu item at position 2.
+		if ( $submenu && isset( $submenu['themes.php'] ) ) {
+			// This might not work as expected if the submenu has already been modified.
+			array_splice( $submenu['themes.php'], 1, 1, array( $styles_menu_item ) );
+		}
+	}
+}
+add_action( 'admin_init', 'gutenberg_add_styles_submenu_item' );

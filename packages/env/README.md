@@ -349,7 +349,7 @@ containers.
 Positionals:
   container  The Docker service to run the command on.
               [string] [required] [choices: "mysql", "tests-mysql", "wordpress",
-                   "tests-wordpress", "cli", "tests-cli", "composer", "phpunit"]
+                   "tests-wordpress", "cli", "tests-cli", "composer", "phpmyadmin"]
   command    The command to run.                                      [required]
 
 Options:

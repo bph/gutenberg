@@ -8,7 +8,7 @@ import { store as coreStore } from '@wordpress/core-data';
 /**
  * Custom hook to get the page type badge for the current post on edit site view.
  *
- * @param {number} postId postId of the current post being edited.
+ * @param {number|string} postId postId of the current post being edited.
  */
 export default function usePageTypeBadge( postId ) {
 	const { isFrontPage, isPostsPage } = useSelect( ( select ) => {
@@ -20,9 +20,11 @@ export default function usePageTypeBadge( postId ) {
 			? getEditedEntityRecord( 'root', 'site' )
 			: undefined;
 
+		const _postId = parseInt( postId, 10 );
+
 		return {
-			isFrontPage: siteSettings?.page_on_front === postId,
-			isPostsPage: siteSettings?.page_for_posts === postId,
+			isFrontPage: siteSettings?.page_on_front === _postId,
+			isPostsPage: siteSettings?.page_for_posts === _postId,
 		};
 	} );
 

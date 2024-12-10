@@ -20,6 +20,7 @@ import { templatesRoute } from './templates';
 import { templateItemRoute } from './template-item';
 import { pagesRoute } from './pages';
 import { pageItemRoute } from './page-item';
+import { stylebookRoute } from './stylebook';
 
 const routes = [
 	pageItemRoute,
@@ -33,6 +34,7 @@ const routes = [
 	navigationRoute,
 	stylesRoute,
 	homeRoute,
+	stylebookRoute,
 ];
 
 export function useRegisterSiteEditorRoutes() {

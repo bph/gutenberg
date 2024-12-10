@@ -28,32 +28,51 @@ test.describe( 'Site Editor Inserter', () => {
 		},
 	} );
 
-	// eslint-disable-next-line playwright/expect-expect
 	test( 'inserter toggle button should toggle global inserter', async ( {
 		InserterUtils,
-	} ) => {
-		await InserterUtils.openBlockLibrary();
-		await InserterUtils.closeBlockLibrary();
-	} );
-
-	// A test for https://github.com/WordPress/gutenberg/issues/43090.
-	test( 'should close the inserter when clicking on the toggle button', async ( {
+		page,
 		editor,
-		InserterUtils,
 	} ) => {
-		const beforeBlocks = await editor.getBlocks();
-
 		await InserterUtils.openBlockLibrary();
-		await InserterUtils.expectActiveTab( 'Blocks' );
-		await InserterUtils.blockLibrary
-			.getByRole( 'option', { name: 'Buttons' } )
-			.click();
-
-		await expect
-			.poll( editor.getBlocks )
-			.toMatchObject( [ ...beforeBlocks, { name: 'core/buttons' } ] );
-
 		await InserterUtils.closeBlockLibrary();
+
+		await test.step( 'should open the inserter via enter keypress on toggle button', async () => {
+			await InserterUtils.inserterButton.focus();
+			await page.keyboard.press( 'Enter' );
+			await expect( InserterUtils.blockLibrary ).toBeVisible();
+		} );
+
+		await test.step( 'should set focus to the blocks tab when opening the inserter', async () => {
+			await expect(
+				InserterUtils.getBlockLibraryTab( 'Blocks' )
+			).toBeFocused();
+		} );
+
+		await test.step( 'should close the inserter via escape keypress', async () => {
+			await page.keyboard.press( 'Escape' );
+			await expect( InserterUtils.blockLibrary ).toBeHidden();
+		} );
+
+		await test.step( 'should focus inserter toggle button after closing the inserter via escape keypress', async () => {
+			await expect( InserterUtils.inserterButton ).toBeFocused();
+		} );
+
+		// A test for https://github.com/WordPress/gutenberg/issues/43090.
+		await test.step( 'should close the inserter when clicking on the toggle button', async () => {
+			const beforeBlocks = await editor.getBlocks();
+
+			await InserterUtils.openBlockLibrary();
+			await InserterUtils.expectActiveTab( 'Blocks' );
+			await InserterUtils.blockLibrary
+				.getByRole( 'option', { name: 'Buttons' } )
+				.click();
+
+			await expect
+				.poll( editor.getBlocks )
+				.toMatchObject( [ ...beforeBlocks, { name: 'core/buttons' } ] );
+
+			await InserterUtils.closeBlockLibrary();
+		} );
 	} );
 
 	test.describe( 'Inserter Zoom Level UX', () => {

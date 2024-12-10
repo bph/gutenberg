@@ -14,13 +14,3 @@
 		padding-top: $grid-unit-20;
 	}
 }
-
-.edit-site-post-edit-header {
-	.edit-site-post-edit-header__description {
-		color: $gray-700;
-	}
-
-	.edit-site-post-edit-header__title {
-		@include heading-medium();
-	}
-}

@@ -17,12 +17,13 @@ import {
 	privateApis as blockEditorPrivateApis,
 	store as blockEditorStore,
 	useSettings,
+	BlockEditorProvider,
 	__unstableEditorStyles as EditorStyles,
 	__unstableIframe as Iframe,
 	__experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients,
 } from '@wordpress/block-editor';
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
-import { useSelect } from '@wordpress/data';
+import { useSelect, dispatch } from '@wordpress/data';
 import { useResizeObserver } from '@wordpress/compose';
 import {
 	useMemo,
@@ -45,6 +46,7 @@ import {
 	getTopLevelStyleBookCategories,
 } from './categories';
 import { getExamples } from './examples';
+import { store as siteEditorStore } from '../../store';
 
 const {
 	ExperimentalBlockEditorProvider,
@@ -191,6 +193,31 @@ function useMultiOriginPalettes() {
 	return palettes;
 }
 
+/**
+ * Get deduped examples for single page stylebook.
+ * @param {Array} examples Array of examples.
+ * @return {Array} Deduped examples.
+ */
+export function getExamplesForSinglePageUse( examples ) {
+	const examplesForSinglePageUse = [];
+	const overviewCategoryExamples = getExamplesByCategory(
+		{ slug: 'overview' },
+		examples
+	);
+	examplesForSinglePageUse.push( ...overviewCategoryExamples.examples );
+	const otherExamples = examples.filter( ( example ) => {
+		return (
+			example.category !== 'overview' &&
+			! overviewCategoryExamples.examples.find(
+				( overviewExample ) => overviewExample.name === example.name
+			)
+		);
+	} );
+	examplesForSinglePageUse.push( ...otherExamples );
+
+	return examplesForSinglePageUse;
+}
+
 function StyleBook( {
 	enableResizing = true,
 	isSelected,
@@ -217,21 +244,7 @@ function StyleBook( {
 		[ examples ]
 	);
 
-	const examplesForSinglePageUse = [];
-	const overviewCategoryExamples = getExamplesByCategory(
-		{ slug: 'overview' },
-		examples
-	);
-	examplesForSinglePageUse.push( ...overviewCategoryExamples.examples );
-	const otherExamples = examples.filter( ( example ) => {
-		return (
-			example.category !== 'overview' &&
-			! overviewCategoryExamples.examples.find(
-				( overviewExample ) => overviewExample.name === example.name
-			)
-		);
-	} );
-	examplesForSinglePageUse.push( ...otherExamples );
+	const examplesForSinglePageUse = getExamplesForSinglePageUse( examples );
 
 	const { base: baseConfig } = useContext( GlobalStylesContext );
 	const goTo = getStyleBookNavigationFromPath( path );
@@ -330,7 +343,76 @@ function StyleBook( {
 	);
 }
 
-const StyleBookBody = ( {
+/**
+ * Style Book Preview component renders the stylebook without the Editor dependency.
+ *
+ * @param {Object}   props            Component props.
+ * @param {string}   props.path       Path to the selected block.
+ * @param {Object}   props.userConfig User configuration.
+ * @param {Function} props.isSelected Function to check if a block is selected.
+ * @param {Function} props.onSelect   Function to select a block.
+ * @return {Object} Style Book Preview component.
+ */
+export const StyleBookPreview = ( {
+	path = '',
+	userConfig = {},
+	isSelected,
+	onSelect,
+} ) => {
+	const siteEditorSettings = useSelect(
+		( select ) => select( siteEditorStore ).getSettings(),
+		[]
+	);
+	// Update block editor settings because useMultipleOriginColorsAndGradients fetch colours from there.
+	dispatch( blockEditorStore ).updateSettings( siteEditorSettings );
+
+	const [ resizeObserver, sizes ] = useResizeObserver();
+	const colors = useMultiOriginPalettes();
+	const examples = getExamples( colors );
+	const examplesForSinglePageUse = getExamplesForSinglePageUse( examples );
+
+	const { base: baseConfig } = useContext( GlobalStylesContext );
+	const goTo = getStyleBookNavigationFromPath( path );
+
+	const mergedConfig = useMemo( () => {
+		if ( ! isObjectEmpty( userConfig ) && ! isObjectEmpty( baseConfig ) ) {
+			return mergeBaseAndUserConfigs( baseConfig, userConfig );
+		}
+		return {};
+	}, [ baseConfig, userConfig ] );
+
+	const [ globalStyles ] = useGlobalStylesOutputWithConfig( mergedConfig );
+
+	const settings = useMemo(
+		() => ( {
+			...siteEditorSettings,
+			styles:
+				! isObjectEmpty( globalStyles ) && ! isObjectEmpty( userConfig )
+					? globalStyles
+					: siteEditorSettings.styles,
+			isPreviewMode: true,
+		} ),
+		[ globalStyles, siteEditorSettings, userConfig ]
+	);
+
+	return (
+		<div className="edit-site-style-book">
+			{ resizeObserver }
+			<BlockEditorProvider settings={ settings }>
+				<StyleBookBody
+					examples={ examplesForSinglePageUse }
+					settings={ settings }
+					goTo={ goTo }
+					sizes={ sizes }
+					isSelected={ isSelected }
+					onSelect={ onSelect }
+				/>
+			</BlockEditorProvider>
+		</div>
+	);
+};
+
+export const StyleBookBody = ( {
 	category,
 	examples,
 	isSelected,
@@ -457,7 +539,11 @@ const Examples = memo(
 							content={ example.content }
 							blocks={ example.blocks }
 							isSelected={ isSelected?.( example.name ) }
-							onClick={ () => onSelect?.( example.name ) }
+							onClick={
+								!! onSelect
+									? () => onSelect( example.name )
+									: null
+							}
 						/>
 					) ) }
 				{ !! filteredExamples?.subcategories?.length &&
@@ -494,9 +580,7 @@ const Subcategory = ( { examples, isSelected, onSelect } ) => {
 				content={ example.content }
 				blocks={ example.blocks }
 				isSelected={ isSelected?.( example.name ) }
-				onClick={ () => {
-					onSelect?.( example.name );
-				} }
+				onClick={ !! onSelect ? () => onSelect( example.name ) : null }
 			/>
 		) )
 	);
@@ -524,12 +608,13 @@ const Example = ( { id, title, blocks, isSelected, onClick, content } ) => {
 		[ blocks ]
 	);
 
-	const disabledProps = disabledExamples.includes( id )
-		? {
-				disabled: true,
-				accessibleWhenDisabled: true,
-		  }
-		: {};
+	const disabledProps =
+		disabledExamples.includes( id ) || ! onClick
+			? {
+					disabled: true,
+					accessibleWhenDisabled: !! onClick,
+			  }
+			: {};
 
 	return (
 		<div role="row">
@@ -540,13 +625,17 @@ const Example = ( { id, title, blocks, isSelected, onClick, content } ) => {
 						'is-disabled-example': !! disabledProps?.disabled,
 					} ) }
 					id={ id }
-					aria-label={ sprintf(
-						// translators: %s: Title of a block, e.g. Heading.
-						__( 'Open %s styles in Styles panel' ),
-						title
-					) }
+					aria-label={
+						!! onClick
+							? sprintf(
+									// translators: %s: Title of a block, e.g. Heading.
+									__( 'Open %s styles in Styles panel' ),
+									title
+							  )
+							: undefined
+					}
 					render={ <div /> }
-					role="button"
+					role={ !! onClick ? 'button' : null }
 					onClick={ onClick }
 					{ ...disabledProps }
 				>

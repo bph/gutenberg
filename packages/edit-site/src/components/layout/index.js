@@ -132,7 +132,7 @@ function Layout() {
 										/>
 										<SidebarContent
 											shouldAnimate={
-												routeKey !== 'styles-view'
+												routeKey !== 'styles'
 											}
 											routeKey={ routeKey }
 										>

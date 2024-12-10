@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import Editor from '../editor';
+import { MaybeEditor } from '../maybe-editor';
 import SidebarNavigationScreenPatterns from '../sidebar-navigation-screen-patterns';
 
 export const templatePartItemRoute = {
@@ -9,7 +9,7 @@ export const templatePartItemRoute = {
 	path: '/wp_template_part/*postId',
 	areas: {
 		sidebar: <SidebarNavigationScreenPatterns backPath="/" />,
-		mobile: <Editor />,
-		preview: <Editor />,
+		mobile: <MaybeEditor />,
+		preview: <MaybeEditor />,
 	},
 };

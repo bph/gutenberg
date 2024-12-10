@@ -25,6 +25,7 @@ import {
 import { unlock } from '../../lock-unlock';
 import { useEditPostAction } from '../dataviews-actions';
 import { authorField, descriptionField, previewField } from './fields';
+import { useEvent } from '@wordpress/compose';
 
 const { usePostActions } = unlock( editorPrivateApis );
 const { useHistory, useLocation } = unlock( routerPrivateApis );
@@ -92,11 +93,19 @@ export default function PageTemplates() {
 		};
 	}, [ layout, activeView ] );
 	const [ view, setView ] = useState( defaultView );
+
+	// Sync the layout from the URL to the view state.
 	useEffect( () => {
-		const usedType = layout ?? DEFAULT_VIEW.type;
 		setView( ( currentView ) => ( {
 			...currentView,
-			type: usedType,
+			type: layout ?? DEFAULT_VIEW.type,
+		} ) );
+	}, [ setView, layout ] );
+
+	// Sync the active view from the URL to the view state.
+	useEffect( () => {
+		setView( ( currentView ) => ( {
+			...currentView,
 			filters:
 				activeView !== 'all'
 					? [
@@ -108,7 +117,7 @@ export default function PageTemplates() {
 					  ]
 					: [],
 		} ) );
-	}, [ activeView, layout ] );
+	}, [ setView, activeView ] );
 
 	const { records, isResolving: isLoadingData } =
 		useEntityRecordsWithPermissions( 'postType', TEMPLATE_POST_TYPE, {
@@ -170,20 +179,16 @@ export default function PageTemplates() {
 		[ postTypeActions, editAction ]
 	);
 
-	const onChangeView = useCallback(
-		( newView ) => {
-			if ( newView.type !== view.type ) {
-				history.navigate(
-					addQueryArgs( path, {
-						layout: newView.type,
-					} )
-				);
-			}
-
-			setView( newView );
-		},
-		[ view.type, setView, history, path ]
-	);
+	const onChangeView = useEvent( ( newView ) => {
+		setView( newView );
+		if ( newView.type !== layout ) {
+			history.navigate(
+				addQueryArgs( path, {
+					layout: newView.type,
+				} )
+			);
+		}
+	} );
 
 	return (
 		<Page

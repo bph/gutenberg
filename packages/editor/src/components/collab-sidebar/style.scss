@@ -18,12 +18,16 @@
 		position: relative;
 		padding: $grid-unit-20;
 		border-radius: $radius-large;
-		border: 1px solid $gray-300;
+		border: 1.5px solid $gray-300;
 		background-color: $gray-100;
 		margin-bottom: $grid-unit-20;
 	}
 
 	&__active-thread {
+		border: 1.5px solid #3858e9;
+	}
+
+	&__focus-thread {
 		border: 1.5px solid #3858e9;
 		background-color: $white;
 		box-shadow: 0 5.5px 7.8px -0.3px rgba(0, 0, 0, 0.102);
@@ -121,4 +125,9 @@
 		}
 	}
 
+	&__show-more-reply {
+		font-weight: 500;
+		font-style: italic;
+		padding: 0;
+	}
 }
