@@ -25,7 +25,11 @@ export default function getClickableItemProps< Item >( {
 			onClickItem( item );
 		},
 		onKeyDown: ( event: React.KeyboardEvent ) => {
-			if ( event.key === 'Enter' || event.key === '' ) {
+			if (
+				event.key === 'Enter' ||
+				event.key === '' ||
+				event.key === ' '
+			) {
 				// Prevents onChangeSelection from triggering.
 				event.stopPropagation();
 				onClickItem( item );

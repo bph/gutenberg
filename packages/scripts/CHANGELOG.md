@@ -8,6 +8,9 @@
 -   The bundled `sass-loader` dependency has been updated from `^12.1.0` to `^16.0.3` ([#67572](https://github.com/WordPress/gutenberg/pull/67572)).
 -   The bundled `mini-css-extract-plugin` dependency has been updated from `^2.5.1` to `^2.9.2` ([#67572](https://github.com/WordPress/gutenberg/pull/67572)).
 -   The bundled `webpack` dependency has been updated from `^5.95.0` to `^5.97.0` ([#67572](https://github.com/WordPress/gutenberg/pull/67572)).
+-   The bundled `cross-spawn` dependency has been updated from `^5.1.0` to `^7.0.6` ([#67708](https://github.com/WordPress/gutenberg/pull/67708)).
+-   The bundled `jest-dev-server` dependency has been updated from `^9.0.1` to `^10.1.4` ([#67708](https://github.com/WordPress/gutenberg/pull/67708)).
+-   The bundled `puppeteer-core` dependency has been updated from `^23.1.0` to `^23.10.1` ([#67708](https://github.com/WordPress/gutenberg/pull/67708)).
 
 ### Bug Fix
 

@@ -64,6 +64,7 @@ $swatch-gap: 12px;
 .block-editor-tools-panel-color-gradient-settings__item {
 	padding: 0;
 	max-width: 100%;
+	position: relative;
 
 	// Border styles.
 	border-left: 1px solid $gray-300;
@@ -118,5 +119,25 @@ $swatch-gap: 12px;
 
 	.component-color-indicator {
 		flex-shrink: 0;
+	}
+}
+
+.block-editor-panel-color-gradient-settings__reset {
+	position: absolute;
+	right: 0;
+	top: $grid-unit;
+	margin: auto $grid-unit auto;
+	opacity: 0;
+	transition: opacity 0.1s ease-in-out;
+	@include reduce-motion("transition");
+
+	&.block-editor-panel-color-gradient-settings__reset {
+		border-radius: $radius-small;
+	}
+
+	.block-editor-panel-color-gradient-settings__dropdown:hover + &,
+	&:focus,
+	&:hover {
+		opacity: 1;
 	}
 }

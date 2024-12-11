@@ -34,17 +34,22 @@ const fieldsWithBulkEditSupport = [
 
 function PostEditForm( { postType, postId } ) {
 	const ids = useMemo( () => postId.split( ',' ), [ postId ] );
-	const { record } = useSelect(
+	const { record, hasFinishedResolution } = useSelect(
 		( select ) => {
+			const args = [ 'postType', postType, ids[ 0 ] ];
+
+			const {
+				getEditedEntityRecord,
+				hasFinishedResolution: hasFinished,
+			} = select( coreDataStore );
+
 			return {
 				record:
-					ids.length === 1
-						? select( coreDataStore ).getEditedEntityRecord(
-								'postType',
-								postType,
-								ids[ 0 ]
-						  )
-						: null,
+					ids.length === 1 ? getEditedEntityRecord( ...args ) : null,
+				hasFinishedResolution: hasFinished(
+					'getEditedEntityRecord',
+					args
+				),
 			};
 		},
 		[ postType, ids ]
@@ -159,12 +164,14 @@ function PostEditForm( { postType, postId } ) {
 	return (
 		<VStack spacing={ 4 }>
 			<PostCardPanel postType={ postType } postId={ ids } />
-			<DataForm
-				data={ ids.length === 1 ? record : multiEdits }
-				fields={ fieldsWithDependency }
-				form={ form }
-				onChange={ onChange }
-			/>
+			{ hasFinishedResolution && (
+				<DataForm
+					data={ ids.length === 1 ? record : multiEdits }
+					fields={ fieldsWithDependency }
+					form={ form }
+					onChange={ onChange }
+				/>
+			) }
 		</VStack>
 	);
 }

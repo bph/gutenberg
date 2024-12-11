@@ -99,6 +99,7 @@ import * as queryPaginationNext from './query-pagination-next';
 import * as queryPaginationNumbers from './query-pagination-numbers';
 import * as queryPaginationPrevious from './query-pagination-previous';
 import * as queryTitle from './query-title';
+import * as queryTotal from './query-total';
 import * as quote from './quote';
 import * as reusableBlock from './block';
 import * as readMore from './read-more';
@@ -211,6 +212,7 @@ const getAllBlocks = () => {
 		queryPaginationNumbers,
 		queryPaginationPrevious,
 		queryNoResults,
+		queryTotal,
 		readMore,
 		comments,
 		commentAuthorName,

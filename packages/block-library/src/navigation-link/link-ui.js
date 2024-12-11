@@ -10,7 +10,7 @@ import {
 } from '@wordpress/components';
 import { __, sprintf, isRTL } from '@wordpress/i18n';
 import {
-	__experimentalLinkControl as LinkControl,
+	LinkControl,
 	store as blockEditorStore,
 	privateApis as blockEditorPrivateApis,
 } from '@wordpress/block-editor';

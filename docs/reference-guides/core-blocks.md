@@ -777,6 +777,16 @@ Display the query title. ([Source](https://github.com/WordPress/gutenberg/tree/t
 -	**Supports:** align (full, wide), color (background, gradients, text), interactivity (clientNavigation), spacing (margin, padding), typography (fontSize, lineHeight), ~~html~~
 -	**Attributes:** level, levelOptions, showPrefix, showSearchTerm, textAlign, type
 
+## Query Total
+
+Display the total number of results in a query. ([Source](https://github.com/WordPress/gutenberg/tree/trunk/packages/block-library/src/query-total))
+
+-	**Name:** core/query-total
+-	**Category:** theme
+-	**Ancestor:** core/query
+-	**Supports:** align (full, wide), color (background, gradients, text), spacing (margin, padding), typography (fontSize, lineHeight), ~~html~~
+-	**Attributes:** displayType
+
 ## Quote
 
 Give quoted text visual emphasis. "In quoting others, we cite ourselves." — Julio Cortázar ([Source](https://github.com/WordPress/gutenberg/tree/trunk/packages/block-library/src/quote))

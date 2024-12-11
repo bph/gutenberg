@@ -341,7 +341,6 @@ const { state, actions, callbacks } = store(
 				// adding 1 pixel to the container width and height solves the problem,
 				// though this can be removed if the issue is fixed in the future.
 				state.overlayStyles = `
-				:root {
 					--wp--lightbox-initial-top-position: ${ screenPosY }px;
 					--wp--lightbox-initial-left-position: ${ screenPosX }px;
 					--wp--lightbox-container-width: ${ containerWidth + 1 }px;
@@ -352,8 +351,7 @@ const { state, actions, callbacks } = store(
 					--wp--lightbox-scrollbar-width: ${
 						window.innerWidth - document.documentElement.clientWidth
 					}px;
-				}
-			`;
+				`;
 			},
 			setButtonStyles() {
 				const { imageId } = getContext();

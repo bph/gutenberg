@@ -146,20 +146,34 @@
 
 .edit-site-global-styles__shadow-editor__dropdown {
 	width: 100%;
+	position: relative;
+}
 
-	.edit-site-global-styles__shadow-editor__dropdown-toggle,
-	.edit-site-global-styles__shadow-editor__remove-button {
-		width: 100%;
-		height: auto;
-		padding-top: $grid-unit;
-		padding-bottom: $grid-unit;
-		text-align: left;
-		border-radius: inherit;
+.edit-site-global-styles__shadow-editor__dropdown-toggle {
+	width: 100%;
+	height: auto;
+	padding-top: $grid-unit;
+	padding-bottom: $grid-unit;
+	text-align: left;
+	border-radius: inherit;
 
-		&.is-open {
-			background: $gray-100;
-			color: var(--wp-admin-theme-color);
-		}
+	&.is-open {
+		background: $gray-100;
+		color: var(--wp-admin-theme-color);
+	}
+}
+
+.edit-site-global-styles__shadow-editor__remove-button {
+	position: absolute;
+	right: $grid-unit;
+	top: $grid-unit;
+	opacity: 0;
+
+	.edit-site-global-styles__shadow-editor__dropdown-toggle:hover + &,
+	&:focus,
+	&:hover {
+		border: none;
+		opacity: 1;
 	}
 }
 

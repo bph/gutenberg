@@ -12,7 +12,7 @@ const inquirer = require( 'inquirer' );
  * Promisified dependencies
  */
 const sleep = util.promisify( setTimeout );
-const rimraf = util.promisify( require( 'rimraf' ) );
+const { rimraf } = require( 'rimraf' );
 const exec = util.promisify( require( 'child_process' ).exec );
 
 /**

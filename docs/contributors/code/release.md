@@ -5,7 +5,7 @@ The [Gutenberg repository](https://github.com/WordPress/gutenberg) on GitHub is 
 Before you begin, there are some requirements that must be met in order to successfully release a stable version of the Gutenberg plugin. You will need to:
 
 -   Be a member of the [Gutenberg development team](https://developer.wordpress.org/block-editor/block-editor/contributors/repository-management/#teams). This gives you the ability to launch the GitHub actions that are related to the release process and to backport pull requests (PRs) to the release branch.
--   Have write permissions on the [Make WordPress Core](http://make.wordpress.org/core) blog. This allows you to draft the release post.
+-   Have write permissions on the [Make WordPress Core](https://make.wordpress.org/core) blog. This allows you to draft the release post.
 -   Obtain approval from a member of the Gutenberg Core team in order to upload the new version Gutenberg to the WordPress.org plugin directory.
 
 Similar requirements apply to releasing WordPress's [npm packages](https://developer.wordpress.org/block-editor/contributors/code/release/#packages-releases-to-npm-and-wordpress-core-updates).
@@ -344,7 +344,7 @@ To do this, when running the Workflow, select the appropriate `release/` branch 
 
 It is possible to create a minor release for any release branch even after a more recent stable release has been published. This can be done for _any_ previous release branches, allowing more flexibility in delivering updates to users. In the past, users had to wait for the next stable release, potentially taking days. Now, fixes can be swiftly shipped to any previous release branches as required.
 
-The process is identical to the one documented above when an RC is already out: choose a previous release branch, type `stable`, and click "Run workflow". The release will be published on the GitHub releases page for Gutenberg and to the WordPress core repository SVN as a `tag` under http://plugins.svn.wordpress.org/gutenberg/tags/. The SVN `trunk` directory will not be touched.
+The process is identical to the one documented above when an RC is already out: choose a previous release branch, type `stable`, and click "Run workflow". The release will be published on the GitHub releases page for Gutenberg and to the WordPress core repository SVN as a `tag` under https://plugins.svn.wordpress.org/gutenberg/tags/. The SVN `trunk` directory will not be touched.
 
 **IMPORTANT:** When publishing the draft created by the ["Build Plugin Zip" workflow](https://github.com/WordPress/gutenberg/actions/workflows/build-plugin-zip.yml), make sure to leave the "Set as last release" checkbox unchecked. If it is left checked by accident, the ["Upload Gutenberg plugin to WordPress.org plugin" workflow](https://github.com/WordPress/gutenberg/actions/workflows/upload-release-to-plugin-repo.yml) will still correctly upload it **as a tag (and will _not_ replace the `trunk` version)** to the WordPress plugin repository SVN - the workflow will perform some version arithmetic to determine how the plugin should be shipped - but you'll still need to fix the state on GitHub by setting the right release as `latest` on the [releases](https://github.com/WordPress/gutenberg/releases/) page!
 

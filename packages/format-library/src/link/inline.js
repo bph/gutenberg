@@ -19,7 +19,7 @@ import {
 	useAnchor,
 } from '@wordpress/rich-text';
 import {
-	__experimentalLinkControl as LinkControl,
+	LinkControl,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { useDispatch, useSelect } from '@wordpress/data';

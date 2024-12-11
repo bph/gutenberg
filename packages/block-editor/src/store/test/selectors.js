@@ -3324,7 +3324,7 @@ describe( 'selectors', () => {
 				settings: {},
 				blockEditingModes: new Map(),
 			};
-			expect( canInsertBlocks( state, [ '2', '3' ], '1' ) ).toBe( true );
+			expect( canInsertBlocks( state, [ '2' ], '1' ) ).toBe( true );
 		} );
 
 		it( 'should deny blocks', () => {

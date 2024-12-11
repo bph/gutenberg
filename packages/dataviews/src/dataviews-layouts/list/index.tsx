@@ -325,6 +325,10 @@ function ListItem< Item >( {
 	);
 }
 
+function isDefined< T >( item: T | undefined ): item is T {
+	return !! item;
+}
+
 export default function ViewList< Item >( props: ViewListProps< Item > ) {
 	const {
 		actions,
@@ -346,15 +350,9 @@ export default function ViewList< Item >( props: ViewListProps< Item > ) {
 	const descriptionField = fields.find(
 		( field ) => field.id === view.descriptionField
 	);
-	const otherFields = fields.filter(
-		( field ) =>
-			( view.fields ?? [] ).includes( field.id ) &&
-			! [
-				view.titleField,
-				view.mediaField,
-				view.descriptionField,
-			].includes( field.id )
-	);
+	const otherFields = ( view?.fields ?? [] )
+		.map( ( fieldId ) => fields.find( ( f ) => fieldId === f.id ) )
+		.filter( isDefined );
 
 	const onSelect = ( item: Item ) =>
 		onChangeSelection( [ getItemId( item ) ] );

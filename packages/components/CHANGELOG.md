@@ -40,10 +40,12 @@
 -   Upgraded `@ariakit/react` (v0.4.15) and `@ariakit/test` (v0.4.7) ([#67404](https://github.com/WordPress/gutenberg/pull/67404)).
 -   `ToolbarButton`: Set size to "compact" ([#67440](https://github.com/WordPress/gutenberg/pull/67440)).
 -   `SlotFill`: remove manual rerenders from the portal `Fill` component ([#67471](https://github.com/WordPress/gutenberg/pull/67471)).
+-   `BoxControl`: Refactor internals to unify the different combinations of sides ([#67626](https://github.com/WordPress/gutenberg/pull/67626)).
 
 ### Bug Fixes
 
 -   `ResizableBox`: Make drag handles focusable ([#67305](https://github.com/WordPress/gutenberg/pull/67305)).
+-   `CustomSelectControl`: Update correctly when `showSelectedHint` is enabled ([#67733](https://github.com/WordPress/gutenberg/pull/67733)).
 
 ## 28.13.0 (2024-11-27)
 

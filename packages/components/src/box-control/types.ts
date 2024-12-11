@@ -110,8 +110,16 @@ export type BoxControlInputControlProps = UnitControlPassthroughProps & {
 	) => void;
 	selectedUnits: BoxControlValue;
 	setSelectedUnits: React.Dispatch< React.SetStateAction< BoxControlValue > >;
-	sides: BoxControlProps[ 'sides' ];
 	values: BoxControlValue;
+	/**
+	 * Collection of sides to allow control of. If omitted or empty, all sides will be available.
+	 */
+	sides: BoxControlProps[ 'sides' ];
+	/**
+	 * Side represents the current side being rendered by the input.
+	 * It can be a concrete side like: left, right, top, bottom or a combined one like: horizontal, vertical.
+	 */
+	side: keyof typeof LABELS;
 };
 
 export type BoxControlIconProps = {

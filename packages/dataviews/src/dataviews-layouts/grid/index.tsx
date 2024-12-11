@@ -15,6 +15,7 @@ import {
 	FlexItem,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -66,6 +67,7 @@ function GridItem< Item >( {
 	const { showTitle = true, showMedia = true, showDescription = true } = view;
 	const hasBulkAction = useHasAPossibleBulkAction( actions, item );
 	const id = getItemId( item );
+	const instanceId = useInstanceId( GridItem );
 	const isSelected = selection.includes( id );
 	const renderedMediaField = mediaField?.render ? (
 		<mediaField.render item={ item } />
@@ -88,6 +90,23 @@ function GridItem< Item >( {
 		onClickItem,
 		className: 'dataviews-view-grid__title-field dataviews-title-field',
 	} );
+
+	let mediaA11yProps;
+	let titleA11yProps;
+	if ( isItemClickable( item ) && onClickItem ) {
+		if ( renderedTitleField ) {
+			mediaA11yProps = {
+				'aria-labelledby': `dataviews-view-grid__title-field-${ instanceId }`,
+			};
+			titleA11yProps = {
+				id: `dataviews-view-grid__title-field-${ instanceId }`,
+			};
+		} else {
+			mediaA11yProps = {
+				'aria-label': __( 'Navigate to item' ),
+			};
+		}
+	}
 
 	return (
 		<VStack
@@ -112,7 +131,9 @@ function GridItem< Item >( {
 			} }
 		>
 			{ showMedia && renderedMediaField && (
-				<div { ...clickableMediaItemProps }>{ renderedMediaField }</div>
+				<div { ...clickableMediaItemProps } { ...mediaA11yProps }>
+					{ renderedMediaField }
+				</div>
 			) }
 			{ showMedia && renderedMediaField && (
 				<DataViewsSelectionCheckbox
@@ -128,7 +149,9 @@ function GridItem< Item >( {
 				justify="space-between"
 				className="dataviews-view-grid__title-actions"
 			>
-				<div { ...clickableTitleItemProps }>{ renderedTitleField }</div>
+				<div { ...clickableTitleItemProps } { ...titleA11yProps }>
+					{ renderedTitleField }
+				</div>
 				<ItemActions item={ item } actions={ actions } isCompact />
 			</HStack>
 			<VStack spacing={ 1 }>
@@ -214,21 +237,18 @@ export default function ViewGrid< Item >( {
 		( field ) => field.id === view?.descriptionField
 	);
 	const otherFields = view.fields ?? [];
-	const { regularFields, badgeFields } = fields.reduce(
-		( accumulator: Record< string, NormalizedField< Item >[] >, field ) => {
-			if (
-				! otherFields.includes( field.id ) ||
-				[
-					view?.mediaField,
-					view?.titleField,
-					view?.descriptionField,
-				].includes( field.id )
-			) {
+	const { regularFields, badgeFields } = otherFields.reduce(
+		(
+			accumulator: Record< string, NormalizedField< Item >[] >,
+			fieldId
+		) => {
+			const field = fields.find( ( f ) => f.id === fieldId );
+			if ( ! field ) {
 				return accumulator;
 			}
 			// If the field is a badge field, add it to the badgeFields array
 			// otherwise add it to the rest visibleFields array.
-			const key = view.layout?.badgeFields?.includes( field.id )
+			const key = view.layout?.badgeFields?.includes( fieldId )
 				? 'badgeFields'
 				: 'regularFields';
 			accumulator[ key ].push( field );

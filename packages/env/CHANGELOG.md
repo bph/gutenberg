@@ -6,6 +6,10 @@
 
 - Add phpMyAdmin as an optional service. Enabled via the new `phpmyadminPort` environment config, as well as env vars `WP_ENV_PHPMYADMIN_PORT` and `WP_ENV_TESTS_PHPMYADMIN_PORT`.
 
+### Internal
+
+-   The bundled `rimraf` dependency has been updated from `^3.0.2` to `^5.0.10` ([#67708](https://github.com/WordPress/gutenberg/pull/67708)).
+
 ## 10.13.0 (2024-11-27)
 
 ## 10.12.0 (2024-11-16)

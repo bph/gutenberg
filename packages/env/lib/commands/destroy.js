@@ -3,7 +3,6 @@
  * External dependencies
  */
 const { v2: dockerCompose } = require( 'docker-compose' );
-const util = require( 'util' );
 const fs = require( 'fs' ).promises;
 const path = require( 'path' );
 const inquirer = require( 'inquirer' );
@@ -11,7 +10,7 @@ const inquirer = require( 'inquirer' );
 /**
  * Promisified dependencies
  */
-const rimraf = util.promisify( require( 'rimraf' ) );
+const { rimraf } = require( 'rimraf' );
 
 /**
  * Internal dependencies

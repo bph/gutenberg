@@ -1586,14 +1586,14 @@ export function getTemplateLock( state, rootClientId ) {
  * @param {string|Object} blockNameOrType The block type object, e.g., the response
  *                                        from the block directory; or a string name of
  *                                        an installed block type, e.g.' core/paragraph'.
- * @param {Set}           checkedBlocks   Set of block names that have already been checked.
+ * @param {?string}       rootClientId    Optional root client ID of block list.
  *
  * @return {boolean} Whether the given block type is allowed to be inserted.
  */
 const isBlockVisibleInTheInserter = (
 	state,
 	blockNameOrType,
-	checkedBlocks = new Set()
+	rootClientId = null
 ) => {
 	let blockType;
 	let blockName;
@@ -1621,26 +1621,19 @@ const isBlockVisibleInTheInserter = (
 		return false;
 	}
 
-	if ( checkedBlocks.has( blockName ) ) {
-		return false;
-	}
-
-	checkedBlocks.add( blockName );
-
 	// If parent blocks are not visible, child blocks should be hidden too.
-	if ( Array.isArray( blockType.parent ) ) {
-		return blockType.parent.some(
-			( name ) =>
-				( blockName !== name &&
-					isBlockVisibleInTheInserter(
-						state,
-						name,
-						checkedBlocks
-					) ) ||
-				// Exception for blocks with post-content parent,
-				// the root level is often consider as "core/post-content".
-				// This exception should only apply to the post editor ideally though.
-				name === 'core/post-content'
+	const parents = (
+		Array.isArray( blockType.parent ) ? blockType.parent : []
+	).concat( Array.isArray( blockType.ancestor ) ? blockType.ancestor : [] );
+	if ( parents.length > 0 ) {
+		const rootBlockName = getBlockName( state, rootClientId );
+		// This is an exception to the rule that says that all blocks are visible in the inserter.
+		// Blocks that require a given parent or ancestor are only visible if we're within that parent.
+		return (
+			parents.includes( 'core/post-content' ) ||
+			parents.includes( rootBlockName ) ||
+			getBlockParentsByBlockName( state, rootClientId, parents ).length >
+				0
 		);
 	}
 
@@ -1665,7 +1658,7 @@ const canInsertBlockTypeUnmemoized = (
 	blockName,
 	rootClientId = null
 ) => {
-	if ( ! isBlockVisibleInTheInserter( state, blockName ) ) {
+	if ( ! isBlockVisibleInTheInserter( state, blockName, rootClientId ) ) {
 		return false;
 	}
 
@@ -2072,6 +2065,7 @@ const buildBlockTypeItem =
 			category: blockType.category,
 			keywords: blockType.keywords,
 			parent: blockType.parent,
+			ancestor: blockType.ancestor,
 			variations: inserterVariations,
 			example: blockType.example,
 			utility: 1, // Deprecated.
@@ -2169,7 +2163,11 @@ export const getInserterItems = createRegistrySelector( ( select ) =>
 			} else {
 				blockTypeInserterItems = blockTypeInserterItems
 					.filter( ( blockType ) =>
-						isBlockVisibleInTheInserter( state, blockType )
+						isBlockVisibleInTheInserter(
+							state,
+							blockType,
+							rootClientId
+						)
 					)
 					.map( ( blockType ) => ( {
 						...blockType,
@@ -2501,7 +2499,11 @@ export const __experimentalGetAllowedPatterns = createRegistrySelector(
 										name,
 										rootClientId
 								  )
-								: isBlockVisibleInTheInserter( state, name )
+								: isBlockVisibleInTheInserter(
+										state,
+										name,
+										rootClientId
+								  )
 						)
 				);
 
