@@ -102,6 +102,7 @@ export function TreeSelect( props: TreeSelectProps ) {
 	return (
 		<ContextSystemProvider value={ CONTEXT_VALUE }>
 			<SelectControl
+				__shouldNotWarnDeprecated36pxSize
 				{ ...{ label, options, onChange } }
 				value={ selectedId }
 				{ ...restProps }

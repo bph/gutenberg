@@ -242,6 +242,7 @@ function UnforwardedNumberControl(
 				return stateReducerProp?.( baseState, action ) ?? baseState;
 			} }
 			size={ size }
+			__shouldNotWarnDeprecated36pxSize
 			suffix={
 				spinControls === 'custom' ? (
 					<>

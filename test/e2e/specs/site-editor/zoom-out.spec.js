@@ -234,6 +234,39 @@ test.describe( 'Zoom Out', () => {
 		await expect( fourthSectionStart ).not.toBeInViewport();
 	} );
 
+	test( 'Zoom out selected section has three items in options menu', async ( {
+		page,
+	} ) => {
+		// open the inserter
+		await page
+			.getByRole( 'button', {
+				name: 'Block Inserter',
+				exact: true,
+			} )
+			.click();
+		// switch to patterns tab
+		await page.getByRole( 'tab', { name: 'Patterns' } ).click();
+		// search for a pattern
+		await page
+			.getByRole( 'searchbox', { name: 'Search' } )
+			.fill( 'Footer' );
+		// click on Footer with colophon, 3 columns
+		await page
+			.getByRole( 'option', { name: 'Footer with colophon, 3 columns' } )
+			.click();
+
+		// open the block toolbar more settings menu
+		await page.getByLabel( 'Block tools' ).getByLabel( 'Options' ).click();
+
+		// get the length of the options menu
+		const optionsMenu = page
+			.getByRole( 'menu', { name: 'Options' } )
+			.getByRole( 'menuitem' );
+
+		// we expect 3 items in the options menu
+		await expect( optionsMenu ).toHaveCount( 3 );
+	} );
+
 	test( 'Zoom Out cannot be activated when the section root is missing', async ( {
 		page,
 		editor,

@@ -15,50 +15,25 @@ import {
 } from '@wordpress/block-editor';
 import { Icon } from '@wordpress/icons';
 import { parse } from '@wordpress/blocks';
-import { privateApis as routerPrivateApis } from '@wordpress/router';
 
 /**
  * Internal dependencies
  */
 import {
-	PATTERN_TYPES,
 	TEMPLATE_PART_POST_TYPE,
 	PATTERN_SYNC_TYPES,
 	OPERATOR_IS,
 } from '../../utils/constants';
 import { unlock } from '../../lock-unlock';
 import { useAddedBy } from '../page-templates/hooks';
-import { defaultGetTitle } from './search-items';
 
-const { useLink } = unlock( routerPrivateApis );
 const { useGlobalStyle } = unlock( blockEditorPrivateApis );
-
-function PreviewWrapper( { item, onClick, ariaDescribedBy, children } ) {
-	return (
-		<button
-			className="page-patterns-preview-field__button"
-			type="button"
-			onClick={ item.type !== PATTERN_TYPES.theme ? onClick : undefined }
-			aria-label={ defaultGetTitle( item ) }
-			aria-describedby={ ariaDescribedBy }
-			aria-disabled={ item.type === PATTERN_TYPES.theme }
-		>
-			{ children }
-		</button>
-	);
-}
 
 function PreviewField( { item } ) {
 	const descriptionId = useId();
 	const description = item.description || item?.excerpt?.raw;
-	const isUserPattern = item.type === PATTERN_TYPES.user;
 	const isTemplatePart = item.type === TEMPLATE_PART_POST_TYPE;
 	const [ backgroundColor ] = useGlobalStyle( 'color.background' );
-	const { onClick } = useLink(
-		`/${ item.type }/${
-			isUserPattern || isTemplatePart ? item.id : item.name
-		}?canvas=edit`
-	);
 	const blocks = useMemo( () => {
 		return (
 			item.blocks ??
@@ -73,23 +48,18 @@ function PreviewField( { item } ) {
 		<div
 			className="page-patterns-preview-field"
 			style={ { backgroundColor } }
+			aria-describedby={ !! description ? descriptionId : undefined }
 		>
-			<PreviewWrapper
-				item={ item }
-				onClick={ onClick }
-				ariaDescribedBy={ !! description ? descriptionId : undefined }
-			>
-				{ isEmpty && isTemplatePart && __( 'Empty template part' ) }
-				{ isEmpty && ! isTemplatePart && __( 'Empty pattern' ) }
-				{ ! isEmpty && (
-					<BlockPreview.Async>
-						<BlockPreview
-							blocks={ blocks }
-							viewportWidth={ item.viewportWidth }
-						/>
-					</BlockPreview.Async>
-				) }
-			</PreviewWrapper>
+			{ isEmpty && isTemplatePart && __( 'Empty template part' ) }
+			{ isEmpty && ! isTemplatePart && __( 'Empty pattern' ) }
+			{ ! isEmpty && (
+				<BlockPreview.Async>
+					<BlockPreview
+						blocks={ blocks }
+						viewportWidth={ item.viewportWidth }
+					/>
+				</BlockPreview.Async>
+			) }
 			{ !! description && (
 				<div hidden id={ descriptionId }>
 					{ description }

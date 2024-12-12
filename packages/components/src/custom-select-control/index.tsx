@@ -149,16 +149,16 @@ function CustomSelectControl< T extends CustomSelectOption >(
 			);
 		} );
 
-	const { value: currentValue } = store.getState();
+	const currentValue = Ariakit.useStoreState( store, 'value' );
 
 	const renderSelectedValueHint = () => {
 		const selectedOptionHint = options
 			?.map( applyOptionDeprecations )
-			?.find( ( { name } ) => store.getState().value === name )?.hint;
+			?.find( ( { name } ) => currentValue === name )?.hint;
 
 		return (
 			<Styled.SelectedExperimentalHintWrapper>
-				{ store.getState().value }
+				{ currentValue }
 				{ selectedOptionHint && (
 					<Styled.SelectedExperimentalHintItem
 						// Keeping the classname for legacy reasons

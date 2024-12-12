@@ -60,6 +60,7 @@ const DEFAULT_COLOR = '#000';
 function NameInput( { value, onChange, label }: NameInputProps ) {
 	return (
 		<NameInputControl
+			size="compact"
 			label={ label }
 			hideLabelFromVision
 			value={ value }

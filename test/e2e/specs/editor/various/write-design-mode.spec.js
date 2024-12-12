@@ -100,6 +100,17 @@ test.describe( 'Write/Design mode', () => {
 
 		expect( await getSelectedBlock() ).toEqual( sectionClientId );
 
+		// open the block toolbar more settings menu
+		await page.getByLabel( 'Block tools' ).getByLabel( 'Options' ).click();
+
+		// get the length of the options menu
+		const optionsMenu = page
+			.getByRole( 'menu', { name: 'Options' } )
+			.getByRole( 'menuitem' );
+
+		// we expect 3 items in the options menu
+		await expect( optionsMenu ).toHaveCount( 3 );
+
 		// We should be able to select the paragraph block and write in it.
 		await paragraph.click();
 		await page.keyboard.type( ' something' );

@@ -9,6 +9,7 @@ import {
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalUseCustomUnits as useCustomUnits,
 	Flex,
 	FlexItem,
 } from '@wordpress/components';
@@ -21,6 +22,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
  */
 import { useGetNumberOfBlocksBeforeCell } from '../grid/use-get-number-of-blocks-before-cell';
 import { store as blockEditorStore } from '../../store';
+import { useSettings } from '../use-settings';
 
 function helpText( selfStretch, parentLayout ) {
 	const { orientation = 'horizontal' } = parentLayout;
@@ -98,6 +100,17 @@ function FlexControls( {
 	const hasFlexValue = () => !! selfStretch;
 	const flexResetLabel =
 		orientation === 'horizontal' ? __( 'Width' ) : __( 'Height' );
+	const [ availableUnits ] = useSettings( 'spacing.units' );
+	const units = useCustomUnits( {
+		availableUnits: availableUnits || [
+			'%',
+			'px',
+			'em',
+			'rem',
+			'vh',
+			'vw',
+		],
+	} );
 	const resetFlex = () => {
 		onChange( {
 			selfStretch: undefined,
@@ -167,6 +180,7 @@ function FlexControls( {
 			{ selfStretch === 'fixed' && (
 				<UnitControl
 					size="__unstable-large"
+					units={ units }
 					onChange={ ( value ) => {
 						onChange( {
 							selfStretch,

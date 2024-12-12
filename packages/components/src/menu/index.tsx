@@ -2,7 +2,6 @@
  * External dependencies
  */
 import * as Ariakit from '@ariakit/react';
-import { useStoreState } from '@ariakit/react';
 
 /**
  * WordPress dependencies
@@ -109,7 +108,7 @@ const UnconnectedMenu = (
 	// Extract the side from the applied placement — useful for animations.
 	// Using `currentPlacement` instead of `placement` to make sure that we
 	// use the final computed placement (including "flips" etc).
-	const appliedPlacementSide = useStoreState(
+	const appliedPlacementSide = Ariakit.useStoreState(
 		menuStore,
 		'currentPlacement'
 	).split( '-' )[ 0 ];

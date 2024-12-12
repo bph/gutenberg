@@ -74,12 +74,12 @@ _PanelRow.args = {
 	children: (
 		<PanelBody title="My Profile">
 			<PanelRow>
-				<InputControl label="First name" />
-				<InputControl label="Last name" />
+				<InputControl label="First name" __next40pxDefaultSize />
+				<InputControl label="Last name" __next40pxDefaultSize />
 			</PanelRow>
 			<PanelRow>
 				<div style={ { flex: 1 } }>
-					<InputControl label="Email" />
+					<InputControl label="Email" __next40pxDefaultSize />
 				</div>
 			</PanelRow>
 		</PanelBody>

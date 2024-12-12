@@ -17,9 +17,15 @@ import BaseInputControl from '../';
 const getInput = () => screen.getByTestId( 'input' );
 
 describe( 'InputControl', () => {
-	const InputControl = ( props ) => (
-		<BaseInputControl { ...props } data-testid="input" />
-	);
+	const InputControl = ( props ) => {
+		return (
+			<BaseInputControl
+				{ ...props }
+				__next40pxDefaultSize
+				data-testid="input"
+			/>
+		);
+	};
 
 	describe( 'Basic rendering', () => {
 		it( 'should render', () => {

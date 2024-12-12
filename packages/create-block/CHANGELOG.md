@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.57.0 (2024-12-11)
+
 ### Internal
 
 -   The bundled `rimraf` dependency has been updated from `^3.0.2` to `^5.0.10` ([#67708](https://github.com/WordPress/gutenberg/pull/67708)).

@@ -18,6 +18,7 @@ import type { WordPressComponentProps } from '../context';
 import type { SelectControlProps } from './types';
 import SelectControlChevronDown from './chevron-down';
 import { useDeprecated36pxDefaultSizeProp } from '../utils/use-deprecated-props';
+import { maybeWarnDeprecated36pxSize } from '../utils/deprecated-36px-size';
 
 function useUniqueId( idProp?: string ) {
 	const instanceId = useInstanceId( SelectControl );
@@ -65,6 +66,7 @@ function UnforwardedSelectControl< V extends string >(
 		variant = 'default',
 		__next40pxDefaultSize = false,
 		__nextHasNoMarginBottom = false,
+		__shouldNotWarnDeprecated36pxSize,
 		...restProps
 	} = useDeprecated36pxDefaultSizeProp( props );
 	const id = useUniqueId( idProp );
@@ -93,6 +95,13 @@ function UnforwardedSelectControl< V extends string >(
 	};
 
 	const classes = clsx( 'components-select-control', className );
+
+	maybeWarnDeprecated36pxSize( {
+		componentName: 'SelectControl',
+		__next40pxDefaultSize,
+		size,
+		__shouldNotWarnDeprecated36pxSize,
+	} );
 
 	return (
 		<BaseControl
@@ -154,6 +163,7 @@ function UnforwardedSelectControl< V extends string >(
  *
  *   return (
  *     <SelectControl
+ *       __next40pxDefaultSize
  *       __nextHasNoMarginBottom
  *       label="Size"
  *       value={ size }

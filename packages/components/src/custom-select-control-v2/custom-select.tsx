@@ -2,7 +2,6 @@
  * External dependencies
  */
 import * as Ariakit from '@ariakit/react';
-import { useStoreState } from '@ariakit/react';
 
 /**
  * WordPress dependencies
@@ -63,7 +62,7 @@ const CustomSelectButton = ( {
 		CustomSelectStore,
 	'onChange'
 > ) => {
-	const { value: currentValue } = useStoreState( store );
+	const { value: currentValue } = Ariakit.useStoreState( store );
 
 	const computedRenderSelectedValue = useMemo(
 		() => renderSelectedValue ?? defaultRenderSelectedValue,

@@ -26,12 +26,12 @@ import { useViewportMatch } from '@wordpress/compose';
 import {
 	canBindAttribute,
 	getBindableAttributes,
-} from '../hooks/use-bindings-attributes';
+	useBlockBindingsUtils,
+} from '../utils/block-bindings';
 import { unlock } from '../lock-unlock';
 import InspectorControls from '../components/inspector-controls';
 import BlockContext from '../components/block-context';
 import { useBlockEditContext } from '../components/block-edit';
-import { useBlockBindingsUtils } from '../utils/block-bindings';
 import { store as blockEditorStore } from '../store';
 
 const { Menu } = unlock( componentsPrivateApis );

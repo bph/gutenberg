@@ -11,7 +11,6 @@ import {
 	__experimentalVStack as VStack,
 	__experimentalHStack as HStack,
 	FlexItem,
-	FlexBlock,
 	Button,
 } from '@wordpress/components';
 import {
@@ -111,23 +110,18 @@ function FontSizeGroup( {
 								key={ size.slug }
 								path={ `/typography/font-sizes/${ origin }/${ size.slug }` }
 							>
-								<HStack direction="row">
+								<HStack>
 									<FlexItem className="edit-site-font-size__item">
 										{ size.name }
 									</FlexItem>
-									<FlexItem>
-										<HStack justify="flex-end">
-											<FlexBlock className="edit-site-font-size__item edit-site-font-size__item-value">
-												{ size.size }
-											</FlexBlock>
-											<Icon
-												icon={
-													isRTL()
-														? chevronLeft
-														: chevronRight
-												}
-											/>
-										</HStack>
+									<FlexItem display="flex">
+										<Icon
+											icon={
+												isRTL()
+													? chevronLeft
+													: chevronRight
+											}
+										/>
 									</FlexItem>
 								</HStack>
 							</NavigationButtonAsItem>

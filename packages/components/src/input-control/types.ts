@@ -40,6 +40,13 @@ interface BaseProps {
 	 * @default false
 	 */
 	__next40pxDefaultSize?: boolean;
+	/**
+	 * Do not throw a warning for the deprecated 36px default size.
+	 * For internal components of other components that already throw the warning.
+	 *
+	 * @ignore
+	 */
+	__shouldNotWarnDeprecated36pxSize?: boolean;
 	__unstableInputWidth?: CSSProperties[ 'width' ];
 	/**
 	 * If true, the label will only be visible to screen readers.

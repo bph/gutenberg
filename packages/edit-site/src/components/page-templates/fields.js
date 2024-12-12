@@ -16,7 +16,6 @@ import {
 	privateApis as blockEditorPrivateApis,
 } from '@wordpress/block-editor';
 import { EditorProvider } from '@wordpress/editor';
-import { privateApis as routerPrivateApis } from '@wordpress/router';
 
 /**
  * Internal dependencies
@@ -25,7 +24,6 @@ import { useAddedBy } from './hooks';
 import usePatternSettings from '../page-patterns/use-pattern-settings';
 import { unlock } from '../../lock-unlock';
 
-const { useLink } = unlock( routerPrivateApis );
 const { useGlobalStyle } = unlock( blockEditorPrivateApis );
 
 function PreviewField( { item } ) {
@@ -34,7 +32,6 @@ function PreviewField( { item } ) {
 	const blocks = useMemo( () => {
 		return parse( item.content.raw );
 	}, [ item.content.raw ] );
-	const { onClick } = useLink( `/${ item.type }/${ item.id }?canvas=edit` );
 
 	const isEmpty = ! blocks?.length;
 	// Wrap everything in a block editor provider to ensure 'styles' that are needed
@@ -50,19 +47,12 @@ function PreviewField( { item } ) {
 				className="page-templates-preview-field"
 				style={ { backgroundColor } }
 			>
-				<button
-					className="page-templates-preview-field__button"
-					type="button"
-					onClick={ onClick }
-					aria-label={ item.title?.rendered || item.title }
-				>
-					{ isEmpty && __( 'Empty template' ) }
-					{ ! isEmpty && (
-						<BlockPreview.Async>
-							<BlockPreview blocks={ blocks } />
-						</BlockPreview.Async>
-					) }
-				</button>
+				{ isEmpty && __( 'Empty template' ) }
+				{ ! isEmpty && (
+					<BlockPreview.Async>
+						<BlockPreview blocks={ blocks } />
+					</BlockPreview.Async>
+				) }
 			</div>
 		</EditorProvider>
 	);

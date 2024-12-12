@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.10.0 (2024-12-11)
+
 ## Breaking Changes
 
 -   Support showing or hiding title, media and description fields ([#67477](https://github.com/WordPress/gutenberg/pull/67477)).

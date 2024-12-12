@@ -19,7 +19,7 @@ import { store as editSiteStore } from '../../store';
 
 export function MainSidebarNavigationContent( { isBlockBasedTheme = true } ) {
 	return (
-		<ItemGroup>
+		<ItemGroup className="edit-site-sidebar-navigation-screen-main">
 			{ isBlockBasedTheme && (
 				<>
 					<SidebarNavigationItem

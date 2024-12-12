@@ -2,6 +2,7 @@
  * External dependencies
  */
 import type { Meta, StoryFn } from '@storybook/react';
+import { fn } from '@storybook/test';
 
 /**
  * WordPress dependencies
@@ -38,6 +39,10 @@ const meta: Meta< typeof Tabs > = {
 		actions: { argTypesRegex: '^on.*' },
 		controls: { expanded: true },
 		docs: { canvas: { sourceState: 'shown' } },
+	},
+	args: {
+		onActiveTabIdChange: fn(),
+		onSelect: fn(),
 	},
 };
 export default meta;

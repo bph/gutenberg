@@ -78,6 +78,7 @@ export default function BoxInputControl( {
 	setSelectedUnits,
 	sides,
 	side,
+	min = 0,
 	...props
 }: BoxControlInputControlProps ) {
 	const defaultValuesToModify = getSidesToModify( side, sides );
@@ -154,6 +155,7 @@ export default function BoxInputControl( {
 			<Tooltip placement="top-end" text={ LABELS[ side ] }>
 				<StyledUnitControl
 					{ ...props }
+					min={ min }
 					__shouldNotWarnDeprecated36pxSize
 					__next40pxDefaultSize={ __next40pxDefaultSize }
 					className="component-box-control__unit-control"
@@ -184,7 +186,7 @@ export default function BoxInputControl( {
 							: undefined
 					);
 				} }
-				min={ 0 }
+				min={ isFinite( min ) ? min : 0 }
 				max={ CUSTOM_VALUE_SETTINGS[ computedUnit ?? 'px' ]?.max ?? 10 }
 				step={
 					CUSTOM_VALUE_SETTINGS[ computedUnit ?? 'px' ]?.step ?? 0.1

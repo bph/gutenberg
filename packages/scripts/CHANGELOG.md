@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 30.7.0 (2024-12-11)
+
 ### Internal
 
 -   The bundled `sass` dependency has been updated from `^1.35.2` to `^1.50.1` ([#67572](https://github.com/WordPress/gutenberg/pull/67572)).

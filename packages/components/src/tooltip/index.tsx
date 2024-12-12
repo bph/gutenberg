@@ -2,7 +2,6 @@
  * External dependencies
  */
 import * as Ariakit from '@ariakit/react';
-import { useStoreState } from '@ariakit/react';
 import clsx from 'clsx';
 
 /**
@@ -94,7 +93,7 @@ function UnforwardedTooltip(
 		placement: computedPlacement,
 		showTimeout: delay,
 	} );
-	const mounted = useStoreState( tooltipStore, 'mounted' );
+	const mounted = Ariakit.useStoreState( tooltipStore, 'mounted' );
 
 	if ( isNestedInTooltip ) {
 		return isOnlyChild ? (

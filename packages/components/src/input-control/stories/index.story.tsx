@@ -46,6 +46,7 @@ export const Default = Template.bind( {} );
 Default.args = {
 	label: 'Value',
 	placeholder: 'Placeholder',
+	__next40pxDefaultSize: true,
 };
 
 export const WithHelpText = Template.bind( {} );
@@ -117,7 +118,6 @@ export const ShowPassword: StoryFn< typeof InputControl > = ( args ) => {
 	return (
 		<InputControl
 			type={ visible ? 'text' : 'password' }
-			label="Password"
 			suffix={
 				<InputControlSuffixWrapper variant="control">
 					<Button
@@ -131,4 +131,9 @@ export const ShowPassword: StoryFn< typeof InputControl > = ( args ) => {
 			{ ...args }
 		/>
 	);
+};
+ShowPassword.args = {
+	...Default.args,
+	label: 'Password',
+	placeholder: undefined,
 };
