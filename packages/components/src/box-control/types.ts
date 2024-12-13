@@ -15,6 +15,12 @@ export type CustomValueUnits = {
 	[ key: string ]: { max: number; step: number };
 };
 
+export interface Preset {
+	name: string;
+	slug: string;
+	value?: string;
+}
+
 type UnitControlPassthroughProps = Omit<
 	UnitControlProps,
 	'label' | 'onChange' | 'onFocus' | 'units'
@@ -94,6 +100,16 @@ export type BoxControlProps = Pick< UnitControlProps, 'units' > &
 		 * @default false
 		 */
 		__next40pxDefaultSize?: boolean;
+		/**
+		 * Available presets to pick from.
+		 */
+		presets?: Preset[];
+		/**
+		 * The key of the preset to apply.
+		 * If you provide a list of presets, you must provide a preset key to use.
+		 * The format of preset selected values is going to be `var:preset|${ presetKey }|${ presetSlug }`
+		 */
+		presetKey?: string;
 	};
 
 export type BoxControlInputControlProps = UnitControlPassthroughProps & {
@@ -120,6 +136,8 @@ export type BoxControlInputControlProps = UnitControlPassthroughProps & {
 	 * It can be a concrete side like: left, right, top, bottom or a combined one like: horizontal, vertical.
 	 */
 	side: keyof typeof LABELS;
+	presets?: Preset[];
+	presetKey?: string;
 };
 
 export type BoxControlIconProps = {

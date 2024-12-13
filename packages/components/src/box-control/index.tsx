@@ -83,6 +83,8 @@ function BoxControl( {
 	splitOnAxis = false,
 	allowReset = true,
 	resetValues = DEFAULT_VALUES,
+	presets,
+	presetKey,
 	onMouseOver,
 	onMouseOut,
 }: BoxControlProps ) {
@@ -153,6 +155,8 @@ function BoxControl( {
 		sides,
 		values: inputValues,
 		__next40pxDefaultSize,
+		presets,
+		presetKey,
 	};
 
 	maybeWarnDeprecated36pxSize( {

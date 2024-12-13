@@ -79,6 +79,22 @@ A callback function when an input value changes.
  - Required: No
  - Default: `() => {}`
 
+### `presets`
+
+Available presets to pick from.
+
+ - Type: `Preset[]`
+ - Required: No
+
+### `presetKey`
+
+The key of the preset to apply.
+If you provide a list of presets, you must provide a preset key to use.
+The format of preset selected values is going to be `var:preset|${ presetKey }|${ presetSlug }`
+
+ - Type: `string`
+ - Required: No
+
 ### `resetValues`
 
 The `top`, `right`, `bottom`, and `left` box dimension values to use when the control is reset.

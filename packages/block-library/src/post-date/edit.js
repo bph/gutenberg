@@ -26,7 +26,8 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	ToggleControl,
-	PanelBody,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { edit } from '@wordpress/icons';
@@ -160,16 +161,36 @@ export default function PostDateEdit( {
 			</BlockControls>
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<DateFormatPicker
-						format={ format }
-						defaultFormat={ siteFormat }
-						onChange={ ( nextFormat ) =>
-							setAttributes( { format: nextFormat } )
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							format: undefined,
+							isLink: false,
+							displayType: 'date',
+						} );
+					} }
+				>
+					<ToolsPanelItem
+						hasValue={ () =>
+							format !== undefined && format !== siteFormat
 						}
-					/>
-					<ToggleControl
-						__nextHasNoMarginBottom
+						label={ __( 'Date Format' ) }
+						onDeselect={ () =>
+							setAttributes( { format: undefined } )
+						}
+						isShownByDefault
+					>
+						<DateFormatPicker
+							format={ format }
+							defaultFormat={ siteFormat }
+							onChange={ ( nextFormat ) =>
+								setAttributes( { format: nextFormat } )
+							}
+						/>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						hasValue={ () => isLink !== false }
 						label={
 							postType?.labels.singular_name
 								? sprintf(
@@ -179,23 +200,49 @@ export default function PostDateEdit( {
 								  )
 								: __( 'Link to post' )
 						}
-						onChange={ () => setAttributes( { isLink: ! isLink } ) }
-						checked={ isLink }
-					/>
-					<ToggleControl
-						__nextHasNoMarginBottom
+						onDeselect={ () => setAttributes( { isLink: false } ) }
+						isShownByDefault
+					>
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label={
+								postType?.labels.singular_name
+									? sprintf(
+											// translators: %s: Name of the post type e.g: "post".
+											__( 'Link to %s' ),
+											postType.labels.singular_name.toLowerCase()
+									  )
+									: __( 'Link to post' )
+							}
+							onChange={ () =>
+								setAttributes( { isLink: ! isLink } )
+							}
+							checked={ isLink }
+						/>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						hasValue={ () => displayType !== 'date' }
 						label={ __( 'Display last modified date' ) }
-						onChange={ ( value ) =>
-							setAttributes( {
-								displayType: value ? 'modified' : 'date',
-							} )
+						onDeselect={ () =>
+							setAttributes( { displayType: 'date' } )
 						}
-						checked={ displayType === 'modified' }
-						help={ __(
-							'Only shows if the post has been modified'
-						) }
-					/>
-				</PanelBody>
+						isShownByDefault
+					>
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label={ __( 'Display last modified date' ) }
+							onChange={ ( value ) =>
+								setAttributes( {
+									displayType: value ? 'modified' : 'date',
+								} )
+							}
+							checked={ displayType === 'modified' }
+							help={ __(
+								'Only shows if the post has been modified'
+							) }
+						/>
+					</ToolsPanelItem>
+				</ToolsPanel>
 			</InspectorControls>
 
 			<div { ...blockProps }>{ postDate }</div>

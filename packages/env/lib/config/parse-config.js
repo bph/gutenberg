@@ -52,6 +52,7 @@ const mergeConfigs = require( './merge-configs' );
  * @property {number}                    port           The port to use.
  * @property {number}                    mysqlPort      The port to use for MySQL. Random if empty.
  * @property {number}                    phpmyadminPort The port to use for phpMyAdmin. If empty, disabled phpMyAdmin.
+ * @property {boolean}                   multisite      Whether to set up a multisite installation.
  * @property {Object}                    config         Mapping of wp-config.php constants to their desired values.
  * @property {Object.<string, WPSource>} mappings       Mapping of WordPress directories to local directories which should be mounted.
  * @property {string|null}               phpVersion     Version of PHP to use in the environments, of the format 0.0.
@@ -89,6 +90,7 @@ const DEFAULT_ENVIRONMENT_CONFIG = {
 	testsPort: 8889,
 	mysqlPort: null,
 	phpmyadminPort: null,
+	multisite: false,
 	mappings: {},
 	config: {
 		FS_METHOD: 'direct',
@@ -464,6 +466,10 @@ async function parseEnvironmentConfig(
 
 	if ( config.phpmyadminPort !== undefined ) {
 		parsedConfig.phpmyadminPort = config.phpmyadminPort;
+	}
+
+	if ( config.multisite !== undefined ) {
+		parsedConfig.multisite = config.multisite;
 	}
 
 	if ( config.phpVersion !== undefined ) {

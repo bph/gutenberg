@@ -23,6 +23,7 @@ const DEFAULT_CONFIG = {
 	testsPort: 8889,
 	mysqlPort: null,
 	phpmyadminPort: null,
+	multisite: false,
 	phpVersion: null,
 	coreSource: {
 		type: 'git',

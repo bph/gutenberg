@@ -66,6 +66,10 @@
 				"phpmyadminPort": {
 					"description": "The port number to access phpMyAdmin.",
 					"type": "integer"
+				},
+				"multisite": {
+					"description": "Whether to set up a multisite installation.",
+					"type": "boolean"
 				}
 			}
 		},
@@ -78,7 +82,8 @@
 				"port",
 				"config",
 				"mappings",
-				"phpmyadminPort"
+				"phpmyadminPort",
+				"multisite"
 			]
 		}
 	},

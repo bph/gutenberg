@@ -11,6 +11,7 @@ import type {
 	BoxControlProps,
 	BoxControlValue,
 	CustomValueUnits,
+	Preset,
 } from './types';
 import deprecated from '@wordpress/deprecated';
 
@@ -271,4 +272,63 @@ export function getAllowedSides(
 		}
 	} );
 	return allowedSides;
+}
+
+/**
+ * Checks if a value is a preset value.
+ *
+ * @param value     The value to check.
+ * @param presetKey The preset key to check against.
+ * @return Whether the value is a preset value.
+ */
+export function isValuePreset( value: string, presetKey: string ) {
+	return value.startsWith( `var:preset|${ presetKey }|` );
+}
+
+/**
+ * Returns the index of the preset value in the presets array.
+ *
+ * @param value     The value to check.
+ * @param presetKey The preset key to check against.
+ * @param presets   The array of presets to search.
+ * @return The index of the preset value in the presets array.
+ */
+export function getPresetIndexFromValue(
+	value: string,
+	presetKey: string,
+	presets: Preset[]
+) {
+	if ( ! isValuePreset( value, presetKey ) ) {
+		return undefined;
+	}
+
+	const match = value.match(
+		new RegExp( `^var:preset\\|${ presetKey }\\|(.+)$` )
+	);
+	if ( ! match ) {
+		return undefined;
+	}
+	const slug = match[ 1 ];
+	const index = presets.findIndex( ( preset ) => {
+		return preset.slug === slug;
+	} );
+
+	return index !== -1 ? index : undefined;
+}
+
+/**
+ * Returns the preset value from the index.
+ *
+ * @param index     The index of the preset value in the presets array.
+ * @param presetKey The preset key to check against.
+ * @param presets   The array of presets to search.
+ * @return The preset value from the index.
+ */
+export function getPresetValueFromIndex(
+	index: number,
+	presetKey: string,
+	presets: Preset[]
+) {
+	const preset = presets[ index ];
+	return `var:preset|${ presetKey }|${ preset.slug }`;
 }

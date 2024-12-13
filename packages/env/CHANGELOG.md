@@ -7,6 +7,7 @@
 ### Enhancements
 
 - Add phpMyAdmin as an optional service. Enabled via the new `phpmyadminPort` environment config, as well as env vars `WP_ENV_PHPMYADMIN_PORT` and `WP_ENV_TESTS_PHPMYADMIN_PORT`.
+- Add support for WordPress multisite installations. Enabled via the new `multisite` environment config.
 
 ### Internal
 

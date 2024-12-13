@@ -109,6 +109,7 @@ function useView( postType ) {
 		return {
 			...initialView,
 			type,
+			...defaultLayouts[ type ],
 		};
 	} );
 
@@ -140,13 +141,15 @@ function useView( postType ) {
 	// without affecting any other config.
 	const onUrlLayoutChange = useEvent( () => {
 		setView( ( prevView ) => {
-			const layoutToApply = layout ?? LAYOUT_LIST;
-			if ( layoutToApply === prevView.type ) {
+			const newType = layout ?? LAYOUT_LIST;
+			if ( newType === prevView.type ) {
 				return prevView;
 			}
+
 			return {
 				...prevView,
-				type: layout ?? LAYOUT_LIST,
+				type: newType,
+				...defaultLayouts[ newType ],
 			};
 		} );
 	} );
@@ -168,6 +171,7 @@ function useView( postType ) {
 			setView( {
 				...newView,
 				type,
+				...defaultLayouts[ type ],
 			} );
 		}
 	} );
