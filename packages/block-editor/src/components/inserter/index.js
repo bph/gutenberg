@@ -29,7 +29,6 @@ const defaultRenderToggle = ( {
 	blockTitle,
 	hasSingleBlockType,
 	toggleProps = {},
-	prioritizePatterns,
 } ) => {
 	const {
 		as: Wrapper = Button,
@@ -45,8 +44,6 @@ const defaultRenderToggle = ( {
 			_x( 'Add %s', 'directly add the only allowed block' ),
 			blockTitle
 		);
-	} else if ( ! label && prioritizePatterns ) {
-		label = __( 'Add pattern' );
 	} else if ( ! label ) {
 		label = _x( 'Add block', 'Generic label for block inserter button' );
 	}
@@ -113,7 +110,6 @@ class Inserter extends Component {
 			toggleProps,
 			hasItems,
 			renderToggle = defaultRenderToggle,
-			prioritizePatterns,
 		} = this.props;
 
 		return renderToggle( {
@@ -124,7 +120,6 @@ class Inserter extends Component {
 			hasSingleBlockType,
 			directInsertBlock,
 			toggleProps,
-			prioritizePatterns,
 		} );
 	}
 
@@ -147,7 +142,6 @@ class Inserter extends Component {
 			// This prop is experimental to give some time for the quick inserter to mature
 			// Feel free to make them stable after a few releases.
 			__experimentalIsQuick: isQuick,
-			prioritizePatterns,
 			onSelectOrClose,
 			selectBlockOnInsert,
 		} = this.props;
@@ -171,7 +165,6 @@ class Inserter extends Component {
 					rootClientId={ rootClientId }
 					clientId={ clientId }
 					isAppender={ isAppender }
-					prioritizePatterns={ prioritizePatterns }
 					selectBlockOnInsert={ selectBlockOnInsert }
 				/>
 			);
@@ -230,7 +223,6 @@ export default compose( [
 				hasInserterItems,
 				getAllowedBlocks,
 				getDirectInsertBlock,
-				getSettings,
 			} = select( blockEditorStore );
 
 			const { getBlockVariations } = select( blocksStore );
@@ -242,8 +234,6 @@ export default compose( [
 
 			const directInsertBlock =
 				shouldDirectInsert && getDirectInsertBlock( rootClientId );
-
-			const settings = getSettings();
 
 			const hasSingleBlockType =
 				allowedBlocks?.length === 1 &&
@@ -262,9 +252,6 @@ export default compose( [
 				allowedBlockType,
 				directInsertBlock,
 				rootClientId,
-				prioritizePatterns:
-					settings.__experimentalPreferPatternsOnRoot &&
-					! rootClientId,
 			};
 		}
 	),

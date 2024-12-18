@@ -5,13 +5,8 @@ import {
 	Icon,
 	BaseControl,
 	TextControl,
-	Flex,
-	FlexItem,
-	FlexBlock,
 	Button,
 	Modal,
-	__experimentalRadioGroup as RadioGroup,
-	__experimentalRadio as Radio,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
@@ -39,6 +34,13 @@ import {
 	getUniqueTemplatePartTitle,
 	useExistingTemplateParts,
 } from './utils';
+
+function getAreaRadioId( value: string, instanceId: number ) {
+	return `fields-create-template-part-modal__area-option-${ value }-${ instanceId }`;
+}
+function getAreaRadioDescriptionId( value: string, instanceId: number ) {
+	return `fields-create-template-part-modal__area-option-description-${ value }-${ instanceId }`;
+}
 
 type CreateTemplatePartModalContentsProps = {
 	defaultArea?: string;
@@ -201,52 +203,66 @@ export function CreateTemplatePartModalContents( {
 					onChange={ setTitle }
 					required
 				/>
-				<BaseControl
-					__nextHasNoMarginBottom
-					label={ __( 'Area' ) }
-					id={ `fields-create-template-part-modal__area-selection-${ instanceId }` }
-					className="fields-create-template-part-modal__area-base-control"
-				>
-					<RadioGroup
-						label={ __( 'Area' ) }
-						className="fields-create-template-part-modal__area-radio-group"
-						id={ `fields-create-template-part-modal__area-selection-${ instanceId }` }
-						onChange={ ( value ) =>
-							value && typeof value === 'string'
-								? setArea( value )
-								: () => void 0
-						}
-						checked={ area }
-					>
+				<fieldset>
+					<BaseControl.VisualLabel as="legend">
+						{ __( 'Area' ) }
+					</BaseControl.VisualLabel>
+					<div className="fields-create-template-part-modal__area-radio-group">
 						{ ( defaultTemplatePartAreas ?? [] ).map( ( item ) => {
 							const icon = getTemplatePartIcon( item.icon );
 							return (
-								<Radio
-									__next40pxDefaultSize
-									key={ item.label }
-									value={ item.area }
-									className="fields-create-template-part-modal__area-radio"
+								<div
+									key={ item.area }
+									className="fields-create-template-part-modal__area-radio-wrapper"
 								>
-									<Flex align="start" justify="start">
-										<FlexItem>
-											<Icon icon={ icon } />
-										</FlexItem>
-										<FlexBlock className="fields-create-template-part-modal__option-label">
-											{ item.label }
-											<div>{ item.description }</div>
-										</FlexBlock>
-
-										<FlexItem className="fields-create-template-part-modal__checkbox">
-											{ area === item.area && (
-												<Icon icon={ check } />
-											) }
-										</FlexItem>
-									</Flex>
-								</Radio>
+									<input
+										type="radio"
+										id={ getAreaRadioId(
+											item.area,
+											instanceId
+										) }
+										name={ `fields-create-template-part-modal__area-${ instanceId }` }
+										value={ item.area }
+										checked={ area === item.area }
+										onChange={ () => {
+											setArea( item.area );
+										} }
+										aria-describedby={ getAreaRadioDescriptionId(
+											item.area,
+											instanceId
+										) }
+									/>
+									<Icon
+										icon={ icon }
+										className="fields-create-template-part-modal__area-radio-icon"
+									/>
+									<label
+										htmlFor={ getAreaRadioId(
+											item.area,
+											instanceId
+										) }
+										className="fields-create-template-part-modal__area-radio-label"
+									>
+										{ item.label }
+									</label>
+									<Icon
+										icon={ check }
+										className="fields-create-template-part-modal__area-radio-checkmark"
+									/>
+									<p
+										className="fields-create-template-part-modal__area-radio-description"
+										id={ getAreaRadioDescriptionId(
+											item.area,
+											instanceId
+										) }
+									>
+										{ item.description }
+									</p>
+								</div>
 							);
 						} ) }
-					</RadioGroup>
-				</BaseControl>
+					</div>
+				</fieldset>
 				<HStack justify="right">
 					<Button
 						__next40pxDefaultSize

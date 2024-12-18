@@ -212,7 +212,7 @@ export default function CustomDataViewsList( { type, activeView, isCustom } ) {
 			<div className="edit-site-sidebar-navigation-screen-dataviews__group-header">
 				<Heading level={ 2 }>{ __( 'Custom Views' ) }</Heading>
 			</div>
-			<ItemGroup>
+			<ItemGroup className="edit-site-sidebar-navigation-screen-dataviews__custom-items">
 				{ customDataViews.map( ( customViewRecord ) => {
 					return (
 						<CustomDataViewItem

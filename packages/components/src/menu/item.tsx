@@ -15,7 +15,7 @@ export const MenuItem = forwardRef<
 	HTMLDivElement,
 	WordPressComponentProps< MenuItemProps, 'div', false >
 >( function MenuItem(
-	{ prefix, suffix, children, hideOnClick = true, ...props },
+	{ prefix, suffix, children, hideOnClick = true, store, ...props },
 	ref
 ) {
 	const menuContext = useContext( MenuContext );
@@ -26,13 +26,19 @@ export const MenuItem = forwardRef<
 		);
 	}
 
+	// In most cases, the menu store will be retrieved from context (ie. the store
+	// created by the top-level menu component). But in rare cases (ie.
+	// `Menu.SubmenuTriggerItem`), the context store wouldn't be correct. This is
+	// why the component accepts a `store` prop to override the context store.
+	const computedStore = store ?? menuContext.store;
+
 	return (
 		<Styled.MenuItem
 			ref={ ref }
 			{ ...props }
 			accessibleWhenDisabled
 			hideOnClick={ hideOnClick }
-			store={ menuContext.store }
+			store={ computedStore }
 		>
 			<Styled.ItemPrefixWrapper>{ prefix }</Styled.ItemPrefixWrapper>
 

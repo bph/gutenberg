@@ -22,7 +22,10 @@ import { useInstanceId } from '@wordpress/compose';
  */
 import ItemActions from '../../components/dataviews-item-actions';
 import DataViewsSelectionCheckbox from '../../components/dataviews-selection-checkbox';
-import { useHasAPossibleBulkAction } from '../../components/dataviews-bulk-actions';
+import {
+	useHasAPossibleBulkAction,
+	useSomeItemHasAPossibleBulkAction,
+} from '../../components/dataviews-bulk-actions';
 import type {
 	Action,
 	NormalizedField,
@@ -47,6 +50,7 @@ interface GridItemProps< Item > {
 	descriptionField?: NormalizedField< Item >;
 	regularFields: NormalizedField< Item >[];
 	badgeFields: NormalizedField< Item >[];
+	hasBulkActions: boolean;
 }
 
 function GridItem< Item >( {
@@ -63,6 +67,7 @@ function GridItem< Item >( {
 	descriptionField,
 	regularFields,
 	badgeFields,
+	hasBulkActions,
 }: GridItemProps< Item > ) {
 	const { showTitle = true, showMedia = true, showDescription = true } = view;
 	const hasBulkAction = useHasAPossibleBulkAction( actions, item );
@@ -135,7 +140,7 @@ function GridItem< Item >( {
 					{ renderedMediaField }
 				</div>
 			) }
-			{ showMedia && renderedMediaField && (
+			{ hasBulkActions && showMedia && renderedMediaField && (
 				<DataViewsSelectionCheckbox
 					item={ item }
 					selection={ selection }
@@ -152,7 +157,9 @@ function GridItem< Item >( {
 				<div { ...clickableTitleItemProps } { ...titleA11yProps }>
 					{ renderedTitleField }
 				</div>
-				<ItemActions item={ item } actions={ actions } isCompact />
+				{ !! actions?.length && (
+					<ItemActions item={ item } actions={ actions } isCompact />
+				) }
 			</HStack>
 			<VStack spacing={ 1 }>
 				{ showDescription && descriptionField?.render && (
@@ -258,6 +265,7 @@ export default function ViewGrid< Item >( {
 	);
 	const hasData = !! data?.length;
 	const updatedPreviewSize = useUpdatedPreviewSizeOnViewportChange();
+	const hasBulkActions = useSomeItemHasAPossibleBulkAction( actions, data );
 	const usedPreviewSize = updatedPreviewSize || view.layout?.previewSize;
 	const gridStyle = usedPreviewSize
 		? {
@@ -292,6 +300,7 @@ export default function ViewGrid< Item >( {
 								descriptionField={ descriptionField }
 								regularFields={ regularFields }
 								badgeFields={ badgeFields }
+								hasBulkActions={ hasBulkActions }
 							/>
 						);
 					} ) }

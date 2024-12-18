@@ -8,11 +8,12 @@ import clsx from 'clsx';
  */
 import { useSelect, useDispatch } from '@wordpress/data';
 import {
-	PanelBody,
 	TextControl,
 	TextareaControl,
 	ToolbarButton,
 	ToolbarGroup,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { displayShortcut, isKeyboardEvent } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
@@ -382,67 +383,119 @@ export default function NavigationSubmenuEdit( {
 			</BlockControls>
 			{ /* Warning, this duplicated in packages/block-library/src/navigation-link/edit.js */ }
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<TextControl
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						value={ label || '' }
-						onChange={ ( labelValue ) => {
-							setAttributes( { label: labelValue } );
-						} }
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							label: '',
+							url: '',
+							description: '',
+							title: '',
+							rel: '',
+						} );
+					} }
+				>
+					<ToolsPanelItem
 						label={ __( 'Text' ) }
-						autoComplete="off"
-					/>
-					<TextControl
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						value={ url || '' }
-						onChange={ ( urlValue ) => {
-							setAttributes( { url: urlValue } );
-						} }
+						isShownByDefault
+						hasValue={ () => !! label }
+						onDeselect={ () => setAttributes( { label: '' } ) }
+					>
+						<TextControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							value={ label || '' }
+							onChange={ ( labelValue ) => {
+								setAttributes( { label: labelValue } );
+							} }
+							label={ __( 'Text' ) }
+							autoComplete="off"
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
 						label={ __( 'Link' ) }
-						autoComplete="off"
-					/>
-					<TextareaControl
-						__nextHasNoMarginBottom
-						value={ description || '' }
-						onChange={ ( descriptionValue ) => {
-							setAttributes( {
-								description: descriptionValue,
-							} );
-						} }
+						isShownByDefault
+						hasValue={ () => !! url }
+						onDeselect={ () => setAttributes( { url: '' } ) }
+					>
+						<TextControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							value={ url || '' }
+							onChange={ ( urlValue ) => {
+								setAttributes( { url: urlValue } );
+							} }
+							label={ __( 'Link' ) }
+							autoComplete="off"
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
 						label={ __( 'Description' ) }
-						help={ __(
-							'The description will be displayed in the menu if the current theme supports it.'
-						) }
-					/>
-					<TextControl
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						value={ title || '' }
-						onChange={ ( titleValue ) => {
-							setAttributes( { title: titleValue } );
-						} }
+						isShownByDefault
+						hasValue={ () => !! description }
+						onDeselect={ () =>
+							setAttributes( { description: '' } )
+						}
+					>
+						<TextareaControl
+							__nextHasNoMarginBottom
+							value={ description || '' }
+							onChange={ ( descriptionValue ) => {
+								setAttributes( {
+									description: descriptionValue,
+								} );
+							} }
+							label={ __( 'Description' ) }
+							help={ __(
+								'The description will be displayed in the menu if the current theme supports it.'
+							) }
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
 						label={ __( 'Title attribute' ) }
-						autoComplete="off"
-						help={ __(
-							'Additional information to help clarify the purpose of the link.'
-						) }
-					/>
-					<TextControl
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						value={ rel || '' }
-						onChange={ ( relValue ) => {
-							setAttributes( { rel: relValue } );
-						} }
+						isShownByDefault
+						hasValue={ () => !! title }
+						onDeselect={ () => setAttributes( { title: '' } ) }
+					>
+						<TextControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							value={ title || '' }
+							onChange={ ( titleValue ) => {
+								setAttributes( { title: titleValue } );
+							} }
+							label={ __( 'Title attribute' ) }
+							autoComplete="off"
+							help={ __(
+								'Additional information to help clarify the purpose of the link.'
+							) }
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
 						label={ __( 'Rel attribute' ) }
-						autoComplete="off"
-						help={ __(
-							'The relationship of the linked URL as space-separated link types.'
-						) }
-					/>
-				</PanelBody>
+						isShownByDefault
+						hasValue={ () => !! rel }
+						onDeselect={ () => setAttributes( { rel: '' } ) }
+					>
+						<TextControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							value={ rel || '' }
+							onChange={ ( relValue ) => {
+								setAttributes( { rel: relValue } );
+							} }
+							label={ __( 'Rel attribute' ) }
+							autoComplete="off"
+							help={ __(
+								'The relationship of the linked URL as space-separated link types.'
+							) }
+						/>
+					</ToolsPanelItem>
+				</ToolsPanel>
 			</InspectorControls>
 			<div { ...blockProps }>
 				{ /* eslint-disable jsx-a11y/anchor-is-valid */ }

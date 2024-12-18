@@ -1,11 +1,11 @@
-ul.dataviews-view-list {
+div.dataviews-view-list {
 	list-style-type: none;
 }
 
 .dataviews-view-list {
 	margin: 0 0 auto;
 
-	li {
+	div[role="row"] {
 		margin: 0;
 		border-top: 1px solid $gray-100;
 
@@ -45,7 +45,7 @@ ul.dataviews-view-list {
 		&.is-selected.is-selected {
 			border-top: 1px solid rgba(var(--wp-admin-theme-color--rgb), 0.12);
 
-			& + li {
+			& + div[role="row"] {
 				border-top: 1px solid rgba(var(--wp-admin-theme-color--rgb), 0.12);
 			}
 		}
@@ -69,8 +69,8 @@ ul.dataviews-view-list {
 
 	}
 
-	li.is-selected,
-	li.is-selected:focus-within {
+	div[role="row"].is-selected,
+	div[role="row"].is-selected:focus-within {
 		.dataviews-view-list__item-wrapper {
 			background-color: rgba(var(--wp-admin-theme-color--rgb), 0.04);
 			color: $gray-900;

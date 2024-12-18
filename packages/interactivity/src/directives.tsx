@@ -4,7 +4,7 @@
 /**
  * External dependencies
  */
-import { h as createElement, type RefObject } from 'preact';
+import { h as createElement, type VNode, type RefObject } from 'preact';
 import { useContext, useMemo, useRef } from 'preact/hooks';
 
 /**
@@ -567,11 +567,19 @@ export default () => {
 			const [ entry ] = each;
 			const { namespace } = entry;
 
-			const list = evaluate( entry );
+			const iterable = evaluate( entry );
+
+			if ( typeof iterable?.[ Symbol.iterator ] !== 'function' ) {
+				return;
+			}
+
 			const itemProp = isNonDefaultDirectiveSuffix( entry )
 				? kebabToCamelCase( entry.suffix )
 				: 'item';
-			return list.map( ( item ) => {
+
+			const result: VNode< any >[] = [];
+
+			for ( const item of iterable ) {
 				const itemContext = proxifyContext(
 					proxifyState( namespace, {} ),
 					inheritedValue.client[ namespace ]
@@ -596,12 +604,15 @@ export default () => {
 					? getEvaluate( { scope } )( eachKey[ 0 ] )
 					: item;
 
-				return createElement(
-					Provider,
-					{ value: mergedContext, key },
-					element.props.content
+				result.push(
+					createElement(
+						Provider,
+						{ value: mergedContext, key },
+						element.props.content
+					)
 				);
-			} );
+			}
+			return result;
 		},
 		{ priority: 20 }
 	);

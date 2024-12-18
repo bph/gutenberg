@@ -136,7 +136,7 @@ export function FiltersToggle( {
 					view={ view }
 					onChangeView={ onChangeViewWithFilterVisibility }
 					setOpenedFilter={ setOpenedFilter }
-					trigger={ buttonComponent }
+					triggerProps={ { render: buttonComponent } }
 				/>
 			) : (
 				<FilterVisibilityToggle

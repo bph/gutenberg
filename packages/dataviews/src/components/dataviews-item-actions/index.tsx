@@ -229,25 +229,27 @@ function CompactItemActions< Item >( {
 	);
 	return (
 		<>
-			<Menu
-				trigger={
-					<Button
-						size={ isSmall ? 'small' : 'compact' }
-						icon={ moreVertical }
-						label={ __( 'Actions' ) }
-						accessibleWhenDisabled
-						disabled={ ! actions.length }
-						className="dataviews-all-actions-button"
-					/>
-				}
-				placement="bottom-end"
-			>
-				<ActionsMenuGroup
-					actions={ actions }
-					item={ item }
-					registry={ registry }
-					setActiveModalAction={ setActiveModalAction }
+			<Menu placement="bottom-end">
+				<Menu.TriggerButton
+					render={
+						<Button
+							size={ isSmall ? 'small' : 'compact' }
+							icon={ moreVertical }
+							label={ __( 'Actions' ) }
+							accessibleWhenDisabled
+							disabled={ ! actions.length }
+							className="dataviews-all-actions-button"
+						/>
+					}
 				/>
+				<Menu.Popover>
+					<ActionsMenuGroup
+						actions={ actions }
+						item={ item }
+						registry={ registry }
+						setActiveModalAction={ setActiveModalAction }
+					/>
+				</Menu.Popover>
 			</Menu>
 			{ !! activeModalAction && (
 				<ActionModal

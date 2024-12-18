@@ -32,7 +32,8 @@ import { privateApis as coreCommandsPrivateApis } from '@wordpress/core-commands
 import { privateApis as routerPrivateApis } from '@wordpress/router';
 import { PluginArea } from '@wordpress/plugins';
 import { store as noticesStore } from '@wordpress/notices';
-import { useDispatch } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { store as preferencesStore } from '@wordpress/preferences';
 
 /**
  * Internal dependencies
@@ -70,6 +71,15 @@ function Layout() {
 		triggerAnimationOnChange: routeKey + '-' + canvas,
 	} );
 
+	const { showIconLabels } = useSelect( ( select ) => {
+		return {
+			showIconLabels: select( preferencesStore ).get(
+				'core',
+				'showIconLabels'
+			),
+		};
+	} );
+
 	const [ backgroundColor ] = useGlobalStyle( 'color.background' );
 	const [ gradientValue ] = useGlobalStyle( 'color.gradient' );
 	const previousCanvaMode = usePrevious( canvas );
@@ -93,6 +103,7 @@ function Layout() {
 					navigateRegionsProps.className,
 					{
 						'is-full-canvas': canvas === 'edit',
+						'show-icon-labels': showIconLabels,
 					}
 				) }
 			>

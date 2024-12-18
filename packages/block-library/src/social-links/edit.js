@@ -22,13 +22,19 @@ import {
 import {
 	MenuGroup,
 	MenuItem,
-	PanelBody,
 	ToggleControl,
 	ToolbarDropdownMenu,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const sizeOptions = [
 	{ name: __( 'Small' ), value: 'has-small-icon-size' },
@@ -67,6 +73,8 @@ export function SocialLinksEdit( props ) {
 	const hasAnySelected = isSelected || hasSelectedChild;
 
 	const logosOnly = attributes.className?.includes( 'is-style-logos-only' );
+
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	// Remove icon background color when logos only style is selected or
 	// restore it when any other style is selected.
@@ -198,24 +206,53 @@ export function SocialLinksEdit( props ) {
 				</ToolbarDropdownMenu>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<ToggleControl
-						__nextHasNoMarginBottom
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							openInNewTab: false,
+							showLabels: false,
+						} );
+					} }
+					dropdownMenuProps={ dropdownMenuProps }
+				>
+					<ToolsPanelItem
+						isShownByDefault
 						label={ __( 'Open links in new tab' ) }
-						checked={ openInNewTab }
-						onChange={ () =>
-							setAttributes( { openInNewTab: ! openInNewTab } )
+						hasValue={ () => !! openInNewTab }
+						onDeselect={ () =>
+							setAttributes( { openInNewTab: false } )
 						}
-					/>
-					<ToggleControl
-						__nextHasNoMarginBottom
+					>
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label={ __( 'Open links in new tab' ) }
+							checked={ openInNewTab }
+							onChange={ () =>
+								setAttributes( {
+									openInNewTab: ! openInNewTab,
+								} )
+							}
+						/>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						isShownByDefault
 						label={ __( 'Show text' ) }
-						checked={ showLabels }
-						onChange={ () =>
-							setAttributes( { showLabels: ! showLabels } )
+						hasValue={ () => !! showLabels }
+						onDeselect={ () =>
+							setAttributes( { showLabels: false } )
 						}
-					/>
-				</PanelBody>
+					>
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label={ __( 'Show text' ) }
+							checked={ showLabels }
+							onChange={ () =>
+								setAttributes( { showLabels: ! showLabels } )
+							}
+						/>
+					</ToolsPanelItem>
+				</ToolsPanel>
 			</InspectorControls>
 			{ colorGradientSettings.hasColorsOrGradients && (
 				<InspectorControls group="color">

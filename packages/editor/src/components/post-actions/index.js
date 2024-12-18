@@ -74,24 +74,26 @@ export default function PostActions( { postType, postId, onActionPerformed } ) {
 
 	return (
 		<>
-			<Menu
-				trigger={
-					<Button
-						size="small"
-						icon={ moreVertical }
-						label={ __( 'Actions' ) }
-						disabled={ ! actions.length }
-						accessibleWhenDisabled
-						className="editor-all-actions-button"
-					/>
-				}
-				placement="bottom-end"
-			>
-				<ActionsDropdownMenuGroup
-					actions={ actions }
-					items={ itemsWithPermissions }
-					setActiveModalAction={ setActiveModalAction }
+			<Menu placement="bottom-end">
+				<Menu.TriggerButton
+					render={
+						<Button
+							size="small"
+							icon={ moreVertical }
+							label={ __( 'Actions' ) }
+							disabled={ ! actions.length }
+							accessibleWhenDisabled
+							className="editor-all-actions-button"
+						/>
+					}
 				/>
+				<Menu.Popover>
+					<ActionsDropdownMenuGroup
+						actions={ actions }
+						items={ itemsWithPermissions }
+						setActiveModalAction={ setActiveModalAction }
+					/>
+				</Menu.Popover>
 			</Menu>
 			{ !! activeModalAction && (
 				<ActionModal

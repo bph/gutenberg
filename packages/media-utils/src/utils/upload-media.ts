@@ -12,13 +12,18 @@ import type {
 	Attachment,
 	OnChangeHandler,
 	OnErrorHandler,
-	OnSuccessHandler,
 } from './types';
 import { uploadToServer } from './upload-to-server';
 import { validateMimeType } from './validate-mime-type';
 import { validateMimeTypeForUser } from './validate-mime-type-for-user';
 import { validateFileSize } from './validate-file-size';
 import { UploadError } from './upload-error';
+
+declare global {
+	interface Window {
+		__experimentalMediaProcessing?: boolean;
+	}
+}
 
 interface UploadMediaArgs {
 	// Additional data to include in the request.
@@ -33,8 +38,6 @@ interface UploadMediaArgs {
 	onError?: OnErrorHandler;
 	// Function called each time a file or a temporary representation of the file is available.
 	onFileChange?: OnChangeHandler;
-	// Function called once a file has completely finished uploading, including thumbnails.
-	onSuccess?: OnSuccessHandler;
 	// List of allowed mime types and file extensions.
 	wpAllowedMimeTypes?: Record< string, string > | null;
 	// Abort signal.
@@ -69,8 +72,11 @@ export function uploadMedia( {
 
 	const filesSet: Array< Partial< Attachment > | null > = [];
 	const setAndUpdateFiles = ( index: number, value: Attachment | null ) => {
-		if ( filesSet[ index ]?.url ) {
-			revokeBlobURL( filesSet[ index ].url );
+		// For client-side media processing, this is handled by the upload-media package.
+		if ( ! window.__experimentalMediaProcessing ) {
+			if ( filesSet[ index ]?.url ) {
+				revokeBlobURL( filesSet[ index ].url );
+			}
 		}
 		filesSet[ index ] = value;
 		onFileChange?.(
@@ -107,10 +113,13 @@ export function uploadMedia( {
 
 		validFiles.push( mediaFile );
 
-		// Set temporary URL to create placeholder media file, this is replaced
-		// with final file from media gallery when upload is `done` below.
-		filesSet.push( { url: createBlobURL( mediaFile ) } );
-		onFileChange?.( filesSet as Array< Partial< Attachment > > );
+		// For client-side media processing, this is handled by the upload-media package.
+		if ( ! window.__experimentalMediaProcessing ) {
+			// Set temporary URL to create placeholder media file, this is replaced
+			// with final file from media gallery when upload is `done` below.
+			filesSet.push( { url: createBlobURL( mediaFile ) } );
+			onFileChange?.( filesSet as Array< Partial< Attachment > > );
+		}
 	}
 
 	validFiles.map( async ( file, index ) => {

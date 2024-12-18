@@ -27,6 +27,7 @@ const noop = () => {};
  * @param {?number}  $0.maxUploadFileSize Maximum upload size in bytes allowed for the site.
  * @param {Function} $0.onError           Function called when an error happens.
  * @param {Function} $0.onFileChange      Function called each time a file or a temporary representation of the file is available.
+ * @param {Function} $0.onSuccess         Function called after the final representation of the file is available.
  */
 export default function mediaUpload( {
 	additionalData = {},
@@ -35,6 +36,7 @@ export default function mediaUpload( {
 	maxUploadFileSize,
 	onError = noop,
 	onFileChange,
+	onSuccess,
 } ) {
 	const { getCurrentPost, getEditorSettings } = select( editorStore );
 	const {
@@ -77,8 +79,9 @@ export default function mediaUpload( {
 			} else {
 				clearSaveLock();
 			}
-			onFileChange( file );
+			onFileChange?.( file );
 		},
+		onSuccess,
 		additionalData: {
 			...postData,
 			...additionalData,

@@ -17,7 +17,11 @@ import {
 	useBlockProps,
 	HeadingLevelDropdown,
 } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody } from '@wordpress/components';
+import {
+	ToggleControl,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from '@wordpress/components';
 import { createBlock, getDefaultBlockName } from '@wordpress/blocks';
 import { decodeEntities } from '@wordpress/html-entities';
 
@@ -109,26 +113,52 @@ export default function SiteTitleEdit( {
 				/>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<ToggleControl
-						__nextHasNoMarginBottom
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							isLink: false,
+							linkTarget: '_self',
+						} );
+					} }
+				>
+					<ToolsPanelItem
+						hasValue={ () => isLink !== false }
 						label={ __( 'Make title link to home' ) }
-						onChange={ () => setAttributes( { isLink: ! isLink } ) }
-						checked={ isLink }
-					/>
-					{ isLink && (
+						onDeselect={ () => setAttributes( { isLink: false } ) }
+						isShownByDefault
+					>
 						<ToggleControl
 							__nextHasNoMarginBottom
-							label={ __( 'Open in new tab' ) }
-							onChange={ ( value ) =>
-								setAttributes( {
-									linkTarget: value ? '_blank' : '_self',
-								} )
+							label={ __( 'Make title link to home' ) }
+							onChange={ () =>
+								setAttributes( { isLink: ! isLink } )
 							}
-							checked={ linkTarget === '_blank' }
+							checked={ isLink }
 						/>
+					</ToolsPanelItem>
+					{ isLink && (
+						<ToolsPanelItem
+							hasValue={ () => linkTarget !== '_self' }
+							label={ __( 'Open in new tab' ) }
+							onDeselect={ () =>
+								setAttributes( { linkTarget: '_self' } )
+							}
+							isShownByDefault
+						>
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Open in new tab' ) }
+								onChange={ ( value ) =>
+									setAttributes( {
+										linkTarget: value ? '_blank' : '_self',
+									} )
+								}
+								checked={ linkTarget === '_blank' }
+							/>
+						</ToolsPanelItem>
 					) }
-				</PanelBody>
+				</ToolsPanel>
 			</InspectorControls>
 			{ siteTitleContent }
 		</>

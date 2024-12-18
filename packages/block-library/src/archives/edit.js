@@ -12,8 +12,15 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
 
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
+
 export default function ArchivesEdit( { attributes, setAttributes } ) {
 	const { showLabel, showPostCounts, displayAsDropdown, type } = attributes;
+
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	return (
 		<>
@@ -28,6 +35,7 @@ export default function ArchivesEdit( { attributes, setAttributes } ) {
 							type: 'monthly',
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						label={ __( 'Display as dropdown' ) }

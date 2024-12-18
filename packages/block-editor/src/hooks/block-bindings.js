@@ -51,7 +51,7 @@ const useToolsPanelDropdownMenuProps = () => {
 		: {};
 };
 
-function BlockBindingsPanelDropdown( { fieldsList, attribute, binding } ) {
+function BlockBindingsPanelMenuContent( { fieldsList, attribute, binding } ) {
 	const { clientId } = useBlockEditContext();
 	const registeredSources = getBlockBindingsSources();
 	const { updateBlockBindings } = useBlockBindingsUtils();
@@ -179,22 +179,21 @@ function EditableBlockBindingsPanelItems( {
 							placement={
 								isMobile ? 'bottom-start' : 'left-start'
 							}
-							gutter={ isMobile ? 8 : 36 }
-							trigger={
-								<Item>
-									<BlockBindingsAttribute
-										attribute={ attribute }
-										binding={ binding }
-										fieldsList={ fieldsList }
-									/>
-								</Item>
-							}
 						>
-							<BlockBindingsPanelDropdown
-								fieldsList={ fieldsList }
-								attribute={ attribute }
-								binding={ binding }
-							/>
+							<Menu.TriggerButton render={ <Item /> }>
+								<BlockBindingsAttribute
+									attribute={ attribute }
+									binding={ binding }
+									fieldsList={ fieldsList }
+								/>
+							</Menu.TriggerButton>
+							<Menu.Popover gutter={ isMobile ? 8 : 36 }>
+								<BlockBindingsPanelMenuContent
+									fieldsList={ fieldsList }
+									attribute={ attribute }
+									binding={ binding }
+								/>
+							</Menu.Popover>
 						</Menu>
 					</ToolsPanelItem>
 				);

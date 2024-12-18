@@ -22,7 +22,7 @@ export const stylebookRoute = {
 				) }
 			/>
 		),
-		preview: <StyleBookPreview />,
-		mobile: <StyleBookPreview />,
+		preview: <StyleBookPreview isStatic />,
+		mobile: <StyleBookPreview isStatic />,
 	},
 };

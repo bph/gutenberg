@@ -17,10 +17,6 @@ export interface MenuContext {
 
 export interface MenuProps {
 	/**
-	 * The button triggering the menu popover.
-	 */
-	trigger: React.ReactElement;
-	/**
 	 * The contents of the menu (ie. one or more menu items).
 	 */
 	children?: React.ReactNode;
@@ -41,6 +37,19 @@ export interface MenuProps {
 	 */
 	onOpenChange?: ( open: boolean ) => void;
 	/**
+	 * The placement of the menu popover.
+	 *
+	 * @default 'bottom-start' for root-level menus, 'right-start' for nested menus
+	 */
+	placement?: Placement;
+}
+
+export interface MenuPopoverProps {
+	/**
+	 * The contents of the dropdown.
+	 */
+	children?: React.ReactNode;
+	/**
 	 * The modality of the menu popover. When set to true, interaction with
 	 * outside elements will be disabled and only menu content will be visible to
 	 * screen readers.
@@ -48,12 +57,6 @@ export interface MenuProps {
 	 * @default true
 	 */
 	modal?: boolean;
-	/**
-	 * The placement of the menu popover.
-	 *
-	 * @default 'bottom-start' for root-level menus, 'right-start' for nested menus
-	 */
-	placement?: Placement;
 	/**
 	 * The distance between the popover and the anchor element.
 	 *
@@ -78,6 +81,50 @@ export interface MenuProps {
 		| ( (
 				event: KeyboardEvent | React.KeyboardEvent< Element >
 		  ) => boolean );
+}
+
+export interface MenuTriggerButtonProps {
+	/**
+	 * The contents of the menu trigger button.
+	 */
+	children?: React.ReactNode;
+	/**
+	 * Allows the component to be rendered as a different HTML element or React
+	 * component. The value can be a React element or a function that takes in the
+	 * original component props and gives back a React element with the props
+	 * merged.
+	 */
+	render?: Ariakit.MenuButtonProps[ 'render' ];
+	/**
+	 * Determines if the element is disabled. This sets the `aria-disabled`
+	 * attribute accordingly, enabling support for all elements, including those
+	 * that don't support the native `disabled` attribute.
+	 *
+	 * This feature can be combined with the `accessibleWhenDisabled` prop to
+	 * make disabled elements still accessible via keyboard.
+	 *
+	 * **Note**: For this prop to work, the `focusable` prop must be set to
+	 * `true`, if it's not set by default.
+	 *
+	 * @default false
+	 */
+	disabled?: Ariakit.MenuButtonProps[ 'disabled' ];
+	/**
+	 * Indicates whether the element should be focusable even when it is
+	 * `disabled`.
+	 *
+	 * This is important when discoverability is a concern. For example:
+	 *
+	 * > A toolbar in an editor contains a set of special smart paste functions
+	 * that are disabled when the clipboard is empty or when the function is not
+	 * applicable to the current content of the clipboard. It could be helpful to
+	 * keep the disabled buttons focusable if the ability to discover their
+	 * functionality is primarily via their presence on the toolbar.
+	 *
+	 * Learn more on [Focusability of disabled
+	 * controls](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#focusabilityofdisabledcontrols).
+	 */
+	accessibleWhenDisabled?: Ariakit.MenuButtonProps[ 'accessibleWhenDisabled' ];
 }
 
 export interface MenuGroupProps {
@@ -118,6 +165,18 @@ export interface MenuItemProps {
 	 * Determines if the element is disabled.
 	 */
 	disabled?: boolean;
+	/**
+	 * Allows the component to be rendered as a different HTML element or React
+	 * component. The value can be a React element or a function that takes in the
+	 * original component props and gives back a React element with the props
+	 * merged.
+	 */
+	render?: Ariakit.MenuItemProps[ 'render' ];
+	/**
+	 * The ariakit store. This prop is only meant for internal use.
+	 * @ignore
+	 */
+	store?: Ariakit.MenuItemProps[ 'store' ];
 }
 
 export interface MenuCheckboxItemProps

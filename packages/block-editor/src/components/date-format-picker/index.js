@@ -29,21 +29,10 @@ if ( exampleDate.getMonth() === 4 ) {
  *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/date-format-picker/README.md
  *
- * @param {Object}                          props
- * @param {string|null}                     props.format        The selected date
- *                                                              format. If
- *                                                              `null`,
- *                                                              _Default_ is
- *                                                              selected.
- * @param {string}                          props.defaultFormat The date format that
- *                                                              will be used if the
- *                                                              user selects
- *                                                              'Default'.
- * @param {( format: string|null ) => void} props.onChange      Called when a
- *                                                              selection is
- *                                                              made. If `null`,
- *                                                              _Default_ is
- *                                                              selected.
+ * @param {Object}      props
+ * @param {string|null} props.format        The selected date format. If `null`, _Default_ is selected.
+ * @param {string}      props.defaultFormat The date format that will be used if the user selects 'Default'.
+ * @param {Function}    props.onChange      Called when a selection is made. If `null`, _Default_ is selected.
  */
 export default function DateFormatPicker( {
 	format,

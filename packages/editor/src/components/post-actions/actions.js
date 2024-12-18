@@ -11,6 +11,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '../../store';
 import { unlock } from '../../lock-unlock';
 import { useSetAsHomepageAction } from './set-as-homepage';
+import { useSetAsPostsPageAction } from './set-as-posts-page';
 
 export function usePostActions( { postType, onActionPerformed, context } ) {
 	const { defaultActions } = useSelect(
@@ -43,7 +44,8 @@ export function usePostActions( { postType, onActionPerformed, context } ) {
 	);
 
 	const setAsHomepageAction = useSetAsHomepageAction();
-	const shouldShowSetAsHomepageAction =
+	const setAsPostsPageAction = useSetAsPostsPageAction();
+	const shouldShowHomepageActions =
 		canManageOptions && ! hasFrontPageTemplate;
 
 	const { registerPostTypeSchema } = unlock( useDispatch( editorStore ) );
@@ -53,9 +55,14 @@ export function usePostActions( { postType, onActionPerformed, context } ) {
 
 	return useMemo( () => {
 		let actions = [ ...defaultActions ];
-		if ( shouldShowSetAsHomepageAction ) {
-			actions.push( setAsHomepageAction );
+		if ( shouldShowHomepageActions ) {
+			actions.push( setAsHomepageAction, setAsPostsPageAction );
 		}
+
+		// Ensure "Move to trash" is always the last action.
+		actions = actions.sort( ( a, b ) =>
+			b.id === 'move-to-trash' ? -1 : 0
+		);
 
 		// Filter actions based on provided context. If not provided
 		// all actions are returned. We'll have a single entry for getting the actions
@@ -123,6 +130,7 @@ export function usePostActions( { postType, onActionPerformed, context } ) {
 		defaultActions,
 		onActionPerformed,
 		setAsHomepageAction,
-		shouldShowSetAsHomepageAction,
+		setAsPostsPageAction,
+		shouldShowHomepageActions,
 	] );
 }

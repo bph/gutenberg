@@ -27,7 +27,8 @@
 	"exports": {
 		".": {
 			"types": "./build-types/index.d.ts",
-			"import": "./build-module/index.js"
+			"import": "./build-module/index.js",
+			"default": "./build/index.js"
 		},
 		"./wp": {
 			"types": "./build-types/index.d.ts",

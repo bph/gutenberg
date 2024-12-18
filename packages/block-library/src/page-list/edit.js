@@ -17,12 +17,13 @@ import {
 	Warning,
 } from '@wordpress/block-editor';
 import {
-	PanelBody,
 	ToolbarButton,
 	Spinner,
 	Notice,
 	ComboboxControl,
 	Button,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
@@ -37,6 +38,7 @@ import {
 	convertDescription,
 	ConvertToLinksModal,
 } from './convert-to-links-modal';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 // We only show the edit option when page count is <= MAX_PAGE_COUNT
 // Performance of Navigation Links is not good past this value.
@@ -123,6 +125,7 @@ export default function PageListEdit( {
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = useCallback( () => setOpen( true ), [] );
 	const closeModal = () => setOpen( false );
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const { records: pages, hasResolved: hasResolvedPages } = useEntityRecords(
 		'postType',
@@ -320,38 +323,61 @@ export default function PageListEdit( {
 	return (
 		<>
 			<InspectorControls>
-				{ pagesTree.length > 0 && (
-					<PanelBody>
-						<ComboboxControl
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							className="editor-page-attributes__parent"
-							label={ __( 'Parent' ) }
-							value={ parentPageID }
-							options={ pagesTree }
-							onChange={ ( value ) =>
-								setAttributes( { parentPageID: value ?? 0 } )
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( { parentPageID: 0 } );
+					} }
+					dropdownMenuProps={ dropdownMenuProps }
+				>
+					{ pagesTree.length > 0 && (
+						<ToolsPanelItem
+							label={ __( 'Parent Page' ) }
+							hasValue={ () => parentPageID !== 0 }
+							onDeselect={ () =>
+								setAttributes( { parentPageID: 0 } )
 							}
-							help={ __(
-								'Choose a page to show only its subpages.'
-							) }
-						/>
-					</PanelBody>
-				) }
-				{ allowConvertToLinks && (
-					<PanelBody title={ __( 'Edit this menu' ) }>
-						<p>{ convertDescription }</p>
-						<Button
-							__next40pxDefaultSize
-							variant="primary"
-							accessibleWhenDisabled
-							disabled={ ! hasResolvedPages }
-							onClick={ convertToNavigationLinks }
+							isShownByDefault
 						>
-							{ __( 'Edit' ) }
-						</Button>
-					</PanelBody>
-				) }
+							<ComboboxControl
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								className="editor-page-attributes__parent"
+								label={ __( 'Parent' ) }
+								value={ parentPageID }
+								options={ pagesTree }
+								onChange={ ( value ) =>
+									setAttributes( {
+										parentPageID: value ?? 0,
+									} )
+								}
+								help={ __(
+									'Choose a page to show only its subpages.'
+								) }
+							/>
+						</ToolsPanelItem>
+					) }
+
+					{ allowConvertToLinks && (
+						<ToolsPanelItem
+							label={ __( 'Edit Menu' ) }
+							isShownByDefault
+						>
+							<div>
+								<p>{ convertDescription }</p>
+								<Button
+									__next40pxDefaultSize
+									variant="primary"
+									accessibleWhenDisabled
+									disabled={ ! hasResolvedPages }
+									onClick={ convertToNavigationLinks }
+								>
+									{ __( 'Edit' ) }
+								</Button>
+							</div>
+						</ToolsPanelItem>
+					) }
+				</ToolsPanel>
 			</InspectorControls>
 			{ allowConvertToLinks && (
 				<>

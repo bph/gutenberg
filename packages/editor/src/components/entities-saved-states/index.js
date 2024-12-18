@@ -115,6 +115,10 @@ export function EntitiesSavedStatesExtensible( {
 		'description'
 	);
 
+	const selectItemsToSaveDescription = !! dirtyEntityRecords.length
+		? __( 'Select the items you want to save.' )
+		: undefined;
+
 	return (
 		<div
 			ref={ renderDialog ? saveDialogRef : undefined }
@@ -180,7 +184,7 @@ export function EntitiesSavedStatesExtensible( {
 								),
 								{ strong: <strong /> }
 						  )
-						: __( 'Select the items you want to save.' ) }
+						: selectItemsToSaveDescription }
 				</p>
 			</div>
 

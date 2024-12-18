@@ -20,6 +20,11 @@
 		color: $white;
 	}
 
+	// Make sure the focus style is drawn on top of the current item background.
+	&:focus-visible {
+		transform: translateZ(0);
+	}
+
 	.edit-site-sidebar-navigation-item__drilldown-indicator {
 		fill: $gray-600;
 	}

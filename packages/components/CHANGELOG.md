@@ -8,12 +8,23 @@
 
 ### Deprecations
 
+-   `TreeSelect`: Deprecate 36px default size ([#67855](https://github.com/WordPress/gutenberg/pull/67855)).
 -   `SelectControl`: Deprecate 36px default size ([#66898](https://github.com/WordPress/gutenberg/pull/66898)).
 -   `InputControl`: Deprecate 36px default size ([#66897](https://github.com/WordPress/gutenberg/pull/66897)).
+-   Soft deprecate `ButtonGroup` component. Use `ToggleGroupControl` instead ([#65429](https://github.com/WordPress/gutenberg/pull/65429)).
 
 ### Bug Fixes
 
 -   `BoxControl`: Better respect for the `min` prop in the Range Slider ([#67819](https://github.com/WordPress/gutenberg/pull/67819)).
+
+### Experimental
+
+-   Add new `Badge` component ([#66555](https://github.com/WordPress/gutenberg/pull/66555)).
+-   `Menu`: refactor to more granular sub-components ([#67422](https://github.com/WordPress/gutenberg/pull/67422)).
+
+### Internal
+
+-   `SlotFill`: rewrite the non-portal version to use `observableMap` ([#67400](https://github.com/WordPress/gutenberg/pull/67400)).
 
 ## 29.0.0 (2024-12-11)
 

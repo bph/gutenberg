@@ -163,33 +163,38 @@ export default function ShadowsEditPanel() {
 				<ScreenHeader title={ selectedShadow.name } />
 				<FlexItem>
 					<Spacer marginTop={ 2 } marginBottom={ 0 } paddingX={ 4 }>
-						<Menu
-							trigger={
-								<Button
-									size="small"
-									icon={ moreVertical }
-									label={ __( 'Menu' ) }
-								/>
-							}
-						>
-							{ ( category === 'custom'
-								? customShadowMenuItems
-								: presetShadowMenuItems
-							).map( ( item ) => (
-								<Menu.Item
-									key={ item.action }
-									onClick={ () => onMenuClick( item.action ) }
-									disabled={
-										item.action === 'reset' &&
-										selectedShadow.shadow ===
-											baseSelectedShadow.shadow
-									}
-								>
-									<Menu.ItemLabel>
-										{ item.label }
-									</Menu.ItemLabel>
-								</Menu.Item>
-							) ) }
+						<Menu>
+							<Menu.TriggerButton
+								render={
+									<Button
+										size="small"
+										icon={ moreVertical }
+										label={ __( 'Menu' ) }
+									/>
+								}
+							/>
+							<Menu.Popover>
+								{ ( category === 'custom'
+									? customShadowMenuItems
+									: presetShadowMenuItems
+								).map( ( item ) => (
+									<Menu.Item
+										key={ item.action }
+										onClick={ () =>
+											onMenuClick( item.action )
+										}
+										disabled={
+											item.action === 'reset' &&
+											selectedShadow.shadow ===
+												baseSelectedShadow.shadow
+										}
+									>
+										<Menu.ItemLabel>
+											{ item.label }
+										</Menu.ItemLabel>
+									</Menu.Item>
+								) ) }
+							</Menu.Popover>
 						</Menu>
 					</Spacer>
 				</FlexItem>

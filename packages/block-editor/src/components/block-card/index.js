@@ -11,16 +11,21 @@ import {
 	Button,
 	__experimentalText as Text,
 	__experimentalVStack as VStack,
+	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
 import { chevronLeft, chevronRight } from '@wordpress/icons';
 import { __, _x, isRTL, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { createInterpolateElement } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import BlockIcon from '../block-icon';
 import { store as blockEditorStore } from '../../store';
+import { unlock } from '../../lock-unlock';
+
+const { Badge } = unlock( componentsPrivateApis );
 
 function BlockCard( { title, icon, description, blockType, className, name } ) {
 	if ( blockType ) {
@@ -67,11 +72,22 @@ function BlockCard( { title, icon, description, blockType, className, name } ) {
 			<VStack spacing={ 1 }>
 				<h2 className="block-editor-block-card__title">
 					{ name?.length
-						? sprintf(
-								// translators:  1: Custom block name. 2: Block title.
-								_x( '%1$s (%2$s)', 'block label' ),
-								name,
-								title
+						? createInterpolateElement(
+								sprintf(
+									// translators:  1: Custom block name. 2: Block title.
+									_x(
+										'<span>%1$s</span> <badge>%2$s</badge>',
+										'block label'
+									),
+									name,
+									title
+								),
+								{
+									span: (
+										<span className="block-editor-block-card__name" />
+									),
+									badge: <Badge />,
+								}
 						  )
 						: title }
 				</h2>

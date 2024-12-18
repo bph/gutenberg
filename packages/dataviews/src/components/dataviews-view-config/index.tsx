@@ -69,50 +69,57 @@ function ViewTypeMenu( {
 	}
 	const activeView = VIEW_LAYOUTS.find( ( v ) => view.type === v.type );
 	return (
-		<Menu
-			trigger={
-				<Button
-					size="compact"
-					icon={ activeView?.icon }
-					label={ __( 'Layout' ) }
-				/>
-			}
-		>
-			{ availableLayouts.map( ( layout ) => {
-				const config = VIEW_LAYOUTS.find( ( v ) => v.type === layout );
-				if ( ! config ) {
-					return null;
+		<Menu>
+			<Menu.TriggerButton
+				render={
+					<Button
+						size="compact"
+						icon={ activeView?.icon }
+						label={ __( 'Layout' ) }
+					/>
 				}
-				return (
-					<Menu.RadioItem
-						key={ layout }
-						value={ layout }
-						name="view-actions-available-view"
-						checked={ layout === view.type }
-						hideOnClick
-						onChange={ ( e: ChangeEvent< HTMLInputElement > ) => {
-							switch ( e.target.value ) {
-								case 'list':
-								case 'grid':
-								case 'table':
-									const viewWithoutLayout = { ...view };
-									if ( 'layout' in viewWithoutLayout ) {
-										delete viewWithoutLayout.layout;
-									}
-									// @ts-expect-error
-									return onChangeView( {
-										...viewWithoutLayout,
-										type: e.target.value,
-										...defaultLayouts[ e.target.value ],
-									} );
-							}
-							warning( 'Invalid dataview' );
-						} }
-					>
-						<Menu.ItemLabel>{ config.label }</Menu.ItemLabel>
-					</Menu.RadioItem>
-				);
-			} ) }
+			/>
+			<Menu.Popover>
+				{ availableLayouts.map( ( layout ) => {
+					const config = VIEW_LAYOUTS.find(
+						( v ) => v.type === layout
+					);
+					if ( ! config ) {
+						return null;
+					}
+					return (
+						<Menu.RadioItem
+							key={ layout }
+							value={ layout }
+							name="view-actions-available-view"
+							checked={ layout === view.type }
+							hideOnClick
+							onChange={ (
+								e: ChangeEvent< HTMLInputElement >
+							) => {
+								switch ( e.target.value ) {
+									case 'list':
+									case 'grid':
+									case 'table':
+										const viewWithoutLayout = { ...view };
+										if ( 'layout' in viewWithoutLayout ) {
+											delete viewWithoutLayout.layout;
+										}
+										// @ts-expect-error
+										return onChangeView( {
+											...viewWithoutLayout,
+											type: e.target.value,
+											...defaultLayouts[ e.target.value ],
+										} );
+								}
+								warning( 'Invalid dataview' );
+							} }
+						>
+							<Menu.ItemLabel>{ config.label }</Menu.ItemLabel>
+						</Menu.RadioItem>
+					);
+				} ) }
+			</Menu.Popover>
 		</Menu>
 	);
 }

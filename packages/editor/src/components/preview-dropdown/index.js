@@ -190,7 +190,6 @@ export default function PreviewDropdown( { forceIsAutosaveable, disabled } ) {
 					) }
 					<ActionItem.Slot
 						name="core/plugin-preview-menu"
-						as={ MenuGroup }
 						fillProps={ { onClick: onClose } }
 					/>
 				</>

@@ -70,7 +70,7 @@ By default this behavior is disabled until the `directInsert` prop is set to `tr
 
 ## Template
 
-Use the template property to define a set of blocks that prefill the InnerBlocks component when inserted. You can set attributes on the blocks to define their use. The example below shows a book review template using InnerBlocks component and setting placeholders values to show the block usage.
+Use the template property to define a set of blocks that prefill the InnerBlocks component when it has no existing content.. You can set attributes on the blocks to define their use. The example below shows a book review template using InnerBlocks component and setting placeholders values to show the block usage.
 
 
 ```js

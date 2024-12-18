@@ -26,13 +26,14 @@ import { useState } from '@wordpress/element';
  * Internal dependencies
  */
 import { unlock } from '../../../lock-unlock';
-const { Menu } = unlock( componentsPrivateApis );
-const { useGlobalSetting } = unlock( blockEditorPrivateApis );
 import Subtitle from '../subtitle';
 import { NavigationButtonAsItem } from '../navigation-button';
 import { getNewIndexFromPresets } from '../utils';
 import ScreenHeader from '../header';
 import ConfirmResetFontSizesDialog from './confirm-reset-font-sizes-dialog';
+
+const { Menu } = unlock( componentsPrivateApis );
+const { useGlobalSetting } = unlock( blockEditorPrivateApis );
 
 function FontSizeGroup( {
 	label,
@@ -80,24 +81,31 @@ function FontSizeGroup( {
 							/>
 						) }
 						{ !! handleResetFontSizes && (
-							<Menu
-								trigger={
-									<Button
-										size="small"
-										icon={ moreVertical }
-										label={ __(
-											'Font size presets options'
-										) }
-									/>
-								}
-							>
-								<Menu.Item onClick={ toggleResetDialog }>
-									<Menu.ItemLabel>
-										{ origin === 'custom'
-											? __( 'Remove font size presets' )
-											: __( 'Reset font size presets' ) }
-									</Menu.ItemLabel>
-								</Menu.Item>
+							<Menu>
+								<Menu.TriggerButton
+									render={
+										<Button
+											size="small"
+											icon={ moreVertical }
+											label={ __(
+												'Font size presets options'
+											) }
+										/>
+									}
+								/>
+								<Menu.Popover>
+									<Menu.Item onClick={ toggleResetDialog }>
+										<Menu.ItemLabel>
+											{ origin === 'custom'
+												? __(
+														'Remove font size presets'
+												  )
+												: __(
+														'Reset font size presets'
+												  ) }
+										</Menu.ItemLabel>
+									</Menu.Item>
+								</Menu.Popover>
 							</Menu>
 						) }
 					</FlexItem>

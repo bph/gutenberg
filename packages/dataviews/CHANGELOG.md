@@ -2,21 +2,25 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Fixed commonjs export ([#67962](https://github.com/WordPress/gutenberg/pull/67962))
+
 ## 4.10.0 (2024-12-11)
 
 ## Breaking Changes
 
 -   Support showing or hiding title, media and description fields ([#67477](https://github.com/WordPress/gutenberg/pull/67477)).
--   Unify the `title`, `media` and `description` fields for the different layouts. So instead of the previous `view.layout.mediaField`, `view.layout.primaryField` and `view.layout.columnFields`, all the layouts now support these three fields with the following config ([#67477](https://github.com/WordPress/gutenberg/pull/67477)): 
+-   Unify the `title`, `media` and `description` fields for the different layouts. So instead of the previous `view.layout.mediaField`, `view.layout.primaryField` and `view.layout.columnFields`, all the layouts now support these three fields with the following config ([#67477](https://github.com/WordPress/gutenberg/pull/67477)):
 
 ```js
 const view = {
-    type: 'table',
-    titleField: 'title',
-    mediaField: 'media',
-    descriptionField: 'description',
-    fields: [ 'author', 'date' ],
-}
+	type: 'table',
+	titleField: 'title',
+	mediaField: 'media',
+	descriptionField: 'description',
+	fields: [ 'author', 'date' ],
+};
 ```
 
 ## Internal

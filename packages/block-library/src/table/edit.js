@@ -57,6 +57,7 @@ import {
 	isEmptyTableSection,
 } from './state';
 import { Caption } from '../utils/caption';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const ALIGNMENT_CONTROLS = [
 	{
@@ -108,6 +109,8 @@ function TableEdit( {
 
 	const tableRef = useRef();
 	const [ hasTableCreated, setHasTableCreated ] = useState( false );
+
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	/**
 	 * Updates the initial column count used for table creation.
@@ -483,6 +486,7 @@ function TableEdit( {
 							foot: [],
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						hasValue={ () => hasFixedLayout !== true }

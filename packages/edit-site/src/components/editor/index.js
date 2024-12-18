@@ -20,7 +20,6 @@ import { privateApis as blockLibraryPrivateApis } from '@wordpress/block-library
 import { useCallback, useMemo } from '@wordpress/element';
 import { store as noticesStore } from '@wordpress/notices';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
-import { store as preferencesStore } from '@wordpress/preferences';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Icon, arrowUpLeft } from '@wordpress/icons';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -130,7 +129,6 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 	const { postType, postId, context } = entity;
 	const {
 		supportsGlobalStyles,
-		showIconLabels,
 		editorCanvasView,
 		currentPostIsTrashed,
 		hasSiteIcon,
@@ -138,13 +136,11 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 		const { getEditorCanvasContainerView } = unlock(
 			select( editSiteStore )
 		);
-		const { get } = select( preferencesStore );
 		const { getCurrentTheme, getEntityRecord } = select( coreDataStore );
 		const siteData = getEntityRecord( 'root', '__unstableBase', undefined );
 
 		return {
 			supportsGlobalStyles: getCurrentTheme()?.is_block_theme,
-			showIconLabels: get( 'core', 'showIconLabels' ),
 			editorCanvasView: getEditorCanvasContainerView(),
 			currentPostIsTrashed:
 				select( editorStore ).getCurrentPostAttribute( 'status' ) ===
@@ -267,9 +263,7 @@ export default function EditSiteEditor( { isPostsList = false } ) {
 					postId={ postWithTemplate ? context.postId : postId }
 					templateId={ postWithTemplate ? postId : undefined }
 					settings={ settings }
-					className={ clsx( 'edit-site-editor__editor-interface', {
-						'show-icon-labels': showIconLabels,
-					} ) }
+					className="edit-site-editor__editor-interface"
 					styles={ styles }
 					customSaveButton={
 						_isPreviewingTheme && <SaveButton size="compact" />

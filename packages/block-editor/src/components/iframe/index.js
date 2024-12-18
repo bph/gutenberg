@@ -192,7 +192,7 @@ function Iframe( {
 					// Appending a hash to the current URL will not reload the
 					// page. This is useful for e.g. footnotes.
 					const href = event.target.getAttribute( 'href' );
-					if ( href.startsWith( '#' ) ) {
+					if ( href?.startsWith( '#' ) ) {
 						iFrameDocument.defaultView.location.hash =
 							href.slice( 1 );
 					}

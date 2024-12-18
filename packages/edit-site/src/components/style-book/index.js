@@ -32,6 +32,7 @@ import {
 	useContext,
 	useRef,
 	useLayoutEffect,
+	useEffect,
 } from '@wordpress/element';
 import { ENTER, SPACE } from '@wordpress/keycodes';
 
@@ -47,6 +48,8 @@ import {
 } from './categories';
 import { getExamples } from './examples';
 import { store as siteEditorStore } from '../../store';
+import { useSection } from '../sidebar-global-styles-wrapper';
+import { STYLE_BOOK_COLOR_GROUPS } from '../style-book/constants';
 
 const {
 	ExperimentalBlockEditorProvider,
@@ -346,25 +349,55 @@ function StyleBook( {
 /**
  * Style Book Preview component renders the stylebook without the Editor dependency.
  *
- * @param {Object}   props            Component props.
- * @param {string}   props.path       Path to the selected block.
- * @param {Object}   props.userConfig User configuration.
- * @param {Function} props.isSelected Function to check if a block is selected.
- * @param {Function} props.onSelect   Function to select a block.
+ * @param {Object}  props            Component props.
+ * @param {Object}  props.userConfig User configuration.
+ * @param {boolean} props.isStatic   Whether the stylebook is static or clickable.
  * @return {Object} Style Book Preview component.
  */
-export const StyleBookPreview = ( {
-	path = '',
-	userConfig = {},
-	isSelected,
-	onSelect,
-} ) => {
+export const StyleBookPreview = ( { userConfig = {}, isStatic = false } ) => {
 	const siteEditorSettings = useSelect(
 		( select ) => select( siteEditorStore ).getSettings(),
 		[]
 	);
+
 	// Update block editor settings because useMultipleOriginColorsAndGradients fetch colours from there.
-	dispatch( blockEditorStore ).updateSettings( siteEditorSettings );
+	useEffect( () => {
+		dispatch( blockEditorStore ).updateSettings( siteEditorSettings );
+	}, [ siteEditorSettings ] );
+
+	const [ section, onChangeSection ] = useSection();
+
+	const isSelected = ( blockName ) => {
+		// Match '/blocks/core%2Fbutton' and
+		// '/blocks/core%2Fbutton/typography', but not
+		// '/blocks/core%2Fbuttons'.
+		return (
+			section === `/blocks/${ encodeURIComponent( blockName ) }` ||
+			section.startsWith(
+				`/blocks/${ encodeURIComponent( blockName ) }/`
+			)
+		);
+	};
+
+	const onSelect = ( blockName ) => {
+		if (
+			STYLE_BOOK_COLOR_GROUPS.find(
+				( group ) => group.slug === blockName
+			)
+		) {
+			// Go to color palettes Global Styles.
+			onChangeSection( '/colors/palette' );
+			return;
+		}
+		if ( blockName === 'typography' ) {
+			// Go to typography Global Styles.
+			onChangeSection( '/typography' );
+			return;
+		}
+
+		// Now go to the selected block.
+		onChangeSection( `/blocks/${ encodeURIComponent( blockName ) }` );
+	};
 
 	const [ resizeObserver, sizes ] = useResizeObserver();
 	const colors = useMultiOriginPalettes();
@@ -372,7 +405,7 @@ export const StyleBookPreview = ( {
 	const examplesForSinglePageUse = getExamplesForSinglePageUse( examples );
 
 	const { base: baseConfig } = useContext( GlobalStylesContext );
-	const goTo = getStyleBookNavigationFromPath( path );
+	const goTo = getStyleBookNavigationFromPath( section );
 
 	const mergedConfig = useMemo( () => {
 		if ( ! isObjectEmpty( userConfig ) && ! isObjectEmpty( baseConfig ) ) {
@@ -404,8 +437,8 @@ export const StyleBookPreview = ( {
 					settings={ settings }
 					goTo={ goTo }
 					sizes={ sizes }
-					isSelected={ isSelected }
-					onSelect={ onSelect }
+					isSelected={ ! isStatic ? isSelected : null }
+					onSelect={ ! isStatic ? onSelect : null }
 				/>
 			</BlockEditorProvider>
 		</div>

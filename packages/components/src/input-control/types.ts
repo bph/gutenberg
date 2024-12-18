@@ -136,7 +136,7 @@ export interface InputBaseProps extends BaseProps, FlexProps {
 	 * If you want to apply standard padding in accordance with the size variant, wrap the element in
 	 * the provided `<InputControlPrefixWrapper>` component.
 	 *
-	 * @example
+	 * ```jsx
 	 * import {
 	 *   __experimentalInputControl as InputControl,
 	 *   __experimentalInputControlPrefixWrapper as InputControlPrefixWrapper,
@@ -145,6 +145,7 @@ export interface InputBaseProps extends BaseProps, FlexProps {
 	 * <InputControl
 	 *   prefix={<InputControlPrefixWrapper>@</InputControlPrefixWrapper>}
 	 * />
+	 * ```
 	 */
 	prefix?: ReactNode;
 	/**
@@ -154,7 +155,7 @@ export interface InputBaseProps extends BaseProps, FlexProps {
 	 * If you want to apply standard padding in accordance with the size variant, wrap the element in
 	 * the provided `<InputControlSuffixWrapper>` component.
 	 *
-	 * @example
+	 * ```jsx
 	 * import {
 	 *   __experimentalInputControl as InputControl,
 	 *   __experimentalInputControlSuffixWrapper as InputControlSuffixWrapper,
@@ -163,6 +164,7 @@ export interface InputBaseProps extends BaseProps, FlexProps {
 	 * <InputControl
 	 *   suffix={<InputControlSuffixWrapper>%</InputControlSuffixWrapper>}
 	 * />
+	 * ```
 	 */
 	suffix?: ReactNode;
 	/**

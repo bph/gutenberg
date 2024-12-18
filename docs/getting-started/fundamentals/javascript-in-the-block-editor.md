@@ -38,9 +38,9 @@ The `wp-scripts` package also facilitates the use of JavaScript modules, allowin
 
 Integrating JavaScript into your WordPress projects without a build process can be the most straightforward approach in specific scenarios. This is particularly true for projects that don't leverage JSX or other advanced JavaScript features requiring compilation.
 
-When you opt out of a build process, you interact directly with WordPress's [JavaScript APIs](/docs/reference-guides/packages/) through the global `wp` object. This means that all the methods and packages provided by WordPress are readily available, but with one caveat: you must manually manage script dependencies. This is done by adding [the handle](/docs/contributors/code/scripts.md) of each corresponding package to the dependency array of your enqueued JavaScript file.
+When you opt out of a build process, you interact directly with WordPress's [JavaScript APIs](/docs/reference-guides/packages.md) through the global `wp` object. This means that all the methods and packages provided by WordPress are readily available, but with one caveat: you must manually manage script dependencies. This is done by adding [the handle](/docs/contributors/code/scripts.md) of each corresponding package to the dependency array of your enqueued JavaScript file.
 
-For example, suppose you're creating a script that registers a new block [variation](/docs/reference-guides/block-api/block-variations.md) using the `registerBlockVariation` function from the [`blocks`](/docs/reference-guides/packages/packages-blocks.md) package. You must include `wp-blocks` in your script's dependency array. This guarantees that the `wp.blocks.registerBlockVariation` method is available and defined by the time your script executes.
+For example, suppose you're creating a script that registers a new block [variation](/docs/reference-guides/block-api/block-variations.md) using the `registerBlockVariation` function from the [`blocks`](/packages/blocks/README.md) package. You must include `wp-blocks` in your script's dependency array. This guarantees that the `wp.blocks.registerBlockVariation` method is available and defined by the time your script executes.
 
 In the following example, the `wp-blocks` dependency is defined when enqueuing the `variations.js` file.
 

@@ -215,32 +215,36 @@ function ListItem< Item >( {
 			) }
 			{ ! hasOnlyOnePrimaryAction && (
 				<div role="gridcell">
-					<Menu
-						trigger={
-							<Composite.Item
-								id={ generateDropdownTriggerCompositeId(
-									idPrefix
-								) }
-								render={
-									<Button
-										size="small"
-										icon={ moreVertical }
-										label={ __( 'Actions' ) }
-										accessibleWhenDisabled
-										disabled={ ! actions.length }
-										onKeyDown={ onDropdownTriggerKeyDown }
-									/>
-								}
-							/>
-						}
-						placement="bottom-end"
-					>
-						<ActionsMenuGroup
-							actions={ eligibleActions }
-							item={ item }
-							registry={ registry }
-							setActiveModalAction={ setActiveModalAction }
+					<Menu placement="bottom-end">
+						<Menu.TriggerButton
+							render={
+								<Composite.Item
+									id={ generateDropdownTriggerCompositeId(
+										idPrefix
+									) }
+									render={
+										<Button
+											size="small"
+											icon={ moreVertical }
+											label={ __( 'Actions' ) }
+											accessibleWhenDisabled
+											disabled={ ! actions.length }
+											onKeyDown={
+												onDropdownTriggerKeyDown
+											}
+										/>
+									}
+								/>
+							}
 						/>
+						<Menu.Popover>
+							<ActionsMenuGroup
+								actions={ eligibleActions }
+								item={ item }
+								registry={ registry }
+								setActiveModalAction={ setActiveModalAction }
+							/>
+						</Menu.Popover>
 					</Menu>
 					{ !! activeModalAction && (
 						<ActionModal
@@ -257,7 +261,7 @@ function ListItem< Item >( {
 	return (
 		<Composite.Row
 			ref={ itemRef }
-			render={ <li /> }
+			render={ <div /> }
 			role="row"
 			className={ clsx( {
 				'is-selected': isSelected,
@@ -482,7 +486,7 @@ export default function ViewList< Item >( props: ViewListProps< Item > ) {
 	return (
 		<Composite
 			id={ baseId }
-			render={ <ul /> }
+			render={ <div /> }
 			className="dataviews-view-list"
 			role="grid"
 			activeId={ activeCompositeId }

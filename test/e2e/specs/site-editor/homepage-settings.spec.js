@@ -10,6 +10,14 @@ test.describe( 'Homepage Settings via Editor', () => {
 			title: 'Homepage',
 			status: 'publish',
 		} );
+		await requestUtils.createPage( {
+			title: 'Sample page',
+			status: 'publish',
+		} );
+		await requestUtils.createPage( {
+			title: 'Draft page',
+			status: 'draft',
+		} );
 	} );
 
 	test.beforeEach( async ( { admin, page } ) => {
@@ -28,27 +36,30 @@ test.describe( 'Homepage Settings via Editor', () => {
 		] );
 	} );
 
-	test( 'should show "Set as homepage" action on pages with `publish` status', async ( {
+	test( 'should not show "Set as homepage" and "Set as posts page" action on pages with `draft` status', async ( {
 		page,
 	} ) => {
-		const samplePage = page
+		const draftPage = page
 			.getByRole( 'gridcell' )
-			.getByLabel( 'Homepage' );
-		const samplePageRow = page
+			.getByLabel( 'Draft page' );
+		const draftPageRow = page
 			.getByRole( 'row' )
-			.filter( { has: samplePage } );
-		await samplePageRow.hover();
-		await samplePageRow
+			.filter( { has: draftPage } );
+		await draftPageRow.hover();
+		await draftPageRow
 			.getByRole( 'button', {
 				name: 'Actions',
 			} )
 			.click();
 		await expect(
 			page.getByRole( 'menuitem', { name: 'Set as homepage' } )
-		).toBeVisible();
+		).toBeHidden();
+		await expect(
+			page.getByRole( 'menuitem', { name: 'Set as posts page' } )
+		).toBeHidden();
 	} );
 
-	test( 'should not show "Set as homepage" action on current homepage', async ( {
+	test( 'should show correct homepage actions based on current homepage or posts page', async ( {
 		page,
 	} ) => {
 		const samplePage = page
@@ -67,6 +78,33 @@ test.describe( 'Homepage Settings via Editor', () => {
 		await page.getByRole( 'button', { name: 'Set homepage' } ).click();
 		await expect(
 			page.getByRole( 'menuitem', { name: 'Set as homepage' } )
+		).toBeHidden();
+		await expect(
+			page.getByRole( 'menuitem', { name: 'Set as posts page' } )
+		).toBeHidden();
+
+		const samplePageTwo = page
+			.getByRole( 'gridcell' )
+			.getByLabel( 'Sample page' );
+		const samplePageTwoRow = page
+			.getByRole( 'row' )
+			.filter( { has: samplePageTwo } );
+		// eslint-disable-next-line playwright/no-force-option
+		await samplePageTwoRow.click( { force: true } );
+		await samplePageTwoRow
+			.getByRole( 'button', {
+				name: 'Actions',
+			} )
+			.click();
+		await page
+			.getByRole( 'menuitem', { name: 'Set as posts page' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Set posts page' } ).click();
+		await expect(
+			page.getByRole( 'menuitem', { name: 'Set as homepage' } )
+		).toBeHidden();
+		await expect(
+			page.getByRole( 'menuitem', { name: 'Set as posts page' } )
 		).toBeHidden();
 	} );
 } );

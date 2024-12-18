@@ -11,7 +11,14 @@ import check from '../../library/check';
 import * as icons from '../../';
 import keywords from './keywords';
 
-const { Icon: _Icon, ...availableIcons } = icons;
+const {
+	Icon: _Icon,
+
+	// Deprecated aliases
+	warning: _warning,
+
+	...availableIcons
+} = icons;
 
 const meta = {
 	component: Icon,

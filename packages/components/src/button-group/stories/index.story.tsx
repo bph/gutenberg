@@ -9,8 +9,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ButtonGroup from '..';
 import Button from '../../button';
 
+/**
+ * ButtonGroup can be used to group any related buttons together.
+ * To emphasize related buttons, a group should share a common container.
+ *
+ * This component is deprecated. Use `ToggleGroupControl` instead.
+ */
 const meta: Meta< typeof ButtonGroup > = {
-	title: 'Components/ButtonGroup',
+	title: 'Components (Deprecated)/ButtonGroup',
+	id: 'components-buttongroup',
 	component: ButtonGroup,
 	argTypes: {
 		children: { control: false },
