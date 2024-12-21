@@ -713,9 +713,49 @@ Undocumented declaration.
 
 ### PlainText
 
+Render an auto-growing textarea allow users to fill any textual content.
+
 _Related_
 
 -   <https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/plain-text/README.md>
+
+_Usage_
+
+```jsx
+import { registerBlockType } from '@wordpress/blocks';
+import { PlainText } from '@wordpress/block-editor';
+
+registerBlockType( 'my-plugin/example-block', {
+	// ...
+
+	attributes: {
+		content: {
+			type: 'string',
+		},
+	},
+
+	edit( { className, attributes, setAttributes } ) {
+		return (
+			<PlainText
+				className={ className }
+				value={ attributes.content }
+				onChange={ ( content ) => setAttributes( { content } ) }
+			/>
+		);
+	},
+} );
+```
+
+_Parameters_
+
+-   _props_ `Object`: Component props.
+-   _props.value_ `string`: String value of the textarea.
+-   _props.onChange_ `Function`: Function called when the text value changes.
+-   _props.ref_ `[Object]`: The component forwards the `ref` property to the `TextareaAutosize` component.
+
+_Returns_
+
+-   `Element`: Plain text component
 
 ### privateApis
 

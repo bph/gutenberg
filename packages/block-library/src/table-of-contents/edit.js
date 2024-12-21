@@ -122,7 +122,7 @@ export default function TableOfContentsEdit( {
 									'Only including headings from the current page (if the post is paginated).'
 							  )
 							: __(
-									'Toggle to only include headings from the current page (if the post is paginated).'
+									'Include headings from all pages (if the post is paginated).'
 							  )
 					}
 				/>

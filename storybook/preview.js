@@ -86,6 +86,8 @@ export const globalTypes = {
 			items: [
 				{ value: 'none', title: 'None' },
 				{ value: 'wordpress-sidebar', title: 'WP Sidebar' },
+				{ value: 'small-container', title: 'Small container' },
+				{ value: 'large-container', title: 'Large container' },
 			],
 		},
 	},
@@ -106,6 +108,9 @@ export const parameters = {
 		sort: 'requiredFirst',
 	},
 	docs: {
+		controls: {
+			sort: 'requiredFirst',
+		},
 		// Flips the order of the description and the primary component story
 		// so the component is always visible before the fold.
 		page: () => (

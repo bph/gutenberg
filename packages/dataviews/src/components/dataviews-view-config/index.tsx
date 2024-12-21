@@ -152,6 +152,7 @@ function SortFieldControl() {
 						direction: view?.sort?.direction || 'desc',
 						field: value,
 					},
+					showLevels: false,
 				} );
 			} }
 		/>
@@ -194,6 +195,7 @@ function SortDirectionControl() {
 								)?.id ||
 								'',
 						},
+						showLevels: false,
 					} );
 					return;
 				}

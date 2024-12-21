@@ -169,10 +169,18 @@
 	top: $grid-unit;
 	opacity: 0;
 
+	&.edit-site-global-styles__shadow-editor__remove-button {
+		border: none;
+	}
+
 	.edit-site-global-styles__shadow-editor__dropdown-toggle:hover + &,
 	&:focus,
 	&:hover {
-		border: none;
+		opacity: 1;
+	}
+
+	@media (hover: none) {
+		// Show reset button on devices that do not support hover.
 		opacity: 1;
 	}
 }

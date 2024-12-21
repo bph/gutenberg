@@ -19,6 +19,7 @@ const MyFormFileUpload = () => (
   </FormFileUpload>
 );
 ```
+
 ## Props
 
 ### `__next40pxDefaultSize`

@@ -33,7 +33,6 @@
 	@include reduce-motion( "transition" );
 }
 
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 430px) {
 	.dataviews__view-actions,
 	.dataviews-filters__container {

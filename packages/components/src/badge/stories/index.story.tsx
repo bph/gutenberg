@@ -11,6 +11,7 @@ import Badge from '..';
 const meta = {
 	component: Badge,
 	title: 'Components/Containers/Badge',
+	id: 'components-badge',
 	tags: [ 'status-private' ],
 } satisfies Meta< typeof Badge >;
 

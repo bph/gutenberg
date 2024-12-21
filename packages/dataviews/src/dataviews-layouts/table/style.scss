@@ -203,7 +203,6 @@
 	}
 }
 
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 430px) {
 	.dataviews-view-table tr td:first-child,
 	.dataviews-view-table tr th:first-child {

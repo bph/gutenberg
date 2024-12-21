@@ -212,7 +212,7 @@ Create a new user account.
 _Parameters_
 
 -   _username_ `string`: User name.
--   _object_ `Object?`: Optional Settings for the new user account.
+-   _object_ `?Object`: Optional Settings for the new user account.
 -   _object.firstName_ `[string]`: First name.
 -   _object.lastName_ `[string]`: Last name.
 -   _object.role_ `[string]`: Role. Defaults to Administrator.
@@ -252,7 +252,7 @@ Deletes a theme from the site, activating another theme if necessary.
 _Parameters_
 
 -   _slug_ `string`: Theme slug.
--   _settings_ `Object?`: Optional settings object.
+-   _settings_ `?Object`: Optional settings object.
 -   _settings.newThemeSlug_ `?string`: A theme to switch to if the theme to delete is active. Required if the theme to delete is active.
 -   _settings.newThemeSearchTerm_ `?string`: A search term to use if the new theme is not findable by its slug.
 
@@ -488,7 +488,7 @@ Installs a theme from the WP.org repository.
 _Parameters_
 
 -   _slug_ `string`: Theme slug.
--   _settings_ `Object?`: Optional settings object.
+-   _settings_ `?Object`: Optional settings object.
 -   _settings.searchTerm_ `?string`: Search term to use if the theme is not findable by its slug.
 
 ### isCurrentURL

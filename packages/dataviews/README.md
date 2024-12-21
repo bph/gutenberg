@@ -2,8 +2,8 @@
 
 The DataViews package offers two React components and a few utilities to work with a list of data:
 
-- `DataViews`: to render the dataset using different types of layouts (table, grid, list) and interaction capabilities (search, filters, sorting, etc.).
-- `DataForm`: to edit the items of the dataset.
+-   `DataViews`: to render the dataset using different types of layouts (table, grid, list) and interaction capabilities (search, filters, sorting, etc.).
+-   `DataForm`: to edit the items of the dataset.
 
 ## Installation
 
@@ -23,13 +23,15 @@ npm install @wordpress/dataviews --save
 
 The `DataViews` component receives data and some other configuration to render the dataset. It'll call the `onChangeView` callback every time the user has interacted with the dataset in some way (sorted, filtered, changed layout, etc.):
 
-![DataViews flow](https://developer.wordpress.org/files/2024/09/368600071-20aa078f-7c3d-406d-8dd0-8b764addd22a.png "DataViews flow")
+![DataViews flow](https://developer.wordpress.org/files/2024/09/368600071-20aa078f-7c3d-406d-8dd0-8b764addd22a.png 'DataViews flow')
 
 Example:
 
 ```jsx
 const Example = () => {
-	const onChangeView = () => { /* React to user changes. */ }
+	const onChangeView = () => {
+		/* React to user changes. */
+	};
 
 	return (
 		<DataViews
@@ -44,7 +46,6 @@ const Example = () => {
 	);
 };
 ```
-
 
 ### Properties
 
@@ -84,6 +85,19 @@ Example:
 // Custom getItemId function.
 {
 	getItemId={ ( item ) => item.name ?? item.id }
+}
+```
+
+#### `getItemLevel`: `function`
+
+A function that receives an item and returns its hierarchical level. It's optional, but this property must be passed for DataViews to display the hierarchical levels of the data if `view.showLevels` is true.
+
+Example:
+
+```js
+// Example implementation
+{
+	getItemLevel={ ( item ) => item.level }
 }
 ```
 
@@ -185,21 +199,23 @@ Properties:
 
     -   `field`: the field used for sorting the dataset.
     -   `direction`: the direction to use for sorting, one of `asc` or `desc`.
+
 -   `titleField`: The id of the field representing the title of the record.
 -   `mediaField`: The id of the field representing the media of the record.
 -   `descriptionField`: The id of the field representing the description of the record.
 -   `showTitle`: Whether the title should be shown in the UI. `true` by default.
 -   `showMedia`: Whether the media should be shown in the UI. `true` by default.
 -   `showDescription`: Whether the description should be shown in the UI. `true` by default.
+-   `showLevels`: Whether to display the hierarchical levels for the data. `false` by default. See related `getItemLevel` DataView prop.
 -   `fields`: a list of remaining field `id` that are visible in the UI and the specific order in which they are displayed.
 -   `layout`: config that is specific to a particular layout type.
 
 ##### Properties of `layout`
 
-| Properties of `layout`                                                                                          | Table | Grid | List |
-| --------------------------------------------------------------------------------------------------------------- | ----- | ---- | ---- |
-| `badgeFields`: a list of field's `id` to render without label and styled as badges.                             |       | ✓    |      |
-| `styles`: additional `width`, `maxWidth`, `minWidth` styles for each field column.                              | ✓     |      |      |
+| Properties of `layout`                                                              | Table | Grid | List |
+| ----------------------------------------------------------------------------------- | ----- | ---- | ---- |
+| `badgeFields`: a list of field's `id` to render without label and styled as badges. |       | ✓    |      |
+| `styles`: additional `width`, `maxWidth`, `minWidth` styles for each field column.  | ✓     |      |      |
 
 #### `onChangeView`: `function`
 
@@ -302,8 +318,8 @@ const actions = [
 		RenderModal: ( { items, closeModal, onActionPerformed } ) => (
 			<div>
 				<p>Are you sure you want to delete { items.length } item(s)?</p>
-				<Button 
-					variant="primary" 
+				<Button
+					variant="primary"
 					onClick={() => {
 						console.log( 'Deleting items:', items );
 						onActionPerformed();
@@ -348,7 +364,7 @@ const defaultLayouts = {
 	},
 	grid: {
 		showMedia: true,
-	}
+	},
 };
 ```
 
@@ -366,11 +382,11 @@ Callback that signals the user selected one of more items. It receives the list 
 
 If `selection` and `onChangeSelection` are provided, the `DataViews` component behaves like a controlled component. Otherwise, it behaves like an uncontrolled component.
 
-### `isItemClickable`: `function`
+#### `isItemClickable`: `function`
 
 A function that determines if a media field or a primary field is clickable. It receives an item as an argument and returns a boolean value indicating whether the item can be clicked.
 
-### `onClickItem`: `function`
+#### `onClickItem`: `function`
 
 A callback function that is triggered when a user clicks on a media field or primary field. This function is currently implemented only in the `grid` and `list` views.
 
@@ -395,8 +411,8 @@ const Example = () => {
 			form={ form }
 			onChange={ onChange }
 		/>
-	)
-}
+	);
+};
 ```
 
 ### Properties
@@ -439,8 +455,30 @@ const fields = [
 
 #### `form`: `Object[]`
 
-- `type`: either `regular` or `panel`.
-- `fields`: a list of fields ids that should be rendered.
+-   `type`: either `regular` or `panel`.
+-   `labelPosition`: either `side`, `top`, or `none`.
+-   `fields`: a list of fields ids that should be rendered. Field ids can also be defined as an object and allow you to define a `layout`, `labelPosition` or `children` if displaying combined fields. See "Form Field API" for a description of every property.
+
+Example:
+
+```js
+const form = {
+	type: 'panel',
+	fields: [
+		'title',
+		'data',
+		{
+			id: 'status',
+			label: 'Status & Visibility',
+			children: [ 'status', 'password' ],
+		},
+		{
+			id: 'featured_media',
+			layout: 'regular',
+		},
+	],
+};
+```
 
 #### `onChange`: `function`
 
@@ -471,10 +509,10 @@ const onChange = ( edits ) => {
 
 return (
 	<DataForm
-		data={data}
-		fields={fields}
-		form={form}
-		onChange={onChange}
+		data={ data }
+		fields={ fields }
+		form={ form }
+		onChange={ onChange }
 	/>
 );
 ```
@@ -487,16 +525,16 @@ Utility to apply the view config (filters, search, sorting, and pagination) to a
 
 Parameters:
 
-- `data`: the dataset, as described in the "data" property of DataViews.
-- `view`: the view config, as described in the "view" property of DataViews.
-- `fields`: the fields config, as described in the "fields" property of DataViews.
+-   `data`: the dataset, as described in the "data" property of DataViews.
+-   `view`: the view config, as described in the "view" property of DataViews.
+-   `fields`: the fields config, as described in the "fields" property of DataViews.
 
 Returns an object containing:
 
-- `data`: the new dataset, with the view config applied.
-- `paginationInfo`: object containing the following properties:
-	- `totalItems`: total number of items for the current view config.
-	- `totalPages`: total number of pages for the current view config.
+-   `data`: the new dataset, with the view config applied.
+-   `paginationInfo`: object containing the following properties:
+    -   `totalItems`: total number of items for the current view config.
+    -   `totalPages`: total number of pages for the current view config.
 
 ### `isItemValid`
 
@@ -504,9 +542,9 @@ Utility is used to determine whether or not the given item's value is valid acco
 
 Parameters:
 
-- `item`: the item, as described in the "data" property of DataForm.
-- `fields`: the fields config, as described in the "fields" property of DataForm.
-- `form`: the form config, as described in the "form" property of DataForm.
+-   `item`: the item, as described in the "data" property of DataForm.
+-   `fields`: the fields config, as described in the "fields" property of DataForm.
+-   `form`: the form config, as described in the "form" property of DataForm.
 
 Returns a boolean indicating if the item is valid (true) or not (false).
 
@@ -516,17 +554,17 @@ Returns a boolean indicating if the item is valid (true) or not (false).
 
 The unique identifier of the action.
 
-- Type: `string`
-- Required
-- Example: `move-to-trash`
+-   Type: `string`
+-   Required
+-   Example: `move-to-trash`
 
-### `label` 
+### `label`
 
 The user facing description of the action.
 
-- Type: `string | function`
-- Required
-- Example:
+-   Type: `string | function`
+-   Required
+-   Example:
 
 ```js
 {
@@ -538,7 +576,7 @@ or
 
 ```js
 {
-	label: ( items ) => items.length > 1 ? 'Delete items' : 'Delete item'
+	label: ( items ) => ( items.length > 1 ? 'Delete items' : 'Delete item' );
 }
 ```
 
@@ -546,27 +584,27 @@ or
 
 Whether the action should be displayed inline (primary) or only displayed in the "More actions" menu (secondary).
 
-- Type: `boolean`
-- Optional
+-   Type: `boolean`
+-   Optional
 
 ### `icon`
 
 Icon to show for primary actions.
 
-- Type: SVG element
-- Required for primary actions, optional for secondary actions.
+-   Type: SVG element
+-   Required for primary actions, optional for secondary actions.
 
 ### `isEligible`
 
 Function that determines whether the action can be performed for a given record.
 
-- Type: `function`
-- Optional. If not present, action is considered eligible for all items.
-- Example:
+-   Type: `function`
+-   Optional. If not present, action is considered eligible for all items.
+-   Example:
 
 ```js
 {
-	isEligible: ( item ) => item.status === 'published'
+	isEligible: ( item ) => item.status === 'published';
 }
 ```
 
@@ -574,47 +612,47 @@ Function that determines whether the action can be performed for a given record.
 
 Whether the action can delete data, in which case the UI communicates it via a red color.
 
-- Type: `boolean`
-- Optional
+-   Type: `boolean`
+-   Optional
 
 ### `supportsBulk`
 
 Whether the action can operate over multiple items at once.
 
-- Type: `boolean`
-- Optional
-- Default: `false`
+-   Type: `boolean`
+-   Optional
+-   Default: `false`
 
 ### `disabled`
 
 Whether the action is disabled.
 
-- Type: `boolean`
-- Optional
-- Default: `false`
+-   Type: `boolean`
+-   Optional
+-   Default: `false`
 
 ### `context`
 
 Where this action would be visible.
 
-- Type: `string`
-- Optional
-- One of: `list`, `single`
+-   Type: `string`
+-   Optional
+-   One of: `list`, `single`
 
 ### `callback`
 
 Function that performs the required action.
 
-- Type: `function`
-- Either `callback` or `RenderModal` must be provided. If `RenderModal` is provided, `callback` will be ignored
-- Example:
+-   Type: `function`
+-   Either `callback` or `RenderModal` must be provided. If `RenderModal` is provided, `callback` will be ignored
+-   Example:
 
 ```js
 {
 	callback: ( items, { onActionPerformed } ) => {
 		// Perform action.
 		onActionPerformed?.( items );
-	}
+	};
 }
 ```
 
@@ -622,9 +660,9 @@ Function that performs the required action.
 
 Component to render UI in a modal for the action.
 
-- Type: `ReactElement`
-- Either `callback` or `RenderModal` must be provided. If `RenderModal` is provided, `callback` will be ignored.
-- Example:
+-   Type: `ReactElement`
+-   Either `callback` or `RenderModal` must be provided. If `RenderModal` is provided, `callback` will be ignored.
+-   Example:
 
 ```jsx
 {
@@ -648,7 +686,7 @@ Component to render UI in a modal for the action.
 				</HStack>
 			</form>
 		);
-	}
+	};
 }
 ```
 
@@ -656,17 +694,16 @@ Component to render UI in a modal for the action.
 
 Controls visibility of the modal's header when using `RenderModal`.
 
-- Type: `boolean`
-- Optional
-- When false and using `RenderModal`, the action's label is used in modal header
+-   Type: `boolean`
+-   Optional
+-   When false and using `RenderModal`, the action's label is used in modal header
 
 ### `modalHeader`
 
 The header text to show in the modal.
 
-- Type: `string`
-- Optional
-
+-   Type: `string`
+-   Optional
 
 ## Fields API
 
@@ -674,13 +711,15 @@ The header text to show in the modal.
 
 The unique identifier of the field.
 
-- Type: `string`.
-- Required.
+-   Type: `string`.
+-   Required.
 
 Example:
 
 ```js
-{ id: 'field_id' }
+{
+	id: 'field_id';
+}
 ```
 
 ### `type`
@@ -689,44 +728,50 @@ Field type. One of `text`, `integer`, `datetime`.
 
 If a field declares a `type`, it gets default implementations for the `sort`, `isValid`, and `Edit` functions if no other values are specified.
 
-- Type: `string`.
-- Optional.
+-   Type: `string`.
+-   Optional.
 
 Example:
 
 ```js
-{ type: 'text' }
+{
+	type: 'text';
+}
 ```
 
 ### `label`
 
 The field's name. This will be used across the UI.
 
-- Type: `string`.
-- Optional.
-- Defaults to the `id` value.
+-   Type: `string`.
+-   Optional.
+-   Defaults to the `id` value.
 
 Example:
 
 ```js
-{ label: 'Title' }
+{
+	label: 'Title';
+}
 ```
 
 ### `header`
 
 React component used by the layouts to display the field name — useful to add icons, etc. It's complementary to the `label` property.
 
-- Type: React component.
-- Optional.
-- Defaults to the `label` value.
-- Props: none.
-- Returns a React element that represents the field's name.
+-   Type: React component.
+-   Optional.
+-   Defaults to the `label` value.
+-   Props: none.
+-   Returns a React element that represents the field's name.
 
 Example:
 
 ```js
 {
-	header: () => { /* Returns a react element. */ }
+	header: () => {
+		/* Returns a react element. */
+	};
 }
 ```
 
@@ -734,18 +779,20 @@ Example:
 
 React component that returns the value of a field. This value is used to sort or filter the fields.
 
-- Type: React component.
-- Optional.
-- Defaults to `item[ id ]`.
-- Props:
-  - `item` value to be processed.
-- Returns a value that represents the field.
+-   Type: React component.
+-   Optional.
+-   Defaults to `item[ id ]`.
+-   Props:
+    -   `item` value to be processed.
+-   Returns a value that represents the field.
 
 Example:
 
 ```js
 {
-	getValue: ( { item } ) => { /* The field's value.  */ };
+	getValue: ( { item } ) => {
+		/* The field's value.  */
+	};
 }
 ```
 
@@ -753,18 +800,20 @@ Example:
 
 React component that renders the field. This is used by the layouts.
 
-- Type: React component.
-- Optional.
-- Defaults to `getValue`.
-- Props
-  - `item` value to be processed.
-- Returns a React element that represents the field's value.
+-   Type: React component.
+-   Optional.
+-   Defaults to `getValue`.
+-   Props
+    -   `item` value to be processed.
+-   Returns a React element that represents the field's value.
 
 Example:
 
 ```js
 {
-	render: ( { item} ) => { /* React element to be displayed. */ }
+	render: ( { item } ) => {
+		/* React element to be displayed. */
+	};
 }
 ```
 
@@ -772,26 +821,21 @@ Example:
 
 React component that renders the control to edit the field.
 
-- Type: React component | `string`. If it's a string, it needs to be one of `text`, `integer`, `datetime`, `radio`, `select`.
-- Required by DataForm. Optional if the field provided a `type`.
-- Props:
-  - `data`: the item to be processed
-  - `field`: the field definition
-  - `onChange`: the callback with the updates
-  - `hideLabelFromVision`: boolean representing if the label should be hidden
-- Returns a React element to edit the field's value.
+-   Type: React component | `string`. If it's a string, it needs to be one of `text`, `integer`, `datetime`, `radio`, `select`.
+-   Required by DataForm. Optional if the field provided a `type`.
+-   Props:
+    -   `data`: the item to be processed
+    -   `field`: the field definition
+    -   `onChange`: the callback with the updates
+    -   `hideLabelFromVision`: boolean representing if the label should be hidden
+-   Returns a React element to edit the field's value.
 
 Example:
 
 ```js
 // A custom control defined by the field.
 {
-	Edit: ( {
-		data,
-		field,
-		onChange,
-		hideLabelFromVision
-	} ) => {
+	Edit: ( { data, field, onChange, hideLabelFromVision } ) => {
 		const value = field.getValue( { item: data } );
 
 		return (
@@ -801,14 +845,14 @@ Example:
 				hideLabelFromVision
 			/>
 		);
-	}
+	};
 }
 ```
 
 ```js
 // Use one of the core controls.
 {
-	Edit: 'radio'
+	Edit: 'radio';
 }
 ```
 
@@ -816,7 +860,7 @@ Example:
 // Edit is optional when field's type is present.
 // The field will use the default Edit function for text.
 {
-	type: 'text'
+	type: 'text';
 }
 ```
 
@@ -833,16 +877,16 @@ Example:
 
 Function to sort the records.
 
-- Type: `function`.
-- Optional.
-- Args
-  - `a`: the first item to compare
-  - `b`: the second item to compare
-  - `direction`: either `asc` (ascending) or `desc` (descending)
-- Returns a number where:
-  - a negative value indicates that `a` should come before `b`
-  - a positive value indicates that `a` should come after `b`
-  - 0 indicates that `a` and `b` are considered equal
+-   Type: `function`.
+-   Optional.
+-   Args
+    -   `a`: the first item to compare
+    -   `b`: the second item to compare
+    -   `direction`: either `asc` (ascending) or `desc` (descending)
+-   Returns a number where:
+    -   a negative value indicates that `a` should come before `b`
+    -   a positive value indicates that `a` should come after `b`
+    -   0 indicates that `a` and `b` are considered equal
 
 Example:
 
@@ -853,7 +897,7 @@ Example:
 		return direction === 'asc'
 			? a.localeCompare( b )
 			: b.localeCompare( a );
-	}
+	};
 }
 ```
 
@@ -861,7 +905,7 @@ Example:
 // If field type is provided,
 // the field gets a default sort function.
 {
-	type: 'number'
+	type: 'number';
 }
 ```
 
@@ -869,8 +913,10 @@ Example:
 // Even if a field type is provided,
 // fields can override the default sort function assigned for that type.
 {
-	type: 'number'
-	sort: ( a, b, direction ) => { /* Custom sort */ }
+	type: 'number';
+	sort: ( a, b, direction ) => {
+		/* Custom sort */
+	};
 }
 ```
 
@@ -878,13 +924,13 @@ Example:
 
 Function to validate a field's value.
 
-- Type: function.
-- Optional.
-- Args
-  - `item`: the data to validate
-  - `context`: an object containing the following props:
-    - `elements`: the elements defined by the field
-- Returns a boolean, indicating if the field is valid or not.
+-   Type: function.
+-   Optional.
+-   Args
+    -   `item`: the data to validate
+    -   `context`: an object containing the following props:
+        -   `elements`: the elements defined by the field
+-   Returns a boolean, indicating if the field is valid or not.
 
 Example:
 
@@ -893,7 +939,7 @@ Example:
 {
 	isValid: ( item, context ) => {
 		return !! item;
-	}
+	};
 }
 ```
 
@@ -918,18 +964,20 @@ Example:
 
 Function that indicates if the field should be visible.
 
-- Type: `function`.
-- Optional.
-- Args
-  - `item`: the data to be processed
-- Returns a `boolean` indicating if the field should be visible (`true`) or not (`false`).
+-   Type: `function`.
+-   Optional.
+-   Args
+    -   `item`: the data to be processed
+-   Returns a `boolean` indicating if the field should be visible (`true`) or not (`false`).
 
 Example:
 
 ```js
 // Custom isVisible function.
 {
-	isVisible: ( item ) => { /* Custom implementation. */ }
+	isVisible: ( item ) => {
+		/* Custom implementation. */
+	};
 }
 ```
 
@@ -937,54 +985,60 @@ Example:
 
 Boolean indicating if the field is sortable.
 
-- Type: `boolean`.
-- Optional.
-- Defaults to `true`.
+-   Type: `boolean`.
+-   Optional.
+-   Defaults to `true`.
 
 Example:
 
 ```js
-{ enableSorting: true }
+{
+	enableSorting: true;
+}
 ```
 
 ### `enableHiding`
 
 Boolean indicating if the field can be hidden.
 
-- Type: `boolean`.
-- Optional.
-- Defaults to `true`.
+-   Type: `boolean`.
+-   Optional.
+-   Defaults to `true`.
 
 Example:
 
 ```js
-{ enableHiding: true }
+{
+	enableHiding: true;
+}
 ```
 
 ### `enableGlobalSearch`
 
 Boolean indicating if the field is searchable.
 
-- Type: `boolean`.
-- Optional.
-- Defaults to `false`.
+-   Type: `boolean`.
+-   Optional.
+-   Defaults to `false`.
 
 Example:
 
 ```js
-{ enableGlobalSearch: true }
+{
+	enableGlobalSearch: true;
+}
 ```
 
 ### `elements`
 
 List of valid values for a field. If provided, it creates a DataViews' filter for the field. DataForm's edit control will also use these values. (See `Edit` field property.)
 
-- Type: `array` of objects.
-- Optional.
-- Each object can have the following properties:
-  - `value`: the value to match against the field's value. (Required)
-  - `label`: the name to display to users. (Required)
-  - `description`: optional, a longer description of the item.
+-   Type: `array` of objects.
+-   Optional.
+-   Each object can have the following properties:
+    -   `value`: the value to match against the field's value. (Required)
+    -   `label`: the name to display to users. (Required)
+    -   `description`: optional, a longer description of the item.
 
 Example:
 
@@ -995,7 +1049,7 @@ Example:
 		{ value: '2', label: 'Product B' },
 		{ value: '3', label: 'Product C' },
 		{ value: '4', label: 'Product D' },
-	]
+	];
 }
 ```
 
@@ -1003,11 +1057,11 @@ Example:
 
 Configuration of the filters.
 
-- Type: `object`.
-- Optional.
-- Properties:
-  - `operators`: the list of operators supported by the field. See "operators" below. A filter will support the `isAny` and `isNone` multi-selection operators by default.
-  - `isPrimary`: boolean, optional. Indicates if the filter is primary. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
+-   Type: `object`.
+-   Optional.
+-   Properties:
+    -   `operators`: the list of operators supported by the field. See "operators" below. A filter will support the `isAny` and `isNone` multi-selection operators by default.
+    -   `isPrimary`: boolean, optional. Indicates if the filter is primary. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
 
 Operators:
 
@@ -1028,7 +1082,7 @@ Example:
 // Set a filter as primary.
 {
 	filterBy: {
-		isPrimary: true
+		isPrimary: true;
 	}
 }
 ```
@@ -1037,7 +1091,7 @@ Example:
 // Configure a filter as single-selection.
 {
 	filterBy: {
-		operators: [ `is`, `isNot` ]
+		operators: [ `is`, `isNot` ];
 	}
 }
 ```
@@ -1046,8 +1100,88 @@ Example:
 // Configure a filter as multi-selection with all the options.
 {
 	filterBy: {
-		operators: [ `isAny`, `isNone`, `isAll`, `isNotAll` ]
+		operators: [ `isAny`, `isNone`, `isAll`, `isNotAll` ];
 	}
+}
+```
+
+## Form Field API
+
+### `id`
+
+The unique identifier of the field.
+
+-   Type: `string`.
+-   Required.
+
+Example:
+
+```js
+{
+	id: 'field_id';
+}
+```
+
+### `layout`
+
+The same as the `form.type`, either `regular` or `panel` only for the individual field. It defaults to `form.type`.
+
+-   Type: `string`.
+
+Example:
+
+```js
+{
+	id: 'field_id',
+	layout: 'regular'
+}
+```
+
+### `labelPosition`
+
+The same as the `form.labelPosition`, either `side`, `top`, or `none` for the individual field. It defaults to `form.labelPosition`.
+
+-   Type: `string`.
+
+Example:
+
+```js
+{
+	id: 'field_id',
+	labelPosition: 'none'
+}
+```
+
+### `label`
+
+The label used when displaying a combined field, this requires the use of `children` as well.
+
+-   Type: `string`.
+
+Example:
+
+```js
+{
+	id: 'field_id',
+	label: 'Combined Field',
+	children: [ 'field1', 'field2' ]
+}
+```
+
+### `children`
+
+Groups a set of fields defined within children. For example if you want to display multiple fields within the Panel dropdown you can use children ( see example ).
+
+-   Type: `Array< string | FormField >`.
+
+Example:
+
+```js
+{
+	id: 'status',
+	layout: 'panel',
+	label: 'Combined Field',
+	children: [ 'field1', 'field2' ],
 }
 ```
 

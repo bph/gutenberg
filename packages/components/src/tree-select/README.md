@@ -51,6 +51,7 @@ const MyTreeSelect = () => {
 	);
 }
 ```
+
 ## Props
 
 ### `__next40pxDefaultSize`

@@ -34,7 +34,7 @@ export function setCurrentTemplateId( id ) {
 /**
  * Create a block based template.
  *
- * @param {Object?} template Template to create and assign.
+ * @param {?Object} template Template to create and assign.
  */
 export const createTemplate =
 	( template ) =>

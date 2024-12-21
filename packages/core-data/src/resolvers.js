@@ -226,7 +226,7 @@ export const getEditedEntityRecord = forwardResolver( 'getEntityRecord' );
  *
  * @param {string}  kind  Entity kind.
  * @param {string}  name  Entity name.
- * @param {Object?} query Query Object. If requesting specific fields, fields
+ * @param {?Object} query Query Object. If requesting specific fields, fields
  *                        must always include the ID.
  */
 export const getEntityRecords =

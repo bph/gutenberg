@@ -142,6 +142,7 @@ const _HeaderMenu = forwardRef( function HeaderMenu< Item >(
 														field: fieldId,
 														direction,
 													},
+													showLevels: false,
 												} );
 											} }
 										>

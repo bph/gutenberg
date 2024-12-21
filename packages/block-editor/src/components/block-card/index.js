@@ -14,9 +14,8 @@ import {
 	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
 import { chevronLeft, chevronRight } from '@wordpress/icons';
-import { __, _x, isRTL, sprintf } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { createInterpolateElement } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -71,25 +70,10 @@ function BlockCard( { title, icon, description, blockType, className, name } ) {
 			<BlockIcon icon={ icon } showColors />
 			<VStack spacing={ 1 }>
 				<h2 className="block-editor-block-card__title">
-					{ name?.length
-						? createInterpolateElement(
-								sprintf(
-									// translators:  1: Custom block name. 2: Block title.
-									_x(
-										'<span>%1$s</span> <badge>%2$s</badge>',
-										'block label'
-									),
-									name,
-									title
-								),
-								{
-									span: (
-										<span className="block-editor-block-card__name" />
-									),
-									badge: <Badge />,
-								}
-						  )
-						: title }
+					<span className="block-editor-block-card__name">
+						{ !! name?.length ? name : title }
+					</span>
+					{ !! name?.length && <Badge>{ title }</Badge> }
 				</h2>
 				{ description && (
 					<Text className="block-editor-block-card__description">

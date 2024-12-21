@@ -2,12 +2,16 @@
 
 ## Unreleased
 
+### Internal
+
+-   Refactored the code to use new API introduced together with `@inquirer/prompts` instead of legacy `inquirer` package ([#67877](https://github.com/WordPress/gutenberg/pull/67877)).
+
 ## 10.14.0 (2024-12-11)
 
 ### Enhancements
 
-- Add phpMyAdmin as an optional service. Enabled via the new `phpmyadminPort` environment config, as well as env vars `WP_ENV_PHPMYADMIN_PORT` and `WP_ENV_TESTS_PHPMYADMIN_PORT`.
-- Add support for WordPress multisite installations. Enabled via the new `multisite` environment config.
+-   Add phpMyAdmin as an optional service. Enabled via the new `phpmyadminPort` environment config, as well as env vars `WP_ENV_PHPMYADMIN_PORT` and `WP_ENV_TESTS_PHPMYADMIN_PORT`.
+-   Add support for WordPress multisite installations. Enabled via the new `multisite` environment config.
 
 ### Internal
 

@@ -322,6 +322,11 @@ interface ViewBase {
 	 * Whether to show the description
 	 */
 	showDescription?: boolean;
+
+	/**
+	 * Whether to show the hierarchical levels.
+	 */
+	showLevels?: boolean;
 }
 
 export interface ColumnStyle {
@@ -480,6 +485,7 @@ export interface ViewBaseProps< Item > {
 	data: Item[];
 	fields: NormalizedField< Item >[];
 	getItemId: ( item: Item ) => string;
+	getItemLevel?: ( item: Item ) => number;
 	isLoading?: boolean;
 	onChangeView: ( view: View ) => void;
 	onChangeSelection: SetSelection;

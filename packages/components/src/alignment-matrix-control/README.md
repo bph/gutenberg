@@ -21,6 +21,7 @@ const Example = () => {
 	);
 };
 ```
+
 ## Props
 
 ### `defaultValue`

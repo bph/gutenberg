@@ -35,6 +35,8 @@ import {
 	useEffect,
 } from '@wordpress/element';
 import { ENTER, SPACE } from '@wordpress/keycodes';
+import { uploadMedia } from '@wordpress/media-utils';
+import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -50,6 +52,7 @@ import { getExamples } from './examples';
 import { store as siteEditorStore } from '../../store';
 import { useSection } from '../sidebar-global-styles-wrapper';
 import { STYLE_BOOK_COLOR_GROUPS } from '../style-book/constants';
+import { GlobalStylesRenderer } from '../global-styles-renderer';
 
 const {
 	ExperimentalBlockEditorProvider,
@@ -360,10 +363,22 @@ export const StyleBookPreview = ( { userConfig = {}, isStatic = false } ) => {
 		[]
 	);
 
+	const canUserUploadMedia = useSelect(
+		( select ) =>
+			select( coreStore ).canUser( 'create', {
+				kind: 'root',
+				name: 'media',
+			} ),
+		[]
+	);
+
 	// Update block editor settings because useMultipleOriginColorsAndGradients fetch colours from there.
 	useEffect( () => {
-		dispatch( blockEditorStore ).updateSettings( siteEditorSettings );
-	}, [ siteEditorSettings ] );
+		dispatch( blockEditorStore ).updateSettings( {
+			...siteEditorSettings,
+			mediaUpload: canUserUploadMedia ? uploadMedia : undefined,
+		} );
+	}, [ siteEditorSettings, canUserUploadMedia ] );
 
 	const [ section, onChangeSection ] = useSection();
 
@@ -432,6 +447,7 @@ export const StyleBookPreview = ( { userConfig = {}, isStatic = false } ) => {
 		<div className="edit-site-style-book">
 			{ resizeObserver }
 			<BlockEditorProvider settings={ settings }>
+				<GlobalStylesRenderer disableRootPadding />
 				<StyleBookBody
 					examples={ examplesForSinglePageUse }
 					settings={ settings }

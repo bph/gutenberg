@@ -48,4 +48,3 @@ export function generateMarkdownPropsJson( props, { headingLevel = 2 } = {} ) {
 
 	return [ { [ `h${ headingLevel }` ]: 'Props' }, ...propsJson ];
 }
-

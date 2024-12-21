@@ -10,10 +10,11 @@ import {
 	privateApis as blockEditorPrivateApis,
 } from '@wordpress/block-editor';
 import {
-	PanelBody,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { View } from '@wordpress/primitives';
@@ -94,28 +95,54 @@ export default function SpacerControls( {
 } ) {
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Settings' ) }>
+			<ToolsPanel
+				label={ __( 'Settings' ) }
+				resetAll={ () => {
+					setAttributes( {
+						width: undefined,
+						height: '100px',
+					} );
+				} }
+			>
 				{ orientation === 'horizontal' && (
-					<DimensionInput
+					<ToolsPanelItem
 						label={ __( 'Width' ) }
-						value={ width }
-						onChange={ ( nextWidth ) =>
-							setAttributes( { width: nextWidth } )
+						isShownByDefault
+						hasValue={ () => width !== undefined }
+						onDeselect={ () =>
+							setAttributes( { width: undefined } )
 						}
-						isResizing={ isResizing }
-					/>
+					>
+						<DimensionInput
+							label={ __( 'Width' ) }
+							value={ width }
+							onChange={ ( nextWidth ) =>
+								setAttributes( { width: nextWidth } )
+							}
+							isResizing={ isResizing }
+						/>
+					</ToolsPanelItem>
 				) }
 				{ orientation !== 'horizontal' && (
-					<DimensionInput
+					<ToolsPanelItem
 						label={ __( 'Height' ) }
-						value={ height }
-						onChange={ ( nextHeight ) =>
-							setAttributes( { height: nextHeight } )
+						isShownByDefault
+						hasValue={ () => height !== '100px' }
+						onDeselect={ () =>
+							setAttributes( { height: '100px' } )
 						}
-						isResizing={ isResizing }
-					/>
+					>
+						<DimensionInput
+							label={ __( 'Height' ) }
+							value={ height }
+							onChange={ ( nextHeight ) =>
+								setAttributes( { height: nextHeight } )
+							}
+							isResizing={ isResizing }
+						/>
+					</ToolsPanelItem>
 				) }
-			</PanelBody>
+			</ToolsPanel>
 		</InspectorControls>
 	);
 }

@@ -172,7 +172,7 @@ _Parameters_
 
 _Returns_
 
--   `Object?`: Block Type.
+-   `?Object`: Block Type.
 
 ### getBlockTypes
 

@@ -25,6 +25,11 @@ import {
 import { createBlock, getDefaultBlockName } from '@wordpress/blocks';
 import { decodeEntities } from '@wordpress/html-entities';
 
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
+
 export default function SiteTitleEdit( {
 	attributes,
 	setAttributes,
@@ -47,6 +52,7 @@ export default function SiteTitleEdit( {
 		};
 	}, [] );
 	const { editEntityRecord } = useDispatch( coreStore );
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	function setTitle( newTitle ) {
 		editEntityRecord( 'root', 'site', undefined, {
@@ -121,6 +127,7 @@ export default function SiteTitleEdit( {
 							linkTarget: '_self',
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						hasValue={ () => isLink !== false }

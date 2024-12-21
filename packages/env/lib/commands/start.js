@@ -6,7 +6,7 @@ const { v2: dockerCompose } = require( 'docker-compose' );
 const util = require( 'util' );
 const path = require( 'path' );
 const fs = require( 'fs' ).promises;
-const inquirer = require( 'inquirer' );
+const { confirm } = require( '@inquirer/prompts' );
 
 /**
  * Promisified dependencies
@@ -328,15 +328,21 @@ async function checkForLegacyInstall( spinner ) {
 			' and '
 		) }. Installs are now in your home folder.\n`
 	);
-	const { yesDelete } = await inquirer.prompt( [
-		{
-			type: 'confirm',
-			name: 'yesDelete',
+	let yesDelete = false;
+	try {
+		yesDelete = confirm( {
 			message:
 				'Do you wish to delete these old installs to reclaim disk space?',
 			default: true,
-		},
-	] );
+		} );
+	} catch ( error ) {
+		if ( error.name === 'ExitPromptError' ) {
+			console.log( 'Cancelled.' );
+			process.exit( 1 );
+		}
+		throw error;
+	}
+
 	if ( yesDelete ) {
 		await Promise.all( installs.map( ( install ) => rimraf( install ) ) );
 		spinner.info( 'Old installs deleted successfully.' );

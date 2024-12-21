@@ -10,7 +10,7 @@ import { useMemo } from '@wordpress/element';
  *
  * @return {Object} Media upload settings.
  */
-function useMediaUploadSettings( settings ) {
+function useMediaUploadSettings( settings = {} ) {
 	return useMemo(
 		() => ( {
 			mediaUpload: settings.mediaUpload,

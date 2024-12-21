@@ -56,6 +56,7 @@
 		"@wordpress/icons": "*",
 		"@wordpress/keyboard-shortcuts": "*",
 		"@wordpress/keycodes": "*",
+		"@wordpress/media-utils": "5.14.0",
 		"@wordpress/notices": "*",
 		"@wordpress/patterns": "*",
 		"@wordpress/plugins": "*",

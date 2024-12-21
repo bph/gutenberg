@@ -14,9 +14,8 @@ import { usePatternCategories } from '../block-patterns-tab/use-pattern-categori
 
 function PatternsExplorer( { initialCategory, rootClientId } ) {
 	const [ searchValue, setSearchValue ] = useState( '' );
-	const [ selectedCategory, setSelectedCategory ] = useState(
-		initialCategory?.name
-	);
+	const [ selectedCategory, setSelectedCategory ] =
+		useState( initialCategory );
 
 	const patternCategories = usePatternCategories( rootClientId );
 

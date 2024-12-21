@@ -1,6 +1,6 @@
 == Changelog ==
 
-= 19.9.0-rc.1 =
+= 19.9.0 =
 
 ## Changelog
 
@@ -35,8 +35,8 @@
 - Navigation: Enable all non-interactive formats. ([67585](https://github.com/WordPress/gutenberg/pull/67585))
 - Query block: Move patterns modal to dropdown on block toolbar. ([66993](https://github.com/WordPress/gutenberg/pull/66993))
 - Separator block: Allow divs to be used as separators. ([67530](https://github.com/WordPress/gutenberg/pull/67530))
-- [ New Block ] Add Query Total block for displaying total query results or ranges. ([67629](https://github.com/WordPress/gutenberg/pull/67629))
-- [Block Library]: Update the relationship of `No results` block  to `ancestor`. ([48348](https://github.com/WordPress/gutenberg/pull/48348))
+- New Block: Add Query Total block for displaying total query results or ranges. ([67629](https://github.com/WordPress/gutenberg/pull/67629))
+- Block Library: Update the relationship of `No results` block  to `ancestor`. ([48348](https://github.com/WordPress/gutenberg/pull/48348))
 
 #### DataViews
 - Add header to the quick edit when bulk editing. ([67390](https://github.com/WordPress/gutenberg/pull/67390))
@@ -335,6 +335,7 @@
 - DataViews build-wp: Don't bundle the date package. ([67612](https://github.com/WordPress/gutenberg/pull/67612))
 - Keycodes: Improve tree shaking by annotating exports as pure. ([67615](https://github.com/WordPress/gutenberg/pull/67615))
 - Upgrade TypeScript to 5.7 and fix types. ([67461](https://github.com/WordPress/gutenberg/pull/67461))
+- Combine the release steps to ensure that releases are tagged. ([65591](https://github.com/WordPress/gutenberg/pull/65591))
 
 #### Testing
 - e2e-test-utils-playwright: Increase timeout of site-editor selector. ([66672](https://github.com/WordPress/gutenberg/pull/66672))
@@ -381,7 +382,9 @@ The following PRs were merged by first-time contributors:
 
 The following contributors merged PRs in this release:
 
-@aaronrobertshaw @afercia @akasunil @alexflorisca @annezazu @benazeer-ben @ciampo @creador-dev @creativecoder @DAreRodz @dcalhoun @dknauss @draganescu @ellatrix @fabiankaegy @getdave @gigitux @gvgvgvijayan @gziolo @hbhalodia @im3dabasia @imrraaj @jameskoster @jeryj @jorgefilipecosta @jsnajdr @juanfra @louwie17 @Mamaduka @manzoorwanijk @matiasbenedetto @Mayank-Tripathi32 @mcsf @michalczaplinski @miminari @mirka @ntsekouras @oandregal @ockham @prajapatisagar @ramonjd @sabernhardt @SantosGuillamot @sarthaknagoshe2002 @sgomes @shail-mehta @stokesman @subodhr258 @Sukhendu2002 @t-hamano @talldan @tellthemachines @tyxla @viralsampat-multidots @wwdes @yogeshbhutkar @youknowriad
+@aaronrobertshaw @afercia @akasunil @alexflorisca @annezazu @benazeer-ben @ciampo @creador-dev @creativecoder @DAreRodz @dcalhoun @dd32 @dknauss @draganescu @ellatrix @fabiankaegy @getdave @gigitux @gvgvgvijayan @gziolo @hbhalodia @im3dabasia @imrraaj @jameskoster @jeryj @jorgefilipecosta @jsnajdr @juanfra @louwie17 @Mamaduka @manzoorwanijk @matiasbenedetto @Mayank-Tripathi32 @mcsf @michalczaplinski @miminari @mirka @ntsekouras @oandregal @ockham @prajapatisagar @ramonjd @sabernhardt @SantosGuillamot @sarthaknagoshe2002 @sgomes @shail-mehta @stokesman @subodhr258 @Sukhendu2002 @t-hamano @talldan @tellthemachines @tyxla @viralsampat-multidots @wwdes @yogeshbhutkar @youknowriad
+
+
 
 
 = 19.8.0 =

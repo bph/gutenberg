@@ -137,6 +137,11 @@ const restrictedSyntax = [
 		message:
 			'Avoid truthy checks on length property rendering, as zero length is rendered verbatim.',
 	},
+	{
+		selector:
+			'CallExpression[callee.name=/^(__|_x|_n|_nx)$/] > Literal[value=/^toggle\\b/i]',
+		message: "Avoid using the verb 'Toggle' in translatable strings",
+	},
 ];
 
 /** `no-restricted-syntax` rules for components. */

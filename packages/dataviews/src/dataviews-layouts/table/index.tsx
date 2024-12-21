@@ -40,6 +40,7 @@ interface TableColumnFieldProps< Item > {
 interface TableRowProps< Item > {
 	hasBulkActions: boolean;
 	item: Item;
+	level?: number;
 	actions: Action< Item >[];
 	fields: NormalizedField< Item >[];
 	id: string;
@@ -75,6 +76,7 @@ function TableColumnField< Item >( {
 function TableRow< Item >( {
 	hasBulkActions,
 	item,
+	level,
 	actions,
 	fields,
 	id,
@@ -160,6 +162,7 @@ function TableRow< Item >( {
 				<td>
 					<ColumnPrimary
 						item={ item }
+						level={ level }
 						titleField={ showTitle ? titleField : undefined }
 						mediaField={ showMedia ? mediaField : undefined }
 						descriptionField={
@@ -210,6 +213,7 @@ function ViewTable< Item >( {
 	data,
 	fields,
 	getItemId,
+	getItemLevel,
 	isLoading = false,
 	onChangeView,
 	onChangeSelection,
@@ -375,6 +379,12 @@ function ViewTable< Item >( {
 							<TableRow
 								key={ getItemId( item ) }
 								item={ item }
+								level={
+									view.showLevels &&
+									typeof getItemLevel === 'function'
+										? getItemLevel( item )
+										: undefined
+								}
 								hasBulkActions={ hasBulkActions }
 								actions={ actions }
 								fields={ fields }

@@ -57,9 +57,15 @@ const ControlledToggleGroupControl = ( {
 				} }
 				value={ value }
 			/>
-			<Button onClick={ () => setValue( undefined ) }>Reset</Button>
+			<Button
+				onClick={ () => setValue( undefined ) }
+				__next40pxDefaultSize
+			>
+				Reset
+			</Button>
 			{ extraButtonOptions?.map( ( obj ) => (
 				<Button
+					__next40pxDefaultSize
 					key={ obj.value }
 					onClick={ () => setValue( obj.value ) }
 				>

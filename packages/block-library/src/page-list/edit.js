@@ -362,6 +362,7 @@ export default function PageListEdit( {
 						<ToolsPanelItem
 							label={ __( 'Edit Menu' ) }
 							isShownByDefault
+							hasValue={ () => false }
 						>
 							<div>
 								<p>{ convertDescription }</p>

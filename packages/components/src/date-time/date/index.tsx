@@ -306,6 +306,7 @@ function Day( {
 
 	return (
 		<DayButton
+			__next40pxDefaultSize
 			ref={ ref }
 			className="components-datetime__date__day" // Unused, for backwards compatibility.
 			disabled={ isInvalid }

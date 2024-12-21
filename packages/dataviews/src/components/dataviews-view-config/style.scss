@@ -43,7 +43,6 @@
 	display: none;
 }
 
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 500px) {
 	.dataviews-settings-section.dataviews-settings-section {
 		grid-template-columns: repeat(2, 1fr);

@@ -20,14 +20,16 @@ import {
 	useBlockProps,
 	useSettings,
 	useBlockEditingMode,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
 import { getBlockSupport } from '@wordpress/blocks';
 import { formatLtr } from '@wordpress/icons';
-
 /**
  * Internal dependencies
  */
 import { useOnEnter } from './use-enter';
+import { unlock } from '../lock-unlock';
 
 function ParagraphRTLControl( { direction, setDirection } ) {
 	return (
@@ -109,7 +111,11 @@ function ParagraphBlock( {
 	isSelected: isSingleSelected,
 	name,
 } ) {
-	const { align, content, direction, dropCap, placeholder } = attributes;
+	const isZoomOut = useSelect( ( select ) =>
+		unlock( select( blockEditorStore ) ).isZoomOut()
+	);
+
+	const { align, content, direction, dropCap } = attributes;
 	const blockProps = useBlockProps( {
 		ref: useOnEnter( { clientId, content } ),
 		className: clsx( {
@@ -119,6 +125,12 @@ function ParagraphBlock( {
 		style: { direction },
 	} );
 	const blockEditingMode = useBlockEditingMode();
+	let { placeholder } = attributes;
+	if ( isZoomOut ) {
+		placeholder = '';
+	} else if ( ! placeholder ) {
+		placeholder = __( 'Type / to choose a block' );
+	}
 
 	return (
 		<>
@@ -170,8 +182,10 @@ function ParagraphBlock( {
 						: __( 'Block: Paragraph' )
 				}
 				data-empty={ RichText.isEmpty( content ) }
-				placeholder={ placeholder || __( 'Type / to choose a block' ) }
-				data-custom-placeholder={ placeholder ? true : undefined }
+				placeholder={ placeholder }
+				data-custom-placeholder={
+					placeholder && ! isZoomOut ? true : undefined
+				}
 				__unstableEmbedURLOnPaste
 				__unstableAllowPrefixTransformations
 			/>

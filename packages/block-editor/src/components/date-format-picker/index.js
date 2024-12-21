@@ -40,7 +40,11 @@ export default function DateFormatPicker( {
 	onChange,
 } ) {
 	return (
-		<fieldset className="block-editor-date-format-picker">
+		<VStack
+			as="fieldset"
+			spacing={ 4 }
+			className="block-editor-date-format-picker"
+		>
 			<VisuallyHidden as="legend">{ __( 'Date format' ) }</VisuallyHidden>
 			<ToggleControl
 				__nextHasNoMarginBottom
@@ -57,7 +61,7 @@ export default function DateFormatPicker( {
 			{ format && (
 				<NonDefaultControls format={ format } onChange={ onChange } />
 			) }
-		</fieldset>
+		</VStack>
 	);
 }
 

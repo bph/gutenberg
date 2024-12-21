@@ -392,7 +392,7 @@ Creates a new store registry, given an optional object of initial store configur
 _Parameters_
 
 -   _storeConfigs_ `Object`: Initial store configurations.
--   _parent_ `Object?`: Parent registry.
+-   _parent_ `?Object`: Parent registry.
 
 _Returns_
 

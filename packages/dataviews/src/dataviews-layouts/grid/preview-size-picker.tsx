@@ -3,7 +3,6 @@
  */
 import { RangeControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useViewportMatch } from '@wordpress/compose';
 import { useMemo, useContext } from '@wordpress/element';
 
 /**
@@ -12,7 +11,9 @@ import { useMemo, useContext } from '@wordpress/element';
 import DataViewsContext from '../../components/dataviews-context';
 import type { ViewGrid } from '../../types';
 
-const viewportBreaks = {
+const viewportBreaks: {
+	[ key: string ]: { min: number; max: number; default: number };
+} = {
 	xhuge: { min: 3, max: 6, default: 5 },
 	huge: { min: 2, max: 4, default: 4 },
 	xlarge: { min: 2, max: 3, default: 3 },
@@ -20,38 +21,35 @@ const viewportBreaks = {
 	mobile: { min: 1, max: 2, default: 2 },
 };
 
-function useViewPortBreakpoint() {
-	const isXHuge = useViewportMatch( 'xhuge', '>=' );
-	const isHuge = useViewportMatch( 'huge', '>=' );
-	const isXlarge = useViewportMatch( 'xlarge', '>=' );
-	const isLarge = useViewportMatch( 'large', '>=' );
-	const isMobile = useViewportMatch( 'mobile', '>=' );
+/**
+ * Breakpoints were adjusted from media queries breakpoints to account for
+ * the sidebar width. This was done to match the existing styles we had.
+ */
+const BREAKPOINTS = {
+	xhuge: 1520,
+	huge: 1140,
+	xlarge: 780,
+	large: 480,
+	mobile: 0,
+};
 
-	if ( isXHuge ) {
-		return 'xhuge';
+function useViewPortBreakpoint() {
+	const containerWidth = useContext( DataViewsContext ).containerWidth;
+	for ( const [ key, value ] of Object.entries( BREAKPOINTS ) ) {
+		if ( containerWidth >= value ) {
+			return key;
+		}
 	}
-	if ( isHuge ) {
-		return 'huge';
-	}
-	if ( isXlarge ) {
-		return 'xlarge';
-	}
-	if ( isLarge ) {
-		return 'large';
-	}
-	if ( isMobile ) {
-		return 'mobile';
-	}
-	return null;
+	return 'mobile';
 }
 
 export function useUpdatedPreviewSizeOnViewportChange() {
-	const viewport = useViewPortBreakpoint();
 	const view = useContext( DataViewsContext ).view as ViewGrid;
+	const viewport = useViewPortBreakpoint();
 	return useMemo( () => {
 		const previewSize = view.layout?.previewSize;
 		let newPreviewSize;
-		if ( ! viewport || ! previewSize ) {
+		if ( ! previewSize ) {
 			return;
 		}
 		const breakValues = viewportBreaks[ viewport ];
@@ -69,9 +67,8 @@ export default function PreviewSizePicker() {
 	const viewport = useViewPortBreakpoint();
 	const context = useContext( DataViewsContext );
 	const view = context.view as ViewGrid;
-	const breakValues = viewportBreaks[ viewport || 'mobile' ];
+	const breakValues = viewportBreaks[ viewport ];
 	const previewSizeToUse = view.layout?.previewSize || breakValues.default;
-
 	const marks = useMemo(
 		() =>
 			Array.from(
@@ -84,11 +81,9 @@ export default function PreviewSizePicker() {
 			),
 		[ breakValues ]
 	);
-
-	if ( ! viewport ) {
+	if ( viewport === 'mobile' ) {
 		return null;
 	}
-
 	return (
 		<RangeControl
 			__nextHasNoMarginBottom

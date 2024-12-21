@@ -11,15 +11,12 @@
 	z-index: z-index(".dataviews-footer");
 }
 
-
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 430px) {
 	.dataviews-footer {
 		padding: $grid-unit-15 $grid-unit-30;
 	}
 }
 
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 560px) {
 	.dataviews-footer {
 		flex-direction: column !important;

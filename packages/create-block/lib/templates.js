@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+const inquirer = require( '@inquirer/prompts' );
 const { command } = require( 'execa' );
 const glob = require( 'fast-glob' );
 const { resolve } = require( 'path' );
@@ -157,7 +158,7 @@ const configToTemplate = async ( {
 	};
 };
 
-const getPluginTemplate = async ( templateName ) => {
+const getProjectTemplate = async ( templateName ) => {
 	if ( predefinedPluginTemplates[ templateName ] ) {
 		return await configToTemplate(
 			predefinedPluginTemplates[ templateName ]
@@ -224,12 +225,13 @@ const getPluginTemplate = async ( templateName ) => {
 	}
 };
 
-const getDefaultValues = ( pluginTemplate, variant ) => {
+const getDefaultValues = ( projectTemplate, variant ) => {
 	return {
 		$schema: 'https://schemas.wp.org/trunk/block.json',
 		apiVersion: 3,
 		namespace: 'create-block',
 		category: 'widgets',
+		textdomain: '',
 		author: 'The WordPress Contributors',
 		license: 'GPL-2.0-or-later',
 		licenseURI: 'https://www.gnu.org/licenses/gpl-2.0.html',
@@ -243,20 +245,33 @@ const getDefaultValues = ( pluginTemplate, variant ) => {
 		editorStyle: 'file:./index.css',
 		style: 'file:./style-index.css',
 		transformer: ( view ) => view,
-		...pluginTemplate.defaultValues,
-		...pluginTemplate.variants?.[ variant ],
-		variantVars: getVariantVars( pluginTemplate.variants, variant ),
+		...projectTemplate.defaultValues,
+		...projectTemplate.variants?.[ variant ],
+		variantVars: getVariantVars( projectTemplate.variants, variant ),
 	};
 };
 
-const getPrompts = ( pluginTemplate, keys, variant ) => {
-	const defaultValues = getDefaultValues( pluginTemplate, variant );
-	return keys.map( ( promptName ) => {
-		return {
-			...prompts[ promptName ],
+const runPrompts = async (
+	projectTemplate,
+	promptNames,
+	variant,
+	optionsValues
+) => {
+	const defaultValues = getDefaultValues( projectTemplate, variant );
+	const result = {};
+	for ( const promptName of promptNames ) {
+		if ( Object.keys( optionsValues ).includes( promptName ) ) {
+			continue;
+		}
+
+		const { type, ...config } = prompts[ promptName ];
+		result[ promptName ] = await inquirer[ type ]( {
+			...config,
 			default: defaultValues[ promptName ],
-		};
-	} );
+		} );
+	}
+
+	return result;
 };
 
 const getVariantVars = ( variants, variant ) => {
@@ -277,7 +292,7 @@ const getVariantVars = ( variants, variant ) => {
 };
 
 module.exports = {
-	getPluginTemplate,
 	getDefaultValues,
-	getPrompts,
+	getProjectTemplate,
+	runPrompts,
 };

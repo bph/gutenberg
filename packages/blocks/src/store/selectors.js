@@ -102,7 +102,7 @@ export const getBlockTypes = createSelector(
  * };
  * ```
  *
- * @return {Object?} Block Type.
+ * @return {?Object} Block Type.
  */
 export function getBlockType( state, name ) {
 	return state.blockTypes[ name ];

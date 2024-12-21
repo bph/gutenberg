@@ -13,7 +13,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { store as coreStore } from '@wordpress/core-data';
 import { PanelBody, ToggleControl } from '@wordpress/components';
 
@@ -22,9 +22,10 @@ function PostAuthorNameEdit( {
 	attributes: { textAlign, isLink, linkTarget },
 	setAttributes,
 } ) {
-	const { authorName } = useSelect(
+	const { authorName, supportsAuthor } = useSelect(
 		( select ) => {
-			const { getEditedEntityRecord, getUser } = select( coreStore );
+			const { getEditedEntityRecord, getUser, getPostType } =
+				select( coreStore );
 			const _authorId = getEditedEntityRecord(
 				'postType',
 				postType,
@@ -33,6 +34,8 @@ function PostAuthorNameEdit( {
 
 			return {
 				authorName: _authorId ? getUser( _authorId ) : null,
+				supportsAuthor:
+					getPostType( postType )?.supports?.author ?? false,
 			};
 		},
 		[ postType, postId ]
@@ -90,7 +93,17 @@ function PostAuthorNameEdit( {
 					) }
 				</PanelBody>
 			</InspectorControls>
-			<div { ...blockProps }> { displayAuthor } </div>
+			<div { ...blockProps }>
+				{ supportsAuthor
+					? displayAuthor
+					: sprintf(
+							// translators: %s: Name of the post type e.g: "post".
+							__(
+								'This post type (%s) does not support the author.'
+							),
+							postType
+					  ) }
+			</div>
 		</>
 	);
 }

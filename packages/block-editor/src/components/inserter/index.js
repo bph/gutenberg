@@ -60,6 +60,7 @@ const defaultRenderToggle = ( {
 
 	return (
 		<Wrapper
+			__next40pxDefaultSize={ toggleProps.as ? undefined : true }
 			icon={ plus }
 			label={ label }
 			tooltipPosition="bottom"

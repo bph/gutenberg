@@ -145,13 +145,6 @@ export function ActionsMenuGroup< Item >( {
 	);
 }
 
-function hasOnlyOneActionAndIsPrimary< Item >(
-	primaryActions: Action< Item >[],
-	actions: Action< Item >[]
-) {
-	return primaryActions.length === 1 && actions.length === 1;
-}
-
 export default function ItemActions< Item >( {
 	item,
 	actions,
@@ -184,7 +177,8 @@ export default function ItemActions< Item >( {
 		);
 	}
 
-	if ( hasOnlyOneActionAndIsPrimary( primaryActions, actions ) ) {
+	// If all actions are primary, there is no need to render the dropdown.
+	if ( primaryActions.length === eligibleActions.length ) {
 		return (
 			<PrimaryActions
 				item={ item }

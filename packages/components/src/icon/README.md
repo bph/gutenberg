@@ -11,6 +11,7 @@ import { wordpress } from '@wordpress/icons';
 
 <Icon icon={ wordpress } />
 ```
+
 ## Props
 
 ### `icon`

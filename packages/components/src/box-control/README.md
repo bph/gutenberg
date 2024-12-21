@@ -28,6 +28,7 @@ function Example() {
   );
 };
 ```
+
 ## Props
 
 ### `__next40pxDefaultSize`

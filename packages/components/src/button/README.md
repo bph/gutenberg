@@ -17,6 +17,7 @@ const Mybutton = () => (
   </Button>
 );
 ```
+
 ## Props
 
 ### `__next40pxDefaultSize`

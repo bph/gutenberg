@@ -395,7 +395,7 @@ test.describe( 'Site Editor Performance', () => {
 			await requestUtils.activateTheme( 'twentytwentyfour' );
 		} );
 
-		const perPage = 20;
+		const perPage = 9;
 
 		test( 'Run the test', async ( { page, admin, requestUtils } ) => {
 			await Promise.all(

@@ -9,7 +9,7 @@ import type { ReactElement, ReactNode, Key } from 'react';
 import { useObservableValue } from '@wordpress/compose';
 import {
 	useContext,
-	useEffect,
+	useLayoutEffect,
 	useRef,
 	Children,
 	cloneElement,
@@ -54,7 +54,7 @@ function Slot( props: Omit< SlotComponentProps, 'bubblesVirtually' > ) {
 
 	const { name, children, fillProps = {} } = props;
 
-	useEffect( () => {
+	useLayoutEffect( () => {
 		const instance = instanceRef.current;
 		registry.registerSlot( name, instance );
 		return () => registry.unregisterSlot( name, instance );

@@ -14,6 +14,7 @@ import getClickableItemProps from '../utils/get-clickable-item-props';
 
 function ColumnPrimary< Item >( {
 	item,
+	level,
 	titleField,
 	mediaField,
 	descriptionField,
@@ -21,6 +22,7 @@ function ColumnPrimary< Item >( {
 	isItemClickable,
 }: {
 	item: Item;
+	level?: number;
 	titleField?: NormalizedField< Item >;
 	mediaField?: NormalizedField< Item >;
 	descriptionField?: NormalizedField< Item >;
@@ -44,6 +46,11 @@ function ColumnPrimary< Item >( {
 			<VStack spacing={ 0 }>
 				{ titleField && (
 					<div { ...clickableProps }>
+						{ level !== undefined && (
+							<span className="dataviews-view-table__level">
+								{ '—'.repeat( level ) }&nbsp;
+							</span>
+						) }
 						<titleField.render item={ item } />
 					</div>
 				) }

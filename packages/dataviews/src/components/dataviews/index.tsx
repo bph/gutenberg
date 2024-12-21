@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
  */
 import { __experimentalHStack as HStack } from '@wordpress/components';
 import { useMemo, useState } from '@wordpress/element';
+import { useResizeObserver } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -47,6 +48,7 @@ type DataViewsProps< Item > = {
 	onClickItem?: ( item: Item ) => void;
 	isItemClickable?: ( item: Item ) => boolean;
 	header?: ReactNode;
+	getItemLevel?: ( item: Item ) => number;
 } & ( Item extends ItemWithId
 	? { getItemId?: ( item: Item ) => string }
 	: { getItemId: ( item: Item ) => string } );
@@ -64,6 +66,7 @@ export default function DataViews< Item >( {
 	actions = EMPTY_ARRAY,
 	data,
 	getItemId = defaultGetItemId,
+	getItemLevel,
 	isLoading = false,
 	paginationInfo,
 	defaultLayouts,
@@ -73,6 +76,15 @@ export default function DataViews< Item >( {
 	isItemClickable = defaultIsItemClickable,
 	header,
 }: DataViewsProps< Item > ) {
+	const [ containerWidth, setContainerWidth ] = useState( 0 );
+	const containerRef = useResizeObserver(
+		( resizeObserverEntries: any ) => {
+			setContainerWidth(
+				resizeObserverEntries[ 0 ].borderBoxSize[ 0 ].inlineSize
+			);
+		},
+		{ box: 'border-box' }
+	);
 	const [ selectionState, setSelectionState ] = useState< string[] >( [] );
 	const isUncontrolled =
 		selectionProperty === undefined || onChangeSelection === undefined;
@@ -115,11 +127,13 @@ export default function DataViews< Item >( {
 				openedFilter,
 				setOpenedFilter,
 				getItemId,
+				getItemLevel,
 				isItemClickable,
 				onClickItem,
+				containerWidth,
 			} }
 		>
-			<div className="dataviews-wrapper">
+			<div className="dataviews-wrapper" ref={ containerRef }>
 				<HStack
 					alignment="top"
 					justify="space-between"

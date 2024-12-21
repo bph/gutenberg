@@ -624,7 +624,7 @@ function pickStyleKeys( treeToPickFrom ) {
 	// clone the style objects so that `getFeatureDeclarations` can remove consumed keys from it
 	const clonedEntries = pickedEntries.map( ( [ key, style ] ) => [
 		key,
-		structuredClone( style ),
+		JSON.parse( JSON.stringify( style ) ),
 	] );
 	return Object.fromEntries( clonedEntries );
 }

@@ -55,12 +55,15 @@ test.describe( 'Template resolution', () => {
 				status: 'publish',
 			} );
 			await admin.editPost( newPage.id );
+			await page.locator( 'role=button[name="Block Inserter"i]' ).click();
 			await editor.openDocumentSettingsSidebar();
 			await expect(
 				page.getByRole( 'button', { name: 'Template options' } )
 			).toHaveText( 'Single Entries' );
 			await updateSiteSettings( { requestUtils, pageId: newPage.id } );
 			await page.reload();
+			await page.locator( 'role=button[name="Block Inserter"i]' ).click();
+			await editor.openDocumentSettingsSidebar();
 			await expect(
 				page.getByRole( 'button', { name: 'Template options' } )
 			).toHaveText( 'Index' );
@@ -81,6 +84,7 @@ test.describe( 'Template resolution', () => {
 				postType: 'page',
 				canvas: 'edit',
 			} );
+			await page.locator( 'role=button[name="Block Inserter"i]' ).click();
 			await editor.openDocumentSettingsSidebar();
 			await expect(
 				page.getByRole( 'button', { name: 'Template options' } )

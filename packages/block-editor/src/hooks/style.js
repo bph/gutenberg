@@ -245,7 +245,7 @@ export function omitStyle( style, paths, preserveReference = false ) {
 
 	let newStyle = style;
 	if ( ! preserveReference ) {
-		newStyle = structuredClone( style );
+		newStyle = JSON.parse( JSON.stringify( style ) );
 	}
 
 	if ( ! Array.isArray( paths ) ) {

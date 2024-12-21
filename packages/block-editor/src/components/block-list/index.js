@@ -12,11 +12,7 @@ import {
 	useDispatch,
 	useRegistry,
 } from '@wordpress/data';
-import {
-	useViewportMatch,
-	useMergeRefs,
-	useDebounce,
-} from '@wordpress/compose';
+import { useMergeRefs, useDebounce } from '@wordpress/compose';
 import {
 	createContext,
 	useMemo,
@@ -46,7 +42,6 @@ export const IntersectionObserver = createContext();
 const pendingBlockVisibilityUpdatesPerRegistry = new WeakMap();
 
 function Root( { className, ...settings } ) {
-	const isLargeViewport = useViewportMatch( 'medium' );
 	const { isOutlineMode, isFocusMode, temporarilyEditingAsBlocks } =
 		useSelect( ( select ) => {
 			const { getSettings, getTemporarilyEditingAsBlocks, isTyping } =
@@ -105,7 +100,7 @@ function Root( { className, ...settings } ) {
 			] ),
 			className: clsx( 'is-root-container', className, {
 				'is-outline-mode': isOutlineMode,
-				'is-focus-mode': isFocusMode && isLargeViewport,
+				'is-focus-mode': isFocusMode,
 			} ),
 		},
 		settings

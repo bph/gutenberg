@@ -41,7 +41,6 @@
 	}
 }
 
-/* stylelint-disable-next-line scss/at-rule-no-unknown -- '@container' not globally permitted */
 @container (max-width: 430px) {
 	.edit-site-page-header {
 		padding: $grid-unit-20 $grid-unit-30;

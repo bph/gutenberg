@@ -13,6 +13,7 @@ import {
 	Spinner,
 	Flex,
 	FlexItem,
+	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
@@ -20,6 +21,7 @@ import { useInstanceId } from '@wordpress/compose';
 /**
  * Internal dependencies
  */
+import { unlock } from '../../lock-unlock';
 import ItemActions from '../../components/dataviews-item-actions';
 import DataViewsSelectionCheckbox from '../../components/dataviews-selection-checkbox';
 import {
@@ -35,6 +37,7 @@ import type {
 import type { SetSelection } from '../../private-types';
 import getClickableItemProps from '../utils/get-clickable-item-props';
 import { useUpdatedPreviewSizeOnViewportChange } from './preview-size-picker';
+const { Badge } = unlock( componentsPrivateApis );
 
 interface GridItemProps< Item > {
 	view: ViewGridType;
@@ -175,12 +178,12 @@ function GridItem< Item >( {
 					>
 						{ badgeFields.map( ( field ) => {
 							return (
-								<FlexItem
+								<Badge
 									key={ field.id }
 									className="dataviews-view-grid__field-value"
 								>
 									<field.render item={ item } />
-								</FlexItem>
+								</Badge>
 							);
 						} ) }
 					</HStack>

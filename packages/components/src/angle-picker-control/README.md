@@ -23,6 +23,7 @@ function Example() {
   );
 }
 ```
+
 ## Props
 
 ### `as`
