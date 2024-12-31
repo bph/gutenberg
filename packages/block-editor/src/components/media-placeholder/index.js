@@ -15,7 +15,7 @@ import {
 	__experimentalInputControlSuffixWrapper as InputControlSuffixWrapper,
 	withFilters,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { keyboardReturn } from '@wordpress/icons';
@@ -482,7 +482,7 @@ export function MediaPlaceholder( {
 										) }
 										onClick={ openFileDialog }
 									>
-										{ __( 'Upload' ) }
+										{ _x( 'Upload', 'verb' ) }
 									</Button>
 									{ uploadMediaLibraryButton }
 									{ renderUrlSelectionUI() }
@@ -512,7 +512,7 @@ export function MediaPlaceholder( {
 									'block-editor-media-placeholder__upload-button'
 								) }
 							>
-								{ __( 'Upload' ) }
+								{ _x( 'Upload', 'verb' ) }
 							</Button>
 						) }
 						onChange={ onUpload }

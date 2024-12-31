@@ -264,7 +264,7 @@ export default function BoxInputControl( {
 					}
 					aria-valuetext={
 						marks[ presetIndex !== undefined ? presetIndex + 1 : 0 ]
-							.label
+							.tooltip
 					}
 					renderTooltipContent={ ( index ) =>
 						marks[ ! index ? 0 : index ].tooltip

@@ -140,4 +140,9 @@ $swatch-gap: 12px;
 	&:hover {
 		opacity: 1;
 	}
+
+	@media (hover: none) {
+		// Show reset button on devices that do not support hover.
+		opacity: 1;
+	}
 }

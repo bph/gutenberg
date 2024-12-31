@@ -318,7 +318,9 @@ function MetaBoxesMain() {
 			// the event to end the drag is captured by the target (resize handle)
 			// whether or not it’s under the pointer.
 			onPointerDown: ( { pointerId, target } ) => {
-				target.setPointerCapture( pointerId );
+				if ( separatorRef.current.parentElement.contains( target ) ) {
+					target.setPointerCapture( pointerId );
+				}
 			},
 			onResizeStart: ( event, direction, elementRef ) => {
 				if ( isAutoHeight ) {
@@ -405,6 +407,9 @@ function Layout( {
 			const isRenderingPostOnly = getRenderingMode() === 'post-only';
 			const isNotDesignPostType =
 				! DESIGN_POST_TYPES.includes( currentPostType );
+			const isDirectlyEditingPattern =
+				currentPostType === 'wp_block' &&
+				! onNavigateToPreviousEntityRecord;
 
 			return {
 				mode: getEditorMode(),
@@ -415,7 +420,9 @@ function Layout( {
 					!! select( blockEditorStore ).getBlockSelectionStart(),
 				showIconLabels: get( 'core', 'showIconLabels' ),
 				isDistractionFree: get( 'core', 'distractionFree' ),
-				showMetaBoxes: isNotDesignPostType && ! isZoomOut(),
+				showMetaBoxes:
+					( isNotDesignPostType && ! isZoomOut() ) ||
+					isDirectlyEditingPattern,
 				isWelcomeGuideVisible: isFeatureActive( 'welcomeGuide' ),
 				templateId:
 					supportsTemplateMode &&
@@ -433,6 +440,7 @@ function Layout( {
 			currentPostId,
 			isEditingTemplate,
 			settings.supportsTemplateMode,
+			onNavigateToPreviousEntityRecord,
 		]
 	);
 	useMetaBoxInitialization( hasActiveMetaboxes );

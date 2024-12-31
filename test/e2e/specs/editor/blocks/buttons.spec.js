@@ -268,7 +268,7 @@ test.describe( 'Buttons', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page
-			.getByRole( 'radiogroup', { name: 'Button width' } )
+			.getByRole( 'radiogroup', { name: 'Width' } )
 			.getByRole( 'radio', { name: '25%' } )
 			.click();
 

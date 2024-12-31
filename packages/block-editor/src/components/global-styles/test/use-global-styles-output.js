@@ -855,7 +855,7 @@ describe( 'global styles renderer', () => {
 
 		it( 'should return block selectors data with old experimental selectors', () => {
 			const imageSupports = {
-				border: {
+				__experimentalBorder: {
 					radius: true,
 					__experimentalSelector: 'img, .crop-area',
 				},

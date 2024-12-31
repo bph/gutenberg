@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Internal
+
+-   The bundled `rtlcss-webpack-plugin` dependency has been replaced with a modified fork of the plugin to fix issues with the original package ([#68201](https://github.com/WordPress/gutenberg/pull/68201)).
+-   The bundled `sass` dependency has been updated from `^1.50.0` to `^1.54.0` ([#68380](https://github.com/WordPress/gutenberg/pull/68380)).
+
 ## 30.7.0 (2024-12-11)
 
 ### Internal

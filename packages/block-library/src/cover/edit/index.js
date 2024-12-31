@@ -114,11 +114,18 @@ function CoverEdit( {
 
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
-	const media = useSelect(
-		( select ) =>
-			featuredImage &&
-			select( coreStore ).getMedia( featuredImage, { context: 'view' } ),
-		[ featuredImage ]
+	const { media } = useSelect(
+		( select ) => {
+			return {
+				media:
+					featuredImage && useFeaturedImage
+						? select( coreStore ).getMedia( featuredImage, {
+								context: 'view',
+						  } )
+						: undefined,
+			};
+		},
+		[ featuredImage, useFeaturedImage ]
 	);
 	const mediaUrl =
 		media?.media_details?.sizes?.[ sizeSlug ]?.source_url ??

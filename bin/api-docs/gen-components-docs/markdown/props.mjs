@@ -33,7 +33,6 @@ export function generateMarkdownPropsJson( props, { headingLevel = 2 } = {} ) {
 
 			return [
 				{ [ `h${ headingLevel + 1 }` ]: `\`${ key }\`` },
-				prop.description,
 				{
 					ul: [
 						`Type: \`${ renderPropType( prop.type ) }\``,
@@ -42,6 +41,7 @@ export function generateMarkdownPropsJson( props, { headingLevel = 2 } = {} ) {
 							`Default: \`${ prop.defaultValue.value }\``,
 					].filter( Boolean ),
 				},
+				{ md: prop.description },
 			];
 		} )
 		.filter( Boolean );

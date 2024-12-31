@@ -8,7 +8,7 @@ const { realpathSync } = require( 'fs' );
 /**
  * WordPress dependencies
  */
-const { PhpFilePathsPlugin } = require( '@wordpress/scripts/utils' );
+const PhpFilePathsPlugin = require( '@wordpress/scripts/plugins/php-file-paths-plugin' );
 
 /**
  * Internal dependencies

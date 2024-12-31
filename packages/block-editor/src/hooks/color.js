@@ -290,7 +290,7 @@ export function ColorEdit( { clientId, name, setAttributes, settings } ) {
 
 	const defaultControls = getBlockSupport( name, [
 		COLOR_SUPPORT_KEY,
-		'defaultControls',
+		'__experimentalDefaultControls',
 	] );
 
 	const enableContrastChecking =

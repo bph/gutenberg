@@ -323,7 +323,7 @@ export default function TracksEditor( { tracks = [], onChange } ) {
 														openFileDialog();
 													} }
 												>
-													{ __( 'Upload' ) }
+													{ _x( 'Upload', 'verb' ) }
 												</MenuItem>
 											);
 										} }

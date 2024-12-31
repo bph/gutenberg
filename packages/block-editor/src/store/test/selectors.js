@@ -4465,6 +4465,7 @@ describe( 'getBlockEditingMode', () => {
 			'9b9c5c3f-2e46-4f02-9e14-9fe9515b958f': {},
 		},
 		blockEditingModes: new Map( [] ),
+		derivedBlockEditingModes: new Map( [] ),
 	};
 
 	const hasContentRoleAttribute = jest.fn( () => false );
@@ -4519,6 +4520,13 @@ describe( 'getBlockEditingMode', () => {
 			blockEditingModes: new Map( [
 				[ 'ef45d5fd-5234-4fd5-ac4f-c3736c7f9337', 'disabled' ],
 			] ),
+			derivedBlockEditingModes: new Map( [
+				[ 'b26fc763-417d-4f01-b81c-2ec61e14a972', 'disabled' ],
+				[ '9b9c5c3f-2e46-4f02-9e14-9fe9515b958f', 'disabled' ],
+				[ 'b3247f75-fd94-4fef-97f9-5bfd162cc416', 'disabled' ],
+				[ 'e178812d-ce5e-48c7-a945-8ae4ffcbbb7c', 'disabled' ],
+				[ '9b9c5c3f-2e46-4f02-9e14-9fed515b958s', 'disabled' ],
+			] ),
 		};
 		expect(
 			getBlockEditingMode( state, 'b3247f75-fd94-4fef-97f9-5bfd162cc416' )
@@ -4545,6 +4553,12 @@ describe( 'getBlockEditingMode', () => {
 				[ 'ef45d5fd-5234-4fd5-ac4f-c3736c7f9337', 'default' ],
 				[ '9b9c5c3f-2e46-4f02-9e14-9fe9515b958f', 'disabled' ],
 			] ),
+			derivedBlockEditingModes: new Map( [
+				[ '6cf70164-9097-4460-bcbf-200560546988', 'disabled' ],
+				[ 'b3247f75-fd94-4fef-97f9-5bfd162cc416', 'disabled' ],
+				[ 'e178812d-ce5e-48c7-a945-8ae4ffcbbb7c', 'disabled' ],
+				[ '9b9c5c3f-2e46-4f02-9e14-9fed515b958s', 'disabled' ],
+			] ),
 		};
 		expect(
 			getBlockEditingMode( state, 'b3247f75-fd94-4fef-97f9-5bfd162cc416' )
@@ -4555,6 +4569,15 @@ describe( 'getBlockEditingMode', () => {
 		const state = {
 			...baseState,
 			blockEditingModes: new Map( [ [ '', 'disabled' ] ] ),
+			derivedBlockEditingModes: new Map( [
+				[ '6cf70164-9097-4460-bcbf-200560546988', 'disabled' ],
+				[ 'ef45d5fd-5234-4fd5-ac4f-c3736c7f9337', 'disabled' ],
+				[ 'b26fc763-417d-4f01-b81c-2ec61e14a972', 'disabled' ],
+				[ '9b9c5c3f-2e46-4f02-9e14-9fe9515b958f', 'disabled' ],
+				[ 'b3247f75-fd94-4fef-97f9-5bfd162cc416', 'disabled' ],
+				[ 'e178812d-ce5e-48c7-a945-8ae4ffcbbb7c', 'disabled' ],
+				[ '9b9c5c3f-2e46-4f02-9e14-9fed515b958s', 'disabled' ],
+			] ),
 		};
 		expect(
 			getBlockEditingMode( state, 'b3247f75-fd94-4fef-97f9-5bfd162cc416' )

@@ -75,6 +75,8 @@ function ButtonTrigger< Item >( {
 		<Button
 			label={ label }
 			icon={ action.icon }
+			disabled={ !! action.disabled }
+			accessibleWhenDisabled
 			isDestructive={ action.isDestructive }
 			size="compact"
 			onClick={ onClick }
@@ -90,7 +92,7 @@ function MenuItemTrigger< Item >( {
 	const label =
 		typeof action.label === 'string' ? action.label : action.label( items );
 	return (
-		<Menu.Item onClick={ onClick }>
+		<Menu.Item disabled={ action.disabled } onClick={ onClick }>
 			<Menu.ItemLabel>{ label }</Menu.ItemLabel>
 		</Menu.Item>
 	);

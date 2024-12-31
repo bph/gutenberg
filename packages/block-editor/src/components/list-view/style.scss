@@ -553,12 +553,17 @@ svg {
 }
 
 .list-view-appender .block-editor-inserter__toggle {
-	background-color: #1e1e1e;
-	color: #fff;
-	margin: $grid-unit-10 0 0 24px;
-	height: 24px;
-	min-width: 24px;
+	background-color: $gray-900;
+	color: $white;
+	margin: $grid-unit-10 0 0 $grid-unit-30;
+	height: $button-size-small;
 	padding: 0;
+
+	// TODO: Consider passing size="small" to the Inserter toggle instead.
+	// Special dimensions for this button.
+	&.has-icon.is-next-40px-default-size {
+		min-width: $button-size-small;
+	}
 
 	&:hover,
 	&:focus {

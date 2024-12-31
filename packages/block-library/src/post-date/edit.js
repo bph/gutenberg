@@ -34,6 +34,11 @@ import { edit } from '@wordpress/icons';
 import { DOWN } from '@wordpress/keycodes';
 import { useSelect } from '@wordpress/data';
 
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
+
 export default function PostDateEdit( {
 	attributes: { textAlign, format, isLink, displayType },
 	context: { postId, postType: postTypeSlug, queryId },
@@ -45,6 +50,7 @@ export default function PostDateEdit( {
 			[ `wp-block-post-date__modified-date` ]: displayType === 'modified',
 		} ),
 	} );
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	// Use internal state instead of a ref to make sure that the component
 	// re-renders when the popover's anchor updates.
@@ -170,6 +176,7 @@ export default function PostDateEdit( {
 							displayType: 'date',
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						hasValue={ () =>

@@ -1,13 +1,8 @@
 /**
- * External dependencies
- */
-import clsx from 'clsx';
-
-/**
  * WordPress dependencies
  */
 import { useRef } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { speak } from '@wordpress/a11y';
 import {
 	FormFileUpload,
@@ -61,10 +56,7 @@ const MediaReplaceFlow = ( {
 	handleUpload = true,
 	popoverProps,
 } ) => {
-	const mediaUpload = useSelect( ( select ) => {
-		return select( blockEditorStore ).getSettings().mediaUpload;
-	}, [] );
-	const canUpload = !! mediaUpload;
+	const { getSettings } = useSelect( blockEditorStore );
 	const editMediaButtonRef = useRef();
 	const errorNoticeID = `block-editor/media-replace-flow/error-notice/${ ++uniqueId }`;
 
@@ -107,7 +99,7 @@ const MediaReplaceFlow = ( {
 			return onSelect( files );
 		}
 		onFilesUpload( files );
-		mediaUpload( {
+		getSettings().mediaUpload( {
 			allowedTypes,
 			filesList: files,
 			onFileChange: ( [ media ] ) => {
@@ -188,7 +180,7 @@ const MediaReplaceFlow = ( {
 												openFileDialog();
 											} }
 										>
-											{ __( 'Upload' ) }
+											{ _x( 'Upload', 'verb' ) }
 										</MenuItem>
 									);
 								} }
@@ -219,15 +211,7 @@ const MediaReplaceFlow = ( {
 					</NavigableMenu>
 					{ onSelectURL && (
 						// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-						<form
-							className={ clsx(
-								'block-editor-media-flow__url-input',
-								{
-									'has-siblings':
-										canUpload || onToggleFeaturedImage,
-								}
-							) }
-						>
+						<form className="block-editor-media-flow__url-input">
 							<span className="block-editor-media-replace-flow__image-url-label">
 								{ __( 'Current media URL:' ) }
 							</span>

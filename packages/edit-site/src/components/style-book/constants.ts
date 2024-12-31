@@ -148,6 +148,55 @@ export const STYLE_BOOK_CATEGORIES: StyleBookCategory[] = [
 	},
 ];
 
+// Style book preview subcategories for all blocks section.
+export const STYLE_BOOK_ALL_BLOCKS_SUBCATEGORIES: StyleBookCategory[] = [
+	...STYLE_BOOK_THEME_SUBCATEGORIES,
+	{
+		slug: 'media',
+		title: __( 'Media' ),
+		blocks: [ 'core/post-featured-image' ],
+	},
+	{
+		slug: 'widgets',
+		title: __( 'Widgets' ),
+		blocks: [],
+	},
+	{
+		slug: 'embed',
+		title: __( 'Embeds' ),
+		include: [],
+	},
+];
+
+// Style book preview categories are organised slightly differently to the editor ones.
+export const STYLE_BOOK_PREVIEW_CATEGORIES: StyleBookCategory[] = [
+	{
+		slug: 'overview',
+		title: __( 'Overview' ),
+		blocks: [],
+	},
+	{
+		slug: 'text',
+		title: __( 'Text' ),
+		blocks: [
+			'core/post-content',
+			'core/home-link',
+			'core/navigation-link',
+		],
+	},
+	{
+		slug: 'colors',
+		title: __( 'Colors' ),
+		blocks: [],
+	},
+	{
+		slug: 'blocks',
+		title: __( 'All Blocks' ),
+		blocks: [],
+		subcategories: STYLE_BOOK_ALL_BLOCKS_SUBCATEGORIES,
+	},
+];
+
 // Forming a "block formatting context" to prevent margin collapsing.
 // @see https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context
 const ROOT_CONTAINER = `

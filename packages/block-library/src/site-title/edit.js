@@ -123,16 +123,16 @@ export default function SiteTitleEdit( {
 					label={ __( 'Settings' ) }
 					resetAll={ () => {
 						setAttributes( {
-							isLink: false,
+							isLink: true,
 							linkTarget: '_self',
 						} );
 					} }
 					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
-						hasValue={ () => isLink !== false }
+						hasValue={ () => ! isLink }
 						label={ __( 'Make title link to home' ) }
-						onDeselect={ () => setAttributes( { isLink: false } ) }
+						onDeselect={ () => setAttributes( { isLink: true } ) }
 						isShownByDefault
 					>
 						<ToggleControl

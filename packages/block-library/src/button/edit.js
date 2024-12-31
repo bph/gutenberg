@@ -39,6 +39,8 @@ import {
 	__experimentalGetElementClassName,
 	store as blockEditorStore,
 	useBlockEditingMode,
+	getTypographyClassesAndStyles as useTypographyProps,
+	useSettings,
 } from '@wordpress/block-editor';
 import { displayShortcut, isKeyboardEvent, ENTER } from '@wordpress/keycodes';
 import { link, linkOff } from '@wordpress/icons';
@@ -125,14 +127,14 @@ function WidthPanel( { selectedWidth, setAttributes } ) {
 			dropdownMenuProps={ dropdownMenuProps }
 		>
 			<ToolsPanelItem
-				label={ __( 'Button width' ) }
+				label={ __( 'Width' ) }
 				isShownByDefault
 				hasValue={ () => !! selectedWidth }
 				onDeselect={ () => setAttributes( { width: undefined } ) }
 				__nextHasNoMarginBottom
 			>
 				<ToggleGroupControl
-					label={ __( 'Button width' ) }
+					label={ __( 'Width' ) }
 					value={ selectedWidth }
 					onChange={ ( newWidth ) =>
 						setAttributes( { width: newWidth } )
@@ -266,6 +268,19 @@ function ButtonEdit( props ) {
 		[ context, isSelected, metadata?.bindings?.url ]
 	);
 
+	const [ fluidTypographySettings, layout ] = useSettings(
+		'typography.fluid',
+		'layout'
+	);
+	const typographyProps = useTypographyProps( attributes, {
+		typography: {
+			fluid: fluidTypographySettings,
+		},
+		layout: {
+			wideSize: layout?.wideSize,
+		},
+	} );
+
 	return (
 		<>
 			<div
@@ -273,7 +288,6 @@ function ButtonEdit( props ) {
 				className={ clsx( blockProps.className, {
 					[ `has-custom-width wp-block-button__width-${ width }` ]:
 						width,
-					[ `has-custom-font-size` ]: blockProps.style.fontSize,
 				} ) }
 			>
 				<RichText
@@ -292,11 +306,14 @@ function ButtonEdit( props ) {
 						'wp-block-button__link',
 						colorProps.className,
 						borderProps.className,
+						typographyProps.className,
 						{
 							[ `has-text-align-${ textAlign }` ]: textAlign,
 							// For backwards compatibility add style that isn't
 							// provided via block support.
 							'no-border-radius': style?.border?.radius === 0,
+							[ `has-custom-font-size` ]:
+								blockProps.style.fontSize,
 						},
 						__experimentalGetElementClassName( 'button' )
 					) }
@@ -305,6 +322,8 @@ function ButtonEdit( props ) {
 						...colorProps.style,
 						...spacingProps.style,
 						...shadowProps.style,
+						...typographyProps.style,
+						writingMode: undefined,
 					} }
 					onReplace={ onReplace }
 					onMerge={ mergeBlocks }

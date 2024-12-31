@@ -72,12 +72,14 @@ export default function FontFamilyControl( {
 		);
 	}
 
+	const selectedValue =
+		options.find( ( option ) => option.key === value ) ?? '';
 	return (
 		<CustomSelectControl
 			__next40pxDefaultSize={ __next40pxDefaultSize }
 			__shouldNotWarnDeprecated36pxSize
 			label={ __( 'Font' ) }
-			value={ value }
+			value={ selectedValue }
 			onChange={ ( { selectedItem } ) => onChange( selectedItem.key ) }
 			options={ options }
 			className={ clsx( 'block-editor-font-family-control', className, {

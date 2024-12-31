@@ -79,7 +79,7 @@ add_filter( 'rest_endpoints', 'add_rest_method');
 
 ### skipBlockSupportAttributes
 
-Remove attributes and style properties applied by the block supports. This prevents duplication of styles in the block wrapper and the `ServerSideRender` components. Even if certain features skip serialization to HTML markup by `skipSerialization`, all attributes and style properties are removed.
+Remove attributes and style properties applied by the block supports. This prevents duplication of styles in the block wrapper and the `ServerSideRender` components. Even if certain features skip serialization to HTML markup by `__experimentalSkipSerialization`, all attributes and style properties are removed.
 
 -   Type: `Boolean`
 -   Required: No

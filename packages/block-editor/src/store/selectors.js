@@ -3087,9 +3087,7 @@ export const getBlockEditingMode = createRegistrySelector(
 				const isContent = hasContentRoleAttribute( name );
 				return isContent ? 'contentOnly' : 'disabled';
 			}
-			// Otherwise, check if there's an ancestor that is contentOnly
-			const parentMode = getBlockEditingMode( state, rootClientId );
-			return parentMode === 'contentOnly' ? 'default' : parentMode;
+			return 'default';
 		}
 );
 

@@ -118,8 +118,14 @@ const SetAsPostsPageModal = ( { items, closeModal } ) => {
 
 export const useSetAsPostsPageAction = () => {
 	const { pageOnFront, pageForPosts } = useSelect( ( select ) => {
-		const { getEntityRecord } = select( coreStore );
-		const siteSettings = getEntityRecord( 'root', 'site' );
+		const { getEntityRecord, canUser } = select( coreStore );
+		const siteSettings = canUser( 'read', {
+			kind: 'root',
+			name: 'site',
+		} )
+			? getEntityRecord( 'root', 'site' )
+			: undefined;
+
 		return {
 			pageOnFront: siteSettings?.page_on_front,
 			pageForPosts: siteSettings?.page_for_posts,

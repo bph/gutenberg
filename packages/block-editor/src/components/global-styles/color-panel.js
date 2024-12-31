@@ -250,6 +250,9 @@ function ColorPanelDropdown( {
 									icon={ resetIcon }
 									onClick={ () => {
 										resetValue();
+										if ( isOpen ) {
+											onToggle();
+										}
 										// Return focus to parent button
 										colorGradientDropdownButtonRef.current?.focus();
 									} }

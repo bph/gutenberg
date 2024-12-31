@@ -21,7 +21,13 @@ export default meta;
 
 const Template: StoryFn< typeof DropZone > = ( props ) => {
 	return (
-		<div style={ { background: 'lightgray', padding: 16 } }>
+		<div
+			style={ {
+				background: 'lightgray',
+				padding: 32,
+				position: 'relative',
+			} }
+		>
 			Drop something here
 			<DropZone { ...props } />
 		</div>

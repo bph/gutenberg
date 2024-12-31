@@ -13,6 +13,7 @@ import {
 	ToggleControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalVStack as VStack,
 } from '@wordpress/components';
 
 import {
@@ -166,24 +167,29 @@ function ColumnInspectorControls( {
 					hasValue={ () => count }
 					onDeselect={ () => updateColumns( count, minCount ) }
 				>
-					<RangeControl
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						label={ __( 'Columns' ) }
-						value={ count }
-						onChange={ ( value ) =>
-							updateColumns( count, Math.max( minCount, value ) )
-						}
-						min={ Math.max( 1, minCount ) }
-						max={ Math.max( 6, count ) }
-					/>
-					{ count > 6 && (
-						<Notice status="warning" isDismissible={ false }>
-							{ __(
-								'This column count exceeds the recommended amount and may cause visual breakage.'
-							) }
-						</Notice>
-					) }
+					<VStack spacing={ 4 }>
+						<RangeControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							label={ __( 'Columns' ) }
+							value={ count }
+							onChange={ ( value ) =>
+								updateColumns(
+									count,
+									Math.max( minCount, value )
+								)
+							}
+							min={ Math.max( 1, minCount ) }
+							max={ Math.max( 6, count ) }
+						/>
+						{ count > 6 && (
+							<Notice status="warning" isDismissible={ false }>
+								{ __(
+									'This column count exceeds the recommended amount and may cause visual breakage.'
+								) }
+							</Notice>
+						) }
+					</VStack>
 				</ToolsPanelItem>
 			) }
 			<ToolsPanelItem

@@ -23,7 +23,6 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { TRASH_POST_NOTICE_ID } from './constants';
 import { localAutosaveSet } from './local-autosave';
 import {
 	getNotificationArgumentsForSaveSuccess,
@@ -347,7 +346,6 @@ export const trashPost =
 		const postType = await registry
 			.resolveSelect( coreStore )
 			.getPostType( postTypeSlug );
-		registry.dispatch( noticesStore ).removeNotice( TRASH_POST_NOTICE_ID );
 		const { rest_base: restBase, rest_namespace: restNamespace = 'wp/v2' } =
 			postType;
 		dispatch( { type: 'REQUEST_POST_DELETE_START' } );

@@ -101,6 +101,8 @@ function PrimaryActionGridCell< Item >( {
 				render={
 					<Button
 						label={ label }
+						disabled={ !! primaryAction.disabled }
+						accessibleWhenDisabled
 						icon={ primaryAction.icon }
 						isDestructive={ primaryAction.isDestructive }
 						size="small"
@@ -124,6 +126,8 @@ function PrimaryActionGridCell< Item >( {
 				render={
 					<Button
 						label={ label }
+						disabled={ !! primaryAction.disabled }
+						accessibleWhenDisabled
 						icon={ primaryAction.icon }
 						isDestructive={ primaryAction.isDestructive }
 						size="small"

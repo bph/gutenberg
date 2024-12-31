@@ -49,7 +49,7 @@
 					"default": []
 				},
 				"port": {
-					"description": "The primary port number to use for the installation. You'll access the instance through the port: 'http://localhost:8888'.",
+					"description": "The primary port number to use for the installation. You'll access the instance through the port: http://localhost:8888",
 					"type": "integer",
 					"default": 8888
 				},
@@ -114,6 +114,11 @@
 						}
 					},
 					"default": {}
+				},
+				"testsPort": {
+					"description": "The port number for the test site. You'll access the instance through the port: http://localhost:8889",
+					"type": "integer",
+					"default": 8889
 				}
 			}
 		},
@@ -125,7 +130,7 @@
 						"$ref": "#/definitions/wpEnvPropertyNames"
 					},
 					{
-						"enum": [ "$schema", "env" ]
+						"enum": [ "$schema", "env", "testsPort" ]
 					}
 				]
 			}

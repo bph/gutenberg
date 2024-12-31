@@ -6,7 +6,7 @@ const { validate } = require( 'schema-utils' );
 /**
  * Internal dependencies
  */
-const { getPhpFilePaths } = require( './config' );
+const { getPhpFilePaths } = require( '../../utils' );
 
 const phpFilePathsPluginSchema = {
 	type: 'object',
@@ -57,4 +57,4 @@ class PhpFilePathsPlugin {
 	}
 }
 
-module.exports = { PhpFilePathsPlugin };
+module.exports = PhpFilePathsPlugin;

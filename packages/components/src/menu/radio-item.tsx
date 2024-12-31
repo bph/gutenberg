@@ -28,7 +28,7 @@ export const MenuRadioItem = forwardRef<
 	HTMLDivElement,
 	WordPressComponentProps< MenuRadioItemProps, 'div', false >
 >( function MenuRadioItem(
-	{ suffix, children, hideOnClick = false, ...props },
+	{ suffix, children, disabled = false, hideOnClick = false, ...props },
 	ref
 ) {
 	const menuContext = useContext( MenuContext );
@@ -44,6 +44,7 @@ export const MenuRadioItem = forwardRef<
 			ref={ ref }
 			{ ...props }
 			accessibleWhenDisabled
+			disabled={ disabled }
 			hideOnClick={ hideOnClick }
 			store={ menuContext.store }
 		>

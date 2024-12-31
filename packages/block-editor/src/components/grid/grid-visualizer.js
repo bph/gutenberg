@@ -62,6 +62,17 @@ const GridVisualizerGrid = forwardRef(
 				observer.observe( element );
 				observers.push( observer );
 			}
+
+			const mutationObserver = new window.MutationObserver( () => {
+				setGridInfo( getGridInfo( gridElement ) );
+			} );
+			mutationObserver.observe( gridElement, {
+				attributeFilter: [ 'style', 'class' ],
+				childList: true,
+				subtree: true,
+			} );
+			observers.push( mutationObserver );
+
 			return () => {
 				for ( const observer of observers ) {
 					observer.disconnect();

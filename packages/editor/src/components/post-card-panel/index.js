@@ -12,7 +12,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { decodeEntities } from '@wordpress/html-entities';
+import { __unstableStripHTML as stripHTML } from '@wordpress/dom';
 
 /**
  * Internal dependencies
@@ -94,7 +94,7 @@ export default function PostCardPanel( {
 			labels?.name
 		);
 	} else if ( postTitle ) {
-		title = decodeEntities( postTitle );
+		title = stripHTML( postTitle );
 	}
 
 	return (

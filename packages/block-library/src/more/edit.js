@@ -10,6 +10,10 @@ import {
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { ENTER } from '@wordpress/keycodes';
 import { getDefaultBlockName, createBlock } from '@wordpress/blocks';
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const DEFAULT_TEXT = __( 'Read more' );
 
@@ -41,6 +45,8 @@ export default function MoreEdit( {
 		width: `${ ( customText ? customText : DEFAULT_TEXT ).length + 1.2 }em`,
 	};
 
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+
 	return (
 		<>
 			<InspectorControls>
@@ -51,6 +57,7 @@ export default function MoreEdit( {
 							noTeaser: false,
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						label={ __( 'Hide excerpt' ) }

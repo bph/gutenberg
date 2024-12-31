@@ -44,6 +44,7 @@ import {
 	getColors,
 	getNavigationChildBlockProps,
 } from '../navigation/edit/utils';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const ALLOWED_BLOCKS = [
 	'core/navigation-link',
@@ -153,6 +154,7 @@ export default function NavigationSubmenuEdit( {
 	const isDraggingWithin = useIsDraggingWithin( listItemRef );
 	const itemLabelPlaceholder = __( 'Add text…' );
 	const ref = useRef();
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const {
 		parentCount,
@@ -394,6 +396,7 @@ export default function NavigationSubmenuEdit( {
 							rel: '',
 						} );
 					} }
+					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						label={ __( 'Text' ) }

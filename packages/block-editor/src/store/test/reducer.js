@@ -12,8 +12,7 @@ import {
 	createBlock,
 	privateApis,
 } from '@wordpress/blocks';
-import { combineReducers, select } from '@wordpress/data';
-import { store as preferencesStore } from '@wordpress/preferences';
+import { combineReducers } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -3576,6 +3575,7 @@ describe( 'state', () => {
 				blocks,
 				settings,
 				zoomLevel,
+				blockEditingModes,
 			} )
 		);
 
@@ -3598,15 +3598,6 @@ describe( 'state', () => {
 		describe( 'edit mode', () => {
 			let initialState;
 			beforeAll( () => {
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'edit' ),
-						};
-					}
-					return select( storeName );
-				} );
-
 				initialState = dispatchActions(
 					[
 						{
@@ -3651,10 +3642,6 @@ describe( 'state', () => {
 				);
 			} );
 
-			afterAll( () => {
-				select.mockRestore();
-			} );
-
 			it( 'returns no block editing modes when zoomed out / navigation mode are not active and there are no synced patterns', () => {
 				expect( initialState.derivedBlockEditingModes ).toEqual(
 					new Map()
@@ -3665,15 +3652,6 @@ describe( 'state', () => {
 		describe( 'synced patterns', () => {
 			let initialState;
 			beforeAll( () => {
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'edit' ),
-						};
-					}
-					return select( storeName );
-				} );
-
 				// Simulates how the editor typically inserts controlled blocks,
 				// - first the pattern is inserted with no inner blocks.
 				// - next the pattern is marked as a controlled block.
@@ -3818,10 +3796,6 @@ describe( 'state', () => {
 				);
 			} );
 
-			afterAll( () => {
-				select.mockRestore();
-			} );
-
 			it( 'returns the expected block editing modes for synced patterns', () => {
 				// Only the parent pattern and its own children that have bindings
 				// are in contentOnly mode. All other blocks are disabled.
@@ -3831,6 +3805,28 @@ describe( 'state', () => {
 							'pattern-paragraph': 'disabled',
 							'pattern-group': 'disabled',
 							'pattern-paragraph-with-overrides': 'contentOnly',
+							'nested-pattern': 'disabled',
+							'nested-paragraph': 'disabled',
+							'nested-group': 'disabled',
+							'nested-paragraph-with-overrides': 'disabled',
+						} )
+					)
+				);
+			} );
+
+			it( 'returns the expected block editing modes for synced patterns in navigation mode', () => {
+				expect( initialState.derivedNavModeBlockEditingModes ).toEqual(
+					new Map(
+						Object.entries( {
+							'': 'contentOnly', // Section root.
+							'group-1': 'contentOnly', // Section.
+							'paragraph-1': 'contentOnly', // Content block in section.
+							'group-2': 'disabled',
+							'paragraph-2': 'contentOnly', // Content block in section.
+							'root-pattern': 'contentOnly', // Section.
+							'pattern-paragraph': 'disabled',
+							'pattern-group': 'disabled',
+							'pattern-paragraph-with-overrides': 'contentOnly', // Pattern child with bindings.
 							'nested-pattern': 'disabled',
 							'nested-paragraph': 'disabled',
 							'nested-group': 'disabled',
@@ -3853,74 +3849,6 @@ describe( 'state', () => {
 				);
 
 				expect( derivedBlockEditingModes ).toEqual( new Map() );
-			} );
-
-			it( 'returns the expected block editing modes for synced patterns when switching to navigation mode', () => {
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'navigation' ),
-						};
-					}
-					return select( storeName );
-				} );
-
-				const {
-					derivedBlockEditingModes,
-					derivedNavModeBlockEditingModes,
-				} = dispatchActions(
-					[
-						{
-							type: 'SET_EDITOR_MODE',
-							mode: 'navigation',
-						},
-					],
-					testReducer,
-					initialState
-				);
-
-				expect( derivedBlockEditingModes ).toEqual(
-					new Map(
-						Object.entries( {
-							'pattern-paragraph': 'disabled',
-							'pattern-group': 'disabled',
-							'pattern-paragraph-with-overrides': 'contentOnly', // Pattern child with bindings.
-							'nested-pattern': 'disabled',
-							'nested-paragraph': 'disabled',
-							'nested-group': 'disabled',
-							'nested-paragraph-with-overrides': 'disabled',
-						} )
-					)
-				);
-
-				expect( derivedNavModeBlockEditingModes ).toEqual(
-					new Map(
-						Object.entries( {
-							'': 'contentOnly', // Section root.
-							'group-1': 'contentOnly', // Section.
-							'paragraph-1': 'contentOnly', // Content block in section.
-							'group-2': 'disabled',
-							'paragraph-2': 'contentOnly', // Content block in section.
-							'root-pattern': 'contentOnly', // Section.
-							'pattern-paragraph': 'disabled',
-							'pattern-group': 'disabled',
-							'pattern-paragraph-with-overrides': 'contentOnly', // Pattern child with bindings.
-							'nested-pattern': 'disabled',
-							'nested-paragraph': 'disabled',
-							'nested-group': 'disabled',
-							'nested-paragraph-with-overrides': 'disabled',
-						} )
-					)
-				);
-
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'edit' ),
-						};
-					}
-					return select( storeName );
-				} );
 			} );
 
 			it( 'returns the expected block editing modes for synced patterns when switching to zoomed out mode', () => {
@@ -3961,51 +3889,103 @@ describe( 'state', () => {
 			let initialState;
 
 			beforeAll( () => {
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'navigation' ),
-						};
-					}
-					return select( storeName );
-				} );
-
 				initialState = dispatchActions(
 					[
 						{
 							type: 'UPDATE_SETTINGS',
 							settings: {
-								[ sectionRootClientIdKey ]: '',
+								[ sectionRootClientIdKey ]: 'section-root',
 							},
 						},
 						{
 							type: 'RESET_BLOCKS',
 							blocks: [
 								{
+									name: 'core/template-part',
+									clientId: 'header',
+									attributes: {},
+									innerBlocks: [],
+								},
+								{
 									name: 'core/group',
-									clientId: 'group-1',
+									clientId: 'section-root',
 									attributes: {},
 									innerBlocks: [
 										{
-											name: 'core/paragraph',
-											clientId: 'paragraph-1',
-											attributes: {},
-											innerBlocks: [],
-										},
-										{
 											name: 'core/group',
-											clientId: 'group-2',
+											clientId: 'group-1',
 											attributes: {},
 											innerBlocks: [
 												{
 													name: 'core/paragraph',
-													clientId: 'paragraph-2',
+													clientId: 'paragraph-1',
 													attributes: {},
 													innerBlocks: [],
+												},
+												{
+													name: 'core/group',
+													clientId: 'group-2',
+													attributes: {},
+													innerBlocks: [
+														{
+															name: 'core/paragraph',
+															clientId:
+																'paragraph-2',
+															attributes: {},
+															innerBlocks: [],
+														},
+													],
 												},
 											],
 										},
 									],
+								},
+								{
+									name: 'core/template-part',
+									clientId: 'footer',
+									attributes: {},
+									innerBlocks: [],
+								},
+							],
+						},
+						{
+							type: 'SET_HAS_CONTROLLED_INNER_BLOCKS',
+							clientId: 'header',
+							hasControlledInnerBlocks: true,
+						},
+						{
+							type: 'REPLACE_INNER_BLOCKS',
+							rootClientId: 'header',
+							blocks: [
+								{
+									name: 'core/group',
+									clientId: 'header-group',
+									attributes: {},
+									innerBlocks: [
+										{
+											name: 'core/paragraph',
+											clientId: 'header-paragraph',
+											attributes: {},
+											innerBlocks: [],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: 'SET_HAS_CONTROLLED_INNER_BLOCKS',
+							clientId: 'footer',
+							hasControlledInnerBlocks: true,
+						},
+						{
+							type: 'REPLACE_INNER_BLOCKS',
+							rootClientId: 'footer',
+							blocks: [
+								{
+									name: 'core/paragraph',
+									clientId: 'footer-paragraph',
+									attributes: {},
+									innerBlocks: [],
 								},
 							],
 						},
@@ -4014,19 +3994,64 @@ describe( 'state', () => {
 				);
 			} );
 
-			afterAll( () => {
-				select.mockRestore();
-			} );
-
 			it( 'returns the expected block editing modes', () => {
 				expect( initialState.derivedNavModeBlockEditingModes ).toEqual(
 					new Map(
 						Object.entries( {
-							'': 'contentOnly', // Section root.
+							'': 'disabled',
+							header: 'contentOnly', // Template part.
+							'header-group': 'disabled', // Content block in template part.
+							'header-paragraph': 'contentOnly', // Content block in template part.
+							footer: 'contentOnly', // Template part.
+							'footer-paragraph': 'contentOnly', // Content block in template part.
+							'section-root': 'contentOnly', // Section root.
 							'group-1': 'contentOnly', // Section block.
 							'paragraph-1': 'contentOnly', // Content block in section.
 							'group-2': 'disabled', // Non-content block in section.
 							'paragraph-2': 'contentOnly', // Content block in section.
+						} )
+					)
+				);
+			} );
+
+			it( 'allows content blocks to be disabled explicitly using the block editing mode', () => {
+				const {
+					derivedNavModeBlockEditingModes,
+					blockEditingModes: _blockEditingModes,
+				} = dispatchActions(
+					[
+						{
+							type: 'SET_BLOCK_EDITING_MODE',
+							clientId: 'paragraph-1',
+							mode: 'disabled',
+						},
+					],
+					testReducer,
+					initialState
+				);
+
+				// Paragraph 1 is explicitly disabled and omitted from the
+				// derived block editing modes.
+				expect( _blockEditingModes ).toEqual(
+					new Map(
+						Object.entries( {
+							'paragraph-1': 'disabled',
+						} )
+					)
+				);
+				expect( derivedNavModeBlockEditingModes ).toEqual(
+					new Map(
+						Object.entries( {
+							'': 'disabled',
+							header: 'contentOnly',
+							'header-group': 'disabled',
+							'header-paragraph': 'contentOnly',
+							footer: 'contentOnly',
+							'footer-paragraph': 'contentOnly',
+							'section-root': 'contentOnly',
+							'group-1': 'contentOnly',
+							'group-2': 'disabled',
+							'paragraph-2': 'contentOnly',
 						} )
 					)
 				);
@@ -4047,7 +4072,13 @@ describe( 'state', () => {
 				expect( derivedNavModeBlockEditingModes ).toEqual(
 					new Map(
 						Object.entries( {
-							'': 'contentOnly',
+							'': 'disabled',
+							header: 'contentOnly', // Template part.
+							'header-group': 'disabled', // Content block in template part.
+							'header-paragraph': 'contentOnly', // Content block in template part.
+							footer: 'contentOnly', // Template part.
+							'footer-paragraph': 'contentOnly', // Content block in template part.
+							'section-root': 'contentOnly',
 							'group-1': 'contentOnly',
 							'paragraph-1': 'contentOnly',
 						} )
@@ -4060,7 +4091,7 @@ describe( 'state', () => {
 					[
 						{
 							type: 'INSERT_BLOCKS',
-							rootClientId: '',
+							rootClientId: 'section-root',
 							blocks: [
 								{
 									name: 'core/group',
@@ -4091,7 +4122,13 @@ describe( 'state', () => {
 				expect( derivedNavModeBlockEditingModes ).toEqual(
 					new Map(
 						Object.entries( {
-							'': 'contentOnly', // Section root.
+							'': 'disabled', // Section root.
+							header: 'contentOnly', // Template part.
+							'header-group': 'disabled', // Content block in template part.
+							'header-paragraph': 'contentOnly', // Content block in template part.
+							footer: 'contentOnly', // Template part.
+							'footer-paragraph': 'contentOnly', // Content block in template part.
+							'section-root': 'contentOnly', // Section root.
 							'group-1': 'contentOnly', // Section block.
 							'paragraph-1': 'contentOnly', // Content block in section.
 							'group-2': 'disabled', // Non-content block in section.
@@ -4111,7 +4148,7 @@ describe( 'state', () => {
 							type: 'MOVE_BLOCKS_TO_POSITION',
 							clientIds: [ 'group-2' ],
 							fromRootClientId: 'group-1',
-							toRootClientId: '',
+							toRootClientId: 'section-root',
 						},
 					],
 					testReducer,
@@ -4120,7 +4157,13 @@ describe( 'state', () => {
 				expect( derivedNavModeBlockEditingModes ).toEqual(
 					new Map(
 						Object.entries( {
-							'': 'contentOnly', // Section root.
+							'': 'disabled', // Section root.
+							header: 'contentOnly', // Template part.
+							'header-group': 'disabled', // Content block in template part.
+							'header-paragraph': 'contentOnly', // Content block in template part.
+							footer: 'contentOnly', // Template part.
+							'footer-paragraph': 'contentOnly', // Content block in template part.
+							'section-root': 'contentOnly', // Section root.
 							'group-1': 'contentOnly', // Section block.
 							'paragraph-1': 'contentOnly', // Content block in section.
 							'group-2': 'contentOnly', // New section block.
@@ -4148,10 +4191,16 @@ describe( 'state', () => {
 					new Map(
 						Object.entries( {
 							'': 'disabled',
-							'group-1': 'contentOnly',
-							'paragraph-1': 'contentOnly',
-							'group-2': 'contentOnly',
-							'paragraph-2': 'contentOnly',
+							header: 'contentOnly', // Template part.
+							'header-group': 'disabled', // Content block in template part.
+							'header-paragraph': 'contentOnly', // Content block in template part.
+							footer: 'contentOnly', // Template part.
+							'footer-paragraph': 'contentOnly', // Content block in template part.
+							'section-root': 'disabled',
+							'group-1': 'contentOnly', // New section root.
+							'paragraph-1': 'contentOnly', // Section and content block
+							'group-2': 'contentOnly', // Section.
+							'paragraph-2': 'contentOnly', // Content block.
 						} )
 					)
 				);
@@ -4222,49 +4271,6 @@ describe( 'state', () => {
 						} )
 					)
 				);
-			} );
-
-			it( 'overrides navigation mode', () => {
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'navigation' ),
-						};
-					}
-					return select( storeName );
-				} );
-
-				const { derivedBlockEditingModes } = dispatchActions(
-					[
-						{
-							type: 'SET_EDITOR_MODE',
-							mode: 'navigation',
-						},
-					],
-					testReducer,
-					initialState
-				);
-
-				expect( derivedBlockEditingModes ).toEqual(
-					new Map(
-						Object.entries( {
-							'': 'contentOnly', // Section root.
-							'group-1': 'contentOnly', // Section block.
-							'paragraph-1': 'disabled',
-							'group-2': 'disabled',
-							'paragraph-2': 'disabled',
-						} )
-					)
-				);
-
-				select.mockImplementation( ( storeName ) => {
-					if ( storeName === preferencesStore ) {
-						return {
-							get: jest.fn( () => 'edit' ),
-						};
-					}
-					return select( storeName );
-				} );
 			} );
 
 			it( 'removes block editing modes when blocks are removed', () => {

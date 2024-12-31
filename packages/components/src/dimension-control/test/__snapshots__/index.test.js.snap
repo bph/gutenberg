@@ -63,7 +63,7 @@ exports[`DimensionControl rendering renders with custom sizes 1`] = `
 }
 
 .emotion-12 {
-  color: #1e1e1e;
+  color: var(--wp-components-color-foreground, #1e1e1e);
   line-height: 1.4;
   margin: 0;
   text-wrap: balance;
@@ -345,7 +345,7 @@ exports[`DimensionControl rendering renders with defaults 1`] = `
 }
 
 .emotion-12 {
-  color: #1e1e1e;
+  color: var(--wp-components-color-foreground, #1e1e1e);
   line-height: 1.4;
   margin: 0;
   text-wrap: balance;
@@ -637,7 +637,7 @@ exports[`DimensionControl rendering renders with icon and custom icon label 1`] 
 }
 
 .emotion-12 {
-  color: #1e1e1e;
+  color: var(--wp-components-color-foreground, #1e1e1e);
   line-height: 1.4;
   margin: 0;
   text-wrap: balance;
@@ -941,7 +941,7 @@ exports[`DimensionControl rendering renders with icon and default icon label 1`]
 }
 
 .emotion-12 {
-  color: #1e1e1e;
+  color: var(--wp-components-color-foreground, #1e1e1e);
   line-height: 1.4;
   margin: 0;
   text-wrap: balance;

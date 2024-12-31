@@ -37,10 +37,8 @@ The user may change the state of this block by applying different styles: a text
 After some user modifications to the block, the initial markup may become something like this:
 
 ```html
-<p
-	class="has-color has-green-color has-font-size has-small-font-size my-custom-class"
-	style="line-height: 1em"
-></p>
+<p class="has-color has-green-color has-font-size has-small-font-size my-custom-class"
+	style="line-height: 1em"></p>
 ```
 
 This is what we refer to as "user-provided block styles", also know as "local styles" or "serialized styles". Essentially, each tool (font size, color, etc) ends up adding some classes and/or inline styles to the block markup. The CSS styling for these classes is part of the block, global, or theme stylesheets.
@@ -125,7 +123,7 @@ The block supports API only serializes the font size value to the wrapper, resul
 
 This is an active area of work you can follow [in the tracking issue](https://github.com/WordPress/gutenberg/issues/38167). The linked proposal is exploring a different way to serialize the user changes: instead of each block support serializing its own data (for example, classes such as `has-small-font-size`, `has-green-color`) the idea is the block would get a single class instead (for example, `wp-style-UUID`) and the CSS styling for that class will be generated in the server by WordPress.
 
-While work continues in that proposal, there's an escape hatch, an experimental option block authors can use. Any block support can skip the serialization to HTML markup by using `skipSerialization`. For example:
+While work continues in that proposal, there's an escape hatch, an experimental option block authors can use. Any block support can skip the serialization to HTML markup by using `__experimentalSkipSerialization`. For example:
 
 ```json
 {
@@ -134,7 +132,7 @@ While work continues in that proposal, there's an escape hatch, an experimental 
 	"supports": {
 		"typography": {
 			"fontSize": true,
-			"skipSerialization": true
+			"__experimentalSkipSerialization": true
 		}
 	}
 }
@@ -142,7 +140,7 @@ While work continues in that proposal, there's an escape hatch, an experimental 
 
 This means that the typography block support will do all of the things (create a UI control, bind the block attribute to the control, etc) except serializing the user values into the HTML markup. The classes and inline styles will not be automatically applied to the wrapper and it is the block author's responsibility to implement this in the `edit`, `save`, and `render_callback` functions. See [this issue](https://github.com/WordPress/gutenberg/issues/28913) for examples of how it was done for some blocks provided by WordPress.
 
-Note that, if `skipSerialization` is enabled for a group (typography, color, spacing) it affects _all_ block supports within this group. In the example above _all_ the properties within the `typography` group will be affected (e.g. `fontSize`, `lineHeight`, `fontFamily` .etc).
+Note that, if `__experimentalSkipSerialization` is enabled for a group (typography, color, spacing) it affects _all_ block supports within this group. In the example above _all_ the properties within the `typography` group will be affected (e.g. `fontSize`, `lineHeight`, `fontFamily` .etc).
 
 To enable for a _single_ property only, you may use an array to declare which properties are to be skipped. In the example below, only `fontSize` will skip serialization, leaving other items within the `typography` group (e.g. `lineHeight`, `fontFamily` .etc) unaffected.
 
@@ -154,7 +152,7 @@ To enable for a _single_ property only, you may use an array to declare which pr
 		"typography": {
 			"fontSize": true,
 			"lineHeight": true,
-			"skipSerialization": [ "fontSize" ]
+			"__experimentalSkipSerialization": [ "fontSize" ]
 		}
 	}
 }
@@ -475,7 +473,7 @@ If blocks do this, they need to be registered in the server using the `block.jso
 
 Every chunk of styles can only use a single selector.
 
-This is particularly relevant if the block is using `skipSerialization` to serialize the different style properties to different nodes other than the wrapper. See "Current limitations of blocks supports" for more.
+This is particularly relevant if the block is using `__experimentalSkipSerialization` to serialize the different style properties to different nodes other than the wrapper. See "Current limitations of blocks supports" for more.
 
 #### 3. **Only a single property per block**
 

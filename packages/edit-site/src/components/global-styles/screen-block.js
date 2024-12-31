@@ -113,8 +113,9 @@ function ScreenBlock( { name, variation } ) {
 	if (
 		settingsForBlockElement?.spacing?.blockGap &&
 		blockType?.supports?.spacing?.blockGap &&
-		( blockType?.supports?.spacing?.skipSerialization === true ||
-			blockType?.supports?.spacing?.skipSerialization?.some?.(
+		( blockType?.supports?.spacing?.__experimentalSkipSerialization ===
+			true ||
+			blockType?.supports?.spacing?.__experimentalSkipSerialization?.some?.(
 				( spacingType ) => spacingType === 'blockGap'
 			) )
 	) {

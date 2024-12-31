@@ -359,24 +359,18 @@ export default function PageListEdit( {
 					) }
 
 					{ allowConvertToLinks && (
-						<ToolsPanelItem
-							label={ __( 'Edit Menu' ) }
-							isShownByDefault
-							hasValue={ () => false }
-						>
-							<div>
-								<p>{ convertDescription }</p>
-								<Button
-									__next40pxDefaultSize
-									variant="primary"
-									accessibleWhenDisabled
-									disabled={ ! hasResolvedPages }
-									onClick={ convertToNavigationLinks }
-								>
-									{ __( 'Edit' ) }
-								</Button>
-							</div>
-						</ToolsPanelItem>
+						<div style={ { gridColumn: '1 / -1' } }>
+							<p>{ convertDescription }</p>
+							<Button
+								__next40pxDefaultSize
+								variant="primary"
+								accessibleWhenDisabled
+								disabled={ ! hasResolvedPages }
+								onClick={ convertToNavigationLinks }
+							>
+								{ __( 'Edit' ) }
+							</Button>
+						</div>
 					) }
 				</ToolsPanel>
 			</InspectorControls>

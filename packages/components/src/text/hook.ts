@@ -105,8 +105,8 @@ export default function useText(
 				getOptimalTextShade( optimizeReadabilityFor ) === 'dark';
 
 			sx.optimalTextColor = isOptimalTextColorDark
-				? css( { color: COLORS.gray[ 900 ] } )
-				: css( { color: COLORS.white } );
+				? css( { color: COLORS.theme.foreground } )
+				: css( { color: COLORS.theme.foregroundInverted } );
 		}
 
 		return cx(

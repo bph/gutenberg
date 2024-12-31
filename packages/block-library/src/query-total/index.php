@@ -40,14 +40,14 @@ function render_block_core_query_total( $attributes, $content, $block ) {
 	switch ( $attributes['displayType'] ) {
 		case 'range-display':
 			if ( $start === $end ) {
-				$range_text = sprintf(
+				$output = sprintf(
 					/* translators: 1: Start index of posts, 2: Total number of posts */
 					__( 'Displaying %1$s of %2$s' ),
 					$start,
 					$max_rows
 				);
 			} else {
-				$range_text = sprintf(
+				$output = sprintf(
 					/* translators: 1: Start index of posts, 2: End index of posts, 3: Total number of posts */
 					__( 'Displaying %1$s – %2$s of %3$s' ),
 					$start,
@@ -56,17 +56,12 @@ function render_block_core_query_total( $attributes, $content, $block ) {
 				);
 			}
 
-			$output = sprintf( '<p>%s</p>', $range_text );
 			break;
 
 		case 'total-results':
 		default:
 			// translators: %d: number of results.
-			$total_text = sprintf( _n( '%d result found', '%d results found', $max_rows ), $max_rows );
-			$output     = sprintf(
-				'<p>%s</p>',
-				$total_text
-			);
+			$output = sprintf( _n( '%d result found', '%d results found', $max_rows ), $max_rows );
 			break;
 	}
 

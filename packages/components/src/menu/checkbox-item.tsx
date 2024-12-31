@@ -21,7 +21,7 @@ export const MenuCheckboxItem = forwardRef<
 	HTMLDivElement,
 	WordPressComponentProps< MenuCheckboxItemProps, 'div', false >
 >( function MenuCheckboxItem(
-	{ suffix, children, hideOnClick = false, ...props },
+	{ suffix, children, disabled = false, hideOnClick = false, ...props },
 	ref
 ) {
 	const menuContext = useContext( MenuContext );
@@ -37,6 +37,7 @@ export const MenuCheckboxItem = forwardRef<
 			ref={ ref }
 			{ ...props }
 			accessibleWhenDisabled
+			disabled={ disabled }
 			hideOnClick={ hideOnClick }
 			store={ menuContext.store }
 		>
