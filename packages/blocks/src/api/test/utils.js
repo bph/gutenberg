@@ -12,6 +12,7 @@ import {
 	isUnmodifiedDefaultBlock,
 	getAccessibleBlockLabel,
 	getBlockLabel,
+	isBlockRegistered,
 	__experimentalSanitizeBlockAttributes,
 	getBlockAttributesNamesByRole,
 	isContentBlock,
@@ -209,6 +210,20 @@ describe( 'getAccessibleBlockLabel', () => {
 
 		expect( getAccessibleBlockLabel( blockType, attributes, 3 ) ).toBe(
 			'Recipe Block. Row 3'
+		);
+	} );
+} );
+
+describe( 'isBlockRegistered', () => {
+	it( 'returns true if the block is registered', () => {
+		registerBlockType( 'core/test-block', { title: 'Test block' } );
+		expect( isBlockRegistered( 'core/test-block' ) ).toBe( true );
+		unregisterBlockType( 'core/test-block' );
+	} );
+
+	it( 'returns false if the block is not registered', () => {
+		expect( isBlockRegistered( 'core/not-registered-test-block' ) ).toBe(
+			false
 		);
 	} );
 } );
