@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 30.8.0 (2025-01-02)
+
 ### Enhancements
 
 -   Recommend listing JavaScript entry points as paths passed to the `start` and `build` commands ([#68251](https://github.com/WordPress/gutenberg/pull/68251)).

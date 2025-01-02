@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 6.15.0 (2025-01-02)
+
 ### Enhancements
 
 -   Allow more iterables to be used in each directives ([#67798](https://github.com/WordPress/gutenberg/pull/67798)).

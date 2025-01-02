@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.11.0 (2025-01-02)
+
 ### Bug Fixes
 
 -   Fixed commonjs export ([#67962](https://github.com/WordPress/gutenberg/pull/67962))

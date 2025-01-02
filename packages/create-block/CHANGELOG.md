@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.58.0 (2025-01-02)
+
 ### Enhancement
 
 -   Add support for custom `textdomain` property for the scaffolded block ([#57197](https://github.com/WordPress/gutenberg/pull/57197)).

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 10.15.0 (2025-01-02)
+
 ### Enhancements
 
 -   Add support for WordPress multisite installations. Enabled via the new `multisite` environment config ([#67845](https://github.com/WordPress/gutenberg/pull/67845)).

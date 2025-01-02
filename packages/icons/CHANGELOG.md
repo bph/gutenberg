@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 10.15.0 (2025-01-02)
+
 -   Add new `caution` icon ([#66555](https://github.com/WordPress/gutenberg/pull/66555)).
 -   Add new `error` icon ([#66555](https://github.com/WordPress/gutenberg/pull/66555)).
 -   Deprecate `warning` icon and rename to `cautionFilled` ([#67895](https://github.com/WordPress/gutenberg/pull/67895)).

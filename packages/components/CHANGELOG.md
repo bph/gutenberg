@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 29.1.0 (2025-01-02)
+
 ### Enhancements
 
 -   `BoxControl`: Add presets support ([#67688](https://github.com/WordPress/gutenberg/pull/67688)).
