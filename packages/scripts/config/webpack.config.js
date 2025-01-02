@@ -30,7 +30,7 @@ const {
 	hasArgInCLI,
 	hasCssnanoConfig,
 	hasPostCSSConfig,
-	getWordPressSrcDirectory,
+	getProjectSourcePath,
 	getWebpackEntryPoints,
 	getAsBooleanFromENV,
 	getBlockJsonModuleFields,
@@ -302,14 +302,14 @@ const scriptConfig = {
 			} ),
 
 		new PhpFilePathsPlugin( {
-			context: getWordPressSrcDirectory(),
+			context: getProjectSourcePath(),
 			props: [ 'render', 'variations' ],
 		} ),
 		new CopyWebpackPlugin( {
 			patterns: [
 				{
 					from: '**/block.json',
-					context: getWordPressSrcDirectory(),
+					context: getProjectSourcePath(),
 					noErrorOnMissing: true,
 					transform( content, absoluteFrom ) {
 						const convertExtension = ( path ) => {
@@ -346,7 +346,7 @@ const scriptConfig = {
 								const runtimePath = relative(
 									dirname( absoluteFrom ),
 									fromProjectRoot(
-										getWordPressSrcDirectory() +
+										getProjectSourcePath() +
 											sep +
 											'runtime.js'
 									)
@@ -375,7 +375,7 @@ const scriptConfig = {
 				},
 				{
 					from: '**/*.php',
-					context: getWordPressSrcDirectory(),
+					context: getProjectSourcePath(),
 					noErrorOnMissing: true,
 					filter: ( filepath ) => {
 						return (
@@ -415,7 +415,7 @@ if ( hasExperimentalModulesFlag ) {
 			/** @type {ReadonlyArray<string>} */
 			this.blockJsonFiles = glob( '**/block.json', {
 				absolute: true,
-				cwd: fromProjectRoot( getWordPressSrcDirectory() ),
+				cwd: fromProjectRoot( getProjectSourcePath() ),
 			} );
 		}
 

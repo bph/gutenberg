@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Enhancements
+
+-   Recommend listing JavaScript entry points as paths passed to the `start` and `build` commands ([#68251](https://github.com/WordPress/gutenberg/pull/68251)).
+-   Introduce a new option `--source-path` to customize the source directory used with the `start` and `build` commands ([#68251](https://github.com/WordPress/gutenberg/pull/68251)).
+
 ### Internal
 
 -   The bundled `rtlcss-webpack-plugin` dependency has been replaced with a modified fork of the plugin to fix issues with the original package ([#68201](https://github.com/WordPress/gutenberg/pull/68201)).
