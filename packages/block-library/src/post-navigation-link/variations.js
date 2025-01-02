@@ -17,7 +17,7 @@ const variations = [
 		scope: [ 'inserter', 'transform' ],
 		example: {
 			attributes: {
-				label: 'Next post',
+				label: __( 'Next post' ),
 				arrow: 'arrow',
 			},
 		},
@@ -33,7 +33,7 @@ const variations = [
 		scope: [ 'inserter', 'transform' ],
 		example: {
 			attributes: {
-				label: 'Previous post',
+				label: __( 'Previous post' ),
 				arrow: 'arrow',
 			},
 		},
