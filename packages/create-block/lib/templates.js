@@ -59,6 +59,7 @@ const predefinedPluginTemplates = {
 			},
 			viewScript: 'file:./view.js',
 			example: {},
+			folderName: './src/$slug',
 		},
 		variants: {
 			static: {},
