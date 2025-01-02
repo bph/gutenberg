@@ -1,16 +1,15 @@
 /**
  * WordPress dependencies
  */
-import { useRef } from '@wordpress/element';
 import { __, _x } from '@wordpress/i18n';
 import { speak } from '@wordpress/a11y';
 import {
 	FormFileUpload,
 	NavigableMenu,
 	MenuItem,
-	ToolbarButton,
 	Dropdown,
 	withFilters,
+	ToolbarButton,
 } from '@wordpress/components';
 import { useSelect, withDispatch } from '@wordpress/data';
 import { DOWN } from '@wordpress/keycodes';
@@ -55,9 +54,9 @@ const MediaReplaceFlow = ( {
 	addToGallery,
 	handleUpload = true,
 	popoverProps,
+	renderToggle,
 } ) => {
 	const { getSettings } = useSelect( blockEditorStore );
-	const editMediaButtonRef = useRef();
 	const errorNoticeID = `block-editor/media-replace-flow/error-notice/${ ++uniqueId }`;
 
 	const onUploadError = ( message ) => {
@@ -133,17 +132,27 @@ const MediaReplaceFlow = ( {
 		<Dropdown
 			popoverProps={ popoverProps }
 			contentClassName="block-editor-media-replace-flow__options"
-			renderToggle={ ( { isOpen, onToggle } ) => (
-				<ToolbarButton
-					ref={ editMediaButtonRef }
-					aria-expanded={ isOpen }
-					aria-haspopup="true"
-					onClick={ onToggle }
-					onKeyDown={ openOnArrowDown }
-				>
-					{ name }
-				</ToolbarButton>
-			) }
+			renderToggle={ ( { isOpen, onToggle } ) => {
+				if ( renderToggle ) {
+					return renderToggle( {
+						'aria-expanded': isOpen,
+						'aria-haspopup': 'true',
+						onClick: onToggle,
+						onKeyDown: openOnArrowDown,
+						children: name,
+					} );
+				}
+				return (
+					<ToolbarButton
+						aria-expanded={ isOpen }
+						aria-haspopup="true"
+						onClick={ onToggle }
+						onKeyDown={ openOnArrowDown }
+					>
+						{ name }
+					</ToolbarButton>
+				);
+			} }
 			renderContent={ ( { onClose } ) => (
 				<>
 					<NavigableMenu className="block-editor-media-replace-flow__media-upload-menu">
@@ -222,7 +231,6 @@ const MediaReplaceFlow = ( {
 								showSuggestions={ false }
 								onChange={ ( { url } ) => {
 									onSelectURL( url );
-									editMediaButtonRef.current.focus();
 								} }
 							/>
 						</form>

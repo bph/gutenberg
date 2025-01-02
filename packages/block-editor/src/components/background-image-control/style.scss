@@ -23,7 +23,10 @@
 
 	.components-dropdown {
 		display: block;
-		height: 36px;
+
+		.block-editor-global-styles-background-panel__dropdown-toggle {
+			height: 40px;
+		}
 	}
 }
 
@@ -44,7 +47,6 @@
 
 	.components-dropdown {
 		display: block;
-		height: 36px;
 	}
 
 	button.components-button {

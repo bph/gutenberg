@@ -24,6 +24,7 @@ import {
 	Placeholder,
 	Spinner,
 	__experimentalDropdownContentWrapper as DropdownContentWrapper,
+	Button,
 } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { store as noticesStore } from '@wordpress/notices';
@@ -378,6 +379,9 @@ function BackgroundImageControls( {
 					/>
 				}
 				variant="secondary"
+				renderToggle={ ( props ) => (
+					<Button { ...props } __next40pxDefaultSize />
+				) }
 				onError={ onUploadError }
 				onReset={ () => {
 					closeAndFocus();
