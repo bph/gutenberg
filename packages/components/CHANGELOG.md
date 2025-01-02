@@ -28,6 +28,7 @@
 
 -   Add new `Badge` component ([#66555](https://github.com/WordPress/gutenberg/pull/66555)).
 -   `Menu`: refactor to more granular sub-components ([#67422](https://github.com/WordPress/gutenberg/pull/67422)).
+-   `Badge`: Support text truncation ([#68107](https://github.com/WordPress/gutenberg/pull/68107)).
 
 ### Internal
 

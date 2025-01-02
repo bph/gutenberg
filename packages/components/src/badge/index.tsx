@@ -56,9 +56,10 @@ function Badge( {
 					icon={ contextBasedIcon() }
 					size={ 16 }
 					fill="currentColor"
+					className="components-badge__icon"
 				/>
 			) }
-			{ children }
+			<span className="components-badge__content">{ children }</span>
 		</span>
 	);
 }
