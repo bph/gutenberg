@@ -11,26 +11,21 @@ import { View } from '@wordpress/primitives';
 import {
 	getColorClassName,
 	__experimentalGetGradientClass,
+	// @wordpress/block-editor imports are not typed.
+	// @ts-expect-error
 } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import type { Color, Gradient } from './types';
-
-type Props = {
-	colors: Color[] | Gradient[];
-	type: 'colors' | 'gradients';
-	templateColumns?: string | number;
-	itemHeight?: string;
-};
+import type { Color, Gradient, ColorExampleProps } from './types';
 
 const ColorExamples = ( {
 	colors,
 	type,
 	templateColumns = '1fr 1fr',
 	itemHeight = '52px',
-}: Props ): JSX.Element | null => {
+}: ColorExampleProps ): JSX.Element | null => {
 	if ( ! colors ) {
 		return null;
 	}

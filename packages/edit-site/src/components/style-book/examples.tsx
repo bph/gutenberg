@@ -7,16 +7,18 @@ import {
 	getBlockTypes,
 	getBlockFromExample,
 	createBlock,
+	// @wordpress/blocks imports are not typed.
+	// @ts-expect-error
 } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
 import type {
-	Block,
 	BlockExample,
 	ColorOrigin,
 	MultiOriginPalettes,
+	BlockType,
 } from './types';
 import ColorExamples from './color-examples';
 import DuotoneExamples from './duotone-examples';
@@ -37,11 +39,14 @@ function getColorExamples( colors: MultiOriginPalettes ): BlockExample[] {
 	const examples: BlockExample[] = [];
 
 	STYLE_BOOK_COLOR_GROUPS.forEach( ( group ) => {
-		const palette = colors[ group.type ].find(
-			( origin: ColorOrigin ) => origin.slug === group.origin
-		);
+		const palette = colors[ group.type as keyof MultiOriginPalettes ];
+		const paletteFiltered = Array.isArray( palette )
+			? palette.find(
+					( origin: ColorOrigin ) => origin.slug === group.origin
+			  )
+			: undefined;
 
-		if ( palette?.[ group.type ] ) {
+		if ( paletteFiltered?.[ group.type ] ) {
 			const example: BlockExample = {
 				name: group.slug,
 				title: group.title,
@@ -49,13 +54,15 @@ function getColorExamples( colors: MultiOriginPalettes ): BlockExample[] {
 			};
 			if ( group.type === 'duotones' ) {
 				example.content = (
-					<DuotoneExamples duotones={ palette[ group.type ] } />
+					<DuotoneExamples
+						duotones={ paletteFiltered[ group.type ] }
+					/>
 				);
 				examples.push( example );
 			} else {
 				example.content = (
 					<ColorExamples
-						colors={ palette[ group.type ] }
+						colors={ paletteFiltered[ group.type ] }
 						type={ group.type }
 					/>
 				);
@@ -79,9 +86,11 @@ function getOverviewBlockExamples(
 	const examples: BlockExample[] = [];
 
 	// Get theme palette from colors if they exist.
-	const themePalette = colors?.colors.find(
-		( origin: ColorOrigin ) => origin.slug === 'theme'
-	);
+	const themePalette = Array.isArray( colors?.colors )
+		? colors.colors.find(
+				( origin: ColorOrigin ) => origin.slug === 'theme'
+		  )
+		: undefined;
 
 	if ( themePalette ) {
 		const themeColorexample: BlockExample = {
@@ -91,7 +100,7 @@ function getOverviewBlockExamples(
 			content: (
 				<ColorExamples
 					colors={ themePalette.colors }
-					type={ colors }
+					type="colors"
 					templateColumns="repeat(auto-fill, minmax( 200px, 1fr ))"
 					itemHeight="32px"
 				/>
@@ -102,7 +111,7 @@ function getOverviewBlockExamples(
 	}
 
 	// Get examples for typography blocks.
-	const typographyBlockExamples: Block[] = [];
+	const typographyBlockExamples: BlockType[] = [];
 
 	if ( getBlockType( 'core/heading' ) ) {
 		const headingBlock = createBlock( 'core/heading', {
@@ -202,7 +211,7 @@ function getOverviewBlockExamples(
  */
 export function getExamples( colors: MultiOriginPalettes ): BlockExample[] {
 	const nonHeadingBlockExamples = getBlockTypes()
-		.filter( ( blockType ) => {
+		.filter( ( blockType: BlockType ) => {
 			const { name, example, supports } = blockType;
 			return (
 				name !== 'core/heading' &&
@@ -210,7 +219,7 @@ export function getExamples( colors: MultiOriginPalettes ): BlockExample[] {
 				supports?.inserter !== false
 			);
 		} )
-		.map( ( blockType ) => ( {
+		.map( ( blockType: BlockType ) => ( {
 			name: blockType.name,
 			title: blockType.title,
 			category: blockType.category,
