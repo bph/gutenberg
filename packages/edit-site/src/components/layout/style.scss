@@ -115,9 +115,12 @@
 
 		.edit-site-resizable-frame__inner-content {
 			box-shadow: $elevation-x-small;
-			transition: border-radius, box-shadow 0.4s;
 			// This ensure the radius work properly.
 			overflow: hidden;
+
+			@media not (prefers-reduced-motion) {
+				transition: border-radius, box-shadow 0.4s;
+			}
 
 			.edit-site-layout:not(.is-full-canvas) & {
 				border-radius: $radius-large;
@@ -195,8 +198,6 @@ html.canvas-mode-edit-transition::view-transition-group(toggle) {
 	}
 
 	&::before {
-		transition: box-shadow 0.1s ease;
-		@include reduce-motion("transition");
 		content: "";
 		display: block;
 		position: absolute;
@@ -206,6 +207,10 @@ html.canvas-mode-edit-transition::view-transition-group(toggle) {
 		left: 9px;
 		border-radius: $radius-medium;
 		box-shadow: none;
+
+		@media not (prefers-reduced-motion) {
+			transition: box-shadow 0.1s ease;
+		}
 	}
 
 	.edit-site-layout__view-mode-toggle-icon {

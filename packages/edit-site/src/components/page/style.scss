@@ -4,8 +4,10 @@
 	height: calc(100% - #{$header-height});
 	/* stylelint-disable-next-line property-no-unknown -- '@container' not globally permitted */
 	container: edit-site-page / inline-size;
-	transition: width ease-out 0.2s;
-	@include reduce-motion("transition");
+
+	@media not (prefers-reduced-motion) {
+		transition: width ease-out 0.2s;
+	}
 
 	@include break-medium() {
 		height: 100%;
@@ -19,8 +21,10 @@
 	position: sticky;
 	top: 0;
 	z-index: z-index(".edit-site-page-header");
-	transition: padding ease-out 0.1s;
-	@include reduce-motion("transition");
+
+	@media not (prefers-reduced-motion) {
+		transition: padding ease-out 0.1s;
+	}
 
 	.components-heading {
 		color: $gray-900;

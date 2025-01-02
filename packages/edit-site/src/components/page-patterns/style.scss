@@ -26,9 +26,11 @@
 	top: 0;
 	z-index: 2;
 	flex-shrink: 0;
-	transition: padding ease-out 0.1s;
-	@include reduce-motion("transition");
 	min-height: $grid-unit-50;
+
+	@media not (prefers-reduced-motion) {
+		transition: padding ease-out 0.1s;
+	}
 
 	.edit-site-patterns__title {
 		min-height: $grid-unit-50;

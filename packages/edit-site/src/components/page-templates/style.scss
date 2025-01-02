@@ -67,9 +67,11 @@
 		height: $grid-unit-20;
 		object-fit: cover;
 		opacity: 0;
-		transition: opacity 0.1s linear;
-		@include reduce-motion("transition");
 		border-radius: 100%;
+
+		@media not (prefers-reduced-motion) {
+			transition: opacity 0.1s linear;
+		}
 	}
 
 	&.is-loaded {

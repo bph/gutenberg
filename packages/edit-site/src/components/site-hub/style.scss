@@ -65,8 +65,10 @@
 		opacity: 0;
 		position: absolute;
 		right: 0;
-		transition: opacity 0.1s linear;
-		@include reduce-motion("transition");
+
+		@media not (prefers-reduced-motion) {
+			transition: opacity 0.1s linear;
+		}
 	}
 
 	&:hover::after,
