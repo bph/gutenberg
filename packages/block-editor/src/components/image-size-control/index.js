@@ -8,7 +8,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -137,7 +137,11 @@ export default function ImageSizeControl( {
 								<ToggleGroupControlOption
 									key={ scale }
 									value={ scale }
-									label={ `${ scale }%` }
+									label={ sprintf(
+										/* translators: Percentage value. */
+										__( '%1$d%%' ),
+										scale
+									) }
 								/>
 							);
 						} ) }

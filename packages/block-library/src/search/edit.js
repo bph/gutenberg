@@ -34,7 +34,7 @@ import {
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { Icon, search } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { __unstableStripHTML as stripHTML } from '@wordpress/dom';
 
 /**
@@ -470,7 +470,11 @@ export default function SearchEdit( {
 									<ToggleGroupControlOption
 										key={ widthValue }
 										value={ widthValue }
-										label={ `${ widthValue }%` }
+										label={ sprintf(
+											/* translators: Percentage value. */
+											__( '%1$d%%' ),
+											widthValue
+										) }
 									/>
 								);
 							} ) }

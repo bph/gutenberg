@@ -14,7 +14,7 @@ import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useEffect, useState, useRef, useMemo } from '@wordpress/element';
 import {
 	TextControl,
@@ -148,7 +148,11 @@ function WidthPanel( { selectedWidth, setAttributes } ) {
 							<ToggleGroupControlOption
 								key={ widthValue }
 								value={ widthValue }
-								label={ `${ widthValue }%` }
+								label={ sprintf(
+									/* translators: Percentage value. */
+									__( '%1$d%%' ),
+									widthValue
+								) }
 							/>
 						);
 					} ) }
