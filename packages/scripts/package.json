@@ -25,6 +25,7 @@
 	"files": [
 		"bin",
 		"config",
+		"plugins",
 		"scripts",
 		"utils"
 	],
