@@ -290,7 +290,7 @@ test.describe( 'Page List', () => {
 			await page.getByRole( 'button', { name: 'Layout' } ).click();
 			await page.getByRole( 'menuitemradio', { name: 'Table' } ).click();
 			const privacyPolicyCheckbox = page.getByRole( 'checkbox', {
-				name: 'Select Item: Privacy Policy',
+				name: 'Privacy Policy',
 			} );
 
 			await privacyPolicyCheckbox.check();
@@ -352,7 +352,7 @@ test.describe( 'Page List', () => {
 		// 	page,
 		// } ) => {
 		// 	const samplePage = page.getByRole( 'checkbox', {
-		// 		name: 'Select Item: Sample Page',
+		// 		name: 'Sample Page',
 		// 	} );
 
 		// 	await samplePage.check();
