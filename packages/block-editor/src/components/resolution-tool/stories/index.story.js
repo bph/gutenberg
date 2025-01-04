@@ -16,9 +16,59 @@ export default {
 	title: 'BlockEditor/ResolutionControl',
 	component: ResolutionTool,
 	tags: [ 'status-private' ],
+	parameters: {
+		docs: {
+			canvas: { sourceState: 'shown' },
+			description: {
+				component:
+					'A control for selecting image resolution with preset size options.',
+			},
+		},
+	},
 	argTypes: {
-		panelId: { control: false },
-		onChange: { action: 'changed' },
+		value: {
+			control: { type: null },
+			description: 'Currently selected resolution value.',
+			table: { type: { summary: 'string' } },
+		},
+		onChange: {
+			action: 'onChange',
+			control: { type: null },
+			description: 'Handles change in resolution selection.',
+			table: {
+				type: { summary: 'function' },
+			},
+		},
+		options: {
+			control: 'object',
+			description: 'Array of resolution options to display.',
+			table: {
+				type: { summary: 'array' },
+			},
+		},
+		defaultValue: {
+			control: 'radio',
+			options: [ 'thumbnail', 'medium', 'large', 'full' ],
+			description: 'Default resolution value.',
+			table: {
+				type: { summary: 'string' },
+			},
+		},
+		isShownByDefault: {
+			control: 'boolean',
+			description:
+				'Whether the control is shown by default in the panel.',
+			table: {
+				type: { summary: 'boolean' },
+			},
+		},
+		panelId: {
+			control: { type: null },
+			description: 'ID of the parent tools panel.',
+			table: {
+				type: { summary: 'string' },
+			},
+		},
 	},
 };
 
