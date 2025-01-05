@@ -39,7 +39,7 @@ function BlockStylesPanel( { clientId } ) {
 	);
 }
 
-const BlockInspector = ( { showNoBlockSelectedMessage = true } ) => {
+function BlockInspector() {
 	const {
 		count,
 		selectedBlockName,
@@ -137,14 +137,11 @@ const BlockInspector = ( { showNoBlockSelectedMessage = true } ) => {
 		! selectedBlockClientId ||
 		isSelectedBlockUnregistered
 	) {
-		if ( showNoBlockSelectedMessage ) {
-			return (
-				<span className="block-editor-block-inspector__no-blocks">
-					{ __( 'No block selected.' ) }
-				</span>
-			);
-		}
-		return null;
+		return (
+			<span className="block-editor-block-inspector__no-blocks">
+				{ __( 'No block selected.' ) }
+			</span>
+		);
 	}
 
 	return (
@@ -168,7 +165,7 @@ const BlockInspector = ( { showNoBlockSelectedMessage = true } ) => {
 			/>
 		</BlockInspectorSingleBlockWrapper>
 	);
-};
+}
 
 const BlockInspectorSingleBlockWrapper = ( { animate, wrapper, children } ) => {
 	return animate ? wrapper( children ) : children;
