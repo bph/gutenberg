@@ -113,7 +113,7 @@ type Optional< T > = T | undefined;
 /**
  * HTTP Query parameters sent with the API request to fetch the entity records.
  */
-type GetRecordsHttpQuery = Record< string, any >;
+export type GetRecordsHttpQuery = Record< string, any >;
 
 /**
  * Arguments for EntityRecord selectors.

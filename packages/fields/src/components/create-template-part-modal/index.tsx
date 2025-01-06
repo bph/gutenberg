@@ -11,6 +11,7 @@ import {
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import type { TemplatePartArea } from '@wordpress/core-data';
 import { store as coreStore } from '@wordpress/core-data';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
@@ -52,13 +53,6 @@ type CreateTemplatePartModalContentsProps = {
 	defaultTitle?: string;
 };
 
-type TemplatePartArea = {
-	area: string;
-	label: string;
-	icon: string;
-	description: string;
-};
-
 /**
  * A React component that renders a modal for creating a template part. The modal displays a title and the contents for creating the template part.
  * This component should not live in this package, it should be moved to a dedicated package responsible for managing template.
@@ -73,7 +67,6 @@ export default function CreateTemplatePartModal( {
 } & CreateTemplatePartModalContentsProps ) {
 	const defaultModalTitle = useSelect(
 		( select ) =>
-			// @ts-expect-error getPostType is not typed with 'wp_template_part' as argument.
 			select( coreStore ).getPostType( 'wp_template_part' )?.labels
 				?.add_new_item,
 		[]
@@ -135,7 +128,6 @@ export function CreateTemplatePartModalContents( {
 
 	const defaultTemplatePartAreas = useSelect(
 		( select ) =>
-			// @ts-expect-error getEntityRecord is not typed with unstableBase as argument.
 			select( coreStore ).getEntityRecord< {
 				default_template_part_areas: Array< TemplatePartArea >;
 			} >( 'root', '__unstableBase' )?.default_template_part_areas,
