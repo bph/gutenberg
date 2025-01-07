@@ -1,0 +1,7 @@
+.block-editor-media-placeholder__url-input-form {
+	min-width: 260px;
+
+	@include break-small() {
+		width: 300px;
+	}
+}
