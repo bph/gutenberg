@@ -359,7 +359,7 @@ describe( 'createI18n', () => {
 				'translated_plural_2'
 			);
 
-			// Reset the locale data and fallback to the defualt plural forms function.
+			// Reset the locale data and fallback to the default plural forms function.
 			locale.resetLocaleData(
 				{
 					singular: [

@@ -714,7 +714,7 @@ Returns the list of patterns based on their declared `blockTypes` and a block's 
 _Parameters_
 
 -   _state_ `Object`: Editor state.
--   _blockNames_ `string|string[]`: Block's name or array of block names to find matching pattens.
+-   _blockNames_ `string|string[]`: Block's name or array of block names to find matching patterns.
 -   _rootClientId_ `?string`: Optional target root client ID.
 
 _Returns_

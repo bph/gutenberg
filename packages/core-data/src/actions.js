@@ -450,7 +450,7 @@ export const undo =
 	};
 
 /**
- * Action triggered to redo the last undoed
+ * Action triggered to redo the last undone
  * edit to an entity record, if any.
  */
 export const redo =

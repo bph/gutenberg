@@ -15,8 +15,11 @@
 	cursor: pointer;
 	-webkit-appearance: none;
 	background: none;
-	transition: box-shadow 0.1s linear;
-	@include reduce-motion("transition");
+
+	@media not (prefers-reduced-motion) {
+		transition: box-shadow 0.1s linear;
+	}
+
 	height: $button-size;
 	align-items: center;
 	box-sizing: border-box;
@@ -245,10 +248,13 @@
 		text-align: left;
 		color: $components-color-accent;
 		text-decoration: underline;
-		transition-property: border, background, color;
-		transition-duration: 0.05s;
-		transition-timing-function: ease-in-out;
-		@include reduce-motion("transition");
+
+		@media not (prefers-reduced-motion) {
+			transition-property: border, background, color;
+			transition-duration: 0.05s;
+			transition-timing-function: ease-in-out;
+		}
+
 		height: auto;
 
 		&:focus {
@@ -275,11 +281,8 @@
 	&.is-secondary.is-busy,
 	&.is-secondary.is-busy:disabled,
 	&.is-secondary.is-busy[aria-disabled="true"] {
-		animation: components-button__busy-animation 2500ms infinite linear;
-		// This should be refactored to use the reduce-motion("animation") mixin
-		// as soon as https://github.com/WordPress/gutenberg/issues/55566 is closed.
-		@media (prefers-reduced-motion: reduce) {
-			animation-duration: 0s;
+		@media not (prefers-reduced-motion) {
+			animation: components-button__busy-animation 2500ms infinite linear;
 		}
 		background-size: 100px 100%;
 		/* stylelint-disable -- Disable reason: This function call looks nicer when each argument is on its own line. */
@@ -376,7 +379,7 @@
 		fill: currentColor;
 		outline: none;
 
-		// Optimizate for high contrast modes.
+		// Optimize for high contrast modes.
 		// See also https://blogs.windows.com/msedgedev/2020/09/17/styling-for-windows-high-contrast-with-new-standards-for-forced-colors/.
 		@media (forced-colors: active) {
 			fill: CanvasText;

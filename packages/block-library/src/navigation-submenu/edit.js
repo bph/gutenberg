@@ -276,7 +276,7 @@ export default function NavigationSubmenuEdit( {
 			// as it shares the CMD+K shortcut.
 			// See https://github.com/WordPress/gutenberg/pull/59845.
 			event.preventDefault();
-			// If we don't stop propogation, this event bubbles up to the parent submenu item
+			// If we don't stop propagation, this event bubbles up to the parent submenu item
 			event.stopPropagation();
 			setIsLinkOpen( true );
 			setOpenedBy( ref.current );

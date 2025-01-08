@@ -379,7 +379,7 @@ _Parameters_
 -   _props.post_ `[Object]`: The post object to edit. This is required.
 -   _props.\_\_unstableTemplate_ `[Object]`: The template object wrapper the edited post. This is optional and can only be used when the post type supports templates (like posts and pages).
 -   _props.settings_ `[Object]`: The settings object to use for the editor. This is optional and can be used to override the default settings.
--   _props.children_ `[Element]`: Children elements for which the BlockEditorProvider context should apply. This is optional.
+-   _props.children_ `[React.ReactNode]`: Children elements for which the BlockEditorProvider context should apply. This is optional.
 
 _Returns_
 

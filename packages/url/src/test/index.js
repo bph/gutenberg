@@ -796,7 +796,7 @@ describe( 'getQueryArg', () => {
 		expect( getQueryArg( url, 'baz' ) ).toBeUndefined();
 	} );
 
-	it( 'should get the value of an arry query arg', () => {
+	it( 'should get the value of an array query arg', () => {
 		const url = 'https://andalouses.example/beach?foo[]=bar&foo[]=baz';
 
 		expect( getQueryArg( url, 'foo' ) ).toEqual( [ 'bar', 'baz' ] );
@@ -823,7 +823,7 @@ describe( 'hasQueryArg', () => {
 		expect( hasQueryArg( url, 'baz' ) ).toBeFalsy();
 	} );
 
-	it( 'should return true for an arry query arg', () => {
+	it( 'should return true for an array query arg', () => {
 		const url = 'https://andalouses.example/beach?foo[]=bar&foo[]=baz';
 
 		expect( hasQueryArg( url, 'foo' ) ).toBeTruthy();

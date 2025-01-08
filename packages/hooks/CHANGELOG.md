@@ -185,7 +185,7 @@
 
 ### New Features
 
--   Enable an optional namespace parameter for `hasAction` & `hasFilter`. When checking if an action or filter exists, `hasAction` and `hasFilter` now accept an optional paramter to limit matches by namespace.
+-   Enable an optional namespace parameter for `hasAction` & `hasFilter`. When checking if an action or filter exists, `hasAction` and `hasFilter` now accept an optional parameter to limit matches by namespace.
 
 ## 2.4.0 (2019-06-12)
 

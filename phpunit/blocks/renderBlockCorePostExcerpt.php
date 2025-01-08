@@ -79,7 +79,7 @@ class Tests_Blocks_RenderBlockCorePostExcerpt extends WP_UnitTestCase {
 	/**
 	 * Test gutenberg_render_block_core_post_excerpt() method.
 	 */
-	public function test_should_render_correct_exceprt() {
+	public function test_should_render_correct_excerpt() {
 
 		$block           = new stdClass();
 		$GLOBALS['post'] = self::$post;

@@ -52,7 +52,7 @@ _Optional._ By default, all registered formats are allowed. This setting can be 
 	tagName="h2"
 	identifier="content"
 	value={ attributes.content }
-	allowedFormats={ [ 'core/bold', 'core/italic' ] } // Allow the content to be made bold or italic, but do not allow othe formatting options
+	allowedFormats={ [ 'core/bold', 'core/italic' ] } // Allow the content to be made bold or italic, but do not allow other formatting options
 	onChange={ ( content ) => setAttributes( { content } ) }
 	placeholder={ __( 'Heading...' ) }
 />

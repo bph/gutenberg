@@ -287,6 +287,12 @@ export const Input = styled.input< InputProps >`
 		&::-webkit-input-placeholder {
 			line-height: normal;
 		}
+
+		&[type='email'],
+		&[type='url'] {
+			/* rtl:ignore */
+			direction: ltr;
+		}
 	}
 `;
 

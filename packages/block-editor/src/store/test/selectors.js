@@ -3534,7 +3534,7 @@ describe( 'selectors', () => {
 		beforeAll( () => {
 			registerBlockType( 'core/with-tranforms-a', {
 				category: 'text',
-				title: 'Tranforms a',
+				title: 'Transforms a',
 				edit: () => {},
 				save: () => {},
 				transforms: {
@@ -3563,7 +3563,7 @@ describe( 'selectors', () => {
 			} );
 			registerBlockType( 'core/with-tranforms-b', {
 				category: 'text',
-				title: 'Tranforms b',
+				title: 'Transforms b',
 				edit: () => {},
 				save: () => {},
 				transforms: {
@@ -3578,7 +3578,7 @@ describe( 'selectors', () => {
 			} );
 			registerBlockType( 'core/with-tranforms-c', {
 				category: 'text',
-				title: 'Tranforms c',
+				title: 'Transforms c',
 				edit: () => {},
 				save: () => {},
 				transforms: {

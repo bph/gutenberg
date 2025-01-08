@@ -65,7 +65,7 @@
 // Font sizes (not used now, kept because of backward compatibility).
 //
 // The reason we add the editor class wrapper here is
-// to avoid enqueing the classes twice: here and in ./editor.scss
+// to avoid enqueuing the classes twice: here and in ./editor.scss
 :where(.editor-styles-wrapper) .has-regular-font-size {
 	font-size: 16px;
 }

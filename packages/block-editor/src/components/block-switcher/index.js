@@ -82,7 +82,7 @@ function BlockSwitcherDropdownMenuContents( {
 			);
 		}
 	}
-	// Simple block tranformation based on the `Block Transforms` API.
+	// Simple block transformation based on the `Block Transforms` API.
 	function onBlockTransform( name ) {
 		const newBlocks = switchToBlockType( blocks, name );
 		replaceBlocks( clientIds, newBlocks );

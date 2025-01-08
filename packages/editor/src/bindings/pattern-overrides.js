@@ -19,7 +19,7 @@ export default {
 					currentBlockAttributes?.metadata?.name
 				]?.[ attributeName ];
 
-			// If it has not been overriden, return the original value.
+			// If it has not been overridden, return the original value.
 			// Check undefined because empty string is a valid value.
 			if ( overridableValue === undefined ) {
 				overridesValues[ attributeName ] =

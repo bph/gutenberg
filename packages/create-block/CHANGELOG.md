@@ -480,7 +480,7 @@
 
 ### Internal
 
--   Relocated npm packge from `create-wordpress-block` to `@wordpress/create-block` ([#19773](https://github.com/WordPress/gutenberg/pull/19773)).
+-   Relocated npm package from `create-wordpress-block` to `@wordpress/create-block` ([#19773](https://github.com/WordPress/gutenberg/pull/19773)).
 
 ## 0.5.0 (2020-01-08)
 

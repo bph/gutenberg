@@ -96,7 +96,7 @@ function LinkUIBlockInserter( { clientId, onBack, onSelectBlock } ) {
 		LinkControl,
 		`link-ui-block-inserter__title`
 	);
-	const dialogDescritionId = useInstanceId(
+	const dialogDescriptionId = useInstanceId(
 		LinkControl,
 		`link-ui-block-inserter__description`
 	);
@@ -110,13 +110,13 @@ function LinkUIBlockInserter( { clientId, onBack, onSelectBlock } ) {
 			className="link-ui-block-inserter"
 			role="dialog"
 			aria-labelledby={ dialogTitleId }
-			aria-describedby={ dialogDescritionId }
+			aria-describedby={ dialogDescriptionId }
 			ref={ focusOnMountRef }
 		>
 			<VisuallyHidden>
 				<h2 id={ dialogTitleId }>{ __( 'Add block' ) }</h2>
 
-				<p id={ dialogDescritionId }>
+				<p id={ dialogDescriptionId }>
 					{ __( 'Choose a block to add to your Navigation.' ) }
 				</p>
 			</VisuallyHidden>
@@ -198,7 +198,7 @@ function UnforwardedLinkUI( props, ref ) {
 		LinkUI,
 		`link-ui-link-control__title`
 	);
-	const dialogDescritionId = useInstanceId(
+	const dialogDescriptionId = useInstanceId(
 		LinkUI,
 		`link-ui-link-control__description`
 	);
@@ -219,12 +219,12 @@ function UnforwardedLinkUI( props, ref ) {
 				<div
 					role="dialog"
 					aria-labelledby={ dialogTitleId }
-					aria-describedby={ dialogDescritionId }
+					aria-describedby={ dialogDescriptionId }
 				>
 					<VisuallyHidden>
 						<h2 id={ dialogTitleId }>{ __( 'Add link' ) }</h2>
 
-						<p id={ dialogDescritionId }>
+						<p id={ dialogDescriptionId }>
 							{ __(
 								'Search for and add a link to your Navigation.'
 							) }

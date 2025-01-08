@@ -111,7 +111,7 @@ function Header( {
 	);
 
 	/*
-	 * The edit-post-header classname is only kept for backward compatability
+	 * The edit-post-header classname is only kept for backward compatibility
 	 * as some plugins might be relying on its presence.
 	 */
 	return (

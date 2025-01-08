@@ -31,11 +31,12 @@ const TEMPLATE = [
 ];
 
 function DetailsEdit( { attributes, setAttributes, clientId } ) {
-	const { showContent, summary } = attributes;
+	const { showContent, summary, allowedBlocks } = attributes;
 	const blockProps = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TEMPLATE,
 		__experimentalCaptureToolbars: true,
+		allowedBlocks,
 	} );
 	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 

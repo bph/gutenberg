@@ -168,7 +168,7 @@ export default function DocumentOutline( {
 						{ title }
 					</DocumentOutlineItem>
 				) }
-				{ headings.map( ( item, index ) => {
+				{ headings.map( ( item ) => {
 					// Headings remain the same, go up by one, or down by any amount.
 					// Otherwise there are missing levels.
 					const isIncorrectLevel =
@@ -184,7 +184,7 @@ export default function DocumentOutline( {
 
 					return (
 						<DocumentOutlineItem
-							key={ index }
+							key={ item.clientId }
 							level={ `H${ item.level }` }
 							isValid={ isValid }
 							isDisabled={ hasOutlineItemsDisabled }

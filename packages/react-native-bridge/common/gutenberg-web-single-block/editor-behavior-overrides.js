@@ -16,7 +16,7 @@ function isAndroid() {
  * @return {void}
  * @see https://github.com/WordPress/gutenberg/pull/34668
  */
-function manageTextSelectonContextMenu() {
+function manageTextSelectionContextMenu() {
 	// Listeners for native context menu visibility changes.
 	let isContextMenuVisible = false;
 	const hideContextMenuListeners = [];
@@ -74,7 +74,7 @@ function manageTextSelectonContextMenu() {
 }
 
 if ( isAndroid() ) {
-	manageTextSelectonContextMenu();
+	manageTextSelectionContextMenu();
 }
 
 function _toggleBlockSelectedClass( isBlockSelected ) {

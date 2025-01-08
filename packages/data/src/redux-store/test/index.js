@@ -311,7 +311,7 @@ describe( 'normalizing args', () => {
 
 		// Needs to be called twice:
 		// 1. When the selector is called.
-		// 2. When the resolver is fullfilled.
+		// 2. When the resolver is fulfilled.
 		expect( normalizingFunction ).toHaveBeenCalledTimes( 2 );
 	} );
 

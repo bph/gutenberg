@@ -18,6 +18,10 @@ npm install @wordpress/fields --save
 
 Author field for BasePost.
 
+### BasePost
+
+Undocumented declaration.
+
 ### BasePostWithEmbeddedAuthor
 
 Undocumented declaration.

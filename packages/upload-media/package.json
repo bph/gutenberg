@@ -1,7 +1,6 @@
 {
 	"name": "@wordpress/upload-media",
-	"version": "1.0.0-prerelease",
-	"private": true,
+	"version": "0.0.1",
 	"description": "Core media upload logic.",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
@@ -26,6 +25,7 @@
 	"module": "build-module/index.js",
 	"wpScript": true,
 	"types": "build-types",
+	"sideEffects": false,
 	"dependencies": {
 		"@shopify/web-worker": "^6.4.0",
 		"@wordpress/api-fetch": "file:../api-fetch",

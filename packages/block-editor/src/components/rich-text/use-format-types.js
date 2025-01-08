@@ -59,7 +59,7 @@ function getPrefixedSelectKeys( selected, prefix ) {
  * @param {Object}  $0                              Options
  * @param {string}  $0.clientId                     Block client ID.
  * @param {string}  $0.identifier                   Block attribute.
- * @param {boolean} $0.withoutInteractiveFormatting Whether to clean the interactive formattings or not.
+ * @param {boolean} $0.withoutInteractiveFormatting Whether to clean the interactive formatting or not.
  * @param {Array}   $0.allowedFormats               Allowed formats
  */
 export function useFormatTypes( {

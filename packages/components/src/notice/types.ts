@@ -83,7 +83,7 @@ export type NoticeProps = {
 	isDismissible?: boolean;
 	/**
 	 * A deprecated alternative to `onRemove`. This prop is kept for
-	 * compatibilty reasons but should be avoided.
+	 * compatibility reasons but should be avoided.
 	 *
 	 * @default noop
 	 */

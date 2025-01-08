@@ -119,7 +119,7 @@ export function useSignalEffect( callback: () => unknown ) {
  * accessible whenever the function runs. This is primarily to make the scope
  * available inside hook callbacks.
  *
- * Asyncronous functions should use generators that yield promises instead of awaiting them.
+ * Asynchronous functions should use generators that yield promises instead of awaiting them.
  * See the documentation for details: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-interactivity/packages-interactivity-api-reference/#the-store
  *
  * @param func The passed function.
@@ -200,7 +200,7 @@ export function useWatch( callback: () => unknown ) {
 
 /**
  * Accepts a function that contains imperative code which runs only after the
- * element's first render, mainly useful for intialization logic.
+ * element's first render, mainly useful for initialization logic.
  *
  * This hook makes the element's scope available so functions like
  * `getElement()` and `getContext()` can be used inside the passed callback.

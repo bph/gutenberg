@@ -264,7 +264,7 @@ test.describe( 'Registered sources', () => {
 	} );
 
 	test.describe( 'should lock editing', () => {
-		// Logic reused accross all the tests that check paragraph editing is locked.
+		// Logic reused across all the tests that check paragraph editing is locked.
 		async function testParagraphControlsAreLocked( {
 			source,
 			editor,

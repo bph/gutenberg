@@ -19,7 +19,7 @@ import { store as editorStore } from '../../store';
  *   user is focusing on editing page content and clicks on a disabled template
  *   block.
  * - Displays a 'Edit your template to edit this block' dialog when the user
- *   is focusing on editing page conetnt and double clicks on a disabled
+ *   is focusing on editing page content and double clicks on a disabled
  *   template block.
  *
  * @param {Object}                                 props

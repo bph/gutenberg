@@ -866,7 +866,7 @@ export const registerBlockBindingsSource = ( source ) => {
 	}
 
 	if ( label && existingSource?.label && label !== existingSource?.label ) {
-		warning( 'Block bindings "' + name + '" source label was overriden.' );
+		warning( 'Block bindings "' + name + '" source label was overridden.' );
 	}
 
 	// Check the `usesContext` property is correct.

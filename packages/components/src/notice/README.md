@@ -134,9 +134,9 @@ Whether the notice should be dismissible or not
 
 #### `onDismiss` : `() => void`
 
-A deprecated alternative to `onRemove`. This prop is kept for compatibilty reasons but should be avoided.
+A deprecated alternative to `onRemove`. This prop is kept for compatibility reasons but should be avoided.
 
-- Requiered: No
+- Required: No
 - Default: `noop`
 
 #### `actions`: `Array<NoticeAction>`.
@@ -154,4 +154,4 @@ The default appearance of an action button is inferred based on whether `url` or
 ## Related components
 
 - To create a more prominent message that requires action, use a Modal.
-- For low priority, non-interruptive messsages, use Snackbar.
+- For low priority, non-interruptive messages, use Snackbar.

@@ -6,7 +6,7 @@ These are the core principles of TypeScript's interaction with the Interactivity
 
 -   **Inferred client types**: When you create a store using the `store` function, TypeScript automatically infers the types of the store's properties (`state`, `actions`, etc.). This means that you can often get away with just writing plain JavaScript objects, and TypeScript will figure out the types for you.
 -   **Explicit server types**: When dealing with data defined on the server, like local context or the initial values of the global state, you can explicitly define its types to ensure that everything is correctly typed.
--   **Mutiple store parts**: Even if your store is split into multiple parts, you can define or infer the types of each part of the store and then merge them into a single type that represents the entire store.
+-   **Multiple store parts**: Even if your store is split into multiple parts, you can define or infer the types of each part of the store and then merge them into a single type that represents the entire store.
 -   **Typed external stores**: You can import typed stores from external namespaces, allowing you to use other plugins' functionality with type safety.
 
 ## Installing `@wordpress/interactivity` locally
@@ -495,7 +495,7 @@ There's something to keep in mind when when using asynchronous actions. Just lik
     		counter: 0,
     	},
     	actions: {
-    		*delayedReturn(): Generator< uknown, number, uknown > {
+    		*delayedReturn(): Generator< unknown, number, unknown > {
     			yield new Promise( ( r ) => setTimeout( r, 1000 ) );
     			return state.counter; // Now this is correctly inferred.
     		},

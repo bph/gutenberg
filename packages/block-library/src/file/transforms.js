@@ -14,7 +14,7 @@ const transforms = {
 			isMatch( files ) {
 				return files.length > 0;
 			},
-			// We define a lower priorty (higher number) than the default of 10. This
+			// We define a lower priority (higher number) than the default of 10. This
 			// ensures that the File block is only created as a fallback.
 			priority: 15,
 			transform: ( files ) => {

@@ -77,6 +77,7 @@ export default function RSSEdit( { attributes, setAttributes } ) {
 						<InputControl
 							__next40pxDefaultSize
 							label={ label }
+							type="url"
 							hideLabelFromVision
 							placeholder={ __( 'Enter URL here…' ) }
 							value={ feedURL }

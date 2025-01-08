@@ -58,7 +58,7 @@ export default function PostPublishButtonOrToggle( {
 	 * for a particular role (see https://wordpress.org/documentation/article/post-status/):
 	 *
 	 * - is published
-	 * - post status has changed explicitely to something different than 'future' or 'publish'
+	 * - post status has changed explicitly to something different than 'future' or 'publish'
 	 * - is scheduled to be published
 	 * - is pending and can't be published (but only for viewports >= medium).
 	 * 	 Originally, we considered showing a button for pending posts that couldn't be published

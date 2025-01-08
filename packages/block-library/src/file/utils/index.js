@@ -10,7 +10,7 @@ export const browserSupportsPdfs = () => {
 		return false;
 	}
 
-	// Android tablets are the noteable exception.
+	// Android tablets are the notable exception.
 	if ( window.navigator.userAgent.indexOf( 'Android' ) > -1 ) {
 		return false;
 	}

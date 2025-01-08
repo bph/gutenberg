@@ -124,8 +124,10 @@
 	height: auto;
 	background: $gray-300;
 	min-width: unset;
-	transition: all 0.2s cubic-bezier(0.4, 1, 0.4, 1);
-	@include reduce-motion;
+
+	@media not (prefers-reduced-motion) {
+		transition: all 0.2s cubic-bezier(0.4, 1, 0.4, 1);
+	}
 }
 
 .components-form-token-field__token-text {
@@ -154,8 +156,11 @@
 	min-width: 100%;
 	max-height: $grid-unit-80 * 2;
 	overflow-y: auto;
-	transition: all 0.15s ease-in-out;
-	@include reduce-motion("transition");
+
+	@media not (prefers-reduced-motion) {
+		transition: all 0.15s ease-in-out;
+	}
+
 	list-style: none;
 	box-shadow: inset 0 $border-width 0 0 $gray-600; // Matches the border color of the input.
 	margin: 0;

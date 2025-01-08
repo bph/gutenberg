@@ -62,7 +62,7 @@ Clipboard.getString.mockImplementation( () => clipboardPromise );
 beforeAll( () => {
 	registerCoreBlocks();
 
-	// Mock Image.getSize to avoid failed attempt to size non-existant image
+	// Mock Image.getSize to avoid failed attempt to size non-existent image
 	const getSizeSpy = jest.spyOn( Image, 'getSize' );
 	getSizeSpy.mockImplementation( ( _url, callback ) => callback( 300, 200 ) );
 } );

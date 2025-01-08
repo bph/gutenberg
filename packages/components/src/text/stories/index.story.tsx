@@ -49,7 +49,7 @@ Truncate.args = {
 facilisis dictum tortor, eu tincidunt justo scelerisque tincidunt.
 Duis semper dui id augue malesuada, ut feugiat nisi aliquam.
 Vestibulum venenatis diam sem, finibus dictum massa semper in. Nulla
-facilisi. Nunc vulputate faucibus diam, in lobortis arcu ornare vel.
+facilities. Nunc vulputate faucibus diam, in lobortis arcu ornare vel.
 In dignissim nunc sed facilisis finibus. Etiam imperdiet mattis
 arcu, sed rutrum sapien blandit gravida. Aenean sollicitudin neque
 eget enim blandit, sit amet rutrum leo vehicula. Nunc malesuada
@@ -68,7 +68,7 @@ Highlight.args = {
 facilisis dictum tortor, eu tincidunt justo scelerisque tincidunt.
 Duis semper dui id augue malesuada, ut feugiat nisi aliquam.
 Vestibulum venenatis diam sem, finibus dictum massa semper in. Nulla
-facilisi. Nunc vulputate faucibus diam, in lobortis arcu ornare vel.
+facilities. Nunc vulputate faucibus diam, in lobortis arcu ornare vel.
 In dignissim nunc sed facilisis finibus. Etiam imperdiet mattis
 arcu, sed rutrum sapien blandit gravida. Aenean sollicitudin neque
 eget enim blandit, sit amet rutrum leo vehicula. Nunc malesuada

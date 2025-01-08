@@ -105,7 +105,7 @@ export const getEntityRecord =
 						}
 					);
 
-					// Boostraps the edited document as well (and load from peers).
+					// Bootstraps the edited document as well (and load from peers).
 					await getSyncProvider().bootstrap(
 						entityConfig.syncObjectType + '--edit',
 						objectId,

@@ -36,7 +36,7 @@ const proxyToProps: WeakMap<
 > = new WeakMap();
 
 /**
- *  Checks wether a {@link PropSignal | `PropSignal`} instance exists for the
+ *  Checks whether a {@link PropSignal | `PropSignal`} instance exists for the
  *  given property in the passed proxy.
  *
  * @param proxy Proxy of a state object or array.

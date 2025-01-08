@@ -55,7 +55,7 @@ const duplicatePost: Action< BasePost > = {
 				return;
 			}
 
-			const newItemOject = {
+			const newItemObject = {
 				status: 'draft',
 				title: item.title,
 				slug: item.title || __( 'No title' ),
@@ -90,7 +90,7 @@ const duplicatePost: Action< BasePost > = {
 			assignableProperties.forEach( ( property ) => {
 				if ( item.hasOwnProperty( property ) ) {
 					// @ts-ignore
-					newItemOject[ property ] = item[ property ];
+					newItemObject[ property ] = item[ property ];
 				}
 			} );
 			setIsCreatingPage( true );
@@ -98,7 +98,7 @@ const duplicatePost: Action< BasePost > = {
 				const newItem = await saveEntityRecord(
 					'postType',
 					item.type,
-					newItemOject,
+					newItemObject,
 					{ throwOnError: true }
 				);
 

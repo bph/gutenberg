@@ -39,6 +39,15 @@ export async function visitSiteEditor(
 
 	await this.visitAdminPage( 'site-editor.php', query.toString() );
 
+	if ( ! options.showWelcomeGuide ) {
+		await this.editor.setPreferences( 'core/edit-site', {
+			welcomeGuide: false,
+			welcomeGuideStyles: false,
+			welcomeGuidePage: false,
+			welcomeGuideTemplate: false,
+		} );
+	}
+
 	/**
 	 * @todo This is a workaround for the fact that the editor canvas is seen as
 	 * ready and visible before the loading spinner is hidden. Ideally, the
@@ -61,15 +70,6 @@ export async function visitSiteEditor(
 			// HTML fixture that we load for performance tests, which often
 			// doesn't make it under the default timeout value.
 			timeout: 60_000,
-		} );
-	}
-
-	if ( ! options.showWelcomeGuide ) {
-		await this.editor.setPreferences( 'core/edit-site', {
-			welcomeGuide: false,
-			welcomeGuideStyles: false,
-			welcomeGuidePage: false,
-			welcomeGuideTemplate: false,
 		} );
 	}
 }

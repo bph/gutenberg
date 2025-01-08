@@ -76,8 +76,8 @@ const MultiGroupsTemplate: StoryFn< typeof MenuGroup > = ( args ) => {
  * When other menu items exist above or below a MenuGroup, the group
  * should have a divider line between it and the adjacent item.
  */
-export const WithSeperator = MultiGroupsTemplate.bind( {} );
-WithSeperator.args = {
+export const WithSeparator = MultiGroupsTemplate.bind( {} );
+WithSeparator.args = {
 	...Default.args,
 	hideSeparator: false,
 	label: 'Editor',

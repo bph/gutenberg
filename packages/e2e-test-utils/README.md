@@ -414,7 +414,7 @@ _Parameters_
 
 _Returns_
 
--   `Promise`: all the blocks anchor nodes matching the lable in the ListView.
+-   `Promise`: all the blocks anchor nodes matching the label in the ListView.
 
 ### getOption
 
@@ -921,7 +921,7 @@ _Related_
 _Parameters_
 
 -   _store_ `string`: Store to query e.g: core/editor, core/blocks...
--   _selector_ `string`: Selector to exectute e.g: getBlocks.
+-   _selector_ `string`: Selector to execute e.g: getBlocks.
 -   _parameters_ `...Object`: Parameters to pass to the selector.
 
 _Returns_

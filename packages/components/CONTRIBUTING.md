@@ -411,7 +411,7 @@ export default MyComponent;
 
 On the component's main named export, add a JSDoc comment that includes the main description and the example code snippet from the README ([example](https://github.com/WordPress/gutenberg/blob/43d9c82922619c1d1ff6b454f86f75c3157d3de6/packages/components/src/date-time/date-time/index.tsx#L193-L217)). _At the time of writing, the `@example` JSDoc keyword is not recognized by StoryBook's docgen, so please avoid using it_.
 
-<!-- TODO: add to the previous paragraph once the composision section gets added to this document.
+<!-- TODO: add to the previous paragraph once the compositions section gets added to this document.
 (more details about polymorphism can be found above in the "Components composition" section). -->
 
 ## Styling
@@ -550,7 +550,7 @@ export function useCardBody( props ) {
 	// Read any derived registered prop from the Context System in the `CardBody` namespace.
 	// If a `CardBody` component is rendered as a child of a `Card` component, the value of
 	// the `size` prop will be the one set by the parent `Card` component via the Context
-	// System (unless the prop gets explicitely set on the `CardBody` component).
+	// System (unless the prop gets explicitly set on the `CardBody` component).
 	const { size = 'medium', ...otherDerivedProps } = useContextSystem(
 		props,
 		'CardBody'
@@ -759,13 +759,13 @@ function NewComponentImplementation( props ) {
 
 In case that is not possible (eg. too difficult to reconciliate new and legacy implementations, or impossible to preserve backward compatibility), then the legacy implementation can stay as-is.
 
-In any case, extra attention should be payed to legacy component families made of two or more subcomponents. It is possible, in fact, that the a legacy subcomponent is used as a parent / child of a subcomponent from the new version (this can happen, for example, when Gutenberg allows third party developers to inject React components via Slot/Fill). To avoid incompatibility issues and unexpected behavior, there should be some code in the components warning when the above scenario happens — or even better, aliasing to the correct version of the component.
+In any case, extra attention should be paid to legacy component families made of two or more subcomponents. It is possible, in fact, that the a legacy subcomponent is used as a parent / child of a subcomponent from the new version (this can happen, for example, when Gutenberg allows third party developers to inject React components via Slot/Fill). To avoid incompatibility issues and unexpected behavior, there should be some code in the components warning when the above scenario happens — or even better, aliasing to the correct version of the component.
 
 ##### Naming
 
 When it comes to naming the newly added component, there are two options.
 
-If there is a good reason for it, pick a new name for the component. For example, some legacy components have names that don't correspond to the corrent name of UI widget that they implement (for example, `TabPanel` should be called `Tabs`, and `Modal` should be called `Dialog`).
+If there is a good reason for it, pick a new name for the component. For example, some legacy components have names that don't correspond to the current name of UI widget that they implement (for example, `TabPanel` should be called `Tabs`, and `Modal` should be called `Dialog`).
 
 Alternatively, version the component name. For example, the new version of `Component` could be called `ComponentV2`. This also applies for namespaced subcomponents (ie. `ComponentV2.SubComponent`).
 

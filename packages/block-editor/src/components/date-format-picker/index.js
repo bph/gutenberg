@@ -14,7 +14,7 @@ import {
 } from '@wordpress/components';
 
 // So that we illustrate the different formats in the dropdown properly, show a date that is
-// somwhat recent, has a day greater than 12, and a month with more than three letters.
+// somewhat recent, has a day greater than 12, and a month with more than three letters.
 const exampleDate = new Date();
 exampleDate.setDate( 20 );
 exampleDate.setMonth( exampleDate.getMonth() - 3 );

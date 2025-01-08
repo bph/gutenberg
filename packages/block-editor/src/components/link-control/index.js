@@ -265,7 +265,7 @@ function LinkControl( {
 
 	const handleSelectSuggestion = ( updatedValue ) => {
 		// Suggestions may contains "settings" values (e.g. `opensInNewTab`)
-		// which should not overide any existing settings values set by the
+		// which should not override any existing settings values set by the
 		// user. This filters out any settings values from the suggestion.
 		const nonSettingsChanges = Object.keys( updatedValue ).reduce(
 			( acc, key ) => {

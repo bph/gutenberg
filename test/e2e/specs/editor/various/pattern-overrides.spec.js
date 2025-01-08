@@ -1292,10 +1292,10 @@ test.describe( 'Pattern Overrides', () => {
 				} )
 				.last();
 
-			await firstParagraph.fill( 'overriden content' );
-			await expect( headingBlock ).toHaveText( 'overriden content' );
-			await expect( firstParagraph ).toHaveText( 'overriden content' );
-			await expect( secondParagraph ).toHaveText( 'overriden content' );
+			await firstParagraph.fill( 'overridden content' );
+			await expect( headingBlock ).toHaveText( 'overridden content' );
+			await expect( firstParagraph ).toHaveText( 'overridden content' );
+			await expect( secondParagraph ).toHaveText( 'overridden content' );
 		} );
 	} );
 

@@ -13,7 +13,7 @@ const PHONE_REGEXP = /^(tel:)?(\+)?\d{6,15}$/;
  * @return {boolean} Whether or not it looks like a phone number.
  */
 export function isPhoneNumber( phoneNumber ) {
-	// Remove any seperator from phone number.
+	// Remove any separator from phone number.
 	phoneNumber = phoneNumber.replace( /[-.() ]/g, '' );
 	return PHONE_REGEXP.test( phoneNumber );
 }

@@ -77,7 +77,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						} );
 					} }
 					help={ __(
-						'Affects the "name" atribute of the input element, and is used as a name for the form submission results.'
+						'Affects the "name" attribute of the input element, and is used as a name for the form submission results.'
 					) }
 				/>
 			</InspectorControls>

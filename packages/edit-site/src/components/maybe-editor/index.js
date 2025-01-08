@@ -43,6 +43,9 @@ export function MaybeEditor( { showEditor = true } ) {
 				document
 					.getElementsByTagName( 'html' )[ 0 ]
 					.setAttribute( 'style', 'margin-top: 0 !important;' );
+				document
+					.getElementsByTagName( 'body' )[ 0 ]
+					.classList.remove( 'admin-bar' );
 				// Make interactive elements unclickable.
 				const interactiveElements = document.querySelectorAll(
 					'a, button, input, details, audio'

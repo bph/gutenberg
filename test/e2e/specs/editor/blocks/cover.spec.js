@@ -177,7 +177,7 @@ test.describe( 'Cover', () => {
 		expect( coverBlockBox.height ).toBeTruthy();
 		expect( coverBlockResizeHandleBox.height ).toBeTruthy();
 
-		// Increse the Cover block height by 100px.
+		// Increase the Cover block height by 100px.
 		await coverBlockResizeHandle.hover();
 		await page.mouse.down();
 

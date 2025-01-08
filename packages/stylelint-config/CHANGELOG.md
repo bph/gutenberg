@@ -313,7 +313,7 @@
 -   Added: `no-extra-semicolons` rule.
 -   Added: `selector-attribute-operator-space-after` rule.
 -   Added: `selector-attribute-operator-space-before` rule.
--   Added: `selector-max-empty-liness` rule.
+-   Added: `selector-max-empty-lines` rule.
 
 ## 5.0.0 (2016-04-24)
 

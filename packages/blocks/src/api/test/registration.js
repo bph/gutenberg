@@ -1568,7 +1568,7 @@ describe( 'blocks', () => {
 				label: 'Client label',
 			} );
 			expect( console ).toHaveWarnedWith(
-				'Block bindings "core/testing" source label was overriden.'
+				'Block bindings "core/testing" source label was overridden.'
 			);
 			const source = getBlockBindingsSource( 'core/testing' );
 			unregisterBlockBindingsSource( 'core/testing' );

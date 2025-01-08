@@ -11,7 +11,6 @@ import {
 /**
  * Internal dependencies
  */
-import { useNotifyCopy } from '../../utils/use-notify-copy';
 import usePasteStyles from '../use-paste-styles';
 import { store as blockEditorStore } from '../../store';
 
@@ -76,7 +75,6 @@ export default function BlockActions( {
 		flashBlock,
 	} = useDispatch( blockEditorStore );
 
-	const notifyCopy = useNotifyCopy();
 	const pasteStyles = usePasteStyles();
 
 	return children( {
@@ -130,7 +128,6 @@ export default function BlockActions( {
 			if ( clientIds.length === 1 ) {
 				flashBlock( clientIds[ 0 ] );
 			}
-			notifyCopy( 'copy', clientIds );
 		},
 		async onPasteStyles() {
 			await pasteStyles( getBlocksByClientId( clientIds ) );

@@ -144,7 +144,7 @@ async function parseConfig( configDirectoryPath, cacheDirectoryPath ) {
 	} );
 
 	// Users can provide overrides in environment
-	// variables that supercede all other options.
+	// variables that supersede all other options.
 	const environmentVarOverrides =
 		getEnvironmentVarOverrides( cacheDirectoryPath );
 

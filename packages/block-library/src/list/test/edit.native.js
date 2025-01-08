@@ -157,7 +157,7 @@ describe( 'List block', () => {
 		fireEvent.press( listBlock );
 		await triggerBlockListLayout( listBlock );
 
-		// Select Secont List Item block
+		// Select Second List Item block
 		const [ listItemBlock ] = screen.getAllByLabelText(
 			/List item Block\. Row 2/
 		);

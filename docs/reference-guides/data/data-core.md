@@ -878,7 +878,7 @@ _Returns_
 
 ### redo
 
-Action triggered to redo the last undoed edit to an entity record, if any.
+Action triggered to redo the last undone edit to an entity record, if any.
 
 ### saveEditedEntityRecord
 

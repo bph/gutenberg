@@ -4995,7 +4995,7 @@ class WP_Theme_JSON_Gutenberg_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests the core separator block outbut based on various provided settings.
+	 * Tests the core separator block output based on various provided settings.
 	 *
 	 * @dataProvider data_update_separator_declarations
 	 *

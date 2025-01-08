@@ -53,7 +53,7 @@ store.dispatch( retrieveTemperature() );
 ```
 
 In this example, when we dispatch `retrieveTemperature`, it will trigger the control handler to take effect, issuing the network request and assigning the result into the `result` variable. Only once the
-request has completed does the action creator procede to return the `SET_TEMPERATURE` action type.
+request has completed does the action creator proceed to return the `SET_TEMPERATURE` action type.
 
 ## API
 

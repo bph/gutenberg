@@ -517,7 +517,7 @@ test.describe( 'Synced pattern', () => {
 	test( 'should show a proper message when the reusable block is missing', async ( {
 		editor,
 	} ) => {
-		// Insert a non-existant reusable block.
+		// Insert a non-existent reusable block.
 		await editor.insertBlock( {
 			name: 'core/block',
 			attributes: { ref: 123456 },

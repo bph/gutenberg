@@ -348,7 +348,7 @@ describe.each( [
 			expect( option ).toHaveTextContent( matches[ optionIndex ].label );
 		} );
 
-		// Confirm that the corrent option is selected
+		// Confirm that the current option is selected
 		await user.keyboard( '{Enter}' );
 
 		expect( onChangeSpy ).toHaveBeenCalledTimes( 1 );

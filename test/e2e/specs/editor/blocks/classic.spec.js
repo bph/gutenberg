@@ -106,7 +106,7 @@ test.describe( 'Classic', () => {
 		page,
 		pageUtils,
 	} ) => {
-		// Based on docs routing diables caching.
+		// Based on docs routing disables caching.
 		// See: https://playwright.dev/docs/api/class-page#page-route
 		await page.route( '**', async ( route ) => {
 			await route.continue();
