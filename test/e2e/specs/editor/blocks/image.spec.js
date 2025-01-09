@@ -859,17 +859,17 @@ test.describe( 'Image', () => {
 			} )
 		).toBeFocused();
 
-		// Select "Expand on click", then remove it.
+		// Select "Enlarge on click", then remove it.
 		await pageUtils.pressKeys( 'Tab' );
 		await page.keyboard.press( 'Enter' );
 		await pageUtils.pressKeys( 'Tab', { times: 5 } );
 		await expect(
-			page.getByRole( 'menuitem', { name: 'Expand on click' } )
+			page.getByRole( 'menuitem', { name: 'Enlarge on click' } )
 		).toBeFocused();
 		await page.keyboard.press( 'Enter' );
 		await expect(
 			page.getByRole( 'button', {
-				name: 'Disable expand on click',
+				name: 'Disable enlarge on click',
 			} )
 		).toBeFocused();
 		await page.keyboard.press( 'Enter' );
@@ -933,7 +933,7 @@ test.describe( 'Image - lightbox', () => {
 
 				await expect(
 					page.getByRole( 'menuitem', {
-						name: 'Expand on click',
+						name: 'Enlarge on click',
 					} )
 				).toBeHidden();
 			} );
@@ -958,13 +958,13 @@ test.describe( 'Image - lightbox', () => {
 
 				await page
 					.getByRole( 'button', {
-						name: 'Disable expand on click',
+						name: 'Disable enlarge on click',
 					} )
 					.click();
 
 				await expect(
 					page.getByRole( 'menuitem', {
-						name: 'Expand on click',
+						name: 'Enlarge on click',
 					} )
 				).toBeHidden();
 			} );

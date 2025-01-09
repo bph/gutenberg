@@ -6,35 +6,21 @@ import { box, button, cog, paragraph } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import BlockCard from '../';
+import BlockIcon from '../';
 
 const meta = {
-	title: 'BlockEditor/BlockCard',
-	component: BlockCard,
+	title: 'BlockEditor/BlockIcon',
+	component: BlockIcon,
 	parameters: {
 		docs: {
 			description: {
 				component:
-					'The `BlockCard` component allows to display a "card" which contains the title of a block, its icon and its description.',
+					'The `BlockIcon` component allows to display an icon for a block.',
 			},
 			canvas: { sourceState: 'shown' },
 		},
 	},
 	argTypes: {
-		title: {
-			control: 'text',
-			description: 'The title of the block.',
-			table: {
-				type: { summary: 'string' },
-			},
-		},
-		description: {
-			control: 'text',
-			description: 'A description of the block functionality.',
-			table: {
-				type: { summary: 'string' },
-			},
-		},
 		icon: {
 			control: 'select',
 			options: [ 'paragraph', 'cog', 'box', 'button' ],
@@ -50,16 +36,23 @@ const meta = {
 				type: { summary: 'string | object' },
 			},
 		},
-		name: {
-			control: 'text',
-			description: 'Optional custom name for the block.',
+		showColors: {
+			control: 'boolean',
+			description: 'Whether to show background and foreground colors.',
 			table: {
-				type: { summary: 'string' },
+				type: { summary: 'boolean' },
 			},
 		},
 		className: {
 			control: 'text',
-			description: 'Additional CSS class names.',
+			description: 'Additional CSS class for the icon.',
+			table: {
+				type: { summary: 'string' },
+			},
+		},
+		context: {
+			control: 'text',
+			description: 'Context where the icon is being used.',
 			table: {
 				type: { summary: 'string' },
 			},
@@ -71,9 +64,6 @@ export default meta;
 
 export const Default = {
 	args: {
-		title: 'Paragraph',
-		icon: paragraph,
-		description: 'This is a paragraph block description.',
-		name: 'Paragraph Block',
+		icon: 'paragraph',
 	},
 };
