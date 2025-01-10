@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Fix the logic path that merges plain objects ([#68579](https://github.com/WordPress/gutenberg/pull/68579)).
+
 ## 6.15.0 (2025-01-02)
 
 ### Enhancements

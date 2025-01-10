@@ -1,6 +1,6 @@
 {
 	"name": "gutenberg",
-	"version": "20.0.0-rc.1",
+	"version": "20.0.0",
 	"private": true,
 	"description": "A new WordPress editor experience.",
 	"author": "The WordPress Contributors",
@@ -181,6 +181,7 @@
 		"build": "npm run build:packages && wp-scripts build",
 		"build:analyze-bundles": "npm run build -- --webpack-bundle-analyzer",
 		"build:package-types": "node ./bin/packages/validate-typescript-version.js && ( tsc --build || ( echo 'tsc failed. Try cleaning up first: `npm run clean:package-types`'; exit 1 ) ) && node ./bin/packages/check-build-type-declaration-files.js",
+		"build:profile-types": "rimraf ./ts-traces && npm run clean:package-types && node ./bin/packages/validate-typescript-version.js && ( tsc --build --extendedDiagnostics --generateTrace ./ts-traces || ( echo 'tsc failed.'; exit 1 ) ) && node ./bin/packages/check-build-type-declaration-files.js && npx --yes @typescript/analyze-trace ts-traces > ts-traces/analysis.txt && echo $'\n\nDone! Build traces saved to ts-traces/ directory.\nTrace analysis saved to ts-traces/analysis.txt.'",
 		"prebuild:packages": "npm run clean:packages && npm run --if-present --workspaces build",
 		"build:packages": "npm run --silent build:package-types && node ./bin/packages/build.js",
 		"postbuild:packages": " npm run --if-present --workspaces build:wp",

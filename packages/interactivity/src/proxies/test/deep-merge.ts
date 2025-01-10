@@ -455,6 +455,38 @@ describe( 'Interactivity API', () => {
 			expect( target.message.fontStyle ).toBeUndefined();
 		} );
 
+		it( 'should not overwrite getters that become objects if `override` is false', () => {
+			const target: any = proxifyState( 'test', {
+				get message() {
+					return 'hello';
+				},
+			} );
+
+			const getterSpy = jest.spyOn( target, 'message', 'get' );
+
+			let message: any;
+			const spy = jest.fn( () => ( message = target.message ) );
+			effect( spy );
+
+			expect( spy ).toHaveBeenCalledTimes( 1 );
+			expect( message ).toBe( 'hello' );
+
+			deepMerge(
+				target,
+				{ message: { content: 'hello', fontStyle: 'italic' } },
+				false
+			);
+
+			// The effect callback reads `target.message`, so the getter is executed once as well.
+			expect( spy ).toHaveBeenCalledTimes( 1 );
+			expect( getterSpy ).toHaveBeenCalledTimes( 1 );
+
+			expect( message ).toBe( 'hello' );
+			expect( target.message ).toBe( 'hello' );
+			expect( target.message.content ).toBeUndefined();
+			expect( target.message.fontStyle ).toBeUndefined();
+		} );
+
 		it( 'should keep reactivity of arrays that are initially undefined', () => {
 			const target: any = proxifyState( 'test', {} );
 

@@ -269,6 +269,7 @@ export function SocialLinksEdit( props ) {
 										isShownByDefault: true,
 										resetAllFilter,
 										enableAlpha: true,
+										clearable: true,
 									},
 								] }
 								panelId={ clientId }
