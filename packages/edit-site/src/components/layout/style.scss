@@ -118,7 +118,7 @@
 			// This ensure the radius work properly.
 			overflow: hidden;
 
-			@media (prefers-reduced-motion: no-preference) {
+			@media not (prefers-reduced-motion) {
 				transition: border-radius, box-shadow 0.4s;
 			}
 

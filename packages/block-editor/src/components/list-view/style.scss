@@ -408,15 +408,11 @@
 		position: absolute;
 		right: 0;
 		transform: translateY(-50%);
-		background: rgba($black, 0.1);
-		border-radius: $radius-x-small;
-		padding: 2px 6px;
-		max-width: 100%;
-		box-sizing: border-box;
 	}
 
 	&.is-selected .block-editor-list-view-block-select-button__anchor {
 		background: rgba($black, 0.3);
+		color: $white;
 	}
 
 	.block-editor-list-view-block-select-button__lock,
