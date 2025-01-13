@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import {
-	PanelBody,
 	TextControl,
 	SelectControl,
 	RangeControl,
@@ -187,110 +186,171 @@ export default function QueryInspectorControls( props ) {
 	return (
 		<>
 			{ showSettingsPanel && (
-				<PanelBody title={ __( 'Settings' ) }>
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setQuery( {
+							postType: 'post',
+							order: 'desc',
+							orderBy: 'date',
+							sticky: '',
+							inherit: true,
+						} );
+					} }
+					dropdownMenuProps={ dropdownMenuProps }
+				>
 					{ showInheritControl && (
-						<ToggleGroupControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
+						<ToolsPanelItem
+							hasValue={ () => ! inherit }
 							label={ __( 'Query type' ) }
-							isBlock
-							onChange={ ( value ) => {
-								setQuery( { inherit: value === 'default' } );
-							} }
-							help={
-								inherit
-									? __(
-											'Display a list of posts or custom post types based on the current template.'
-									  )
-									: __(
-											'Display a list of posts or custom post types based on specific criteria.'
-									  )
-							}
-							value={ !! inherit ? 'default' : 'custom' }
+							onDeselect={ () => setQuery( { inherit: true } ) }
+							isShownByDefault
 						>
-							<ToggleGroupControlOption
-								value="default"
-								label={ __( 'Default' ) }
-							/>
-							<ToggleGroupControlOption
-								value="custom"
-								label={ __( 'Custom' ) }
-							/>
-						</ToggleGroupControl>
-					) }
-					{ showPostTypeControl &&
-						( postTypesSelectOptions.length > 2 ? (
-							<SelectControl
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-								options={ postTypesSelectOptions }
-								value={ postType }
-								label={ postTypeControlLabel }
-								onChange={ onPostTypeChange }
-								help={ postTypeControlHelp }
-							/>
-						) : (
 							<ToggleGroupControl
-								__nextHasNoMarginBottom
 								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Query type' ) }
 								isBlock
-								value={ postType }
-								label={ postTypeControlLabel }
-								onChange={ onPostTypeChange }
-								help={ postTypeControlHelp }
+								onChange={ ( value ) => {
+									setQuery( {
+										inherit: value === 'default',
+									} );
+								} }
+								help={
+									inherit
+										? __(
+												'Display a list of posts or custom post types based on the current template.'
+										  )
+										: __(
+												'Display a list of posts or custom post types based on specific criteria.'
+										  )
+								}
+								value={ !! inherit ? 'default' : 'custom' }
 							>
-								{ postTypesSelectOptions.map( ( option ) => (
-									<ToggleGroupControlOption
-										key={ option.value }
-										value={ option.value }
-										label={ option.label }
-									/>
-								) ) }
+								<ToggleGroupControlOption
+									value="default"
+									label={ __( 'Default' ) }
+								/>
+								<ToggleGroupControlOption
+									value="custom"
+									label={ __( 'Custom' ) }
+								/>
 							</ToggleGroupControl>
-						) ) }
+						</ToolsPanelItem>
+					) }
+
+					{ showPostTypeControl && (
+						<ToolsPanelItem
+							hasValue={ () => postType !== 'post' }
+							label={ postTypeControlLabel }
+							onDeselect={ () => onPostTypeChange( 'post' ) }
+							isShownByDefault
+						>
+							{ postTypesSelectOptions.length > 2 ? (
+								<SelectControl
+									__nextHasNoMarginBottom
+									__next40pxDefaultSize
+									options={ postTypesSelectOptions }
+									value={ postType }
+									label={ postTypeControlLabel }
+									onChange={ onPostTypeChange }
+									help={ postTypeControlHelp }
+								/>
+							) : (
+								<ToggleGroupControl
+									__nextHasNoMarginBottom
+									__next40pxDefaultSize
+									isBlock
+									value={ postType }
+									label={ postTypeControlLabel }
+									onChange={ onPostTypeChange }
+									help={ postTypeControlHelp }
+								>
+									{ postTypesSelectOptions.map(
+										( option ) => (
+											<ToggleGroupControlOption
+												key={ option.value }
+												value={ option.value }
+												label={ option.label }
+											/>
+										)
+									) }
+								</ToggleGroupControl>
+							) }
+						</ToolsPanelItem>
+					) }
 
 					{ showColumnsControl && (
-						<>
-							<RangeControl
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-								label={ __( 'Columns' ) }
-								value={ displayLayout.columns }
-								onChange={ ( value ) =>
-									setDisplayLayout( {
-										columns: value,
-									} )
-								}
-								min={ 2 }
-								max={ Math.max( 6, displayLayout.columns ) }
-							/>
-							{ displayLayout.columns > 6 && (
-								<Notice
-									status="warning"
-									isDismissible={ false }
-								>
-									{ __(
-										'This column count exceeds the recommended amount and may cause visual breakage.'
-									) }
-								</Notice>
-							) }
-						</>
-					) }
-					{ showOrderControl && (
-						<OrderControl
-							{ ...{ order, orderBy } }
-							onChange={ setQuery }
-						/>
-					) }
-					{ showStickyControl && (
-						<StickyControl
-							value={ sticky }
-							onChange={ ( value ) =>
-								setQuery( { sticky: value } )
+						<ToolsPanelItem
+							hasValue={ () => displayLayout?.columns !== 2 }
+							label={ __( 'Columns' ) }
+							onDeselect={ () =>
+								setDisplayLayout( { columns: 2 } )
 							}
-						/>
+							isShownByDefault
+						>
+							<>
+								<RangeControl
+									__nextHasNoMarginBottom
+									__next40pxDefaultSize
+									label={ __( 'Columns' ) }
+									value={ displayLayout.columns }
+									onChange={ ( value ) =>
+										setDisplayLayout( {
+											columns: value,
+										} )
+									}
+									min={ 2 }
+									max={ Math.max( 6, displayLayout.columns ) }
+								/>
+								{ displayLayout.columns > 6 && (
+									<Notice
+										status="warning"
+										isDismissible={ false }
+									>
+										{ __(
+											'This column count exceeds the recommended amount and may cause visual breakage.'
+										) }
+									</Notice>
+								) }
+							</>
+						</ToolsPanelItem>
 					) }
-				</PanelBody>
+
+					{ showOrderControl && (
+						<ToolsPanelItem
+							hasValue={ () =>
+								order !== 'desc' || orderBy !== 'date'
+							}
+							label={ __( 'Order by' ) }
+							onDeselect={ () =>
+								setQuery( { order: 'desc', orderBy: 'date' } )
+							}
+							isShownByDefault
+						>
+							<OrderControl
+								{ ...{ order, orderBy } }
+								onChange={ setQuery }
+							/>
+						</ToolsPanelItem>
+					) }
+
+					{ showStickyControl && (
+						<ToolsPanelItem
+							hasValue={ () => !! sticky }
+							label={ __( 'Sticky posts' ) }
+							onDeselect={ () => setQuery( { sticky: '' } ) }
+							isShownByDefault
+						>
+							<StickyControl
+								value={ sticky }
+								onChange={ ( value ) =>
+									setQuery( { sticky: value } )
+								}
+							/>
+						</ToolsPanelItem>
+					) }
+				</ToolsPanel>
 			) }
 			{ ! inherit && showDisplayPanel && (
 				<ToolsPanel

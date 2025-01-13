@@ -2,10 +2,11 @@
 	margin-bottom: auto;
 	grid-template-rows: max-content;
 	padding: 0 $grid-unit-60 $grid-unit-30;
-	transition: padding ease-out 0.1s;
 	container-type: inline-size;
-	@include reduce-motion("transition");
 
+	@media not (prefers-reduced-motion) {
+		transition: padding ease-out 0.1s;
+	}
 
 	.dataviews-view-grid__card {
 		height: 100%;

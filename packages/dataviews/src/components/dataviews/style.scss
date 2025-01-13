@@ -18,8 +18,10 @@
 	flex-shrink: 0;
 	position: sticky;
 	left: 0;
-	transition: padding ease-out 0.1s;
-	@include reduce-motion( "transition" );
+
+	@media not (prefers-reduced-motion) {
+		transition: padding ease-out 0.1s;
+	}
 }
 
 .dataviews-no-results,
@@ -29,8 +31,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: padding ease-out 0.1s;
-	@include reduce-motion( "transition" );
+
+	@media not (prefers-reduced-motion) {
+		transition: padding ease-out 0.1s;
+	}
 }
 
 @container (max-width: 430px) {

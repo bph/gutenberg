@@ -555,7 +555,10 @@ test.describe( 'Navigation block - List view editing', () => {
 
 		await editor.openDocumentSettingsSidebar();
 
-		await page.getByLabel( 'Test Menu' ).click();
+		await page
+			.getByRole( 'tabpanel' )
+			.getByRole( 'button', { name: 'Test Menu' } )
+			.click();
 
 		await page.keyboard.press( 'ArrowUp' );
 

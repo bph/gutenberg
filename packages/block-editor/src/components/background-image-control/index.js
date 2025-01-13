@@ -378,7 +378,6 @@ function BackgroundImageControls( {
 						label={ imgLabel }
 					/>
 				}
-				variant="secondary"
 				renderToggle={ ( props ) => (
 					<Button { ...props } __next40pxDefaultSize />
 				) }
