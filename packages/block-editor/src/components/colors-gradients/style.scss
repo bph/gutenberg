@@ -111,6 +111,7 @@ $swatch-gap: 12px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		max-width: calc(100% - ($button-size-next-default-40px + $grid-unit-05));
 	}
 }
 

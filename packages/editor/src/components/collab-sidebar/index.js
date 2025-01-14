@@ -29,8 +29,6 @@ import AddCommentToolbarButton from './comment-button-toolbar';
 import { useGlobalStylesContext } from '../global-styles-provider';
 import { getCommentIdsFromBlocks } from './utils';
 
-const isBlockCommentExperimentEnabled =
-	window?.__experimentalEnableBlockComment;
 const modifyBlockCommentAttributes = ( settings ) => {
 	if ( ! settings.attributes.blockCommentId ) {
 		settings.attributes = {
@@ -329,8 +327,7 @@ export default function CollabSidebar() {
 		} );
 	}
 
-	// Check if the experimental flag is enabled.
-	if ( ! isBlockCommentExperimentEnabled || postStatus === 'publish' ) {
+	if ( postStatus === 'publish' ) {
 		return null; // or maybe return some message indicating no threads are available.
 	}
 

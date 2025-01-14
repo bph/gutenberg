@@ -14,13 +14,18 @@ import {
 	Warning,
 	HeadingLevelDropdown,
 } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody } from '@wordpress/components';
+import {
+	ToggleControl,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import { useArchiveLabel } from './use-archive-label';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const SUPPORTED_TYPES = [ 'archive', 'search' ];
 
@@ -36,6 +41,7 @@ export default function QueryTitleEdit( {
 	setAttributes,
 } ) {
 	const { archiveTypeLabel, archiveNameLabel } = useArchiveLabel();
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const TagName = `h${ level }`;
 	const blockProps = useBlockProps( {
@@ -89,16 +95,35 @@ export default function QueryTitleEdit( {
 		titleElement = (
 			<>
 				<InspectorControls>
-					<PanelBody title={ __( 'Settings' ) }>
-						<ToggleControl
-							__nextHasNoMarginBottom
+					<ToolsPanel
+						label={ __( 'Settings' ) }
+						resetAll={ () =>
+							setAttributes( {
+								showPrefix: true,
+							} )
+						}
+						dropdownMenuProps={ dropdownMenuProps }
+					>
+						<ToolsPanelItem
+							hasValue={ () => ! showPrefix }
 							label={ __( 'Show archive type in title' ) }
-							onChange={ () =>
-								setAttributes( { showPrefix: ! showPrefix } )
+							onDeselect={ () =>
+								setAttributes( { showPrefix: true } )
 							}
-							checked={ showPrefix }
-						/>
-					</PanelBody>
+							isShownByDefault
+						>
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Show archive type in title' ) }
+								onChange={ () =>
+									setAttributes( {
+										showPrefix: ! showPrefix,
+									} )
+								}
+								checked={ showPrefix }
+							/>
+						</ToolsPanelItem>
+					</ToolsPanel>
 				</InspectorControls>
 				<TagName { ...blockProps }>{ title }</TagName>
 			</>
@@ -109,18 +134,34 @@ export default function QueryTitleEdit( {
 		titleElement = (
 			<>
 				<InspectorControls>
-					<PanelBody title={ __( 'Settings' ) }>
-						<ToggleControl
-							__nextHasNoMarginBottom
+					<ToolsPanel
+						label={ __( 'Settings' ) }
+						resetAll={ () =>
+							setAttributes( {
+								showSearchTerm: true,
+							} )
+						}
+					>
+						<ToolsPanelItem
+							hasValue={ () => ! showSearchTerm }
 							label={ __( 'Show search term in title' ) }
-							onChange={ () =>
-								setAttributes( {
-									showSearchTerm: ! showSearchTerm,
-								} )
+							onDeselect={ () =>
+								setAttributes( { showSearchTerm: true } )
 							}
-							checked={ showSearchTerm }
-						/>
-					</PanelBody>
+							isShownByDefault
+						>
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Show search term in title' ) }
+								onChange={ () =>
+									setAttributes( {
+										showSearchTerm: ! showSearchTerm,
+									} )
+								}
+								checked={ showSearchTerm }
+							/>
+						</ToolsPanelItem>
+					</ToolsPanel>
 				</InspectorControls>
 
 				<TagName { ...blockProps }>

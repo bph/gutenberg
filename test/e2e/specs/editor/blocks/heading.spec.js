@@ -220,7 +220,7 @@ test.describe( 'Heading', () => {
 
 		await page
 			.getByRole( 'option', {
-				name: 'Color: Luminous vivid orange',
+				name: 'Luminous vivid orange',
 			} )
 			.click();
 

@@ -23,8 +23,9 @@
 		}
 
 		&::before {
-			transition: box-shadow 0.1s ease;
-			@include reduce-motion("transition");
+			@media not (prefers-reduced-motion) {
+				transition: box-shadow 0.1s ease;
+			}
 			content: "";
 			display: block;
 			position: absolute;

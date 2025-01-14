@@ -87,7 +87,6 @@ const DefaultOptions = () => {
 						onClick={ () => {
 							setCurrentColor?.( color );
 						} }
-						aria-label={ name }
 					/>
 				);
 			} ) }

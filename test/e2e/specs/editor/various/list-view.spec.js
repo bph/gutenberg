@@ -162,7 +162,10 @@ test.describe( 'List View', () => {
 		// make the inner blocks appear.
 		await editor.canvas
 			.getByRole( 'document', { name: 'Block: Cover' } )
-			.getByRole( 'option', { name: /Color: /i } )
+			.getByRole( 'listbox', {
+				name: 'Custom color picker.',
+			} )
+			.getByRole( 'option' )
 			.first()
 			.click();
 

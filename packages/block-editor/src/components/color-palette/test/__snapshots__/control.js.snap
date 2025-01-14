@@ -217,7 +217,7 @@ exports[`ColorPaletteControl matches the snapshot 1`] = `
                         class="components-circular-option-picker__option-wrapper"
                       >
                         <button
-                          aria-label="Color: red"
+                          aria-label="red"
                           aria-selected="true"
                           class="components-button components-circular-option-picker__option is-next-40px-default-size"
                           data-active-item="true"

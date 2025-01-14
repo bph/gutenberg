@@ -79,13 +79,6 @@ function SinglePalette( {
 					onClick={
 						isSelected ? clearColor : () => onChange( color, index )
 					}
-					aria-label={
-						name
-							? // translators: %s: The name of the color e.g: "vivid red".
-							  sprintf( __( 'Color: %s' ), name )
-							: // translators: %s: color hex code e.g: "#f00".
-							  sprintf( __( 'Color code: %s' ), color )
-					}
 				/>
 			);
 		} );
