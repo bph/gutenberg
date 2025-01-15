@@ -26,6 +26,7 @@ import {
 	getEntityFields as _getEntityFields,
 	isEntityReady as _isEntityReady,
 } from '../dataviews/store/private-selectors';
+import { getTemplatePartIcon } from '../utils';
 
 const EMPTY_INSERTION_POINT = {
 	rootClientId: undefined,
@@ -97,15 +98,21 @@ export const getPostIcon = createRegistrySelector(
 				postType === 'wp_template_part' ||
 				postType === 'wp_template'
 			) {
-				return (
-					(
-						select( coreStore ).getEntityRecord(
-							'root',
-							'__unstableBase'
-						)?.default_template_part_areas || []
-					).find( ( item ) => options.area === item.area )?.icon ||
-					layout
+				const templateAreas =
+					select( coreStore ).getEntityRecord(
+						'root',
+						'__unstableBase'
+					)?.default_template_part_areas || [];
+
+				const areaData = templateAreas.find(
+					( item ) => options.area === item.area
 				);
+
+				if ( areaData?.icon ) {
+					return getTemplatePartIcon( areaData.icon );
+				}
+
+				return layout;
 			}
 			if ( CARD_ICONS[ postType ] ) {
 				return CARD_ICONS[ postType ];

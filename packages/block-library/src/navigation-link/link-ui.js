@@ -78,7 +78,7 @@ export function getSuggestionsQuery( type, kind ) {
 	}
 }
 
-function LinkUIBlockInserter( { clientId, onBack, onSelectBlock } ) {
+function LinkUIBlockInserter( { clientId, onBack } ) {
 	const { rootBlockClientId } = useSelect(
 		( select ) => {
 			const { getBlockRootClientId } = select( blockEditorStore );
@@ -140,7 +140,6 @@ function LinkUIBlockInserter( { clientId, onBack, onSelectBlock } ) {
 				prioritizePatterns={ false }
 				selectBlockOnInsert
 				hasSearch={ false }
-				onSelect={ onSelectBlock }
 			/>
 		</div>
 	);
@@ -202,10 +201,6 @@ function UnforwardedLinkUI( props, ref ) {
 		LinkUI,
 		`link-ui-link-control__description`
 	);
-
-	// Selecting a block should close the popover and also remove the (previously) automatically inserted
-	// link block so that the newly selected block can be inserted in its place.
-	const { onClose: onSelectBlock } = props;
 
 	return (
 		<Popover
@@ -287,7 +282,6 @@ function UnforwardedLinkUI( props, ref ) {
 						setAddingBlock( false );
 						setFocusAddBlockButton( true );
 					} }
-					onSelectBlock={ onSelectBlock }
 				/>
 			) }
 		</Popover>
