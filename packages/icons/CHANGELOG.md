@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 10.16.0 (2025-01-15)
+
 ## 10.15.0 (2025-01-02)
 
 -   Add new `caution` icon ([#66555](https://github.com/WordPress/gutenberg/pull/66555)).

@@ -726,7 +726,10 @@ describe( 'getAutosaves', () => {
 		const postType = 'post';
 		const postId = 1;
 		const restBase = 'posts';
-		const postEntityConfig = { rest_base: restBase };
+		const postEntityConfig = {
+			rest_base: restBase,
+			supports: { autosave: true },
+		};
 
 		triggerFetch.mockImplementation( () => SUCCESSFUL_RESPONSE );
 		const dispatch = Object.assign( jest.fn(), {
@@ -750,7 +753,10 @@ describe( 'getAutosaves', () => {
 		const postType = 'post';
 		const postId = 1;
 		const restBase = 'posts';
-		const postEntityConfig = { rest_base: restBase };
+		const postEntityConfig = {
+			rest_base: restBase,
+			supports: { autosave: true },
+		};
 
 		triggerFetch.mockImplementation( () => [] );
 		const dispatch = Object.assign( jest.fn(), {

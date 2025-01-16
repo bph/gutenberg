@@ -57,6 +57,11 @@ const NON_CONTEXTUAL_POST_TYPES = [
 ];
 
 /**
+ * These are rendering modes that the editor supports.
+ */
+const RENDERING_MODES = [ 'post-only', 'template-locked' ];
+
+/**
  * Depending on the post, template and template mode,
  * returns the appropriate blocks and change handlers for the block editor provider.
  *
@@ -171,7 +176,6 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 			mode,
 			defaultMode,
 			postTypeEntities,
-			hasLoadedPostObject,
 		} = useSelect(
 			( select ) => {
 				const {
@@ -180,24 +184,32 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 					getRenderingMode,
 					__unstableIsEditorReady,
 				} = select( editorStore );
-				const { getEntitiesConfig } = select( coreStore );
+				const {
+					getEntitiesConfig,
+					getPostType,
+					hasFinishedResolution,
+				} = select( coreStore );
 
-				const postTypeObject = select( coreStore ).getPostType(
-					post.type
+				const postTypeSupports = getPostType( post.type )?.supports;
+				const hasLoadedPostObject = hasFinishedResolution(
+					'getPostType',
+					[ post.type ]
 				);
 
-				const _hasLoadedPostObject = select(
-					coreStore
-				).hasFinishedResolution( 'getPostType', [ post.type ] );
+				const _defaultMode = Array.isArray( postTypeSupports?.editor )
+					? postTypeSupports.editor.find(
+							( features ) => 'default_mode' in features
+					  )?.default_mode
+					: undefined;
+				const hasDefaultMode = RENDERING_MODES.includes( _defaultMode );
 
 				return {
-					hasLoadedPostObject: _hasLoadedPostObject,
 					editorSettings: getEditorSettings(),
-					isReady: __unstableIsEditorReady(),
+					isReady: __unstableIsEditorReady() && hasLoadedPostObject,
 					mode: getRenderingMode(),
 					defaultMode:
-						hasTemplate && postTypeObject?.default_rendering_mode
-							? postTypeObject?.default_rendering_mode
+						hasTemplate && hasDefaultMode
+							? _defaultMode
 							: 'post-only',
 					selection: getEditorSelection(),
 					postTypeEntities:
@@ -334,7 +346,7 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 		// Register the editor commands.
 		useCommands();
 
-		if ( ! isReady || ! mode || ! hasLoadedPostObject ) {
+		if ( ! isReady || ! mode ) {
 			return null;
 		}
 

@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-<<<<<<< HEAD
-=======
+## 29.2.0 (2025-01-15)
+
 ### Internal
 
 -   `Components`: Standardize reduced motion handling using media queries ([#68421](https://github.com/WordPress/gutenberg/pull/68421)).
