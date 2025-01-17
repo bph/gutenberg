@@ -8,6 +8,7 @@ import {
 	InspectorControls,
 } from '@wordpress/block-editor';
 import {
+	TextControl,
 	ToggleControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -30,7 +31,7 @@ const TEMPLATE = [
 ];
 
 function DetailsEdit( { attributes, setAttributes } ) {
-	const { showContent, summary, allowedBlocks } = attributes;
+	const { name, showContent, summary, allowedBlocks } = attributes;
 	const blockProps = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TEMPLATE,
@@ -74,6 +75,20 @@ function DetailsEdit( { attributes, setAttributes } ) {
 						/>
 					</ToolsPanelItem>
 				</ToolsPanel>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				<TextControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Name attribute' ) }
+					value={ name || '' }
+					onChange={ ( newName ) =>
+						setAttributes( { name: newName } )
+					}
+					help={ __(
+						'Enables multiple Details blocks with the same name attribute to be connected, with only one open at a time.'
+					) }
+				/>
 			</InspectorControls>
 			<details { ...innerBlocksProps } open={ isOpen }>
 				<summary

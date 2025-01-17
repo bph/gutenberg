@@ -17,6 +17,12 @@
 			"source": "rich-text",
 			"selector": "summary"
 		},
+		"name": {
+			"type": "string",
+			"source": "attribute",
+			"attribute": "name",
+			"selector": ".wp-block-details"
+		},
 		"allowedBlocks": {
 			"type": "array"
 		}

@@ -25,12 +25,13 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	ResizableBox,
-	PanelBody,
-	__experimentalVStack as VStack,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalUnitControl as UnitControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { Icon, search } from '@wordpress/icons';
@@ -54,6 +55,7 @@ import {
 	MIN_WIDTH,
 	isPercentageUnit,
 } from './utils.js';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 // Used to calculate border radius adjustment to avoid "fat" corners when
 // button is placed inside wrapper.
@@ -370,6 +372,7 @@ export default function SearchEdit( {
 			</>
 		);
 	};
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const controls = (
 		<>
@@ -408,79 +411,101 @@ export default function SearchEdit( {
 			</BlockControls>
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<VStack
-						className="wp-block-search__inspector-controls"
-						spacing={ 4 }
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							width: undefined,
+							widthUnit: undefined,
+						} );
+					} }
+					dropdownMenuProps={ dropdownMenuProps }
+				>
+					<ToolsPanelItem
+						hasValue={ () => !! width }
+						label={ __( 'Width' ) }
+						onDeselect={ () => {
+							setAttributes( {
+								width: undefined,
+								widthUnit: undefined,
+							} );
+						} }
+						isShownByDefault
 					>
-						<UnitControl
-							__next40pxDefaultSize
-							label={ __( 'Width' ) }
-							id={ unitControlInputId } // unused, kept for backwards compatibility
-							min={
-								isPercentageUnit( widthUnit ) ? 0 : MIN_WIDTH
-							}
-							max={
-								isPercentageUnit( widthUnit ) ? 100 : undefined
-							}
-							step={ 1 }
-							onChange={ ( newWidth ) => {
-								const parsedNewWidth =
-									newWidth === ''
-										? undefined
-										: parseInt( newWidth, 10 );
-								setAttributes( {
-									width: parsedNewWidth,
-								} );
-							} }
-							onUnitChange={ ( newUnit ) => {
-								setAttributes( {
-									width:
-										'%' === newUnit
-											? PC_WIDTH_DEFAULT
-											: PX_WIDTH_DEFAULT,
-									widthUnit: newUnit,
-								} );
-							} }
-							__unstableInputWidth="80px"
-							value={ `${ width }${ widthUnit }` }
-							units={ units }
-						/>
-						<ToggleGroupControl
-							label={ __( 'Percentage Width' ) }
-							value={
-								PERCENTAGE_WIDTHS.includes( width ) &&
-								widthUnit === '%'
-									? width
-									: undefined
-							}
-							hideLabelFromVision
-							onChange={ ( newWidth ) => {
-								setAttributes( {
-									width: newWidth,
-									widthUnit: '%',
-								} );
-							} }
-							isBlock
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-						>
-							{ PERCENTAGE_WIDTHS.map( ( widthValue ) => {
-								return (
-									<ToggleGroupControlOption
-										key={ widthValue }
-										value={ widthValue }
-										label={ sprintf(
-											/* translators: Percentage value. */
-											__( '%d%%' ),
-											widthValue
-										) }
-									/>
-								);
-							} ) }
-						</ToggleGroupControl>
-					</VStack>
-				</PanelBody>
+						<VStack>
+							<UnitControl
+								__next40pxDefaultSize
+								label={ __( 'Width' ) }
+								id={ unitControlInputId } // Unused, kept for backwards compatibility
+								min={
+									isPercentageUnit( widthUnit )
+										? 0
+										: MIN_WIDTH
+								}
+								max={
+									isPercentageUnit( widthUnit )
+										? 100
+										: undefined
+								}
+								step={ 1 }
+								onChange={ ( newWidth ) => {
+									const parsedNewWidth =
+										newWidth === ''
+											? undefined
+											: parseInt( newWidth, 10 );
+									setAttributes( {
+										width: parsedNewWidth,
+									} );
+								} }
+								onUnitChange={ ( newUnit ) => {
+									setAttributes( {
+										width:
+											'%' === newUnit
+												? PC_WIDTH_DEFAULT
+												: PX_WIDTH_DEFAULT,
+										widthUnit: newUnit,
+									} );
+								} }
+								__unstableInputWidth="80px"
+								value={ `${ width }${ widthUnit }` }
+								units={ units }
+							/>
+							<ToggleGroupControl
+								label={ __( 'Percentage Width' ) }
+								value={
+									PERCENTAGE_WIDTHS.includes( width ) &&
+									widthUnit === '%'
+										? width
+										: undefined
+								}
+								hideLabelFromVision
+								onChange={ ( newWidth ) => {
+									setAttributes( {
+										width: newWidth,
+										widthUnit: '%',
+									} );
+								} }
+								isBlock
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+							>
+								{ PERCENTAGE_WIDTHS.map( ( widthValue ) => {
+									return (
+										<ToggleGroupControlOption
+											key={ widthValue }
+											value={ widthValue }
+											label={ sprintf(
+												/* translators: Percentage value. */
+												__( '%d%%' ),
+												widthValue
+											) }
+										/>
+									);
+								} ) }
+							</ToggleGroupControl>
+						</VStack>
+					</ToolsPanelItem>
+				</ToolsPanel>
 			</InspectorControls>
 		</>
 	);

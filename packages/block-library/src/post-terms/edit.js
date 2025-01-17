@@ -122,6 +122,7 @@ export default function PostTermsEdit( {
 								key={ postTerm.id }
 								href={ postTerm.link }
 								onClick={ ( event ) => event.preventDefault() }
+								rel="tag"
 							>
 								{ decodeEntities( postTerm.name ) }
 							</a>

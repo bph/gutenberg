@@ -255,7 +255,7 @@ Hide and show additional content. ([Source](https://github.com/WordPress/gutenbe
 -	**Name:** core/details
 -	**Category:** text
 -	**Supports:** align (full, wide), anchor, color (background, gradients, link, text), interactivity (clientNavigation), layout (~~allowEditing~~), spacing (blockGap, margin, padding), typography (fontSize, lineHeight), ~~html~~
--	**Attributes:** allowedBlocks, showContent, summary
+-	**Attributes:** allowedBlocks, name, showContent, summary
 
 ## Embed
 
@@ -616,7 +616,7 @@ Displays the contents of a post or page. ([Source](https://github.com/WordPress/
 
 -	**Name:** core/post-content
 -	**Category:** theme
--	**Supports:** align (full, wide), background (backgroundImage, backgroundSize), color (background, gradients, link, text), dimensions (minHeight), layout, spacing (blockGap, margin, padding), typography (fontSize, lineHeight), ~~html~~
+-	**Supports:** align (full, wide), background (backgroundImage, backgroundSize), color (background, gradients, heading, link, text), dimensions (minHeight), layout, spacing (blockGap, margin, padding), typography (fontSize, lineHeight), ~~html~~
 
 ## Date
 

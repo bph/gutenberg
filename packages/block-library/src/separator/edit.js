@@ -19,12 +19,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import useDeprecatedOpacity from './use-deprecated-opacity';
-
-const htmlElementMessages = {
-	div: __(
-		'The <div> element should only be used if the separator is a design element that should not be announced.'
-	),
-};
+import { htmlElementMessages } from '../utils/messages';
 
 export default function SeparatorEdit( { attributes, setAttributes } ) {
 	const { backgroundColor, opacity, style, tagName } = attributes;

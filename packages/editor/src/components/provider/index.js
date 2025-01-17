@@ -198,8 +198,8 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 
 				const _defaultMode = Array.isArray( postTypeSupports?.editor )
 					? postTypeSupports.editor.find(
-							( features ) => 'default_mode' in features
-					  )?.default_mode
+							( features ) => 'default-mode' in features
+					  )?.[ 'default-mode' ]
 					: undefined;
 				const hasDefaultMode = RENDERING_MODES.includes( _defaultMode );
 
