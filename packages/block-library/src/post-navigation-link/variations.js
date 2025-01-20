@@ -8,7 +8,7 @@ const variations = [
 	{
 		isDefault: true,
 		name: 'post-next',
-		title: __( 'Next post' ),
+		title: __( 'Next Post' ),
 		description: __(
 			'Displays the post link that follows the current post.'
 		),
@@ -24,7 +24,7 @@ const variations = [
 	},
 	{
 		name: 'post-previous',
-		title: __( 'Previous post' ),
+		title: __( 'Previous Post' ),
 		description: __(
 			'Displays the post link that precedes the current post.'
 		),

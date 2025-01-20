@@ -24,6 +24,7 @@ import { View } from '@wordpress/primitives';
  */
 import { unlock } from '../lock-unlock';
 import { MIN_SPACER_SIZE } from './constants';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const { useSpacingSizes } = unlock( blockEditorPrivateApis );
 
@@ -93,6 +94,8 @@ export default function SpacerControls( {
 	width,
 	isResizing,
 } ) {
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+
 	return (
 		<InspectorControls>
 			<ToolsPanel
@@ -103,6 +106,7 @@ export default function SpacerControls( {
 						height: '100px',
 					} );
 				} }
+				dropdownMenuProps={ dropdownMenuProps }
 			>
 				{ orientation === 'horizontal' && (
 					<ToolsPanelItem

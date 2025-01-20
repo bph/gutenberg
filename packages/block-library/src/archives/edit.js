@@ -61,7 +61,7 @@ export default function ArchivesEdit( { attributes, setAttributes } ) {
 						<ToolsPanelItem
 							label={ __( 'Show label' ) }
 							isShownByDefault
-							hasValue={ () => showLabel }
+							hasValue={ () => ! showLabel }
 							onDeselect={ () =>
 								setAttributes( { showLabel: false } )
 							}
@@ -102,7 +102,7 @@ export default function ArchivesEdit( { attributes, setAttributes } ) {
 					<ToolsPanelItem
 						label={ __( 'Group by' ) }
 						isShownByDefault
-						hasValue={ () => !! type }
+						hasValue={ () => type !== 'monthly' }
 						onDeselect={ () =>
 							setAttributes( { type: 'monthly' } )
 						}

@@ -141,6 +141,7 @@ export default function QueryTitleEdit( {
 								showSearchTerm: true,
 							} )
 						}
+						dropdownMenuProps={ dropdownMenuProps }
 					>
 						<ToolsPanelItem
 							hasValue={ () => ! showSearchTerm }

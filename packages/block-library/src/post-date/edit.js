@@ -179,9 +179,7 @@ export default function PostDateEdit( {
 					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
-						hasValue={ () =>
-							format !== undefined && format !== siteFormat
-						}
+						hasValue={ () => !! format }
 						label={ __( 'Date Format' ) }
 						onDeselect={ () =>
 							setAttributes( { format: undefined } )
