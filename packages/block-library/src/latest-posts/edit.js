@@ -17,6 +17,8 @@ import {
 	ToolbarGroup,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { dateI18n, format, getSettings } from '@wordpress/date';
@@ -49,7 +51,9 @@ import {
 	MIN_EXCERPT_LENGTH,
 	MAX_EXCERPT_LENGTH,
 	MAX_POSTS_COLUMNS,
+	DEFAULT_EXCERPT_LENGTH,
 } from './constants';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 /**
  * Module Constants
@@ -77,6 +81,8 @@ function getFeaturedImageDetails( post, size ) {
 
 export default function LatestPostsEdit( { attributes, setAttributes } ) {
 	const instanceId = useInstanceId( LatestPostsEdit );
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+
 	const {
 		postsToShow,
 		order,
@@ -227,68 +233,137 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 	const hasPosts = !! latestPosts?.length;
 	const inspectorControls = (
 		<InspectorControls>
-			<PanelBody title={ __( 'Post content' ) }>
-				<ToggleControl
-					__nextHasNoMarginBottom
+			<ToolsPanel
+				label={ __( 'Post content' ) }
+				resetAll={ () =>
+					setAttributes( {
+						displayPostContent: false,
+						displayPostContentRadio: 'excerpt',
+						excerptLength: DEFAULT_EXCERPT_LENGTH,
+					} )
+				}
+				dropdownMenuProps={ dropdownMenuProps }
+			>
+				<ToolsPanelItem
+					hasValue={ () => !! displayPostContent }
 					label={ __( 'Post content' ) }
-					checked={ displayPostContent }
-					onChange={ ( value ) =>
-						setAttributes( { displayPostContent: value } )
+					onDeselect={ () =>
+						setAttributes( { displayPostContent: false } )
 					}
-				/>
-				{ displayPostContent && (
-					<RadioControl
-						label={ __( 'Show' ) }
-						selected={ displayPostContentRadio }
-						options={ [
-							{ label: __( 'Excerpt' ), value: 'excerpt' },
-							{
-								label: __( 'Full post' ),
-								value: 'full_post',
-							},
-						] }
+					isShownByDefault
+				>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Post content' ) }
+						checked={ displayPostContent }
 						onChange={ ( value ) =>
-							setAttributes( {
-								displayPostContentRadio: value,
-							} )
+							setAttributes( { displayPostContent: value } )
 						}
 					/>
+				</ToolsPanelItem>
+				{ displayPostContent && (
+					<ToolsPanelItem
+						hasValue={ () => displayPostContentRadio !== 'excerpt' }
+						label={ __( 'Show' ) }
+						onDeselect={ () =>
+							setAttributes( {
+								displayPostContentRadio: 'excerpt',
+							} )
+						}
+						isShownByDefault
+					>
+						<RadioControl
+							label={ __( 'Show' ) }
+							selected={ displayPostContentRadio }
+							options={ [
+								{ label: __( 'Excerpt' ), value: 'excerpt' },
+								{
+									label: __( 'Full post' ),
+									value: 'full_post',
+								},
+							] }
+							onChange={ ( value ) =>
+								setAttributes( {
+									displayPostContentRadio: value,
+								} )
+							}
+						/>
+					</ToolsPanelItem>
 				) }
 				{ displayPostContent &&
 					displayPostContentRadio === 'excerpt' && (
-						<RangeControl
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							label={ __( 'Max number of words' ) }
-							value={ excerptLength }
-							onChange={ ( value ) =>
-								setAttributes( { excerptLength: value } )
+						<ToolsPanelItem
+							hasValue={ () =>
+								excerptLength !== DEFAULT_EXCERPT_LENGTH
 							}
-							min={ MIN_EXCERPT_LENGTH }
-							max={ MAX_EXCERPT_LENGTH }
-						/>
+							label={ __( 'Max number of words' ) }
+							onDeselect={ () =>
+								setAttributes( {
+									excerptLength: DEFAULT_EXCERPT_LENGTH,
+								} )
+							}
+							isShownByDefault
+						>
+							<RangeControl
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								label={ __( 'Max number of words' ) }
+								value={ excerptLength }
+								onChange={ ( value ) =>
+									setAttributes( { excerptLength: value } )
+								}
+								min={ MIN_EXCERPT_LENGTH }
+								max={ MAX_EXCERPT_LENGTH }
+							/>
+						</ToolsPanelItem>
 					) }
-			</PanelBody>
+			</ToolsPanel>
 
-			<PanelBody title={ __( 'Post meta' ) }>
-				<ToggleControl
-					__nextHasNoMarginBottom
+			<ToolsPanel
+				label={ __( 'Post meta' ) }
+				resetAll={ () =>
+					setAttributes( {
+						displayAuthor: false,
+						displayPostDate: false,
+					} )
+				}
+				dropdownMenuProps={ dropdownMenuProps }
+			>
+				<ToolsPanelItem
+					hasValue={ () => !! displayAuthor }
 					label={ __( 'Display author name' ) }
-					checked={ displayAuthor }
-					onChange={ ( value ) =>
-						setAttributes( { displayAuthor: value } )
+					onDeselect={ () =>
+						setAttributes( { displayAuthor: false } )
 					}
-				/>
-				<ToggleControl
-					__nextHasNoMarginBottom
+					isShownByDefault
+				>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Display author name' ) }
+						checked={ displayAuthor }
+						onChange={ ( value ) =>
+							setAttributes( { displayAuthor: value } )
+						}
+					/>
+				</ToolsPanelItem>
+				<ToolsPanelItem
+					hasValue={ () => !! displayPostDate }
 					label={ __( 'Display post date' ) }
-					checked={ displayPostDate }
-					onChange={ ( value ) =>
-						setAttributes( { displayPostDate: value } )
+					onDeselect={ () =>
+						setAttributes( { displayPostDate: false } )
 					}
-				/>
-			</PanelBody>
-
+					isShownByDefault
+				>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Display post date' ) }
+						checked={ displayPostDate }
+						onChange={ ( value ) =>
+							setAttributes( { displayPostDate: value } )
+						}
+					/>
+				</ToolsPanelItem>
+			</ToolsPanel>
 			<PanelBody title={ __( 'Featured image' ) }>
 				<ToggleControl
 					__nextHasNoMarginBottom
