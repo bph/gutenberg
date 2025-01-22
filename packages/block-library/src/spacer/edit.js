@@ -260,7 +260,7 @@ const SpacerEdit = ( {
 			isFlexLayout &&
 			selfStretch !== 'fill' &&
 			selfStretch !== 'fit' &&
-			! flexSize
+			flexSize === undefined
 		) {
 			if ( inheritedOrientation === 'horizontal' ) {
 				// If spacer is moving from a vertical container to a horizontal container,
