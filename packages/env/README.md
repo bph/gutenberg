@@ -709,6 +709,17 @@ You can tell `wp-env` to use a specific PHP version for compatibility and testin
 }
 ```
 
+### Multisite support
+
+You can tell `wp-env`  if the site should be multisite enabled. This can also be set via the environment variable `WP_ENV_MULTISITE`.
+
+```json
+{
+	"multisite": true,
+	"plugins": [ "." ]
+}
+```
+
 ### Node Lifecycle Script
 
 This is useful for performing some actions after setting up the environment, such as bootstrapping an E2E test environment.
