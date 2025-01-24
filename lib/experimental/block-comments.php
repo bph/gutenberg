@@ -1,6 +1,6 @@
 <?php
 /**
- * Updates the comment type in the REST API for WordPress version 6.7.
+ * Updates the comment type in the REST API.
  *
  * This function is used as a filter callback for the 'rest_pre_insert_comment' hook.
  * It checks if the 'comment_type' parameter is set to 'block_comment' in the REST API request,
@@ -10,7 +10,7 @@
  * @param WP_REST_Request $request The REST API request object.
  * @return array The updated prepared comment data.
  */
-if ( ! function_exists( 'update_comment_type_in_rest_api_6_8' ) && gutenberg_is_experiment_enabled( 'gutenberg-block-comment' ) ) {
+if ( ! function_exists( 'update_comment_type_in_rest_api_6_8' ) ) {
 	function update_comment_type_in_rest_api_6_8( $prepared_comment, $request ) {
 		if ( ! empty( $request['comment_type'] ) && 'block_comment' === $request['comment_type'] ) {
 			$prepared_comment['comment_type']     = $request['comment_type'];
@@ -31,7 +31,7 @@ if ( ! function_exists( 'update_comment_type_in_rest_api_6_8' ) && gutenberg_is_
  * @param array $comment_type The array of comment types.
  * @return array The updated array of comment types.
  */
-if ( ! function_exists( 'update_get_avatar_comment_type' ) && gutenberg_is_experiment_enabled( 'gutenberg-block-comment' ) ) {
+if ( ! function_exists( 'update_get_avatar_comment_type' ) ) {
 	function update_get_avatar_comment_type( $comment_type ) {
 		$comment_type[] = 'block_comment';
 		return $comment_type;
@@ -49,7 +49,7 @@ if ( ! function_exists( 'update_get_avatar_comment_type' ) && gutenberg_is_exper
  *
  * @return void
  */
-if ( ! function_exists( 'exclude_block_comments_from_admin' ) && gutenberg_is_experiment_enabled( 'gutenberg-block-comment' ) ) {
+if ( ! function_exists( 'exclude_block_comments_from_admin' ) ) {
 	function exclude_block_comments_from_admin( $query ) {
 		// Only modify the query if it's for comments
 		if ( isset( $query->query_vars['type'] ) && '' === $query->query_vars['type'] ) {

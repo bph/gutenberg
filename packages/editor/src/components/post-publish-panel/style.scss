@@ -210,9 +210,11 @@
 		left: auto;
 		width: $sidebar-width + $border-width;
 		border-left: $border-width solid $gray-300;
-		transform: translateX(+100%);
-		animation: editor-post-publish-panel__slide-in-animation 0.1s forwards;
-		@include reduce-motion("animation");
+
+		@media not (prefers-reduced-motion) {
+			transform: translateX(+100%);
+			animation: editor-post-publish-panel__slide-in-animation 0.1s forwards;
+		}
 
 		body.is-fullscreen-mode & {
 			top: 0;

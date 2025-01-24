@@ -7,7 +7,7 @@
  */
 
 // Create a new class that extends WP_REST_Comments_Controller
-class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller {
+class Gutenberg_REST_Comment_Controller extends WP_REST_Comments_Controller {
 
 	public function create_item_permissions_check( $request ) {
 		if ( empty( $request['comment_type'] ) || 'comment' === $request['comment_type'] ) {
@@ -18,7 +18,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 			if ( get_option( 'comment_registration' ) ) {
 				return new WP_Error(
 					'rest_comment_login_required',
-					__( 'Sorry, you must be logged in to comment.' ),
+					__( 'Sorry, you must be logged in to comment.', 'gutenberg' ),
 					array( 'status' => 401 )
 				);
 			}
@@ -40,7 +40,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 			if ( ! $allow_anonymous ) {
 				return new WP_Error(
 					'rest_comment_login_required',
-					__( 'Sorry, you must be logged in to comment.' ),
+					__( 'Sorry, you must be logged in to comment.', 'gutenberg' ),
 					array( 'status' => 401 )
 				);
 			}
@@ -51,7 +51,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 			return new WP_Error(
 				'rest_comment_invalid_author',
 				/* translators: %s: Request parameter. */
-				sprintf( __( "Sorry, you are not allowed to edit '%s' for comments." ), 'author' ),
+				sprintf( __( "Sorry, you are not allowed to edit '%s' for comments.", 'gutenberg' ), 'author' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -61,7 +61,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 				return new WP_Error(
 					'rest_comment_invalid_author_ip',
 					/* translators: %s: Request parameter. */
-					sprintf( __( "Sorry, you are not allowed to edit '%s' for comments." ), 'author_ip' ),
+					sprintf( __( "Sorry, you are not allowed to edit '%s' for comments.", 'gutenberg' ), 'author_ip' ),
 					array( 'status' => rest_authorization_required_code() )
 				);
 			}
@@ -71,7 +71,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 			return new WP_Error(
 				'rest_comment_invalid_status',
 				/* translators: %s: Request parameter. */
-				sprintf( __( "Sorry, you are not allowed to edit '%s' for comments." ), 'status' ),
+				sprintf( __( "Sorry, you are not allowed to edit '%s' for comments.", 'gutenberg' ), 'status' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -79,7 +79,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 		if ( empty( $request['post'] ) ) {
 			return new WP_Error(
 				'rest_comment_invalid_post_id',
-				__( 'Sorry, you are not allowed to create this comment without a post.' ),
+				__( 'Sorry, you are not allowed to create this comment without a post.', 'gutenberg' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -89,7 +89,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 		if ( ! $post ) {
 			return new WP_Error(
 				'rest_comment_invalid_post_id',
-				__( 'Sorry, you are not allowed to create this comment without a post.' ),
+				__( 'Sorry, you are not allowed to create this comment without a post.', 'gutenberg' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -97,7 +97,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 		if ( 'trash' === $post->post_status ) {
 			return new WP_Error(
 				'rest_comment_trash_post',
-				__( 'Sorry, you are not allowed to create a comment on this post.' ),
+				__( 'Sorry, you are not allowed to create a comment on this post.', 'gutenberg' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -105,7 +105,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 		if ( ! $this->check_read_post_permission( $post, $request ) ) {
 			return new WP_Error(
 				'rest_cannot_read_post',
-				__( 'Sorry, you are not allowed to read the post for this comment.' ),
+				__( 'Sorry, you are not allowed to read the post for this comment.', 'gutenberg' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -117,7 +117,7 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 add_action(
 	'rest_api_init',
 	function () {
-		$controller = new Gutenberg_REST_Comment_Controller_6_8();
+		$controller = new Gutenberg_REST_Comment_Controller();
 		$controller->register_routes();
 	}
 );

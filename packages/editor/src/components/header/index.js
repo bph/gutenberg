@@ -95,11 +95,12 @@ function Header( {
 		[ 'post', 'page', 'wp_template' ].includes( postType ) &&
 		hasSectionRootClientId;
 
-	const disablePreviewOption = [
-		NAVIGATION_POST_TYPE,
-		TEMPLATE_PART_POST_TYPE,
-		PATTERN_POST_TYPE,
-	].includes( postType );
+	const disablePreviewOption =
+		[
+			NAVIGATION_POST_TYPE,
+			TEMPLATE_PART_POST_TYPE,
+			PATTERN_POST_TYPE,
+		].includes( postType ) || forceDisableBlockTools;
 
 	const [ isBlockToolsCollapsed, setIsBlockToolsCollapsed ] =
 		useState( true );
