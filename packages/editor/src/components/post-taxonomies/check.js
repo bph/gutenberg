@@ -15,7 +15,7 @@ import { store as editorStore } from '../../store';
  * @param {Object}          props          The component props.
  * @param {React.ReactNode} props.children The children components to render.
  *
- * @return {React.ReactElement} The rendered children components or null if the current post type has no taxonomies.
+ * @return {React.ReactNode} The rendered children components or null if the current post type has no taxonomies.
  */
 export default function PostTaxonomiesCheck( { children } ) {
 	const hasTaxonomies = useSelect( ( select ) => {
