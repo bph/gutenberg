@@ -25,6 +25,9 @@
 		},
 		"allowedBlocks": {
 			"type": "array"
+		},
+		"placeholder": {
+			"type": "string"
 		}
 	},
 	"supports": {

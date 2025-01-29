@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 10.17.0 (2025-01-29)
+
 ### Enhancements
 
 -   Add a `WP_ENV_MULTISITE` environment variable to override the `multisite` option ([#68792](https://github.com/WordPress/gutenberg/pull/68792)).

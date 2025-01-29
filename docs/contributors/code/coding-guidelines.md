@@ -607,7 +607,7 @@ Many third-party dependencies will distribute their own TypeScript typings. For 
 
 If you use a [TypeScript integration](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support) for your editor, you can typically see that this works if the type resolves to anything other than the fallback `any` type.
 
-For packages which do not distribute their own TypeScript types, you are welcomed to install and use the [DefinitelyTyped](http://definitelytyped.org/) community-maintained types definitions, if one exists.
+For packages which do not distribute their own TypeScript types, you are welcomed to install and use the [DefinitelyTyped](https://definitelytyped.org/) community-maintained types definitions, if one exists.
 
 ### Generic types
 

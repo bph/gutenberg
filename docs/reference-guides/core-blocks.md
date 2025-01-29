@@ -255,7 +255,7 @@ Hide and show additional content. ([Source](https://github.com/WordPress/gutenbe
 -	**Name:** core/details
 -	**Category:** text
 -	**Supports:** align (full, wide), anchor, color (background, gradients, link, text), interactivity (clientNavigation), layout (~~allowEditing~~), spacing (blockGap, margin, padding), typography (fontSize, lineHeight), ~~html~~
--	**Attributes:** allowedBlocks, name, showContent, summary
+-	**Attributes:** allowedBlocks, name, placeholder, showContent, summary
 
 ## Embed
 

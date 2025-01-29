@@ -31,7 +31,8 @@ const TEMPLATE = [
 ];
 
 function DetailsEdit( { attributes, setAttributes } ) {
-	const { name, showContent, summary, allowedBlocks } = attributes;
+	const { name, showContent, summary, allowedBlocks, placeholder } =
+		attributes;
 	const blockProps = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TEMPLATE,
@@ -100,7 +101,7 @@ function DetailsEdit( { attributes, setAttributes } ) {
 					<RichText
 						identifier="summary"
 						aria-label={ __( 'Write summary' ) }
-						placeholder={ __( 'Write summary…' ) }
+						placeholder={ placeholder || __( 'Write summary…' ) }
 						allowedFormats={ [] }
 						withoutInteractiveFormatting
 						value={ summary }

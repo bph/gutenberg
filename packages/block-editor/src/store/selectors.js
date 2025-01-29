@@ -1626,15 +1626,23 @@ const isBlockVisibleInTheInserter = (
 		Array.isArray( blockType.parent ) ? blockType.parent : []
 	).concat( Array.isArray( blockType.ancestor ) ? blockType.ancestor : [] );
 	if ( parents.length > 0 ) {
-		const rootBlockName = getBlockName( state, rootClientId );
 		// This is an exception to the rule that says that all blocks are visible in the inserter.
 		// Blocks that require a given parent or ancestor are only visible if we're within that parent.
-		return (
-			parents.includes( 'core/post-content' ) ||
-			parents.includes( rootBlockName ) ||
-			getBlockParentsByBlockName( state, rootClientId, parents ).length >
-				0
-		);
+		if ( parents.includes( 'core/post-content' ) ) {
+			return true;
+		}
+
+		let current = rootClientId;
+		let hasParent = false;
+		do {
+			if ( parents.includes( getBlockName( state, current ) ) ) {
+				hasParent = true;
+				break;
+			}
+			current = state.blocks.parents.get( current );
+		} while ( current );
+
+		return hasParent;
 	}
 
 	return true;

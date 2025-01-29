@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 29.3.0 (2025-01-29)
+
 ### Enhancements
 
 -   `BorderBoxControl`, `BoxControl`: Remove `Tooltip` component from linked button ([#68498](https://github.com/WordPress/gutenberg/pull/68498)).
