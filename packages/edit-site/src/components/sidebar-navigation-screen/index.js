@@ -36,7 +36,6 @@ export default function SidebarNavigationScreen( {
 	isRoot,
 	title,
 	actions,
-	meta,
 	content,
 	footer,
 	description,
@@ -121,14 +120,6 @@ export default function SidebarNavigationScreen( {
 						</div>
 					) }
 				</HStack>
-				{ meta && (
-					<>
-						<div className="edit-site-sidebar-navigation-screen__meta">
-							{ meta }
-						</div>
-					</>
-				) }
-
 				<div className="edit-site-sidebar-navigation-screen__content">
 					{ description && (
 						<p className="edit-site-sidebar-navigation-screen__description">

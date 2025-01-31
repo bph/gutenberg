@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Fix CSS rule order in some constructed style sheets. ([#68923](https://github.com/WordPress/gutenberg/pull/68923))
+
 ## 2.17.0 (2025-01-29)
 
 ## 2.16.0 (2025-01-15)

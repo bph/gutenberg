@@ -41,8 +41,9 @@ const sheetFromLink = async (
 	if ( elementSheet ) {
 		return getCachedSheet( sheetId, () => {
 			const sheet = new CSSStyleSheet();
-			for ( const { cssText } of elementSheet.cssRules ) {
-				sheet.insertRule( withAbsoluteUrls( cssText, sheetUrl ) );
+			for ( let i = 0; i < elementSheet.cssRules.length; i++ ) {
+				const { cssText } = elementSheet.cssRules[ i ];
+				sheet.insertRule( withAbsoluteUrls( cssText, sheetUrl ), i );
 			}
 			return Promise.resolve( sheet );
 		} );

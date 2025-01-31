@@ -7,6 +7,17 @@
  * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
  */
 
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		wp_enqueue_style(
+			'wrapper-styles-from-link',
+			plugin_dir_url( __FILE__ ) . 'style-from-link.css',
+			array()
+		);
+	}
+);
+
 $wrapper_attributes = get_block_wrapper_attributes();
 ?>
 <div <?php echo $wrapper_attributes; ?>>
@@ -36,6 +47,12 @@ $wrapper_attributes = get_block_wrapper_attributes();
 		<p data-testid="green-from-inline" class="green-from-inline">Green</p>
 		<p data-testid="blue-from-inline" class="blue-from-inline">Blue</p>
 		<p data-testid="all-from-inline" class="red-from-inline green-from-inline blue-from-inline">All</p>
+	</fieldset>
+
+	<!-- This one should remain green after navigation. -->
+	<fieldset>
+		<legend>Rule order checker</legend>
+		<p data-testid="order-checker" class="order-checker">I should remain green</p>
 	</fieldset>
 
 	<!-- Links to pages with different blocks combination. -->

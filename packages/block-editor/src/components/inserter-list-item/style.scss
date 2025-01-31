@@ -43,8 +43,9 @@
 	cursor: pointer;
 	background: transparent;
 	word-break: break-word;
-	transition: all 0.05s ease-in-out;
-	@include reduce-motion("transition");
+	@media not ( prefers-reduced-motion ) {
+		transition: all 0.05s ease-in-out;
+	}
 	position: relative;
 	height: auto;
 
@@ -97,8 +98,9 @@
 .block-editor-block-types-list__item-icon {
 	padding: 12px 20px;
 	color: $gray-900;
-	transition: all 0.05s ease-in-out;
-	@include reduce-motion("transition");
+	@media not ( prefers-reduced-motion ) {
+		transition: all 0.05s ease-in-out;
+	}
 
 	.block-editor-block-icon {
 		margin-left: auto;
@@ -106,8 +108,9 @@
 	}
 
 	svg {
-		transition: all 0.15s ease-out;
-		@include reduce-motion("transition");
+		@media not ( prefers-reduced-motion ) {
+			transition: all 0.15s ease-out;
+		}
 	}
 
 	.block-editor-block-types-list__list-item[draggable="true"] & {

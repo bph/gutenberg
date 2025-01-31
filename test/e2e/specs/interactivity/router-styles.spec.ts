@@ -229,4 +229,33 @@ test.describe( 'Router styles', () => {
 		await expect( blue ).toHaveCSS( 'color', COLOR_BLUE );
 		await expect( all ).toHaveCSS( 'color', COLOR_BLUE );
 	} );
+
+	test( 'should preserve rule order from referenced style sheets', async ( {
+		page,
+	} ) => {
+		const csn = page.getByTestId( 'client-side navigation' );
+		const orderChecker = page.getByTestId( 'order-checker' );
+
+		await expect( orderChecker ).toHaveCSS( 'color', COLOR_GREEN );
+
+		await page.getByTestId( 'link red' ).click();
+
+		await expect( csn ).toBeVisible();
+		await expect( orderChecker ).toHaveCSS( 'color', COLOR_GREEN );
+
+		await page.getByTestId( 'link green' ).click();
+
+		await expect( csn ).toBeVisible();
+		await expect( orderChecker ).toHaveCSS( 'color', COLOR_GREEN );
+
+		await page.getByTestId( 'link blue' ).click();
+
+		await expect( csn ).toBeVisible();
+		await expect( orderChecker ).toHaveCSS( 'color', COLOR_GREEN );
+
+		await page.getByTestId( 'link all' ).click();
+
+		await expect( csn ).toBeVisible();
+		await expect( orderChecker ).toHaveCSS( 'color', COLOR_GREEN );
+	} );
 } );

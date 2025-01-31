@@ -19,6 +19,7 @@ import {
 	useCallback,
 	useEffect,
 } from '@wordpress/element';
+import { getDefaultBlockName } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -171,13 +172,13 @@ function Items( {
 			const {
 				getSettings,
 				getBlockOrder,
-				getSelectedBlockClientId,
 				getSelectedBlockClientIds,
 				__unstableGetVisibleBlocks,
 				getTemplateLock,
 				getBlockEditingMode,
 				isSectionBlock,
 				isZoomOut: _isZoomOut,
+				canInsertBlockType,
 			} = unlock( select( blockEditorStore ) );
 
 			const _order = getBlockOrder( rootClientId );
@@ -190,10 +191,20 @@ function Items( {
 				};
 			}
 
-			const selectedBlockClientId = getSelectedBlockClientId();
+			const selectedBlockClientIds = getSelectedBlockClientIds();
+			const selectedBlockClientId = selectedBlockClientIds[ 0 ];
+			const showRootAppender =
+				! rootClientId &&
+				! selectedBlockClientId &&
+				( ! _order.length ||
+					! canInsertBlockType(
+						getDefaultBlockName(),
+						rootClientId
+					) );
+
 			return {
 				order: _order,
-				selectedBlocks: getSelectedBlockClientIds(),
+				selectedBlocks: selectedBlockClientIds,
 				visibleBlocks: __unstableGetVisibleBlocks(),
 				isZoomOut: _isZoomOut(),
 				shouldRenderAppender:
@@ -203,10 +214,8 @@ function Items( {
 					hasAppender &&
 					! _isZoomOut() &&
 					( hasCustomAppender ||
-						rootClientId === selectedBlockClientId ||
-						( ! rootClientId &&
-							! selectedBlockClientId &&
-							! _order.length ) ),
+						showRootAppender ||
+						rootClientId === selectedBlockClientId ),
 			};
 		},
 		[ rootClientId, hasAppender, hasCustomAppender ]

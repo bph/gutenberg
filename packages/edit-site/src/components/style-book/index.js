@@ -24,7 +24,6 @@ import {
 } from '@wordpress/block-editor';
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
 import { useSelect, dispatch } from '@wordpress/data';
-import { useResizeObserver } from '@wordpress/compose';
 import {
 	useMemo,
 	useState,
@@ -227,7 +226,6 @@ function StyleBook( {
 	userConfig = {},
 	path = '',
 } ) {
-	const [ resizeObserver, sizes ] = useResizeObserver();
 	const [ textColor ] = useGlobalStyle( 'color.text' );
 	const [ backgroundColor ] = useGlobalStyle( 'color.background' );
 	const colors = useMultiOriginPalettes();
@@ -282,7 +280,6 @@ function StyleBook( {
 		>
 			<div
 				className={ clsx( 'edit-site-style-book', {
-					'is-wide': sizes.width > 600,
 					'is-button': !! onClick,
 				} ) }
 				style={ {
@@ -290,7 +287,6 @@ function StyleBook( {
 					background: backgroundColor,
 				} }
 			>
-				{ resizeObserver }
 				{ showTabs ? (
 					<Tabs>
 						<div className="edit-site-style-book__tablist-container">
@@ -331,7 +327,6 @@ function StyleBook( {
 										isSelected={ isSelected }
 										onSelect={ onSelect }
 										settings={ settings }
-										sizes={ sizes }
 										title={ tab.title }
 										goTo={ goTo }
 									/>
@@ -346,7 +341,6 @@ function StyleBook( {
 						onClick={ onClick }
 						onSelect={ onSelect }
 						settings={ settings }
-						sizes={ sizes }
 						goTo={ goTo }
 					/>
 				) }
@@ -420,7 +414,6 @@ export const StyleBookPreview = ( { userConfig = {}, isStatic = false } ) => {
 		onChangeSection( `/blocks/${ encodeURIComponent( blockName ) }` );
 	};
 
-	const [ resizeObserver, sizes ] = useResizeObserver();
 	const colors = useMultiOriginPalettes();
 	const examples = getExamples( colors );
 	const examplesForSinglePageUse = getExamplesForSinglePageUse( examples );
@@ -489,14 +482,12 @@ export const StyleBookPreview = ( { userConfig = {}, isStatic = false } ) => {
 
 	return (
 		<div className="edit-site-style-book">
-			{ resizeObserver }
 			<BlockEditorProvider settings={ settings }>
 				<GlobalStylesRenderer disableRootPadding />
 				<StyleBookBody
 					examples={ displayedExamples }
 					settings={ settings }
 					goTo={ goTo }
-					sizes={ sizes }
 					isSelected={ ! isStatic ? isSelected : null }
 					onSelect={ ! isStatic ? onSelect : null }
 				/>
@@ -511,7 +502,6 @@ export const StyleBookBody = ( {
 	onClick,
 	onSelect,
 	settings,
-	sizes,
 	title,
 	goTo,
 } ) => {
@@ -574,9 +564,7 @@ export const StyleBookBody = ( {
 					'body { cursor: pointer; } body * { pointer-events: none; }' }
 			</style>
 			<Examples
-				className={ clsx( 'edit-site-style-book__examples', {
-					'is-wide': sizes.width > 600,
-				} ) }
+				className="edit-site-style-book__examples"
 				filteredExamples={ examples }
 				label={
 					title

@@ -104,7 +104,7 @@
 		&.is-invalid,
 		&.is-draft {
 			span {
-				--wp-underline-color: var(--wp--preset--color--vivid-red);
+				--wp-underline-color: #{$alert-red};
 			}
 		}
 	}

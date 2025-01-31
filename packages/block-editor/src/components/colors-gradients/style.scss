@@ -129,8 +129,9 @@ $swatch-gap: 12px;
 	top: $grid-unit;
 	margin: auto $grid-unit auto;
 	opacity: 0;
-	transition: opacity 0.1s ease-in-out;
-	@include reduce-motion("transition");
+	@media not ( prefers-reduced-motion ) {
+		transition: opacity 0.1s ease-in-out;
+	}
 
 	&.block-editor-panel-color-gradient-settings__reset {
 		border-radius: $radius-small;

@@ -7,7 +7,6 @@ import { privateApis as corePrivateApis } from '@wordpress/core-data';
 import { DataViews, filterSortAndPaginate } from '@wordpress/dataviews';
 import { privateApis as routerPrivateApis } from '@wordpress/router';
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
-import { templateTitleField } from '@wordpress/fields';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -27,7 +26,7 @@ import { useEditPostAction } from '../dataviews-actions';
 import { authorField, descriptionField, previewField } from './fields';
 import { useEvent } from '@wordpress/compose';
 
-const { usePostActions } = unlock( editorPrivateApis );
+const { usePostActions, templateTitleField } = unlock( editorPrivateApis );
 const { useHistory, useLocation } = unlock( routerPrivateApis );
 const { useEntityRecordsWithPermissions } = unlock( corePrivateApis );
 
