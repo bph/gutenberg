@@ -24,6 +24,7 @@
 .block-editor-global-styles__shadow-dropdown {
 	display: block;
 	padding: 0;
+	position: relative;
 
 	button {
 		width: 100%;
@@ -32,6 +33,28 @@
 		&.is-open {
 			background-color: $gray-100;
 		}
+	}
+}
+
+.block-editor-global-styles__shadow-editor__remove-button {
+	position: absolute;
+	right: 0;
+	top: $grid-unit;
+	margin: auto $grid-unit auto;
+	opacity: 0;
+	@media not (prefers-reduced-motion) {
+		transition: opacity 0.1s ease-in-out;
+	}
+
+	.block-editor-global-styles__shadow-dropdown:hover &,
+	&:focus,
+	&:hover {
+		opacity: 1;
+	}
+
+	@media (hover: none) {
+		// Show reset button on devices that do not support hover.
+		opacity: 1;
 	}
 }
 

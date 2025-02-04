@@ -201,6 +201,11 @@ function Items( {
 						getDefaultBlockName(),
 						rootClientId
 					) );
+			const hasSelectedRoot = !! (
+				rootClientId &&
+				selectedBlockClientId &&
+				rootClientId === selectedBlockClientId
+			);
 
 			return {
 				order: _order,
@@ -214,8 +219,8 @@ function Items( {
 					hasAppender &&
 					! _isZoomOut() &&
 					( hasCustomAppender ||
-						showRootAppender ||
-						rootClientId === selectedBlockClientId ),
+						hasSelectedRoot ||
+						showRootAppender ),
 			};
 		},
 		[ rootClientId, hasAppender, hasCustomAppender ]

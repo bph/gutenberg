@@ -217,3 +217,20 @@ function gutenberg_update_ignored_hooked_blocks_postmeta( $post ) {
 add_filter( 'rest_pre_insert_page', 'gutenberg_update_ignored_hooked_blocks_postmeta' );
 add_filter( 'rest_pre_insert_post', 'gutenberg_update_ignored_hooked_blocks_postmeta' );
 add_filter( 'rest_pre_insert_wp_block', 'gutenberg_update_ignored_hooked_blocks_postmeta' );
+
+/**
+ * Update Query `parents` argument validation for hierarchical post types.
+ * A zero is a valid parent ID for hierarchical post types. Used to display top-level items.
+ *
+ * @param array    $query The query vars.
+ * @param WP_Block $block Block instance.
+ * @return array   The filtered query vars.
+ */
+function gutenberg_parents_query_vars_from_query_block( $query, $block ) {
+	if ( ! empty( $block->context['query']['parents'] ) && is_post_type_hierarchical( $query['post_type'] ) ) {
+		$query['post_parent__in'] = array_unique( array_map( 'intval', $block->context['query']['parents'] ) );
+	}
+
+	return $query;
+}
+add_filter( 'query_loop_block_query_vars', 'gutenberg_parents_query_vars_from_query_block', 10, 2 );
