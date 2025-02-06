@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-   `ComboboxControl`: Add an `isLoading` prop to show a loading spinner ([#68990](https://github.com/WordPress/gutenberg/pull/68990))
+
 ## 29.3.0 (2025-01-29)
 
 ### Enhancements

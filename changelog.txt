@@ -1,7 +1,15 @@
 == Changelog ==
 
-= 20.2.0-rc.1 =
+= 20.0.1 =
 
+## Changelog
+
+### Bug Fixes
+
+- iAPI Router: add missing changelog entry for [#68923](https://github.com/WordPress/gutenberg/pull/68945)
+
+
+= 20.2.0 =
 
 ## Changelog
 
@@ -141,6 +149,8 @@
 The following contributors merged PRs in this release:
 
 @afercia @benazeer-ben @fabiankaegy @himanshupathak95 @im3dabasia @Infinite-Null @justlevine @karthick-murugan @Mamaduka @Mayank-Tripathi32 @SainathPoojary @shail-mehta @shimotmk @Soean @spacedmonkey @stokesman @Sukhendu2002 @t-hamano @yogeshbhutkar
+
+
 
 
 = 20.1.0 =
