@@ -4,7 +4,9 @@ version: 2
 updates:
     # Check for updates to GitHub Actions.
     - package-ecosystem: 'github-actions'
-      directory: '/'
+      directories:
+          - '.github/workflows'
+          - '.github/setup-node'
       schedule:
           interval: 'daily'
       open-pull-requests-limit: 10
@@ -13,13 +15,9 @@ updates:
           - '[Type] Build Tooling'
       ignore:
           - dependency-name: 'actions/setup-java'
-            versions: ['*']
           - dependency-name: 'gradle/*'
-            versions: ['*']
           - dependency-name: 'reactivecircus/*'
-            versions: ['*']
           - dependency-name: 'ruby/setup-ruby'
-            versions: ['*']
       groups:
           github-actions:
               patterns:

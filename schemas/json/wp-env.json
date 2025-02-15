@@ -149,7 +149,12 @@
 						"$ref": "#/definitions/wpEnvPropertyNames"
 					},
 					{
-						"enum": [ "$schema", "env", "testsPort", "lifecycleScripts" ]
+						"enum": [
+							"$schema",
+							"env",
+							"testsPort",
+							"lifecycleScripts"
+						]
 					}
 				]
 			}
