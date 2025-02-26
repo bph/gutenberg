@@ -273,12 +273,12 @@ jobs:
               run: echo "version=$(echo $VERSION | cut -d / -f 3 | sed 's/-rc./ RC/' )" >> $GITHUB_OUTPUT
 
             - name: Download Plugin Zip Artifact
-              uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+              uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
               with:
                   name: gutenberg-plugin
 
             - name: Download Release Notes Artifact
-              uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+              uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
               with:
                   name: release-notes
 
