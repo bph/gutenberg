@@ -465,7 +465,10 @@ export const getRawEntityRecord = createSelector(
 					// Because edits are the "raw" attribute values,
 					// we return those from record selectors to make rendering,
 					// comparisons, and joins with edits easier.
-					accumulator[ _key ] = record[ _key ]?.raw ?? record[ _key ];
+					accumulator[ _key ] =
+						record[ _key ]?.raw !== undefined
+							? record[ _key ]?.raw
+							: record[ _key ];
 				} else {
 					accumulator[ _key ] = record[ _key ];
 				}

@@ -644,5 +644,10 @@ $block-inserter-tabs-height: 44px;
 }
 
 .block-editor-tabbed-sidebar__tabpanel .block-editor-inserter__help-text {
+	display: none;
 	padding: 0 $grid-unit-30 $grid-unit-20;
+
+	@include break-mobile {
+		display: block;
+	}
 }

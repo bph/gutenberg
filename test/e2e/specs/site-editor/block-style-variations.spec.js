@@ -317,7 +317,9 @@ async function draftNewPage( page ) {
 
 // Create a Group block with 2 nested Group blocks.
 async function addPageContent( editor, page ) {
-	const inserterButton = page.locator( 'role=tab[name="Blocks"i]' );
+	const inserterButton = page.locator(
+		'role=button[name="Block Inserter"i]'
+	);
 	await inserterButton.click();
 	await page.type( 'role=searchbox[name="Search"i]', 'Group' );
 	await page.click(

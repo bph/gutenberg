@@ -140,12 +140,7 @@ function TableRow< Item >( {
 			} }
 		>
 			{ hasBulkActions && (
-				<td
-					className="dataviews-view-table__checkbox-column"
-					style={ {
-						width: '1%',
-					} }
-				>
+				<td className="dataviews-view-table__checkbox-column">
 					<div className="dataviews-view-table__cell-content-wrapper">
 						<DataViewsSelectionCheckbox
 							item={ item }
@@ -301,9 +296,6 @@ function ViewTable< Item >( {
 						{ hasBulkActions && (
 							<th
 								className="dataviews-view-table__checkbox-column"
-								style={ {
-									width: '1%',
-								} }
 								scope="col"
 							>
 								<BulkSelectionCheckbox
@@ -317,23 +309,21 @@ function ViewTable< Item >( {
 						) }
 						{ hasPrimaryColumn && (
 							<th scope="col">
-								<span className="dataviews-view-table-header">
-									{ titleField && (
-										<ColumnHeaderMenu
-											ref={ headerMenuRef(
-												titleField.id,
-												0
-											) }
-											fieldId={ titleField.id }
-											view={ view }
-											fields={ fields }
-											onChangeView={ onChangeView }
-											onHide={ onHide }
-											setOpenedFilter={ setOpenedFilter }
-											canMove={ false }
-										/>
-									) }
-								</span>
+								{ titleField && (
+									<ColumnHeaderMenu
+										ref={ headerMenuRef(
+											titleField.id,
+											0
+										) }
+										fieldId={ titleField.id }
+										view={ view }
+										fields={ fields }
+										onChangeView={ onChangeView }
+										onHide={ onHide }
+										setOpenedFilter={ setOpenedFilter }
+										canMove={ false }
+									/>
+								) }
 							</th>
 						) }
 						{ columns.map( ( column, index ) => {

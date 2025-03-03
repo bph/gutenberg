@@ -118,11 +118,13 @@ export default function PostCardPanel( {
 						<Badge>{ pageTypeBadge }</Badge>
 					) }
 				</Text>
-				<PostActions
-					postType={ postType }
-					postId={ postId }
-					onActionPerformed={ onActionPerformed }
-				/>
+				{ postIds.length === 1 && (
+					<PostActions
+						postType={ postType }
+						postId={ postIds[ 0 ] }
+						onActionPerformed={ onActionPerformed }
+					/>
+				) }
 			</HStack>
 			{ postIds.length > 1 && (
 				<Text className="editor-post-card-panel__description">

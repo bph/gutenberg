@@ -50,6 +50,54 @@ function deepClone< T >( source: T ): T {
 	return source;
 }
 
+/**
+ * Wraps event object to warn about access of synchronous properties and methods.
+ *
+ * For all store actions attached to an event listener the event object is proxied via this function, unless the action
+ * uses the `withSyncEvent()` utility to indicate that it requires synchronous access to the event object.
+ *
+ * At the moment, the proxied event only emits warnings when synchronous properties or methods are being accessed. In
+ * the future this will be changed and result in an error. The current temporary behavior allows implementers to update
+ * their relevant actions to use `withSyncEvent()`.
+ *
+ * For additional context, see https://github.com/WordPress/gutenberg/issues/64944.
+ *
+ * @param event Event object.
+ * @return Proxied event object.
+ */
+function wrapEventAsync( event: Event ) {
+	const handler = {
+		get( target: Event, prop: string | symbol, receiver: any ) {
+			const value = target[ prop ];
+			switch ( prop ) {
+				case 'currentTarget':
+					warn(
+						`Accessing the synchronous event.${ prop } property in a store action without wrapping it in withSyncEvent() is deprecated and will stop working in WordPress 6.9. Please wrap the store action in withSyncEvent().`
+					);
+					break;
+				case 'preventDefault':
+				case 'stopImmediatePropagation':
+				case 'stopPropagation':
+					warn(
+						`Using the synchronous event.${ prop }() function in a store action without wrapping it in withSyncEvent() is deprecated and will stop working in WordPress 6.9. Please wrap the store action in withSyncEvent().`
+					);
+					break;
+			}
+			if ( value instanceof Function ) {
+				return function ( this: any, ...args: any[] ) {
+					return value.apply(
+						this === receiver ? target : this,
+						args
+					);
+				};
+			}
+			return value;
+		},
+	};
+
+	return new Proxy( event, handler );
+}
+
 const newRule =
 	/(?:([\u0080-\uFFFF\w-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(}\s*)/g;
 const ruleClean = /\/\*[^]*?\*\/|  +/g;
@@ -102,7 +150,15 @@ const getGlobalEventDirective = (
 			.forEach( ( entry ) => {
 				const eventName = entry.suffix.split( '--', 1 )[ 0 ];
 				useInit( () => {
-					const cb = ( event: Event ) => evaluate( entry, event );
+					const cb = ( event: Event ) => {
+						const result = evaluate( entry );
+						if ( typeof result === 'function' ) {
+							if ( ! result?.sync ) {
+								event = wrapEventAsync( event );
+							}
+							result( event );
+						}
+					};
 					const globalVar = type === 'window' ? window : document;
 					globalVar.addEventListener( eventName, cb );
 					return () => globalVar.removeEventListener( eventName, cb );
@@ -128,7 +184,10 @@ const getGlobalAsyncEventDirective = (
 				useInit( () => {
 					const cb = async ( event: Event ) => {
 						await splitTask();
-						evaluate( entry, event );
+						const result = evaluate( entry );
+						if ( typeof result === 'function' ) {
+							result( event );
+						}
 					};
 					const globalVar = type === 'window' ? window : document;
 					globalVar.addEventListener( eventName, cb, {
@@ -206,7 +265,10 @@ export default () => {
 						start = performance.now();
 					}
 				}
-				const result = evaluate( entry );
+				let result = evaluate( entry );
+				if ( typeof result === 'function' ) {
+					result = result();
+				}
 				if ( globalThis.IS_GUTENBERG_PLUGIN ) {
 					if ( globalThis.SCRIPT_DEBUG ) {
 						performance.measure(
@@ -239,7 +301,10 @@ export default () => {
 						start = performance.now();
 					}
 				}
-				const result = evaluate( entry );
+				let result = evaluate( entry );
+				if ( typeof result === 'function' ) {
+					result = result();
+				}
 				if ( globalThis.IS_GUTENBERG_PLUGIN ) {
 					if ( globalThis.SCRIPT_DEBUG ) {
 						performance.measure(
@@ -286,7 +351,13 @@ export default () => {
 							start = performance.now();
 						}
 					}
-					evaluate( entry, event );
+					const result = evaluate( entry );
+					if ( typeof result === 'function' ) {
+						if ( ! result?.sync ) {
+							event = wrapEventAsync( event );
+						}
+						result( event );
+					}
 					if ( globalThis.IS_GUTENBERG_PLUGIN ) {
 						if ( globalThis.SCRIPT_DEBUG ) {
 							performance.measure(
@@ -332,7 +403,10 @@ export default () => {
 					}
 					entries.forEach( async ( entry ) => {
 						await splitTask();
-						evaluate( entry, event );
+						const result = evaluate( entry );
+						if ( typeof result === 'function' ) {
+							result( event );
+						}
 					} );
 				};
 			} );
@@ -360,7 +434,10 @@ export default () => {
 				.filter( isNonDefaultDirectiveSuffix )
 				.forEach( ( entry ) => {
 					const className = entry.suffix;
-					const result = evaluate( entry );
+					let result = evaluate( entry );
+					if ( typeof result === 'function' ) {
+						result = result();
+					}
 					const currentClass = element.props.class || '';
 					const classFinder = new RegExp(
 						`(^|\\s)${ className }(\\s|$)`,
@@ -400,7 +477,10 @@ export default () => {
 	directive( 'style', ( { directives: { style }, element, evaluate } ) => {
 		style.filter( isNonDefaultDirectiveSuffix ).forEach( ( entry ) => {
 			const styleProp = entry.suffix;
-			const result = evaluate( entry );
+			let result = evaluate( entry );
+			if ( typeof result === 'function' ) {
+				result = result();
+			}
 			element.props.style = element.props.style || {};
 			if ( typeof element.props.style === 'string' ) {
 				element.props.style = cssStringToObject( element.props.style );
@@ -434,7 +514,10 @@ export default () => {
 	directive( 'bind', ( { directives: { bind }, element, evaluate } ) => {
 		bind.filter( isNonDefaultDirectiveSuffix ).forEach( ( entry ) => {
 			const attribute = entry.suffix;
-			const result = evaluate( entry );
+			let result = evaluate( entry );
+			if ( typeof result === 'function' ) {
+				result = result();
+			}
 			element.props[ attribute ] = result;
 
 			/*
@@ -535,7 +618,10 @@ export default () => {
 		}
 
 		try {
-			const result = evaluate( entry );
+			let result = evaluate( entry );
+			if ( typeof result === 'function' ) {
+				result = result();
+			}
 			element.props.children =
 				typeof result === 'object' ? null : result.toString();
 		} catch ( e ) {
@@ -545,7 +631,13 @@ export default () => {
 
 	// data-wp-run
 	directive( 'run', ( { directives: { run }, evaluate } ) => {
-		run.forEach( ( entry ) => evaluate( entry ) );
+		run.forEach( ( entry ) => {
+			let result = evaluate( entry );
+			if ( typeof result === 'function' ) {
+				result = result();
+			}
+			return result;
+		} );
 	} );
 
 	// data-wp-each--[item]
@@ -567,7 +659,10 @@ export default () => {
 			const [ entry ] = each;
 			const { namespace } = entry;
 
-			const iterable = evaluate( entry );
+			let iterable = evaluate( entry );
+			if ( typeof iterable === 'function' ) {
+				iterable = iterable();
+			}
 
 			if ( typeof iterable?.[ Symbol.iterator ] !== 'function' ) {
 				return;

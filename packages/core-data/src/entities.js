@@ -34,6 +34,9 @@ export const rootEntitiesConfig = [
 				'default_template_part_areas',
 				'default_template_types',
 				'url',
+				'page_for_posts',
+				'page_on_front',
+				'show_on_front',
 			].join( ',' ),
 		},
 		// The entity doesn't support selecting multiple records.

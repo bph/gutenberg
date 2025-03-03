@@ -56,7 +56,9 @@ export default function PreviewDropdown( { forceIsAutosaveable, disabled } ) {
 			templateId: getCurrentTemplateId(),
 		};
 	}, [] );
-	const { setDeviceType, setRenderingMode } = useDispatch( editorStore );
+	const { setDeviceType, setRenderingMode, setDefaultRenderingMode } = unlock(
+		useDispatch( editorStore )
+	);
 	const { resetZoomLevel } = unlock( useDispatch( blockEditorStore ) );
 
 	const handleDevicePreviewChange = ( newDeviceType ) => {
@@ -160,11 +162,11 @@ export default function PreviewDropdown( { forceIsAutosaveable, disabled } ) {
 								isSelected={ ! isTemplateHidden }
 								role="menuitemcheckbox"
 								onClick={ () => {
-									setRenderingMode(
-										isTemplateHidden
-											? 'template-locked'
-											: 'post-only'
-									);
+									const newRenderingMode = isTemplateHidden
+										? 'template-locked'
+										: 'post-only';
+									setRenderingMode( newRenderingMode );
+									setDefaultRenderingMode( newRenderingMode );
 								} }
 							>
 								{ __( 'Show template' ) }

@@ -36,23 +36,6 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 
 		$paths[] = '/wp/v2/settings';
 		$paths[] = array( '/wp/v2/settings', 'OPTIONS' );
-		$paths[] = '/?_fields=' . implode(
-			',',
-			// @see packages/core-data/src/entities.js
-			array(
-				'description',
-				'gmt_offset',
-				'home',
-				'name',
-				'site_icon',
-				'site_icon_url',
-				'site_logo',
-				'timezone_string',
-				'default_template_part_areas',
-				'default_template_types',
-				'url',
-			)
-		);
 		$paths[] = '/wp/v2/templates/lookup?slug=front-page';
 		$paths[] = '/wp/v2/templates/lookup?slug=home';
 	}
@@ -90,6 +73,26 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 
 		// Used by getBlockPatternCategories in useBlockEditorSettings.
 		$paths[] = '/wp/v2/block-patterns/categories';
+		$paths[] = '/?_fields=' . implode(
+			',',
+			// @see packages/core-data/src/entities.js
+			array(
+				'description',
+				'gmt_offset',
+				'home',
+				'name',
+				'site_icon',
+				'site_icon_url',
+				'site_logo',
+				'timezone_string',
+				'default_template_part_areas',
+				'default_template_types',
+				'url',
+				'page_for_posts',
+				'page_on_front',
+				'show_on_front',
+			)
+		);
 	}
 	return $paths;
 }

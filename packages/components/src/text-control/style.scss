@@ -28,3 +28,9 @@
 		padding-right: $grid-unit-15;
 	}
 }
+
+.components-text-control__input[type="email"],
+.components-text-control__input[type="url"] {
+	/* rtl:ignore */
+	direction: ltr;
+}

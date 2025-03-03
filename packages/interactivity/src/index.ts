@@ -27,6 +27,7 @@ export {
 	useCallback,
 	useMemo,
 	splitTask,
+	withSyncEvent,
 } from './utils';
 
 export { useState, useRef } from 'preact/hooks';

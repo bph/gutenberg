@@ -3,6 +3,7 @@
  */
 import { getQueryArgs } from './get-query-args';
 import { buildQueryString } from './build-query-string';
+import { getFragment } from './get-fragment';
 
 /**
  * Appends arguments as querystring to the provided URL. If the URL already
@@ -26,7 +27,8 @@ export function addQueryArgs( url = '', args ) {
 		return url;
 	}
 
-	let baseUrl = url;
+	const fragment = getFragment( url ) || '';
+	let baseUrl = url.replace( fragment, '' );
 
 	// Determine whether URL already had query arguments.
 	const queryStringIndex = url.indexOf( '?' );
@@ -38,5 +40,5 @@ export function addQueryArgs( url = '', args ) {
 		baseUrl = baseUrl.substr( 0, queryStringIndex );
 	}
 
-	return baseUrl + '?' + buildQueryString( args );
+	return baseUrl + '?' + buildQueryString( args ) + fragment;
 }

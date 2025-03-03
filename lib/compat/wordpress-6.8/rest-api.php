@@ -72,6 +72,21 @@ function gutenberg_add_default_template_types_to_index( WP_REST_Response $respon
 add_filter( 'rest_index', 'gutenberg_add_default_template_types_to_index' );
 
 /**
+ * Adds the site reading options to the REST API index.
+ *
+ * @param WP_REST_Response $response REST API response.
+ * @return WP_REST_Response Modified REST API response.
+ */
+function gutenberg_add_rest_index_reading_options( WP_REST_Response $response ) {
+	$response->data['page_for_posts'] = (int) get_option( 'page_for_posts' );
+	$response->data['page_on_front']  = (int) get_option( 'page_on_front' );
+	$response->data['show_on_front']  = get_option( 'show_on_front' );
+
+	return $response;
+}
+add_filter( 'rest_index', 'gutenberg_add_rest_index_reading_options' );
+
+/**
  * Adds `ignore_sticky` parameter to the post collection endpoint.
  *
  * Note: Backports into the wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php file.

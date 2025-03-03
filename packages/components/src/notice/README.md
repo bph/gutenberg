@@ -19,7 +19,7 @@ Notices are color-coded to indicate the type of message being communicated:
 - **Informational** notices are **blue** by default.
 - If there is a parent `Theme` component with an `accent` color prop, informational notices will take on that color instead.
 - **Success** notices are **green.**
-- **Warning** notices are **yellow\*\***.\*\*
+- **Warning** notices are **yellow.**
 - **Error** notices are **red.**
 
 If an icon is included in the Notice, it should be color-coded to match the Notice state.

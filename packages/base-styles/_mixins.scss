@@ -284,7 +284,6 @@
 	}
 
 	&::-moz-placeholder {
-		opacity: 1; // Necessary because Firefox reduces this from 1.
 		color: $dark-gray-placeholder;
 	}
 

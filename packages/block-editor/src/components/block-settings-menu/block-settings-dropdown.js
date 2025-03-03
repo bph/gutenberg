@@ -11,7 +11,6 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { moreVertical } from '@wordpress/icons';
 import { Children, cloneElement } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { displayShortcut } from '@wordpress/keycodes';
 import { store as keyboardShortcutsStore } from '@wordpress/keyboard-shortcuts';
 import { pipe, useCopyToClipboard } from '@wordpress/compose';
 
@@ -39,16 +38,27 @@ function CopyMenuItem( {
 	label,
 	shortcut,
 	eventType = 'copy',
+	__experimentalUpdateSelection: updateSelection = false,
 } ) {
 	const { getBlocksByClientId } = useSelect( blockEditorStore );
+	const { removeBlocks } = useDispatch( blockEditorStore );
 	const notifyCopy = useNotifyCopy();
 	const ref = useCopyToClipboard(
 		() => serialize( getBlocksByClientId( clientIds ) ),
 		() => {
-			if ( onCopy && eventType === 'copy' ) {
-				onCopy();
+			switch ( eventType ) {
+				case 'copy':
+				case 'copyStyles':
+					onCopy();
+					notifyCopy( eventType, clientIds );
+					break;
+				case 'cut':
+					notifyCopy( eventType, clientIds );
+					removeBlocks( clientIds, updateSelection );
+					break;
+				default:
+					break;
 			}
-			notifyCopy( eventType, clientIds );
 		}
 	);
 	const copyMenuItemLabel = label ? label : __( 'Copy' );
@@ -127,6 +137,8 @@ export function BlockSettingsDropdown( {
 	const shortcuts = useSelect( ( select ) => {
 		const { getShortcutRepresentation } = select( keyboardShortcutsStore );
 		return {
+			copy: getShortcutRepresentation( 'core/block-editor/copy' ),
+			cut: getShortcutRepresentation( 'core/block-editor/cut' ),
 			duplicate: getShortcutRepresentation(
 				'core/block-editor/duplicate'
 			),
@@ -266,9 +278,16 @@ export function BlockSettingsDropdown( {
 									<CopyMenuItem
 										clientIds={ clientIds }
 										onCopy={ onCopy }
-										shortcut={ displayShortcut.primary(
-											'c'
-										) }
+										shortcut={ shortcuts.copy }
+									/>
+									<CopyMenuItem
+										clientIds={ clientIds }
+										label={ __( 'Cut' ) }
+										eventType="cut"
+										shortcut={ shortcuts.cut }
+										__experimentalUpdateSelection={
+											! __experimentalSelectBlock
+										}
 									/>
 									{ canDuplicate && (
 										<MenuItem

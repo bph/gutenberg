@@ -332,6 +332,48 @@ describe( 'getRawEntityRecord', () => {
 			},
 		} );
 	} );
+	it( 'should allow `null` as raw value', () => {
+		const state = deepFreeze( {
+			entities: {
+				config: [
+					{
+						kind: 'someKind',
+						name: 'someName',
+						rawAttributes: [ 'title' ],
+					},
+				],
+				records: {
+					someKind: {
+						someName: {
+							queriedData: {
+								items: {
+									default: {
+										post: {
+											title: {
+												raw: null,
+												rendered: 'Placeholder',
+											},
+										},
+									},
+								},
+								itemIsComplete: {
+									default: {
+										post: true,
+									},
+								},
+								queries: {},
+							},
+						},
+					},
+				},
+			},
+		} );
+		expect(
+			getRawEntityRecord( state, 'someKind', 'someName', 'post' )
+		).toEqual( {
+			title: null,
+		} );
+	} );
 } );
 
 describe( 'getEntityRecords', () => {

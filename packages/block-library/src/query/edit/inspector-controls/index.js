@@ -35,6 +35,7 @@ import {
 	useAllowedControls,
 	isControlAllowed,
 	useTaxonomies,
+	useOrderByOptions,
 } from '../../utils';
 import { useToolsPanelDropdownMenuProps } from '../../../utils/hooks';
 
@@ -111,6 +112,7 @@ export default function QueryInspectorControls( props ) {
 		return onChangeDebounced.cancel;
 	}, [ querySearch, onChangeDebounced ] );
 
+	const orderByOptions = useOrderByOptions( postType );
 	const showInheritControl =
 		! isSingular && isControlAllowed( allowedControls, 'inherit' );
 	const showPostTypeControl =
@@ -329,7 +331,7 @@ export default function QueryInspectorControls( props ) {
 							isShownByDefault
 						>
 							<OrderControl
-								{ ...{ order, orderBy } }
+								{ ...{ order, orderBy, orderByOptions } }
 								onChange={ setQuery }
 							/>
 						</ToolsPanelItem>

@@ -198,7 +198,7 @@ export default function PostNavigationLinkEdit( {
 					aria-label={ ariaLabel }
 					placeholder={ placeholder }
 					value={ label }
-					allowedFormats={ [ 'core/bold', 'core/italic' ] }
+					withoutInteractiveFormatting
 					onChange={ ( newLabel ) =>
 						setAttributes( { label: newLabel } )
 					}

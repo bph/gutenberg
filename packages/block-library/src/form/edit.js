@@ -123,6 +123,7 @@ const Edit = ( { attributes, setAttributes, clientId } ) => {
 							help={ __(
 								'The email address where form submissions will be sent. Separate multiple email addresses with a comma.'
 							) }
+							type="email"
 						/>
 					) }
 				</PanelBody>
@@ -159,6 +160,7 @@ const Edit = ( { attributes, setAttributes, clientId } ) => {
 						help={ __(
 							'The URL where the form should be submitted.'
 						) }
+						type="url"
 					/>
 				</InspectorControls>
 			) }

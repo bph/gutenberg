@@ -1,7 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { store, getContext, getElement } from '@wordpress/interactivity';
+import {
+	store,
+	getContext,
+	getElement,
+	withSyncEvent,
+} from '@wordpress/interactivity';
 
 const focusableSelectors = [
 	'a[href]',
@@ -106,7 +111,7 @@ const { state, actions } = store(
 					actions.openMenu( 'click' );
 				}
 			},
-			handleMenuKeydown( event ) {
+			handleMenuKeydown: withSyncEvent( ( event ) => {
 				const { type, firstFocusableElement, lastFocusableElement } =
 					getContext();
 				if ( state.menuOpenedBy.click ) {
@@ -137,7 +142,7 @@ const { state, actions } = store(
 						}
 					}
 				}
-			},
+			} ),
 			handleMenuFocusout( event ) {
 				const { modal, type } = getContext();
 				// If focus is outside modal, and in the document, close menu

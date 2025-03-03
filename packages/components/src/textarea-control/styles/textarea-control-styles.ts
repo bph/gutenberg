@@ -62,7 +62,6 @@ export const StyledTextarea = styled.textarea`
 	}
 
 	&::-moz-placeholder {
-		opacity: 1; // Necessary because Firefox reduces this from 1.
 		color: ${ COLORS.ui.darkGrayPlaceholder };
 	}
 
@@ -76,7 +75,6 @@ export const StyledTextarea = styled.textarea`
 		}
 
 		&::-moz-placeholder {
-			opacity: 1; // Necessary because Firefox reduces this from 1.
 			color: ${ COLORS.ui.lightGrayPlaceholder };
 		}
 

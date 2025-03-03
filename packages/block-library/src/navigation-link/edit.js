@@ -201,6 +201,7 @@ function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
 						);
 					} }
 					autoComplete="off"
+					type="url"
 				/>
 			</ToolsPanelItem>
 

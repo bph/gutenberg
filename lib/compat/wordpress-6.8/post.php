@@ -12,7 +12,7 @@ function gutenberg_update_page_editor_support() {
 		return;
 	}
 
-	if ( wp_is_block_theme() ) {
+	if ( wp_is_block_theme() && current_theme_supports( 'block-templates' ) ) {
 		add_post_type_support( 'page', 'editor', array( 'default-mode' => 'template-locked' ) );
 	}
 }

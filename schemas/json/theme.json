@@ -1713,6 +1713,9 @@
 				":focus": {
 					"$ref": "#/definitions/stylesPropertiesComplete"
 				},
+				":focus-visible": {
+					"$ref": "#/definitions/stylesPropertiesComplete"
+				},
 				":hover": {
 					"$ref": "#/definitions/stylesPropertiesComplete"
 				},
@@ -1729,6 +1732,7 @@
 				":active",
 				":any-link",
 				":focus",
+				":focus-visible",
 				":hover",
 				":link",
 				":visited"

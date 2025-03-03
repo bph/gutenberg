@@ -1,7 +1,219 @@
 == Changelog ==
 
-= 20.3.0-rc.1 =
+= 20.4.0-rc.1 =
 
+
+## Changelog
+
+### Enhancements
+
+- Generate built CSS file containing the admin color theme CSS custom properties. ([69128](https://github.com/WordPress/gutenberg/pull/69128))
+
+#### Post Editor
+- Editor: Conditionally enable the new default rendering mode for Pages. ([69160](https://github.com/WordPress/gutenberg/pull/69160))
+- Editor: Persist user's 'Show Template' preference. ([69286](https://github.com/WordPress/gutenberg/pull/69286))
+- Editor: Restore starter content modal. ([69081](https://github.com/WordPress/gutenberg/pull/69081))
+- Post Template Panel: Display popover on the left side of the sidebar. ([69134](https://github.com/WordPress/gutenberg/pull/69134))
+
+#### Block Library
+- Post Navigation Link: Enable all non-interactive formats. ([69325](https://github.com/WordPress/gutenberg/pull/69325))
+- Pullquote: Adding missing alignment style. ([68121](https://github.com/WordPress/gutenberg/pull/68121))
+
+#### Site Editor
+- Enhance 404 message styling. ([69234](https://github.com/WordPress/gutenberg/pull/69234))
+
+#### Media
+- Media Utils: Restrict file uploads with `multiple` prop in `uploadMedia` and `mediaUpload`. ([69175](https://github.com/WordPress/gutenberg/pull/69175))
+
+#### Components
+- BorderControl: Always show Reset  button. ([69066](https://github.com/WordPress/gutenberg/pull/69066))
+
+#### Block Editor
+- Block Action: Implement cut functionality in block actions and settings menu. ([68554](https://github.com/WordPress/gutenberg/pull/68554))
+
+#### Global Styles
+- Allow :Focus-visible pseudo-selector to be set in theme.json. ([68521](https://github.com/WordPress/gutenberg/pull/68521))
+
+#### Design Tools
+- Post Comments Count: Add Border Support. ([68223](https://github.com/WordPress/gutenberg/pull/68223))
+
+
+### Bug Fixes
+
+- Core Data: Allow 'null' as raw attribute value. ([69257](https://github.com/WordPress/gutenberg/pull/69257))
+- Dataviews: Fix alignment issue of "Title" column header. ([68840](https://github.com/WordPress/gutenberg/pull/68840))
+- Fix addQueryArgs and removeQueryArg on URLs with fragments. ([69313](https://github.com/WordPress/gutenberg/pull/69313))
+- Post formats: Make title and description human readable. ([69275](https://github.com/WordPress/gutenberg/pull/69275))
+- Site Editor: Fix back link from “Navigation” sub-menus in mobile web. ([69192](https://github.com/WordPress/gutenberg/pull/69192))
+- TextControl: Fix text direction for URL and email fields in block editor for RTL languages. ([68561](https://github.com/WordPress/gutenberg/pull/68561))
+
+#### Block Library
+- Fix: Extra top and bottom margin issue in Social Link block for classic theme below twenty twenty. ([69100](https://github.com/WordPress/gutenberg/pull/69100))
+- Make navigation block wavy underline more visible on dark backgrounds. ([69004](https://github.com/WordPress/gutenberg/pull/69004))
+- Template Part block: Guard against `get_block_file_template` returning `null`. ([69309](https://github.com/WordPress/gutenberg/pull/69309))
+- Video Block: Disable autoplay when video is not muted. ([69232](https://github.com/WordPress/gutenberg/pull/69232))
+
+#### Post Editor
+- Editor: Add an extra check before enabling the new default rendering mode for Pages. ([69209](https://github.com/WordPress/gutenberg/pull/69209))
+- Editor: Avoid a 'flash' when rendering in 'template-locked' mode. ([69173](https://github.com/WordPress/gutenberg/pull/69173))
+- Editor: Revert bulk editing support for post actions. ([69341](https://github.com/WordPress/gutenberg/pull/69341))
+
+#### Site Editor
+- Fix space on the left or right of the menu in mobile view. ([69327](https://github.com/WordPress/gutenberg/pull/69327))
+- Show pattern category step in navigation for mobile. ([69206](https://github.com/WordPress/gutenberg/pull/69206))
+- Site Hub: Navigate correctly in mobile view. ([69157](https://github.com/WordPress/gutenberg/pull/69157))
+
+#### Components
+- Notice: Fix text contrast for dark mode. ([69226](https://github.com/WordPress/gutenberg/pull/69226))
+- NumberControl: Fix invalid HTML attributes for infinite bounds. ([69033](https://github.com/WordPress/gutenberg/pull/69033))
+
+#### Colors
+- Format Library: Prevent the text and color picker from overlapping. ([69169](https://github.com/WordPress/gutenberg/pull/69169))
+- Format Library: Text-color popover width to fit sidebar. ([68881](https://github.com/WordPress/gutenberg/pull/68881))
+
+#### Interactivity API
+- iAPI Router: Revert "Handle styles assets on region-based navigation". ([69222](https://github.com/WordPress/gutenberg/pull/69222))
+
+#### Plugin
+- Fix typo for 'ignore_sticky_posts' REST API support. ([69171](https://github.com/WordPress/gutenberg/pull/69171))
+
+#### Block Editor
+- Inserter: Hide drag-and-drop help text on mobile devices when previewing patterns. ([69159](https://github.com/WordPress/gutenberg/pull/69159))
+
+#### Block hooks
+- Fix duplicated insertion in Post Content. ([69142](https://github.com/WordPress/gutenberg/pull/69142))
+
+#### REST API
+- Adds the site reading options to the index. ([69106](https://github.com/WordPress/gutenberg/pull/69106))
+
+#### Block API
+- Block support: Add server-side processing for ariaLabel. ([69096](https://github.com/WordPress/gutenberg/pull/69096))
+
+#### Document Outline
+- Show heading blocks when template-lock is enabled. ([69073](https://github.com/WordPress/gutenberg/pull/69073))
+
+#### Media
+- Improve display of error returned from the REST API when an unsupported image type is uploaded. ([68788](https://github.com/WordPress/gutenberg/pull/68788))
+
+
+### Accessibility
+
+#### Components
+- Cover: Fix placeholder color options keyboard accessibility. ([68662](https://github.com/WordPress/gutenberg/pull/68662))
+- InputControl: Ensure consistent placeholder color. ([69334](https://github.com/WordPress/gutenberg/pull/69334))
+
+#### Post Editor
+- Improve the EntitiesSavedStates modal dialog design and labeling. ([67792](https://github.com/WordPress/gutenberg/pull/67792))
+- Swap fullscreen mode snackbar notice message. ([69305](https://github.com/WordPress/gutenberg/pull/69305))
+
+#### Patterns
+- Close patterns modal on insertion and focus on inserted pattern. ([68975](https://github.com/WordPress/gutenberg/pull/68975))
+
+#### Block Editor
+- Fix CSS classes for the post editor iframe body. ([68481](https://github.com/WordPress/gutenberg/pull/68481))
+
+
+### Performance
+
+#### Interactivity API
+- Introduce `withSyncEvent` action wrapper utility and proxy `event` object whenever it is not used. ([68097](https://github.com/WordPress/gutenberg/pull/68097))
+
+
+### Documentation
+
+- Added Missing Double Quote in Number Control. ([69207](https://github.com/WordPress/gutenberg/pull/69207))
+- Added Missing Global Documentation in Query Total Block. ([69233](https://github.com/WordPress/gutenberg/pull/69233))
+- Added php.net/date links. ([69280](https://github.com/WordPress/gutenberg/pull/69280))
+- Components: Fix typo for notice color in readme.md. ([69204](https://github.com/WordPress/gutenberg/pull/69204))
+- Docs: Add Documentation for Adding Block Variations Using get_block_type_variations Hook. ([68434](https://github.com/WordPress/gutenberg/pull/68434))
+- Docs: Removes notes about Block Hooks only supporting static theme elements. ([65455](https://github.com/WordPress/gutenberg/pull/65455))
+- Fix Syntax Issue in Documentation. ([69166](https://github.com/WordPress/gutenberg/pull/69166))
+- Fix typo incorrect article before "user interface". ([69168](https://github.com/WordPress/gutenberg/pull/69168))
+- FontSizePicker: Fix FontSizePicker Storybook control type and improve documentation. ([68936](https://github.com/WordPress/gutenberg/pull/68936))
+- Update javascript-in-the-block-editor.md - fix link. ([62431](https://github.com/WordPress/gutenberg/pull/62431))
+- docs: Correction in plugin-sidebar-0.md. ([69268](https://github.com/WordPress/gutenberg/pull/69268))
+
+
+### Code Quality
+
+- Fields: Avoid 'useSelect' warnings in the template component. ([69344](https://github.com/WordPress/gutenberg/pull/69344))
+- Remove unnecessary opacity override for Firefox placeholders. ([69312](https://github.com/WordPress/gutenberg/pull/69312))
+- Revert "Feature: Add `navigation.isLoading` state to core/router store (#67680)". ([69330](https://github.com/WordPress/gutenberg/pull/69330))
+
+#### Post Editor
+- Editor: Use a stable array ref as fallback value in 'BlockVisibility'. ([69288](https://github.com/WordPress/gutenberg/pull/69288))
+
+#### Site Editor
+- Test: Add end-to-end test for 404 page. ([69272](https://github.com/WordPress/gutenberg/pull/69272))
+
+
+### Tools
+
+#### Testing
+- ESLint: Improve lint regex for preventing "toggle" word usage in translation ready functions. ([68958](https://github.com/WordPress/gutenberg/pull/68958))
+- Media Utils: Add tests for new error behavior. ([69215](https://github.com/WordPress/gutenberg/pull/69215))
+- Performance Tests: Update method for creating sample content. ([69210](https://github.com/WordPress/gutenberg/pull/69210))
+- Tests: Fix preloading end-to-end test. ([69228](https://github.com/WordPress/gutenberg/pull/69228))
+- end-to-end Tests: Add Block Hooks Test Coverage. ([69044](https://github.com/WordPress/gutenberg/pull/69044))
+
+
+### Various
+
+#### Plugin
+- ESLint: Add rule to prevent usage of the word 'sidebar' in translatable strings. ([68894](https://github.com/WordPress/gutenberg/pull/68894))
+
+#### Post Editor
+- Update template-related messages to improve clarity for custom post types. ([67722](https://github.com/WordPress/gutenberg/pull/67722))
+
+
+## First-time contributors
+
+The following PRs were merged by first-time contributors:
+
+- @alexchrysovergis: Fix typo incorrect article before "user interface". ([69168](https://github.com/WordPress/gutenberg/pull/69168))
+- @andreawetzel: Components: Fix typo for notice color in readme.md. ([69204](https://github.com/WordPress/gutenberg/pull/69204))
+- @kellymears: docs: Correction in plugin-sidebar-0.md. ([69268](https://github.com/WordPress/gutenberg/pull/69268))
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@adamsilverstein @afercia @alexchrysovergis @andreawetzel @benazeer-ben @carolinan @DAreRodz @davilera @fabiankaegy @felixarntz @himanshupathak95 @huubl @im3dabasia @Infinite-Null @jonathanbossenger @juanmaguitar @kellymears @Mamaduka @ockham @Rishit30G @SainathPoojary @shail-mehta @shimotmk @singhakanshu00 @snehapatil2001 @stokesman @Sukhendu2002 @swissspidy @t-hamano @yogeshbhutkar
+
+
+= 20.0.3 =
+
+## Changelog
+
+### Bug Fixes
+
+#### Block Hooks
+
+- Fix truncation of post content. (https://github.com/WordPress/gutenberg/pull/68926)
+- Fix duplicated insertion in Post Content. (https://github.com/WordPress/gutenberg/pull/69142)
+- Enable first/last child insertion next to Classic block. (https://github.com/WordPress/gutenberg/pull/69241)
+
+#### Block Library
+
+- Template Part block: Guard against `get_block_file_template` returning `null`. (https://github.com/WordPress/gutenberg/pull/69309)
+
+### Code Quality
+
+#### Block Hooks
+
+- Add end-to-end test Coverage. (https://github.com/WordPress/gutenberg/pull/69044)
+
+
+= 20.0.2 =
+
+### Bug Fixes
+
+#### Block Editor
+- Fix 'isBlockVisibleInTheInserter' selector helper performance ([68898](https://github.com/WordPress/gutenberg/pull/68898))
+
+
+= 20.3.0 =
 
 ## Changelog
 
@@ -90,6 +302,7 @@
 
 #### Interactivity API
 - iAPI Router: Fix CSS rule order in some constructed style sheets. ([68923](https://github.com/WordPress/gutenberg/pull/68923))
+- iAPI Router: Revert "Handle styles assets on region-based navigation" ([69222](https://github.com/WordPress/gutenberg/pull/69222))
 
 
 ### Accessibility
