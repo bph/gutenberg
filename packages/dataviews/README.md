@@ -705,6 +705,23 @@ The header text to show in the modal.
 -   Type: `string`
 -   Optional
 
+### `modalSize`
+
+Specifies the size of the modal window when displaying action content using `RenderModal`.
+
+-	Type: `string`
+-	Optional
+-	Default: `'medium'`
+-	One of: `'small'`, `'medium'`, `'large'`, `'fill'`
+
+Example:
+
+```js
+{
+	modalSize: 'large';
+}
+```
+
 ## Fields API
 
 ### `id`

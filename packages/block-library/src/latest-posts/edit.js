@@ -126,6 +126,7 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 					orderby: orderBy,
 					per_page: postsToShow,
 					_embed: 'wp:featuredmedia',
+					ignore_sticky: true,
 				} ).filter( ( [ , value ] ) => typeof value !== 'undefined' )
 			);
 

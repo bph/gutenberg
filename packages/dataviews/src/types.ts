@@ -463,6 +463,13 @@ export interface ActionModal< Item > extends ActionBase< Item > {
 	 * The header of the modal.
 	 */
 	modalHeader?: string;
+
+	/**
+	 * The size of the modal.
+	 *
+	 * @default 'medium'
+	 */
+	modalSize?: 'small' | 'medium' | 'large' | 'fill';
 }
 
 export interface ActionButton< Item > extends ActionBase< Item > {
