@@ -230,7 +230,7 @@ export default function PostStatus() {
 													'Password protected'
 												) }
 												help={ __(
-													'Only visible to those who know the password'
+													'Only visible to those who know the password.'
 												) }
 												checked={ showPassword }
 												onChange={

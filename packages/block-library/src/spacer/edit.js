@@ -23,7 +23,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
  */
 import { unlock } from '../lock-unlock';
 import SpacerControls from './controls';
-import { DEFAULT_HEIGHT, MIN_SPACER_SIZE } from './constants';
+import { MIN_SPACER_SIZE } from './constants';
 
 const { useSpacingSizes } = unlock( blockEditorPrivateApis );
 
@@ -169,13 +169,9 @@ const SpacerEdit = ( {
 
 	const getHeightForVerticalBlocks = () => {
 		if ( isFlexLayout ) {
-			return DEFAULT_HEIGHT;
+			return undefined;
 		}
-		return (
-			temporaryHeight ||
-			getSpacingPresetCssVar( height ) ||
-			DEFAULT_HEIGHT
-		);
+		return temporaryHeight || getSpacingPresetCssVar( height ) || undefined;
 	};
 
 	const getWidthForHorizontalBlocks = () => {
@@ -283,7 +279,7 @@ const SpacerEdit = ( {
 				const newSize =
 					getCustomValueFromPreset( width, spacingSizes ) ||
 					getCustomValueFromPreset( height, spacingSizes ) ||
-					DEFAULT_HEIGHT;
+					'100px';
 				setAttributesCovertly( {
 					width: '0px',
 					style: {
@@ -299,7 +295,7 @@ const SpacerEdit = ( {
 				const newSize =
 					getCustomValueFromPreset( height, spacingSizes ) ||
 					getCustomValueFromPreset( width, spacingSizes ) ||
-					DEFAULT_HEIGHT;
+					'100px';
 				setAttributesCovertly( {
 					height: '0px',
 					style: {

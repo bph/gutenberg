@@ -87,23 +87,25 @@ function SidebarContentWrapper( { children, shouldAnimate } ) {
 	);
 }
 
-export default function SidebarContent( {
-	routeKey,
-	shouldAnimate,
-	children,
-} ) {
+export function SidebarNavigationProvider( { children } ) {
 	const [ navState ] = useState( createNavState );
 
 	return (
 		<SidebarNavigationContext.Provider value={ navState }>
-			<div className="edit-site-sidebar__content">
-				<SidebarContentWrapper
-					shouldAnimate={ shouldAnimate }
-					key={ routeKey }
-				>
-					{ children }
-				</SidebarContentWrapper>
-			</div>
+			{ children }
 		</SidebarNavigationContext.Provider>
+	);
+}
+
+export function SidebarContent( { routeKey, shouldAnimate, children } ) {
+	return (
+		<div className="edit-site-sidebar__content">
+			<SidebarContentWrapper
+				shouldAnimate={ shouldAnimate }
+				key={ routeKey }
+			>
+				{ children }
+			</SidebarContentWrapper>
+		</div>
 	);
 }

@@ -99,7 +99,7 @@ function PostAuthorEdit( {
 	const showAuthorControl =
 		!! postId && ! isDescendentOfQueryLoop && authorOptions.length > 0;
 
-	if ( ! supportsAuthor ) {
+	if ( ! supportsAuthor && postType !== undefined ) {
 		return (
 			<div { ...blockProps }>
 				{ sprintf(

@@ -56,6 +56,8 @@
 	position: relative;
 	width: 100%;
 	z-index: z-index(".edit-site-layout__canvas-container");
+	display: flex;
+	flex-direction: column;
 
 	/*
 	 * The SiteHubMobile component is displayed

@@ -44,7 +44,7 @@ import { unlock } from '../../lock-unlock';
 import SaveKeyboardShortcut from '../save-keyboard-shortcut';
 import { useIsSiteEditorLoading } from './hooks';
 import useMovingAnimation from './animation';
-import SidebarContent from '../sidebar';
+import { SidebarContent, SidebarNavigationProvider } from '../sidebar';
 import SaveHub from '../save-hub';
 import SavePanel from '../save-panel';
 
@@ -141,16 +141,18 @@ function Layout() {
 												isResizableFrameOversized
 											}
 										/>
-										<SidebarContent
-											shouldAnimate={
-												routeKey !== 'styles'
-											}
-											routeKey={ routeKey }
-										>
-											<ErrorBoundary>
-												{ areas.sidebar }
-											</ErrorBoundary>
-										</SidebarContent>
+										<SidebarNavigationProvider>
+											<SidebarContent
+												shouldAnimate={
+													routeKey !== 'styles'
+												}
+												routeKey={ routeKey }
+											>
+												<ErrorBoundary>
+													{ areas.sidebar }
+												</ErrorBoundary>
+											</SidebarContent>
+										</SidebarNavigationProvider>
 										<SaveHub />
 										<SavePanel />
 									</motion.div>
@@ -163,17 +165,27 @@ function Layout() {
 
 					{ isMobileViewport && areas.mobile && (
 						<div className="edit-site-layout__mobile">
-							{ canvas !== 'edit' && (
-								<SidebarContent routeKey={ routeKey }>
-									<SiteHubMobile
-										ref={ toggleRef }
-										isTransparent={
-											isResizableFrameOversized
-										}
-									/>
-								</SidebarContent>
-							) }
-							<ErrorBoundary>{ areas.mobile }</ErrorBoundary>
+							<SidebarNavigationProvider>
+								{ canvas !== 'edit' ? (
+									<>
+										<SiteHubMobile
+											ref={ toggleRef }
+											isTransparent={
+												isResizableFrameOversized
+											}
+										/>
+										<SidebarContent routeKey={ routeKey }>
+											<ErrorBoundary>
+												{ areas.mobile }
+											</ErrorBoundary>
+										</SidebarContent>
+									</>
+								) : (
+									<ErrorBoundary>
+										{ areas.mobile }
+									</ErrorBoundary>
+								) }
+							</SidebarNavigationProvider>
 						</div>
 					) }
 

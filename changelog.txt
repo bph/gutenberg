@@ -1,5 +1,16 @@
 == Changelog ==
 
+= 20.0.4 =
+
+## Changelog
+
+### Bug Fixes
+
+#### Interactivity API
+
+- iAPI Router: Revert "Handle styles assets on region-based navigation" (#69222)
+
+
 = 20.4.0 =
 
 ## Changelog

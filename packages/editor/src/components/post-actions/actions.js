@@ -26,21 +26,26 @@ export function usePostActions( { postType, onActionPerformed, context } ) {
 
 	const { canManageOptions, hasFrontPageTemplate } = useSelect(
 		( select ) => {
-			const { getEntityRecords } = select( coreStore );
-			const templates = getEntityRecords( 'postType', 'wp_template', {
-				per_page: -1,
+			const { getEntityRecords, canUser } = select( coreStore );
+			const canUpdateSettings = canUser( 'update', {
+				kind: 'root',
+				name: 'site',
 			} );
+			const templates =
+				'page' === postType && canUpdateSettings
+					? getEntityRecords( 'postType', 'wp_template', {
+							per_page: -1,
+					  } )
+					: [];
 
 			return {
-				canManageOptions: select( coreStore ).canUser( 'update', {
-					kind: 'root',
-					name: 'site',
-				} ),
+				canManageOptions: canUpdateSettings,
 				hasFrontPageTemplate: !! templates?.find(
 					( template ) => template?.slug === 'front-page'
 				),
 			};
-		}
+		},
+		[ postType ]
 	);
 
 	const setAsHomepageAction = useSetAsHomepageAction();

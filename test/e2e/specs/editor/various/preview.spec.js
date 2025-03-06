@@ -9,8 +9,7 @@ test.use( {
 	},
 } );
 
-// Reason: https://core.trac.wordpress.org/ticket/56992#comment:22.
-test.describe.skip( 'Preview', () => {
+test.describe( 'Preview', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
@@ -215,8 +214,7 @@ test.describe.skip( 'Preview', () => {
 	} );
 } );
 
-// Reason: https://core.trac.wordpress.org/ticket/56992#comment:22.
-test.describe.skip( 'Preview with Custom Fields enabled', () => {
+test.describe( 'Preview with Custom Fields enabled', () => {
 	test.beforeEach( async ( { admin, previewUtils } ) => {
 		await admin.createNewPost();
 		await previewUtils.toggleCustomFieldsOption( true );

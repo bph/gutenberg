@@ -23,7 +23,7 @@ import { View } from '@wordpress/primitives';
  * Internal dependencies
  */
 import { unlock } from '../lock-unlock';
-import { DEFAULT_HEIGHT, MIN_SPACER_SIZE } from './constants';
+import { MIN_SPACER_SIZE } from './constants';
 import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const { useSpacingSizes } = unlock( blockEditorPrivateApis );
@@ -100,7 +100,7 @@ export default function SpacerControls( {
 				resetAll={ () => {
 					setAttributes( {
 						width: undefined,
-						height: DEFAULT_HEIGHT,
+						height: '100px',
 					} );
 				} }
 				dropdownMenuProps={ dropdownMenuProps }
@@ -128,9 +128,9 @@ export default function SpacerControls( {
 					<ToolsPanelItem
 						label={ __( 'Height' ) }
 						isShownByDefault
-						hasValue={ () => height !== DEFAULT_HEIGHT }
+						hasValue={ () => height !== '100px' }
 						onDeselect={ () =>
-							setAttributes( { height: DEFAULT_HEIGHT } )
+							setAttributes( { height: '100px' } )
 						}
 					>
 						<DimensionInput
