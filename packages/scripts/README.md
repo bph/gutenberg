@@ -108,7 +108,8 @@ This script uses [webpack](https://webpack.js.org/) behind the scenes. It’ll l
 This script generates a PHP file containing block metadata from all
 `block.json` files in the project. This is useful for enhancing performance
 when registering multiple block types, as it allows you to use
-`wp_register_block_metadata_collection()` in WordPress.
+`wp_register_block_metadata_collection()` and
+`wp_register_block_types_from_metadata_collection()` in WordPress.
 
 Usage: `wp-scripts build-blocks-manifest [options]`
 
@@ -138,6 +139,20 @@ wp_register_block_metadata_collection(
 Using this approach can improve performance when registering multiple block
 types, especially for plugins with several custom blocks. Note that this
 feature is only available in WordPress 6.7 and later versions.
+
+Alternatively, you can use `wp_register_block_types_from_metadata_collection()`
+to have all block types from your plugin automatically registered in the same
+function call. This way you no longer need to call `register_block_type()` for
+every block type in your plugin.
+
+```php
+wp_register_block_types_from_metadata_collection(
+    plugin_dir_path( __FILE__ ) . 'dist',
+    plugin_dir_path( __FILE__ ) . 'dist/blocks-manifest.php'
+);
+```
+
+Note that this feature is only available in WordPress 6.8 and later versions.
 
 ### `check-engines`
 

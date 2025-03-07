@@ -34,28 +34,45 @@ const TagsPanel = () => {
 };
 
 const MaybeTagsPanel = () => {
-	const { hasTags, isPostTypeSupported } = useSelect( ( select ) => {
-		const postType = select( editorStore ).getCurrentPostType();
-		const tagsTaxonomy = select( coreStore ).getEntityRecord(
-			'root',
-			'taxonomy',
-			'post_tag'
-		);
-		const _isPostTypeSupported = tagsTaxonomy?.types?.includes( postType );
-		const areTagsFetched = tagsTaxonomy !== undefined;
-		const tags =
-			tagsTaxonomy &&
-			select( editorStore ).getEditedPostAttribute(
-				tagsTaxonomy.rest_base
+	const { postHasTags, siteHasTags, isPostTypeSupported } = useSelect(
+		( select ) => {
+			const postType = select( editorStore ).getCurrentPostType();
+			const tagsTaxonomy = select( coreStore ).getEntityRecord(
+				'root',
+				'taxonomy',
+				'post_tag'
 			);
-		return {
-			hasTags: !! tags?.length,
-			isPostTypeSupported: areTagsFetched && _isPostTypeSupported,
-		};
-	}, [] );
-	const [ hadTagsWhenOpeningThePanel ] = useState( hasTags );
+			const _isPostTypeSupported =
+				tagsTaxonomy?.types?.includes( postType );
+			const areTagsFetched = tagsTaxonomy !== undefined;
+			const tags =
+				tagsTaxonomy &&
+				select( editorStore ).getEditedPostAttribute(
+					tagsTaxonomy.rest_base
+				);
+			const siteTags = _isPostTypeSupported
+				? !! select( coreStore ).getEntityRecords(
+						'taxonomy',
+						'post_tag',
+						{ per_page: 1 }
+				  )?.length
+				: false;
 
-	if ( ! isPostTypeSupported ) {
+			return {
+				postHasTags: !! tags?.length,
+				siteHasTags: siteTags,
+				isPostTypeSupported: areTagsFetched && _isPostTypeSupported,
+			};
+		},
+		[]
+	);
+	const [ hadTagsWhenOpeningThePanel ] = useState( postHasTags );
+
+	/**
+	 * We only want to show the tag panel if the post type supports
+	 * tags and the site has tags.
+	 */
+	if ( ! isPostTypeSupported || ! siteHasTags ) {
 		return null;
 	}
 
@@ -63,9 +80,9 @@ const MaybeTagsPanel = () => {
 	 * We only want to show the tag panel if the post didn't have
 	 * any tags when the user hit the Publish button.
 	 *
-	 * We can't use the prop.hasTags because it'll change to true
+	 * We can't use the prop.postHasTags because it'll change to true
 	 * if the user adds a new tag within the pre-publish panel.
-	 * This would force a re-render and a new prop.hasTags check,
+	 * This would force a re-render and a new prop.postHasTags check,
 	 * hiding this panel and keeping the user from adding
 	 * more than one tag.
 	 */
