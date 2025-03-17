@@ -17,7 +17,16 @@ const currentNamespace = () => namespaces[ namespaces.length - 1 ] ?? null;
 const isObject = ( item: unknown ): item is Record< string, unknown > =>
 	Boolean( item && typeof item === 'object' && item.constructor === Object );
 
-// Regular expression for directive parsing.
+/**
+ * This regex pattern must be kept in sync with the server-side implementation in
+ * wp-includes/interactivity-api/class-wp-interactivity-api.php.
+ *
+ * The pattern validates directive attribute names to ensure consistency between
+ * client and server processing. Invalid directive names (containing characters like
+ * square brackets or colons) should be ignored by both client and server.
+ *
+ * @see https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-includes/interactivity-api/class-wp-interactivity-api.php
+ */
 const directiveParser = new RegExp(
 	`^data-${ p }-` + // ${p} must be a prefix string, like 'wp'.
 		// Match alphanumeric characters including hyphen-separated

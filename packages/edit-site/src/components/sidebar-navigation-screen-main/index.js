@@ -100,7 +100,7 @@ export default function SidebarNavigationScreenMain( { customDescription } ) {
 		);
 	} else {
 		description = __(
-			'Explore block styles and patterns to refine your site'
+			'Explore block styles and patterns to refine your site.'
 		);
 	}
 

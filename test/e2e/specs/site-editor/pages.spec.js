@@ -319,6 +319,6 @@ test.describe( 'Pages', () => {
 			page
 				.getByRole( 'menu', { name: 'Template options' } )
 				.getByText( 'Change template' )
-		).toHaveCount( 0 );
+		).toBeDisabled();
 	} );
 } );

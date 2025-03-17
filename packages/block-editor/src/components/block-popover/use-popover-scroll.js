@@ -14,7 +14,7 @@ const scrollContainerCache = new WeakMap();
  * @param {Object} contentRef
  */
 function usePopoverScroll( contentRef ) {
-	return useRefEffect(
+	const effect = useRefEffect(
 		( node ) => {
 			function onWheel( event ) {
 				const { deltaX, deltaY } = event;
@@ -36,6 +36,7 @@ function usePopoverScroll( contentRef ) {
 		},
 		[ contentRef ]
 	);
+	return contentRef ? effect : null;
 }
 
 export default usePopoverScroll;

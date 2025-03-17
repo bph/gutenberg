@@ -182,6 +182,7 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 				} = unlock( select( editorStore ) );
 				const { getEntitiesConfig } = select( coreStore );
 
+				const _mode = getRenderingMode();
 				const _defaultMode = getDefaultRenderingMode( post.type );
 				/**
 				 * To avoid content "flash", wait until rendering mode has been resolved.
@@ -190,16 +191,20 @@ export const ExperimentalEditorProvider = withRegistryProvider(
 				 * - Wait for template to be resolved if the default mode is 'template-locked'.
 				 * - Wait for default mode to be resolved otherwise.
 				 */
-				const hasResolvedMode =
+				const hasResolvedDefaultMode =
 					_defaultMode === 'template-locked'
 						? hasTemplate
 						: _defaultMode !== undefined;
+				// Wait until the default mode is retrieved and start rendering canvas.
+				const isRenderingModeReady = _defaultMode !== undefined;
 
 				return {
 					editorSettings: getEditorSettings(),
-					isReady: __unstableIsEditorReady() && hasResolvedMode,
-					mode: getRenderingMode(),
-					defaultMode: _defaultMode,
+					isReady: __unstableIsEditorReady(),
+					mode: isRenderingModeReady ? _mode : undefined,
+					defaultMode: hasResolvedDefaultMode
+						? _defaultMode
+						: undefined,
 					selection: getEditorSelection(),
 					postTypeEntities:
 						post.type === 'wp_template'

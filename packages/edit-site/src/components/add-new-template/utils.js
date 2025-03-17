@@ -68,8 +68,7 @@ export const useExistingTemplates = () => {
 export const useDefaultTemplateTypes = () => {
 	return useSelect(
 		( select ) =>
-			select( coreStore ).getEntityRecord( 'root', '__unstableBase' )
-				?.default_template_types || [],
+			select( coreStore ).getCurrentTheme()?.default_template_types || [],
 		[]
 	);
 };

@@ -179,6 +179,8 @@ function Layout() {
 												{ areas.mobile }
 											</ErrorBoundary>
 										</SidebarContent>
+										<SaveHub />
+										<SavePanel />
 									</>
 								) : (
 									<ErrorBoundary>

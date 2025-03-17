@@ -127,6 +127,23 @@ export default function DocumentOutline( {
 		// all compulations should happen in `computeOutlineHeadings`.
 		return clientIds.map( ( id ) => getBlock( id ) );
 	} );
+	const contentBlocks = useSelect( ( select ) => {
+		// When rendering in `post-only` mode all blocks are considered content blocks.
+		if ( select( editorStore ).getRenderingMode() === 'post-only' ) {
+			return undefined;
+		}
+
+		const { getBlocksByName, getClientIdsOfDescendants } =
+			select( blockEditorStore );
+		const [ postContentClientId ] = getBlocksByName( 'core/post-content' );
+
+		// Do nothing if there's no post content block.
+		if ( ! postContentClientId ) {
+			return undefined;
+		}
+
+		return getClientIdsOfDescendants( postContentClientId );
+	}, [] );
 
 	const prevHeadingLevelRef = useRef( 1 );
 
@@ -159,6 +176,12 @@ export default function DocumentOutline( {
 		{}
 	);
 	const hasMultipleH1 = countByLevel[ 1 ] > 1;
+
+	function isContentBlock( clientId ) {
+		return Array.isArray( contentBlocks )
+			? contentBlocks.includes( clientId )
+			: true;
+	}
 
 	return (
 		<div className="document-outline">
@@ -193,7 +216,10 @@ export default function DocumentOutline( {
 							key={ item.clientId }
 							level={ `H${ item.level }` }
 							isValid={ isValid }
-							isDisabled={ hasOutlineItemsDisabled }
+							isDisabled={
+								hasOutlineItemsDisabled ||
+								! isContentBlock( item.clientId )
+							}
 							href={ `#block-${ item.clientId }` }
 							onSelect={ () => {
 								selectBlock( item.clientId );

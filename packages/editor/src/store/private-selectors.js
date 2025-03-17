@@ -105,10 +105,8 @@ export const getPostIcon = createRegistrySelector(
 				postType === 'wp_template'
 			) {
 				const templateAreas =
-					select( coreStore ).getEntityRecord(
-						'root',
-						'__unstableBase'
-					)?.default_template_part_areas || [];
+					select( coreStore ).getCurrentTheme()
+						?.default_template_part_areas || [];
 
 				const areaData = templateAreas.find(
 					( item ) => options.area === item.area

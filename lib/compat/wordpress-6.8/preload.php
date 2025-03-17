@@ -85,13 +85,25 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 				'site_icon_url',
 				'site_logo',
 				'timezone_string',
-				'default_template_part_areas',
-				'default_template_types',
 				'url',
 				'page_for_posts',
 				'page_on_front',
 				'show_on_front',
 			)
+		);
+	}
+
+	if ( 'core/edit-post' === $context->name ) {
+		$slug = 'page' === $context->post->post_type ? 'page' : 'single-' . $context->post->post_type;
+		if ( ! empty( $context->post->post_name ) ) {
+			$slug .= '-' . $context->post->post_name;
+		}
+
+		$paths[] = add_query_arg(
+			'slug',
+			// @see https://github.com/WordPress/gutenberg/blob/e093fefd041eb6cc4a4e7f67b92ab54fd75c8858/packages/core-data/src/private-selectors.ts#L244-L254
+			$slug,
+			'/wp/v2/templates/lookup'
 		);
 	}
 

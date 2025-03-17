@@ -289,6 +289,8 @@ test.describe( 'Block Hooks API', () => {
 					'<!-- wp:navigation-link {"label":"wordpress.org","url":"https://wordpress.org","kind":"custom"} /-->',
 			} );
 
+			// The navigation menu in the site editor is only supported in block themes.
+			await requestUtils.activateTheme( 'emptytheme' );
 			await requestUtils.activatePlugin( 'gutenberg-test-block-hooks' );
 
 			// We need a container to hold our Navigation block instance.
@@ -303,8 +305,8 @@ test.describe( 'Block Hooks API', () => {
 		} );
 
 		test.afterAll( async ( { requestUtils } ) => {
+			await requestUtils.activateTheme( 'twentytwentyone' );
 			await requestUtils.deactivatePlugin( 'gutenberg-test-block-hooks' );
-
 			await requestUtils.deleteAllPages();
 			await requestUtils.deleteAllMenus();
 		} );

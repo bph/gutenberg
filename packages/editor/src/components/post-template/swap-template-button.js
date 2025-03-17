@@ -20,9 +20,7 @@ export default function SwapTemplateButton( { onClick } ) {
 	const { postType, postId } = useEditedPostContext();
 	const availableTemplates = useAvailableTemplates( postType );
 	const { editEntityRecord } = useDispatch( coreStore );
-	if ( ! availableTemplates?.length ) {
-		return null;
-	}
+
 	const onTemplateSelect = async ( template ) => {
 		editEntityRecord(
 			'postType',
@@ -36,7 +34,11 @@ export default function SwapTemplateButton( { onClick } ) {
 	};
 	return (
 		<>
-			<MenuItem onClick={ () => setShowModal( true ) }>
+			<MenuItem
+				disabled={ ! availableTemplates?.length }
+				accessibleWhenDisabled
+				onClick={ () => setShowModal( true ) }
+			>
 				{ __( 'Change template' ) }
 			</MenuItem>
 			{ showModal && (

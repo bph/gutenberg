@@ -42,17 +42,21 @@ module.exports = async ( {
 				main: wpScripts && 'build/index.js',
 				scripts: {
 					...( wpScripts && {
-						build: isDynamicVariant
-							? 'wp-scripts build --webpack-copy-php'
-							: 'wp-scripts build',
+						build:
+							( isDynamicVariant
+								? 'wp-scripts build --webpack-copy-php'
+								: 'wp-scripts build' ) +
+							' && wp-scripts build-blocks-manifest',
 						format: 'wp-scripts format',
 						'lint:css': 'wp-scripts lint-style',
 						'lint:js': 'wp-scripts lint-js',
 						'packages-update': 'wp-scripts packages-update',
 						'plugin-zip': 'wp-scripts plugin-zip',
-						start: isDynamicVariant
-							? 'wp-scripts start --webpack-copy-php'
-							: 'wp-scripts start',
+						start:
+							( isDynamicVariant
+								? 'wp-scripts start --webpack-copy-php'
+								: 'wp-scripts start' ) +
+							' && wp-scripts build-blocks-manifest',
 					} ),
 					...( wpEnv && { env: 'wp-env' } ),
 					...customScripts,

@@ -697,7 +697,7 @@ test.describe( 'Registered sources', () => {
 				.getByRole( 'button', { name: 'Edit link', exact: true } )
 				.click();
 			await page
-				.getByPlaceholder( 'Search or type URL' )
+				.getByPlaceholder( 'Paste or type URL' )
 				.fill( testingImgSrc );
 			await pageUtils.pressKeys( 'Enter' );
 
