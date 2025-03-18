@@ -108,6 +108,7 @@ require __DIR__ . '/compat/wordpress-6.8/post.php';
 require __DIR__ . '/compat/wordpress-6.8/site-editor.php';
 require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-user-controller.php';
 require __DIR__ . '/compat/wordpress-6.8/block-template-utils.php';
+require __DIR__ . '/compat/wordpress-6.8/site-preview.php';
 
 // Experimental features.
 require __DIR__ . '/experimental/block-editor-settings-mobile.php';

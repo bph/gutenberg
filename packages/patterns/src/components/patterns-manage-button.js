@@ -42,7 +42,7 @@ function PatternsManageButton( { clientId } ) {
 					name: 'wp_template',
 				} )
 					? addQueryArgs( 'site-editor.php', {
-							path: '/patterns',
+							p: '/pattern',
 					  } )
 					: addQueryArgs( 'edit.php', {
 							post_type: 'wp_block',
