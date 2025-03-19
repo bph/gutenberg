@@ -52,6 +52,7 @@ import useBlockDisplayInformation from '../use-block-display-information';
 import { useBlockLock } from '../block-lock';
 import AriaReferencedText from './aria-referenced-text';
 import { unlock } from '../../lock-unlock';
+import usePasteStyles from '../use-paste-styles';
 
 function ListViewBlock( {
 	block: { clientId },
@@ -111,6 +112,8 @@ function ListViewBlock( {
 	const { getGroupingBlockName } = useSelect( blocksStore );
 
 	const blockInformation = useBlockDisplayInformation( clientId );
+
+	const pasteStyles = usePasteStyles();
 
 	const { block, blockName, allowRightClickOverrides } = useSelect(
 		( select ) => {
@@ -233,6 +236,13 @@ function ListViewBlock( {
 			}
 
 			updateFocusAndSelection( blockToFocus, shouldUpdateSelection );
+		} else if ( isMatch( 'core/block-editor/paste-styles', event ) ) {
+			event.preventDefault();
+
+			const { blocksToUpdate } = getBlocksToUpdate();
+			const blocks = getBlocksByClientId( blocksToUpdate );
+
+			pasteStyles( blocks );
 		} else if ( isMatch( 'core/block-editor/duplicate', event ) ) {
 			event.preventDefault();
 

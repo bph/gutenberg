@@ -194,7 +194,12 @@ export default function PostStatus() {
 								title={ __( 'Status & visibility' ) }
 								onClose={ onClose }
 							/>
-							<form>
+							<form
+								onSubmit={ ( event ) => {
+									event.preventDefault();
+									onClose();
+								} }
+							>
 								<VStack spacing={ 4 }>
 									<RadioControl
 										className="editor-change-status__options"

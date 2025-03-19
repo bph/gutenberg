@@ -65,6 +65,18 @@ function KeyboardShortcutsRegister() {
 		} );
 
 		registerShortcut( {
+			name: 'core/block-editor/paste-styles',
+			category: 'block',
+			description: __(
+				'Paste the copied style to the selected block(s).'
+			),
+			keyCombination: {
+				modifier: 'primaryAlt',
+				character: 'v',
+			},
+		} );
+
+		registerShortcut( {
 			name: 'core/block-editor/insert-before',
 			category: 'block',
 			description: __(

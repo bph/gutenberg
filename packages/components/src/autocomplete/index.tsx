@@ -394,12 +394,13 @@ export function useAutocomplete( {
 		? `components-autocomplete-item-${ instanceId }-${ selectedKey }`
 		: null;
 	const hasSelection = record.start !== undefined;
+	const showPopover = !! textContent && hasSelection && !! AutocompleterUI;
 
 	return {
 		listBoxId,
 		activeId,
 		onKeyDown: withIgnoreIMEEvents( handleKeyDown ),
-		popover: hasSelection && AutocompleterUI && (
+		popover: showPopover && (
 			<AutocompleterUI
 				className={ className }
 				filterValue={ filterValue }

@@ -1069,7 +1069,9 @@ test.describe( 'Registered sources', () => {
 			await expect( initialButton ).toHaveText( 'Text Field Value' );
 			// Second block should be an empty paragraph block.
 			await expect( newEmptyButton ).toHaveText( '' );
-			await expect( newEmptyButton ).toBeEditable();
+			await expect(
+				newEmptyButton.getByRole( 'textbox' )
+			).toBeEditable();
 		} );
 		test( 'should show placeholder prompt when value is empty and can edit', async ( {
 			editor,
