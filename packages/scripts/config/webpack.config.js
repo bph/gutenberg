@@ -12,6 +12,7 @@ const ReactRefreshWebpackPlugin = require( '@pmmmwh/react-refresh-webpack-plugin
 const TerserPlugin = require( 'terser-webpack-plugin' );
 const { realpathSync } = require( 'fs' );
 const { sync: glob } = require( 'fast-glob' );
+const { exec } = require( 'child_process' );
 
 /**
  * WordPress dependencies
@@ -36,6 +37,7 @@ const {
 	getBlockJsonModuleFields,
 	getBlockJsonScriptFields,
 	fromProjectRoot,
+	fromScriptsRoot,
 } = require( '../utils' );
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -45,6 +47,7 @@ if ( ! browserslist.findConfig( '.' ) ) {
 	target += ':' + fromConfigRoot( '.browserslistrc' );
 }
 const hasReactFastRefresh = hasArgInCLI( '--hot' ) && ! isProduction;
+const hasBlocksManifest = getAsBooleanFromENV( 'WP_BLOCKS_MANIFEST' );
 const hasExperimentalModulesFlag = getAsBooleanFromENV(
 	'WP_EXPERIMENTAL_MODULES'
 );
@@ -260,6 +263,26 @@ if ( baseConfig.devtool ) {
 	} );
 }
 
+/**
+ * Build blocks manifest.
+ */
+class BlocksManifestPlugin {
+	/**
+	 * Apply the plugin.
+	 *
+	 * @param {webpack.Compiler} compiler The compiler instance.
+	 */
+	apply( compiler ) {
+		compiler.hooks.afterEmit.tap( 'BlocksManifest', () => {
+			exec(
+				`node ${ fromScriptsRoot(
+					'build-blocks-manifest'
+				) } --input="${ compiler.options.output.path }"`
+			);
+		} );
+	}
+}
+
 /** @type {webpack.Configuration} */
 const scriptConfig = {
 	...baseConfig,
@@ -397,6 +420,8 @@ const scriptConfig = {
 		} ),
 		// RtlCssPlugin to generate RTL CSS files.
 		new RtlCssPlugin(),
+		// Generate blocks manifest after changes.
+		hasBlocksManifest && new BlocksManifestPlugin(),
 		// React Fast Refresh.
 		hasReactFastRefresh && new ReactRefreshWebpackPlugin(),
 		// WP_NO_EXTERNALS global variable controls whether scripts' assets get

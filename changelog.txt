@@ -1,7 +1,6 @@
 == Changelog ==
 
-= 20.5.0-rc.1 =
-
+= 20.5.0 =
 
 ## Changelog
 
@@ -122,7 +121,7 @@
 
 ### Code Quality
 
-- Alignment note with Wordpress report 62426. ([69519](https://github.com/WordPress/gutenberg/pull/69519))
+- Alignment note with WordPress report 62426. ([69519](https://github.com/WordPress/gutenberg/pull/69519))
 - Core Data: Update '__unstableBase' entity types. ([69556](https://github.com/WordPress/gutenberg/pull/69556))
 
 #### Block Library
@@ -154,7 +153,7 @@ The following PRs were merged by first-time contributors:
 - @bschneidewind: Site Title: Fix logic for 'aria-current' attribute. ([68909](https://github.com/WordPress/gutenberg/pull/68909))
 - @dontfeedthecode: Docs/update reference to JS build setup 404 in scripts README, fix absolute links. ([69495](https://github.com/WordPress/gutenberg/pull/69495))
 - @sabbir1991: Removed `color.__experimentalDuotone` from core blocks. ([58241](https://github.com/WordPress/gutenberg/pull/58241))
-- @SirLouen: Alignment note with Wordpress report 62426. ([69519](https://github.com/WordPress/gutenberg/pull/69519))
+- @SirLouen: Alignment note with WordPress report 62426. ([69519](https://github.com/WordPress/gutenberg/pull/69519))
 
 
 ## Contributors
@@ -162,6 +161,8 @@ The following PRs were merged by first-time contributors:
 The following contributors merged PRs in this release:
 
 @afercia @Anuj-Rathore24 @bschneidewind @carolinan @cbravobernal @DAreRodz @dhruvikpatel18 @dontfeedthecode @felixarntz @HILAYTRIVEDI @himanshupathak95 @im3dabasia @Infinite-Null @Mamaduka @sabbir1991 @SainathPoojary @shail-mehta @shimotmk @SirLouen @stokesman @t-hamano @yogeshbhutkar
+
+
 
 
 = 20.0.4 =

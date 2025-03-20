@@ -45,8 +45,7 @@ module.exports = async ( {
 						build:
 							( isDynamicVariant
 								? 'wp-scripts build --webpack-copy-php'
-								: 'wp-scripts build' ) +
-							' && wp-scripts build-blocks-manifest',
+								: 'wp-scripts build' ) + ' --blocks-manifest',
 						format: 'wp-scripts format',
 						'lint:css': 'wp-scripts lint-style',
 						'lint:js': 'wp-scripts lint-js',
@@ -55,8 +54,7 @@ module.exports = async ( {
 						start:
 							( isDynamicVariant
 								? 'wp-scripts start --webpack-copy-php'
-								: 'wp-scripts start' ) +
-							' && wp-scripts build-blocks-manifest',
+								: 'wp-scripts start' ) + ' --blocks-manifest',
 					} ),
 					...( wpEnv && { env: 'wp-env' } ),
 					...customScripts,

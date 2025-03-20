@@ -89,6 +89,7 @@ This script automatically use the optimized config but sometimes you may want to
 -   `--webpack-bundle-analyzer` – enables visualization for the size of webpack output files with an interactive zoomable treemap.
 -   `--webpack-copy-php` – enables copying all PHP files from the source directory ( default is `src` ) and its subfolders to the output directory.
 -   `--webpack-no-externals` – disables scripts’ assets generation, and omits the list of default externals.
+-   `--blocks-manifest` – generates a PHP file containing block metadata from all `block.json` files in the project. This is useful for enhancing performance when registering multiple block types, as it allows you to use `wp_register_block_metadata_collection()` and `wp_register_block_types_from_metadata_collection()` in WordPress.
 -   `--source-path` – allows customization of the source directory. The default is the project root `.` when [entry points are listed](#listing-entry-points) in the command, or `src` otherwise.
 -   `--output-path` – allows customization of the output directory. The default is the `build` folder.
 
@@ -105,11 +106,7 @@ This script uses [webpack](https://webpack.js.org/) behind the scenes. It’ll l
 
 ### `build-blocks-manifest`
 
-This script generates a PHP file containing block metadata from all
-`block.json` files in the project. This is useful for enhancing performance
-when registering multiple block types, as it allows you to use
-`wp_register_block_metadata_collection()` and
-`wp_register_block_types_from_metadata_collection()` in WordPress.
+This script generates a PHP file containing block metadata from all `block.json` files in the project. This is useful for enhancing performance when registering multiple block types, as it allows you to use `wp_register_block_metadata_collection()` and `wp_register_block_types_from_metadata_collection()` in WordPress.
 
 Usage: `wp-scripts build-blocks-manifest [options]`
 
@@ -426,6 +423,7 @@ This script automatically use the optimized config but sometimes you may want to
 -   `--webpack-copy-php` – enables copying all PHP files from the source directory ( default is `src` ) and its subfolders to the output directory.
 -   `--webpack-devtool` – controls how source maps are generated. See options at https://webpack.js.org/configuration/devtool/#devtool.
 -   `--webpack-no-externals` – disables scripts’ assets generation, and omits the list of default externals.
+-   `--blocks-manifest` – generates a PHP file containing block metadata from all `block.json` files in the project. This is useful for enhancing performance when registering multiple block types, as it allows you to use `wp_register_block_metadata_collection()` and `wp_register_block_types_from_metadata_collection()` in WordPress.
 -   `--source-path` – allows customization of the source directory. The default is the project root `.` when [entry points are listed](#listing-entry-points) in the command, or `src` otherwise.
 -   `--output-path` – allows customization of the output directory. The default is the `build` folder.
 
