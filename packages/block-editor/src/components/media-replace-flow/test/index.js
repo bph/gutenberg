@@ -110,7 +110,7 @@ describe( 'General media replace flow', () => {
 		);
 
 		const mediaURLInput = screen.getByRole( 'combobox', {
-			name: 'Paste or type URL',
+			name: 'Link',
 			expanded: false,
 		} );
 

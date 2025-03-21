@@ -60,7 +60,7 @@ test.describe( 'Buttons', () => {
 		).toBeFocused();
 		await pageUtils.pressKeys( 'primary+k' );
 		await expect(
-			page.locator( 'role=combobox[name="Search or type URL"i]' )
+			page.locator( 'role=combobox[name="Link"i]' )
 		).toBeFocused();
 		await page.keyboard.press( 'Escape' );
 		await expect(
@@ -91,7 +91,7 @@ test.describe( 'Buttons', () => {
 		).toBeFocused();
 		await pageUtils.pressKeys( 'primary+k' );
 		await expect(
-			page.locator( 'role=combobox[name="Search or type URL"i]' )
+			page.locator( 'role=combobox[name="Link"i]' )
 		).toBeFocused();
 		await page.keyboard.type( 'https://example.com' );
 		await page.keyboard.press( 'Enter' );
@@ -123,9 +123,7 @@ test.describe( 'Buttons', () => {
 		).toBeFocused();
 		await pageUtils.pressKeys( 'primary+k' );
 
-		const urlInput = page.locator(
-			'role=combobox[name="Search or type URL"i]'
-		);
+		const urlInput = page.locator( 'role=combobox[name="Link"i]' );
 
 		await expect( urlInput ).toBeFocused();
 		await page.keyboard.type( 'example.com' );

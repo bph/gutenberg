@@ -56,7 +56,7 @@ export default function SiteTitleEdit( {
 
 	function setTitle( newTitle ) {
 		editEntityRecord( 'root', 'site', undefined, {
-			title: newTitle,
+			title: newTitle.trim(),
 		} );
 	}
 
