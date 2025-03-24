@@ -890,6 +890,24 @@ test.describe( 'Writing Flow (@firefox, @webkit)', () => {
 		).toHaveClass( /is-selected/ );
 	} );
 
+	test( 'should focus preceding tabbable using shift+tab from post title and writing flow container', async ( {
+		editor,
+		page,
+	} ) => {
+		const optionsButton = page
+			.getByRole( 'region', { name: 'Editor top bar' } )
+			.getByRole( 'button', { name: 'Options' } );
+		await page.keyboard.press( 'Shift+Tab' );
+		await expect( optionsButton ).toBeFocused();
+
+		const editorCanvasBody = editor.canvas.locator( 'body' );
+		// Focuses the editor canvas body. In the editor the click doesn’t have
+		// to be on the element itself – just somewhere that won’t focus a block.
+		await editorCanvasBody.click();
+		await page.keyboard.press( 'Shift+Tab' );
+		await expect( optionsButton ).toBeFocused();
+	} );
+
 	test( 'should only consider the content as one tab stop', async ( {
 		editor,
 		page,

@@ -116,9 +116,9 @@ export function ImageEdit( {
 	// Only observe the max width from the parent container when the parent layout is not flex nor grid.
 	// This won't work for them because the container width changes with the image.
 	// TODO: Find a way to observe the container width for flex and grid layouts.
+	const layoutType = parentLayout?.type || parentLayout?.default?.type;
 	const isMaxWidthContainerWidth =
-		! parentLayout ||
-		( parentLayout.type !== 'flex' && parentLayout.type !== 'grid' );
+		! layoutType || ( layoutType !== 'flex' && layoutType !== 'grid' );
 	const [ maxWidthObserver, maxContentWidth ] = useMaxWidthObserver();
 
 	const [ placeholderResizeListener, { width: placeholderWidth } ] =
@@ -452,7 +452,7 @@ export function ImageEdit( {
 					context={ context }
 					clientId={ clientId }
 					blockEditingMode={ blockEditingMode }
-					parentLayoutType={ parentLayout?.type }
+					parentLayoutType={ layoutType }
 					maxContentWidth={ maxContentWidth }
 				/>
 				<MediaPlaceholder
