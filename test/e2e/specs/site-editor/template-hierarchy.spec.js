@@ -22,11 +22,14 @@ test.describe( 'Template hierarchy', () => {
 		await page.selectOption( 'select[name="page_on_front"]', '2' );
 		await page.click( 'input[type="submit"]' );
 		await admin.visitSiteEditor();
+		await editor.canvas.locator( 'body' ).click();
 
-		// Title block should contain "Sample Page"
+		// The document bar should contain "Sample Page".
 		await expect(
-			editor.canvas.locator( 'role=document[name="Block: Title"]' )
-		).toContainText( 'Sample Page' );
+			page
+				.getByRole( 'region', { name: 'Editor top bar' } )
+				.getByRole( 'button', { name: 'Sample Page · Homepage' } )
+		).toBeVisible();
 
 		await admin.visitAdminPage( 'options-reading.php' );
 		await page.click( 'input[name="show_on_front"][value="posts"]' );

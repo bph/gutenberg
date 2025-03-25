@@ -150,6 +150,11 @@
 	top: -9999em;
 	left: $grid-unit-10;
 	z-index: z-index(".dataviews-view-grid__card .dataviews-selection-checkbox");
+
+	@media (hover: none) {
+		// Show checkboxes on devices that do not support hover.
+		top: $grid-unit-10;
+	}
 }
 
 .dataviews-view-grid__card:hover .dataviews-selection-checkbox,

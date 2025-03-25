@@ -22,7 +22,6 @@ test.describe( 'Site editor command palette', () => {
 
 	test( 'Open the command palette and navigate to the page create page', async ( {
 		page,
-		editor,
 	} ) => {
 		await page
 			.getByRole( 'button', { name: 'Open command palette' } )
@@ -34,9 +33,9 @@ test.describe( 'Site editor command palette', () => {
 			/\/wp-admin\/site-editor.php\?p=%2Fpage%2F(\d+)&canvas=edit/
 		);
 		await expect(
-			editor.canvas
-				.getByLabel( 'Block: Title' )
-				.locator( '[data-rich-text-placeholder="No title"]' )
+			page
+				.getByRole( 'region', { name: 'Editor top bar' } )
+				.getByRole( 'button', { name: 'No title · Page' } )
 		).toBeVisible();
 	} );
 

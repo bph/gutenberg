@@ -69,7 +69,9 @@ function InlineUI( { value, onChange, activeObjectAttributes, contentRef } ) {
 						type: name,
 						attributes: {
 							...activeObjectAttributes,
-							style: width ? `width: ${ editedWidth }px;` : '',
+							style: editedWidth
+								? `width: ${ editedWidth }px;`
+								: '',
 							alt: editedAlt,
 						},
 					};
