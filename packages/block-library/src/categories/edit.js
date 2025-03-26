@@ -125,7 +125,7 @@ export default function CategoriesEdit( {
 					<RichText
 						className="wp-block-categories__label"
 						aria-label={ __( 'Label text' ) }
-						placeholder={ taxonomy.name }
+						placeholder={ taxonomy?.name }
 						withoutInteractiveFormatting
 						value={ label }
 						onChange={ ( html ) =>
@@ -134,7 +134,7 @@ export default function CategoriesEdit( {
 					/>
 				) : (
 					<VisuallyHidden as="label" htmlFor={ selectId }>
-						{ label ? label : taxonomy.name }
+						{ label ? label : taxonomy?.name }
 					</VisuallyHidden>
 				) }
 				<select id={ selectId }>
@@ -142,7 +142,7 @@ export default function CategoriesEdit( {
 						{ sprintf(
 							/* translators: %s: taxonomy's singular name */
 							__( 'Select %s' ),
-							taxonomy.labels.singular_name
+							taxonomy?.labels?.singular_name
 						) }
 					</option>
 					{ categoriesList.map( ( category ) =>

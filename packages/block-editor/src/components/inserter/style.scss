@@ -379,7 +379,7 @@ $block-inserter-tabs-height: 44px;
 		width: $sidebar-width;
 		padding: $grid-unit-30 $grid-unit-40 $grid-unit-40;
 		overflow-x: visible;
-		overflow-y: scroll;
+		overflow-y: auto;
 
 		&__categories-list__item {
 			display: block;

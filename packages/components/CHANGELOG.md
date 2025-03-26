@@ -8,6 +8,7 @@
 -   `FormTokenField`: Use `color-mix` for disabled option selection background ([#69621](https://github.com/WordPress/gutenberg/pull/69621)).
 -   `CustomSelectControl`: Fix check icon color to adapt with dark theme ([#69626](https://github.com/WordPress/gutenberg/pull/69626)).
 -   `Autocomplete`: Extracts `getNodeText` function into a separate file and adds unit tests ([#69135](https://github.com/WordPress/gutenberg/pull/69135)).
+-   `NumberControl`: update stepping to match HTML number input stepping ([#34566](https://github.com/WordPress/gutenberg/pull/34566)).
 
 ## 29.6.0 (2025-03-13)
 

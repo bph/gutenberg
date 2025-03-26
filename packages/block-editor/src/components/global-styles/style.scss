@@ -25,6 +25,8 @@
 	display: block;
 	padding: 0;
 	position: relative;
+	border: 1px solid $gray-300;
+	border-radius: $radius-small;
 }
 
 .block-editor-global-styles-filters-panel__dropdown-toggle,
@@ -57,11 +59,6 @@
 		// Show reset button on devices that do not support hover.
 		opacity: 1;
 	}
-}
-
-.block-editor-global-styles-filters-panel__dropdown {
-	border: 1px solid $gray-300;
-	border-radius: $radius-small;
 }
 
 // These styles are similar to the color palette.
