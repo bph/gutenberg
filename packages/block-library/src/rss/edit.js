@@ -14,6 +14,7 @@ import {
 	RangeControl,
 	ToggleControl,
 	ToolbarGroup,
+	TextControl,
 	__experimentalInputControl as InputControl,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
@@ -37,6 +38,8 @@ export default function RSSEdit( { attributes, setAttributes } ) {
 		excerptLength,
 		feedURL,
 		itemsToShow,
+		openInNewTab,
+		rel,
 	} = attributes;
 
 	function toggleAttribute( propName ) {
@@ -197,7 +200,25 @@ export default function RSSEdit( { attributes, setAttributes } ) {
 							required
 						/>
 					) }
+
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'Open links in new tab' ) }
+						checked={ openInNewTab }
+						onChange={ ( value ) =>
+							setAttributes( { openInNewTab: value } )
+						}
+					/>
 				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				<TextControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Link rel' ) }
+					value={ rel || '' }
+					onChange={ ( value ) => setAttributes( { rel: value } ) }
+				/>
 			</InspectorControls>
 			<div { ...blockProps }>
 				<Disabled>

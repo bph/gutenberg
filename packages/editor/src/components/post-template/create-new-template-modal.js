@@ -111,6 +111,7 @@ export default function CreateNewTemplateModal( { onClose } ) {
 			onRequestClose={ cancel }
 			focusOnMount="firstContentElement"
 			size="small"
+			overlayClassName="editor-post-template__create-template-modal"
 		>
 			<form
 				className="editor-post-template__create-form"

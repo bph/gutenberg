@@ -296,7 +296,7 @@ const actions = [
 		label: 'View',
 		isPrimary: true,
 		icon: <Icon icon={ view } />,
-		isEligible: ( item ) => item.status === 'published'
+		isEligible: ( item ) => item.status === 'published',
 		callback: ( items ) => {
 			console.log( 'Viewing item:', items[0] );
 		},

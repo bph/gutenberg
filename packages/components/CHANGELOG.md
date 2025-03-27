@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 29.7.0 (2025-03-27)
+
 ### Bug Fixes
 
 -   `useAutocomplete`: Fix autocomple UI flicker when deleting trigger prefix ([#69562](https://github.com/WordPress/gutenberg/pull/69562)).

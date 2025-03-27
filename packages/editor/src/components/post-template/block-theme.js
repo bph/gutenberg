@@ -141,9 +141,7 @@ export default function BlockThemeControl( { id } ) {
 
 							<SwapTemplateButton onClick={ onClose } />
 							<ResetDefaultTemplate onClick={ onClose } />
-							{ canCreateTemplate && (
-								<CreateNewTemplate onClick={ onClose } />
-							) }
+							{ canCreateTemplate && <CreateNewTemplate /> }
 						</MenuGroup>
 						<MenuGroup>
 							<MenuItem

@@ -31,6 +31,20 @@ function render_block_core_rss( $attributes ) {
 
 	$rss_items  = $rss->get_items( 0, $attributes['itemsToShow'] );
 	$list_items = '';
+
+	$open_in_new_tab = ! empty( $attributes['openInNewTab'] );
+	$rel             = ! empty( $attributes['rel'] ) ? trim( $attributes['rel'] ) : '';
+
+	$link_attributes = '';
+
+	if ( $open_in_new_tab ) {
+		$link_attributes .= ' target="_blank"';
+	}
+
+	if ( '' !== $rel ) {
+		$link_attributes .= ' rel="' . esc_attr( $rel ) . '"';
+	}
+
 	foreach ( $rss_items as $item ) {
 		$title = esc_html( trim( strip_tags( $item->get_title() ) ) );
 		if ( empty( $title ) ) {
@@ -38,8 +52,9 @@ function render_block_core_rss( $attributes ) {
 		}
 		$link = $item->get_link();
 		$link = esc_url( $link );
+
 		if ( $link ) {
-			$title = "<a href='{$link}'>{$title}</a>";
+			$title = "<a href='{$link}'{$link_attributes}>{$title}</a>";
 		}
 		$title = "<div class='wp-block-rss__item-title'>{$title}</div>";
 

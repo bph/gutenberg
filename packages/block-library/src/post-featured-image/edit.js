@@ -398,7 +398,8 @@ export default function PostFeaturedImageEdit( {
 							label={ label }
 							showTooltip
 							tooltipPosition="top center"
-							onClick={ () => {
+							onClick={ ( e ) => {
+								e.preventDefault();
 								open();
 							} }
 						/>

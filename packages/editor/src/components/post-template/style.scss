@@ -2,6 +2,10 @@
 	z-index: z-index(".editor-post-template__swap-template-modal");
 }
 
+.editor-post-template__create-template-modal {
+	z-index: z-index(".editor-post-template__create-template-modal");
+}
+
 .editor-post-template__swap-template-modal-content .block-editor-block-patterns-list {
 	column-count: 2;
 	column-gap: $grid-unit-30;
