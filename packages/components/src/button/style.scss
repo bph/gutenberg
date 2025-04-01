@@ -167,7 +167,7 @@
 		color: $components-color-accent;
 		background: transparent;
 
-		&:hover:not(:disabled, [aria-disabled="true"]) {
+		&:hover:not(:disabled, [aria-disabled="true"], .is-pressed) {
 			background: color-mix(in srgb, $components-color-accent 4%, transparent);
 			color: $components-color-accent-darker-20;
 		}

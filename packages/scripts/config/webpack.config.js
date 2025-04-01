@@ -275,9 +275,9 @@ class BlocksManifestPlugin {
 	apply( compiler ) {
 		compiler.hooks.afterEmit.tap( 'BlocksManifest', () => {
 			exec(
-				`node ${ fromScriptsRoot(
+				`node "${ fromScriptsRoot(
 					'build-blocks-manifest'
-				) } --input="${ compiler.options.output.path }"`
+				) }" --input="${ compiler.options.output.path }"`
 			);
 		} );
 	}

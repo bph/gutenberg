@@ -29,8 +29,8 @@ function AddCustomGenericTemplateModalContent( { onClose, createTemplate } ) {
 			await createTemplate(
 				{
 					slug:
-						'wp-custom-template-' +
-						kebabCase( title || defaultTitle ),
+						kebabCase( title || defaultTitle ) ||
+						'wp-custom-template',
 					title: title || defaultTitle,
 				},
 				false

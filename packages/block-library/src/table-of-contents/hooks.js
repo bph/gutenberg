@@ -148,8 +148,11 @@ function observeCallback( select, dispatch, clientId ) {
 
 	const headings = getLatestHeadings( select, clientId );
 	if ( ! fastDeepEqual( headings, attributes.headings ) ) {
-		__unstableMarkNextChangeAsNotPersistent();
-		updateBlockAttributes( clientId, { headings } );
+		// Executing the update in a microtask ensures that the non-persistent marker doesn't affect an attribute triggering the change.
+		window.queueMicrotask( () => {
+			__unstableMarkNextChangeAsNotPersistent();
+			updateBlockAttributes( clientId, { headings } );
+		} );
 	}
 }
 

@@ -135,6 +135,22 @@ const addListItem = ( newListItem ) => {
 
 Why do this? In JavaScript, arrays and objects are passed by reference, so this practice ensures changes won't affect other code that might hold references to the same data. Furthermore, the Gutenberg project follows the philosophy of the Redux library that [state should be immutable](https://redux.js.org/faq/immutable-data#what-are-the-benefits-of-immutability)—data should not be changed directly, but instead a new version of the data created containing the changes.
 
+The `setAttribute` also supports an updater function as an argument. It must be a pure function, which takes current attributes as its only argument and returns updated attributes. This method is helpful when you want to update an value based on a previous state or when working with objects and arrays.
+
+```js
+// Toggle a setting when the user clicks the button.
+const toggleSetting = () =>
+	setAttributes( ( currentAttr ) => ( {
+		mySetting: ! currentAttr.mySetting,
+	} ) );
+
+// Add item to the list.
+const addListItem = ( newListItem ) =>
+	setAttributes( ( currentAttr ) => ( {
+		list: [ ...currentAttr.list, newListItem ],
+	} ) );
+```
+
 ## Save
 
 The `save` function defines the way in which the different attributes should be combined into the final markup, which is then serialized into `post_content`.

@@ -17,6 +17,7 @@ import { store as interfaceStore } from '@wordpress/interface';
 /**
  * Internal dependencies
  */
+import { TEMPLATE_POST_TYPE } from '../../store/constants';
 import { store as editorStore } from '../../store';
 
 export function useStartPatterns() {
@@ -152,7 +153,8 @@ export default function StartPageOptions() {
 		return {
 			postId: getCurrentPostId(),
 			enabled:
-				choosePatternModalEnabled && 'page' === getCurrentPostType(),
+				choosePatternModalEnabled &&
+				TEMPLATE_POST_TYPE !== getCurrentPostType(),
 		};
 	}, [] );
 

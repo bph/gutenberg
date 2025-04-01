@@ -86,8 +86,11 @@ export default function QueryContent( {
 	// because updates are batched after the render and changes in different query properties
 	// would cause to override previous wanted changes.
 	const updateQuery = useCallback(
-		( newQuery ) => setAttributes( { query: { ...query, ...newQuery } } ),
-		[ query, setAttributes ]
+		( newQuery ) =>
+			setAttributes( ( prevAttributes ) => ( {
+				query: { ...prevAttributes.query, ...newQuery },
+			} ) ),
+		[ setAttributes ]
 	);
 	useEffect( () => {
 		const newQuery = {};
