@@ -174,7 +174,7 @@ function getMissingText( type ) {
  * Consider reusing this components for both blocks.
  */
 function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
-	const { label, url, description, title, rel } = attributes;
+	const { label, url, description, rel } = attributes;
 	return (
 		<ToolsPanel label={ __( 'Settings' ) }>
 			<ToolsPanelItem
@@ -235,27 +235,6 @@ function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
 					} }
 					help={ __(
 						'The description will be displayed in the menu if the current theme supports it.'
-					) }
-				/>
-			</ToolsPanelItem>
-
-			<ToolsPanelItem
-				hasValue={ () => !! title }
-				label={ __( 'Title attribute' ) }
-				onDeselect={ () => setAttributes( { title: '' } ) }
-				isShownByDefault
-			>
-				<TextControl
-					__nextHasNoMarginBottom
-					__next40pxDefaultSize
-					label={ __( 'Title attribute' ) }
-					value={ title || '' }
-					onChange={ ( titleValue ) => {
-						setAttributes( { title: titleValue } );
-					} }
-					autoComplete="off"
-					help={ __(
-						'Additional information to help clarify the purpose of the link.'
 					) }
 				/>
 			</ToolsPanelItem>

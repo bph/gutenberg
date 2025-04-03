@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Internal
+
+-   Update `gradient-parser` to version `1.0.2` ([#69783](https://github.com/WordPress/gutenberg/pull/69783)).
+
+
 ### Bug Fixes
 
 -   `Button`: Fix tertiary variant displaying incorrect text color in pressed and hover states ([#68542](https://github.com/WordPress/gutenberg/pull/68542)).
