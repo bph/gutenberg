@@ -176,7 +176,7 @@ export default function TableOfContentsEdit( {
 							} )
 						}
 						help={
-							maxLevel
+							! maxLevel
 								? __(
 										'Including all heading levels in the table of contents.'
 								  )

@@ -151,10 +151,10 @@
 }
 
 
-@mixin input-style__focus() {
-	border-color: var(--wp-admin-theme-color);
+@mixin input-style__focus($accent-color: var(--wp-admin-theme-color)) {
+	border-color: $accent-color;
 	// Expand the default border focus style by .5px to be a total of 1.5px.
-	box-shadow: 0 0 0 0.5px var(--wp-admin-theme-color);
+	box-shadow: 0 0 0 0.5px $accent-color;
 	// Windows High Contrast mode will show this outline, but not the box-shadow.
 	outline: 2px solid transparent;
 }
@@ -259,7 +259,7 @@
 	}
 }
 
-@mixin input-control {
+@mixin input-control($accent-color: var(--wp-admin-theme-color)) {
 	font-family: $default-font;
 	padding: 6px 8px;
 	@include input-style__neutral();
@@ -275,7 +275,7 @@
 	}
 
 	&:focus {
-		@include input-style__focus();
+		@include input-style__focus($accent-color);
 	}
 
 	// Use opacity to work in various editor styles.
