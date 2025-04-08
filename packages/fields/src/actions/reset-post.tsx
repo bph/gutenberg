@@ -189,6 +189,7 @@ const resetPostAction: Action< Template | TemplatePart > = {
 	icon: backup,
 	supportsBulk: true,
 	hideModalHeader: true,
+	modalFocusOnMount: 'firstContentElement',
 	RenderModal: ( { items, closeModal, onActionPerformed } ) => {
 		const [ isBusy, setIsBusy ] = useState( false );
 

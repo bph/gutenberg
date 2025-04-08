@@ -47,6 +47,7 @@ const deletePostAction: Action< Template | TemplatePart | Pattern > = {
 	},
 	supportsBulk: true,
 	hideModalHeader: true,
+	modalFocusOnMount: 'firstContentElement',
 	RenderModal: ( { items, closeModal, onActionPerformed } ) => {
 		const [ isBusy, setIsBusy ] = useState( false );
 		const isResetting = items.every(

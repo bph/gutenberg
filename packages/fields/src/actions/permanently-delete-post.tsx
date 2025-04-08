@@ -35,6 +35,7 @@ const permanentlyDeletePost: Action< PostWithPermissions > = {
 		return status === 'trash' && permissions?.delete;
 	},
 	hideModalHeader: true,
+	modalFocusOnMount: 'firstContentElement',
 	RenderModal: ( { items, closeModal, onActionPerformed } ) => {
 		const [ isBusy, setIsBusy ] = useState( false );
 		const { createSuccessNotice, createErrorNotice } =

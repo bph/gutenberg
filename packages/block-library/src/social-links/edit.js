@@ -6,7 +6,7 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 import {
 	BlockControls,
 	useInnerBlocksProps,
@@ -57,16 +57,21 @@ export function SocialLinksEdit( props ) {
 
 	const {
 		iconBackgroundColorValue,
-		customIconBackgroundColor,
 		iconColorValue,
 		openInNewTab,
 		showLabels,
 		size,
 	} = attributes;
 
-	const hasSelectedChild = useSelect(
-		( select ) =>
-			select( blockEditorStore ).hasSelectedInnerBlock( clientId ),
+	const { hasSocialIcons, hasSelectedChild } = useSelect(
+		( select ) => {
+			const { getBlockCount, hasSelectedInnerBlock } =
+				select( blockEditorStore );
+			return {
+				hasSocialIcons: getBlockCount( clientId ) > 0,
+				hasSelectedChild: hasSelectedInnerBlock( clientId ),
+			};
+		},
 		[ clientId ]
 	);
 
@@ -78,33 +83,25 @@ export function SocialLinksEdit( props ) {
 
 	// Remove icon background color when logos only style is selected or
 	// restore it when any other style is selected.
-	const backgroundBackupRef = useRef( {} );
 	useEffect( () => {
 		if ( logosOnly ) {
-			backgroundBackupRef.current = {
-				iconBackgroundColor,
-				iconBackgroundColorValue,
-				customIconBackgroundColor,
-			};
-			setAttributes( {
-				iconBackgroundColor: undefined,
-				customIconBackgroundColor: undefined,
-				iconBackgroundColorValue: undefined,
+			let restore;
+			setAttributes( ( prev ) => {
+				restore = {
+					iconBackgroundColor: prev.iconBackgroundColor,
+					iconBackgroundColorValue: prev.iconBackgroundColorValue,
+					customIconBackgroundColor: prev.customIconBackgroundColor,
+				};
+				return {
+					iconBackgroundColor: undefined,
+					iconBackgroundColorValue: undefined,
+					customIconBackgroundColor: undefined,
+				};
 			} );
-		} else {
-			setAttributes( { ...backgroundBackupRef.current } );
-		}
-	}, [ logosOnly ] );
 
-	const SocialPlaceholder = (
-		<li className="wp-block-social-links__social-placeholder">
-			<div className="wp-block-social-links__social-placeholder-icons">
-				<div className="wp-social-link wp-social-link-twitter"></div>
-				<div className="wp-social-link wp-social-link-facebook"></div>
-				<div className="wp-social-link wp-social-link-instagram"></div>
-			</div>
-		</li>
-	);
+			return () => setAttributes( { ...restore } );
+		}
+	}, [ logosOnly, setAttributes ] );
 
 	// Fallback color values are used maintain selections in case switching
 	// themes and named colors in palette do not match.
@@ -117,11 +114,13 @@ export function SocialLinksEdit( props ) {
 
 	const blockProps = useBlockProps( { className } );
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		placeholder: ! isSelected && SocialPlaceholder,
 		templateLock: false,
 		orientation: attributes.layout?.orientation ?? 'horizontal',
 		__experimentalAppenderTagName: 'li',
-		renderAppender: hasAnySelected && InnerBlocks.ButtonBlockAppender,
+		renderAppender:
+			! hasSocialIcons || hasAnySelected
+				? InnerBlocks.ButtonBlockAppender
+				: undefined,
 	} );
 
 	const POPOVER_PROPS = {
