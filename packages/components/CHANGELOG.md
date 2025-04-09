@@ -2,10 +2,13 @@
 
 ## Unreleased
 
+### Documentation 
+
+-   `Popover`: Expose Popover TypeScript types for subcomponents. ([#69619](https://github.com/WordPress/gutenberg/pull/69619))
+
 ### Internal
 
 -   Update `gradient-parser` to version `1.0.2` ([#69783](https://github.com/WordPress/gutenberg/pull/69783)).
-
 
 ### Bug Fixes
 

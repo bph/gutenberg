@@ -586,7 +586,6 @@ This block is deprecated. Please use the Comments block instead. ([Source](https
 Display a post's comments count. ([Source](https://github.com/WordPress/gutenberg/tree/trunk/packages/block-library/src/post-comments-count))
 
 -	**Name:** core/post-comments-count
--	**Experimental:** fse
 -	**Category:** theme
 -	**Supports:** color (background, gradients, text), interactivity (clientNavigation), spacing (margin, padding), typography (fontSize, lineHeight), ~~html~~
 -	**Attributes:** textAlign
@@ -605,7 +604,6 @@ Display a post's comments form. ([Source](https://github.com/WordPress/gutenberg
 Displays the link to the current post comments. ([Source](https://github.com/WordPress/gutenberg/tree/trunk/packages/block-library/src/post-comments-link))
 
 -	**Name:** core/post-comments-link
--	**Experimental:** fse
 -	**Category:** theme
 -	**Supports:** color (background, link, ~~text~~), interactivity (clientNavigation), spacing (margin, padding), typography (fontSize, lineHeight), ~~html~~
 -	**Attributes:** textAlign

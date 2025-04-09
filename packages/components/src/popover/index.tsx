@@ -59,6 +59,7 @@ import type {
 	PopoverProps,
 	PopoverAnchorRefReference,
 	PopoverAnchorRefTopBottom,
+	PopoverSlotProps,
 } from './types';
 import { overlayMiddlewares } from './overlay-middlewares';
 import { StyleProvider } from '../style-provider';
@@ -478,6 +479,20 @@ const UnforwardedPopover = (
 	);
 };
 
+// Export the PopoverSlot individually to allow typescript to pick the types up.
+export const PopoverSlot = forwardRef< HTMLDivElement, PopoverSlotProps >(
+	( { name = SLOT_NAME }, ref ) => {
+		return (
+			<Slot
+				bubblesVirtually
+				name={ name }
+				className="popover-slot"
+				ref={ ref }
+			/>
+		);
+	}
+);
+
 /**
  * `Popover` renders its content in a floating modal. If no explicit anchor is passed via props, it anchors to its parent element by default.
  *
@@ -501,25 +516,24 @@ const UnforwardedPopover = (
  * ```
  *
  */
-export const Popover = contextConnect( UnforwardedPopover, 'Popover' );
-
-function PopoverSlot(
-	{ name = SLOT_NAME }: { name?: string },
-	ref: ForwardedRef< any >
-) {
-	return (
-		<Slot
-			bubblesVirtually
-			name={ name }
-			className="popover-slot"
-			ref={ ref }
-		/>
-	);
-}
-
-// @ts-expect-error For Legacy Reasons
-Popover.Slot = forwardRef( PopoverSlot );
-// @ts-expect-error For Legacy Reasons
-Popover.__unstableSlotNameProvider = slotNameContext.Provider;
+export const Popover = Object.assign(
+	contextConnect( UnforwardedPopover, 'Popover' ),
+	{
+		/**
+		 * Renders a slot that is used internally by Popover for rendering content.
+		 */
+		Slot: Object.assign( PopoverSlot, {
+			displayName: 'Popover.Slot',
+		} ),
+		/**
+		 * Provides a context to manage popover slot names.
+		 *
+		 * This is marked as unstable and should not be used directly.
+		 */
+		__unstableSlotNameProvider: Object.assign( slotNameContext.Provider, {
+			displayName: 'Popover.__unstableSlotNameProvider',
+		} ),
+	}
+);
 
 export default Popover;

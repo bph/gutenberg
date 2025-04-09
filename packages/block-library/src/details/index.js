@@ -20,7 +20,7 @@ export const settings = {
 	icon,
 	example: {
 		attributes: {
-			summary: 'La Mancha',
+			summary: __( 'La Mancha' ),
 			showContent: true,
 		},
 		innerBlocks: [
