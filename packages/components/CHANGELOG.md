@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 29.8.0 (2025-04-11)
+
 ### Documentation 
 
 -   `Popover`: Expose Popover TypeScript types for subcomponents. ([#69619](https://github.com/WordPress/gutenberg/pull/69619))
