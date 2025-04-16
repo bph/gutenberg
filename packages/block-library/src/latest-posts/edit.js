@@ -68,6 +68,28 @@ const USERS_LIST_QUERY = {
 	has_published_posts: [ 'post' ],
 	context: 'view',
 };
+const imageAlignmentOptions = [
+	{
+		value: 'none',
+		icon: alignNone,
+		label: __( 'None' ),
+	},
+	{
+		value: 'left',
+		icon: positionLeft,
+		label: __( 'Left' ),
+	},
+	{
+		value: 'center',
+		icon: positionCenter,
+		label: __( 'Center' ),
+	},
+	{
+		value: 'right',
+		icon: positionRight,
+		label: __( 'Right' ),
+	},
+];
 
 function getFeaturedImageDetails( post, size ) {
 	const image = post._embedded?.[ 'wp:featuredmedia' ]?.[ '0' ];
@@ -84,10 +106,7 @@ function getCurrentAuthor( post ) {
 	return post._embedded?.author?.[ 0 ];
 }
 
-export default function LatestPostsEdit( { attributes, setAttributes } ) {
-	const instanceId = useInstanceId( LatestPostsEdit );
-	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
-
+function Controls( { attributes, setAttributes, postCount } ) {
 	const {
 		postsToShow,
 		order,
@@ -110,7 +129,6 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 	} = attributes;
 	const {
 		imageSizes,
-		latestPosts,
 		defaultImageWidth,
 		defaultImageHeight,
 		categoriesList,
@@ -119,21 +137,6 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 		( select ) => {
 			const { getEntityRecords, getUsers } = select( coreStore );
 			const settings = select( blockEditorStore ).getSettings();
-			const catIds =
-				categories && categories.length > 0
-					? categories.map( ( cat ) => cat.id )
-					: [];
-			const latestPostsQuery = Object.fromEntries(
-				Object.entries( {
-					categories: catIds,
-					author: selectedAuthor,
-					order,
-					orderby: orderBy,
-					per_page: postsToShow,
-					_embed: 'author,wp:featuredmedia',
-					ignore_sticky: true,
-				} ).filter( ( [ , value ] ) => typeof value !== 'undefined' )
-			);
 
 			return {
 				defaultImageWidth:
@@ -143,11 +146,6 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 					settings.imageDimensions?.[ featuredImageSizeSlug ]
 						?.height ?? 0,
 				imageSizes: settings.imageSizes,
-				latestPosts: getEntityRecords(
-					'postType',
-					'post',
-					latestPostsQuery
-				),
 				categoriesList: getEntityRecords(
 					'taxonomy',
 					'category',
@@ -156,25 +154,10 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 				authorList: getUsers( USERS_LIST_QUERY ),
 			};
 		},
-		[
-			featuredImageSizeSlug,
-			postsToShow,
-			order,
-			orderBy,
-			categories,
-			selectedAuthor,
-		]
+		[ featuredImageSizeSlug ]
 	);
 
-	// If a user clicks to a link prevent redirection and show a warning.
-	const { createWarningNotice } = useDispatch( noticeStore );
-	const showRedirectionPreventedNotice = ( event ) => {
-		event.preventDefault();
-		createWarningNotice( __( 'Links are disabled in the editor.' ), {
-			id: `block-library/core/latest-posts/redirection-prevented/${ instanceId }`,
-			type: 'snackbar',
-		} );
-	};
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const imageSizeOptions = imageSizes
 		.filter( ( { slug } ) => slug !== 'full' )
@@ -213,32 +196,8 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 		setAttributes( { categories: allCategories } );
 	};
 
-	const imageAlignmentOptions = [
-		{
-			value: 'none',
-			icon: alignNone,
-			label: __( 'None' ),
-		},
-		{
-			value: 'left',
-			icon: positionLeft,
-			label: __( 'Left' ),
-		},
-		{
-			value: 'center',
-			icon: positionCenter,
-			label: __( 'Center' ),
-		},
-		{
-			value: 'right',
-			icon: positionRight,
-			label: __( 'Right' ),
-		},
-	];
-
-	const hasPosts = !! latestPosts?.length;
-	const inspectorControls = (
-		<InspectorControls>
+	return (
+		<>
 			<ToolsPanel
 				label={ __( 'Post content' ) }
 				resetAll={ () =>
@@ -324,7 +283,6 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 						</ToolsPanelItem>
 					) }
 			</ToolsPanel>
-
 			<ToolsPanel
 				label={ __( 'Post meta' ) }
 				resetAll={ () =>
@@ -450,7 +408,6 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 					</>
 				) }
 			</PanelBody>
-
 			<PanelBody title={ __( 'Sorting and filtering' ) }>
 				<QueryControls
 					{ ...{ order, orderBy } }
@@ -488,17 +445,89 @@ export default function LatestPostsEdit( { attributes, setAttributes } ) {
 						}
 						min={ 2 }
 						max={
-							! hasPosts
+							! postCount
 								? MAX_POSTS_COLUMNS
-								: Math.min(
-										MAX_POSTS_COLUMNS,
-										latestPosts.length
-								  )
+								: Math.min( MAX_POSTS_COLUMNS, postCount )
 						}
 						required
 					/>
 				) }
 			</PanelBody>
+		</>
+	);
+}
+
+export default function LatestPostsEdit( { attributes, setAttributes } ) {
+	const instanceId = useInstanceId( LatestPostsEdit );
+
+	const {
+		postsToShow,
+		order,
+		orderBy,
+		categories,
+		selectedAuthor,
+		displayFeaturedImage,
+		displayPostContentRadio,
+		displayPostContent,
+		displayPostDate,
+		displayAuthor,
+		postLayout,
+		columns,
+		excerptLength,
+		featuredImageAlign,
+		featuredImageSizeSlug,
+		featuredImageSizeWidth,
+		featuredImageSizeHeight,
+		addLinkToFeaturedImage,
+	} = attributes;
+	const { latestPosts } = useSelect(
+		( select ) => {
+			const { getEntityRecords } = select( coreStore );
+			const catIds =
+				categories && categories.length > 0
+					? categories.map( ( cat ) => cat.id )
+					: [];
+			const latestPostsQuery = Object.fromEntries(
+				Object.entries( {
+					categories: catIds,
+					author: selectedAuthor,
+					order,
+					orderby: orderBy,
+					per_page: postsToShow,
+					_embed: 'author,wp:featuredmedia',
+					ignore_sticky: true,
+				} ).filter( ( [ , value ] ) => typeof value !== 'undefined' )
+			);
+
+			return {
+				latestPosts: getEntityRecords(
+					'postType',
+					'post',
+					latestPostsQuery
+				),
+			};
+		},
+		[ postsToShow, order, orderBy, categories, selectedAuthor ]
+	);
+
+	// If a user clicks to a link prevent redirection and show a warning.
+	const { createWarningNotice } = useDispatch( noticeStore );
+	const showRedirectionPreventedNotice = ( event ) => {
+		event.preventDefault();
+		createWarningNotice( __( 'Links are disabled in the editor.' ), {
+			id: `block-library/core/latest-posts/redirection-prevented/${ instanceId }`,
+			type: 'snackbar',
+		} );
+	};
+
+	const hasPosts = !! latestPosts?.length;
+	const inspectorControls = (
+		<InspectorControls>
+			<Controls
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				postCount={ latestPosts?.length ?? 0 }
+			/>
 		</InspectorControls>
 	);
 

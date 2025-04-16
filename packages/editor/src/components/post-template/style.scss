@@ -1,5 +1,15 @@
 .editor-post-template__swap-template-modal {
 	z-index: z-index(".editor-post-template__swap-template-modal");
+
+	.editor-post-template__swap-template-search {
+		background: $white;
+		position: sticky;
+		top: 0;
+		padding: $grid-unit-20 0;
+		transform: translateY(- $grid-unit-05); // Offsets the top padding on the modal content container
+		margin-bottom: - $grid-unit-05;
+		z-index: z-index(".editor-post-template__swap-template-search");
+	}
 }
 
 .editor-post-template__create-template-modal {
