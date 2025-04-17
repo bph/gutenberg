@@ -71,6 +71,13 @@ import { StyleProvider } from '../style-provider';
  */
 export const SLOT_NAME = 'Popover';
 
+/**
+ * Virtual padding to account for overflow boundaries.
+ *
+ * @type {number}
+ */
+const OVERFLOW_PADDING = 8;
+
 // An SVG displaying a triangle facing down, filled with a solid
 // color and bordered in such a way to create an arrow-like effect.
 // Keeping the SVG's viewbox squared simplify the arrow positioning
@@ -224,6 +231,7 @@ const UnforwardedPopover = (
 		computedFlipProp && flipMiddleware(),
 		computedResizeProp &&
 			size( {
+				padding: OVERFLOW_PADDING,
 				apply( sizeProps ) {
 					const { firstElementChild } = refs.floating.current ?? {};
 
@@ -234,7 +242,10 @@ const UnforwardedPopover = (
 
 					// Reduce the height of the popover to the available space.
 					Object.assign( firstElementChild.style, {
-						maxHeight: `${ sizeProps.availableHeight }px`,
+						maxHeight: `${ Math.max(
+							0,
+							sizeProps.availableHeight
+						) }px`,
 						overflow: 'auto',
 					} );
 				},

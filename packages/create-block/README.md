@@ -67,6 +67,7 @@ The rest of the configuration is set to all default values unless overridden wit
 --wp-scripts                 enable integration with `@wordpress/scripts` package
 --no-wp-scripts              disable integration with `@wordpress/scripts` package
 --wp-env                     enable integration with `@wordpress/env` package
+--textdomain <value>         text domain for internationalization
 -h, --help                   output usage information
 ```
 
@@ -106,6 +107,14 @@ With this argument, the `create-block` package will add to the generated plugin 
 
 ```bash
 $ npx @wordpress/create-block@latest --wp-env
+```
+
+#### `--textdomain`
+
+With this argument, the `create-block` package will a generate a block with the provided text domain. If not specified, the block’s slug is used as the default text domain.
+
+```bash
+$ npx @wordpress/create-block@latest --textdomain my-custom-domain
 ```
 
 #### `--help`

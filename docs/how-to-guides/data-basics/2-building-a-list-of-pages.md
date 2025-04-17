@@ -366,6 +366,7 @@ import { SearchControl, Spinner } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
 import { decodeEntities } from '@wordpress/html-entities';
+import './style.css';
 
 function MyFirstApp() {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
