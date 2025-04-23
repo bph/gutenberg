@@ -18,16 +18,25 @@ on:
             - '!packages/block-serialization-default-parser/**'
             - '!packages/widgets/**'
             - '!packages/e2e-tests/**'
+
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
     check:
         name: Check for a Core backport changelog entry
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'No Core Sync Required') && !contains(github.event.pull_request.labels.*.name, 'Backport from WordPress Core') }}
         steps:
             - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
               with:
                   ref: ${{ github.event.pull_request.head.ref }}
                   repository: ${{ github.event.pull_request.head.repo.full_name }}
+                  persist-credentials: false
+
             - name: Check the changelog folder
               env:
                   PR_NUMBER: ${{ github.event.number }}
@@ -46,7 +55,7 @@ jobs:
                     exit 1
                   fi
 
-                  core_pr_number=$(basename "${changelog_file}" .md)
+                  core_pr_number="$(basename "${changelog_file}" .md)"
                   core_pr_url="https://github\.com/WordPress/wordpress-develop/pull/${core_pr_number}"
 
                   # Confirm that the entry has the correct core backport PR URL.

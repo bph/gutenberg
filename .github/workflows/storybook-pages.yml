@@ -5,9 +5,15 @@ on:
         branches:
             - trunk
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        permissions:
+          contents: write
         if: ${{ github.repository == 'WordPress/gutenberg' }}
 
         steps:
@@ -16,6 +22,7 @@ jobs:
               with:
                   ref: trunk
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  persist-credentials: false
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node

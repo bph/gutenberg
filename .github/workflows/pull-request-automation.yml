@@ -4,9 +4,17 @@ on:
     push:
 name: Pull request automation
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
     pull-request-automation:
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
+          issues: write
+          pull-requests: write
         if: ${{ github.repository == 'WordPress/gutenberg' }}
 
         steps:
@@ -16,6 +24,7 @@ jobs:
               with:
                   ref: trunk
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  persist-credentials: false
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node

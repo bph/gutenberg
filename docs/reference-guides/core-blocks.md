@@ -69,7 +69,7 @@ A calendar of your site’s posts. ([Source](https://github.com/WordPress/gutenb
 
 -	**Name:** core/calendar
 -	**Category:** widgets
--	**Supports:** align, color (background, link, text), interactivity (clientNavigation), typography (fontSize, lineHeight)
+-	**Supports:** align, color (background, link, text), interactivity (clientNavigation), typography (fontSize, lineHeight), ~~html~~
 -	**Attributes:** month, year
 
 ## Terms List

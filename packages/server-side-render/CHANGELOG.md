@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Fix `ServerSideRender` not updating when attributes change by properly implementing debounced fetch with refs ([#69237](https://github.com/WordPress/gutenberg/pull/69237)).
+
 ## 5.22.0 (2025-04-11)
 
 ## 5.21.0 (2025-03-27)

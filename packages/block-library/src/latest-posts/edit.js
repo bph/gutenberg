@@ -211,7 +211,7 @@ function Controls( { attributes, setAttributes, postCount } ) {
 			>
 				<ToolsPanelItem
 					hasValue={ () => !! displayPostContent }
-					label={ __( 'Post content' ) }
+					label={ __( 'Display post content' ) }
 					onDeselect={ () =>
 						setAttributes( { displayPostContent: false } )
 					}
@@ -219,7 +219,7 @@ function Controls( { attributes, setAttributes, postCount } ) {
 				>
 					<ToggleControl
 						__nextHasNoMarginBottom
-						label={ __( 'Post content' ) }
+						label={ __( 'Display post content' ) }
 						checked={ displayPostContent }
 						onChange={ ( value ) =>
 							setAttributes( { displayPostContent: value } )
@@ -229,7 +229,7 @@ function Controls( { attributes, setAttributes, postCount } ) {
 				{ displayPostContent && (
 					<ToolsPanelItem
 						hasValue={ () => displayPostContentRadio !== 'excerpt' }
-						label={ __( 'Show' ) }
+						label={ __( 'Content length' ) }
 						onDeselect={ () =>
 							setAttributes( {
 								displayPostContentRadio: 'excerpt',
@@ -238,7 +238,7 @@ function Controls( { attributes, setAttributes, postCount } ) {
 						isShownByDefault
 					>
 						<RadioControl
-							label={ __( 'Show' ) }
+							label={ __( 'Content length' ) }
 							selected={ displayPostContentRadio }
 							options={ [
 								{ label: __( 'Excerpt' ), value: 'excerpt' },

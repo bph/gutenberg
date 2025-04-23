@@ -1,13 +1,12 @@
 == Changelog ==
 
-= 20.7.0-rc.1 =
-
+= 20.7.0 =
 
 ## Changelog
 
 ### Enhancements
 
-- Format Library: Add a feature to set alpha value to Highlight. ([67525](https://github.com/WordPress/gutenberg/pull/67525))
+- Format Library: Add a feature to set the alpha value to Highlight. ([67525](https://github.com/WordPress/gutenberg/pull/67525))
 - Playwright end-to-end utils: Add new `emulateNetworkConditions` helper. ([69865](https://github.com/WordPress/gutenberg/pull/69865))
 
 #### Block Library
@@ -32,7 +31,7 @@
 - Scripts: Fix blocks manifest generation when directory name has space. ([69766](https://github.com/WordPress/gutenberg/pull/69766))
 
 #### Block Library
-- Enhance Featured Image Block: Don't include interactive elements within a element. ([69730](https://github.com/WordPress/gutenberg/pull/69730))
+- Enhance Featured Image Block: Don't include interactive elements within an element. ([69730](https://github.com/WordPress/gutenberg/pull/69730))
 - Featured Image: Don't render empty Resolution tools panel if media is not set. ([69805](https://github.com/WordPress/gutenberg/pull/69805))
 - Fix: Background wrapper for 'Button Inside' option. ([69624](https://github.com/WordPress/gutenberg/pull/69624))
 - Fix: Update the static text and make them translatable in the Blocks example. ([69859](https://github.com/WordPress/gutenberg/pull/69859))
@@ -132,6 +131,8 @@ The following PRs were merged by first-time contributors:
 The following contributors merged PRs in this release:
 
 @carolinan @Debarghya-Banerjee @dhruvikpatel18 @dilipbheda @himanshupathak95 @im3dabasia @Infinite-Null @jonathanbossenger @karthikeya-io @Mamaduka @Mayank-Tripathi32 @Rishit30G @SainathPoojary @shimotmk @snehapatil2001 @stokesman @Sukhendu2002 @swissspidy @t-hamano @timse201 @yogeshbhutkar
+
+
 
 
 = 20.6.0 =

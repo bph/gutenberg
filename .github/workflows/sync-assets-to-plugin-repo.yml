@@ -7,10 +7,16 @@ on:
         paths:
             - assets/**
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
     sync-assets:
         name: Sync assets to WordPress.org plugin repo
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
         environment: wp.org plugin
         env:
             PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/gutenberg'
@@ -33,6 +39,7 @@ jobs:
                       assets
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
                   path: git
+                  persist-credentials: false
 
             - name: Copy files from git checkout to svn working copy
               run: cp -R git/assets/* assets

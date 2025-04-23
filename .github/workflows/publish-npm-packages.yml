@@ -23,10 +23,16 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 jobs:
     release:
         name: Release - ${{ github.event.inputs.release_type }}
         runs-on: ubuntu-latest
+        permissions:
+          contents: read
         environment: WordPress packages
         steps:
             - name: Checkout (for CLI)
@@ -36,6 +42,7 @@ jobs:
                   path: cli
                   ref: trunk
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  persist-credentials: false
 
             - name: Checkout (for publishing)
               if: ${{ github.event.inputs.release_type != 'wp' }}
@@ -46,6 +53,7 @@ jobs:
                   ref: trunk
                   token: ${{ secrets.GUTENBERG_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  persist-credentials: false
 
             - name: Checkout (for publishing WP major version)
               if: ${{ github.event.inputs.release_type == 'wp' && github.event.inputs.wp_version }}
@@ -58,6 +66,7 @@ jobs:
                   fetch-depth: 999
                   token: ${{ secrets.GUTENBERG_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+                  persist-credentials: false
 
             - name: Configure git user name and email (for publishing)
               run: |
@@ -104,6 +113,7 @@ jobs:
               run: |
                   cd publish
                   npm ci
-                  npx lerna publish patch --dist-tag wp-${{ github.event.inputs.wp_version }} --no-private --yes --no-verify-access
+                  npx lerna publish patch --dist-tag "wp-$WP_VERSION" --no-private --yes --no-verify-access
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  WP_VERSION: ${{ github.event.inputs.wp_version }}

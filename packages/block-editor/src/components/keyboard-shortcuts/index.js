@@ -59,8 +59,8 @@ function KeyboardShortcutsRegister() {
 			category: 'block',
 			description: __( 'Remove the selected block(s).' ),
 			keyCombination: {
-				modifier: 'primaryShift',
-				character: 'backspace',
+				modifier: 'access',
+				character: 'z',
 			},
 		} );
 
