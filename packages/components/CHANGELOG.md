@@ -11,6 +11,10 @@
 
 -   `ToggleGroupControl`: Fix active background for empty string value ([#69969](https://github.com/WordPress/gutenberg/pull/69969)).
 
+### Internal
+
+-   `ColorPicker`: Add tests for Alpha slider functionality ([#69203](https://github.com/WordPress/gutenberg/pull/69203)).
+
 ## 29.8.0 (2025-04-11)
 
 ### Documentation
