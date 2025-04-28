@@ -11,6 +11,7 @@ import {
 	RawHTML,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useRef,
 	useState,
 } from '@wordpress/element';
@@ -106,7 +107,10 @@ export default function ServerSideRender( props ) {
 	const prevProps = usePrevious( props );
 	const [ isLoading, setIsLoading ] = useState( false );
 	const latestPropsRef = useRef( props );
-	latestPropsRef.current = props;
+
+	useLayoutEffect( () => {
+		latestPropsRef.current = props;
+	}, [ props ] );
 
 	const fetchData = useCallback( () => {
 		if ( ! isMountedRef.current ) {
@@ -213,12 +217,12 @@ export default function ServerSideRender( props ) {
 
 	const hasResponse = !! response;
 	const hasEmptyResponse = response === '';
-	const hasError = response?.error;
+	const hasError = !! response?.error;
 
 	if ( isLoading ) {
 		return (
 			<LoadingResponsePlaceholder { ...props } showLoader={ showLoader }>
-				{ hasResponse && (
+				{ hasResponse && ! hasError && (
 					<RawHTML className={ className }>{ response }</RawHTML>
 				) }
 			</LoadingResponsePlaceholder>
