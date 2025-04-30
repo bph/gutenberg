@@ -597,6 +597,87 @@ test.describe( 'List View', () => {
 			] );
 	} );
 
+	test( 'should paste block styles using keyboard', async ( {
+		editor,
+		page,
+		pageUtils,
+		listViewUtils,
+		context,
+	} ) => {
+		// Grant clipboard access for copying and pasting styles between blocks.
+		await context.grantPermissions( [
+			'clipboard-read',
+			'clipboard-write',
+		] );
+
+		// Insert a block without styles.
+		await editor.insertBlock( {
+			name: 'core/paragraph',
+			attributes: {
+				content: 'First Block',
+			},
+		} );
+
+		// Insert a block with styles.
+		await editor.insertBlock( {
+			name: 'core/paragraph',
+			attributes: {
+				content: 'Second Block',
+				style: {
+					color: {
+						text: '#ff0000',
+						background: '#00ff00',
+					},
+				},
+			},
+		} );
+
+		// Copy the styles from the second block.
+		await editor.clickBlockToolbarButton( 'Options' );
+		await page
+			.getByRole( 'menu', { name: 'Options' } )
+			.getByRole( 'menuitem', {
+				name: 'Copy Styles',
+			} )
+			.click();
+
+		// Open List View.
+		await listViewUtils.openListView();
+
+		// Navigate to the block without styles.
+		await page.keyboard.press( 'ArrowUp' );
+
+		// Paste the copied styles.
+		await pageUtils.pressKeys( 'primaryAlt+v' );
+
+		await expect.poll( editor.getBlocks ).toMatchObject( [
+			{
+				name: 'core/paragraph',
+				attributes: {
+					content: 'First Block',
+					style: {
+						color: {
+							text: '#ff0000',
+							background: '#00ff00',
+						},
+					},
+				},
+			},
+			{
+				name: 'core/paragraph',
+				attributes: {
+					content: 'Second Block',
+					style: {
+						color: {
+							text: '#ff0000',
+							background: '#00ff00',
+						},
+					},
+				},
+			},
+		] );
+	} );
+
 	test( 'should cut and paste blocks using keyboard', async ( {
 		editor,
 		pageUtils,
