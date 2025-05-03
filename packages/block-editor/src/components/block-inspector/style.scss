@@ -11,7 +11,8 @@
 	}
 
 	.components-base-control,
-	.components-radio-control {
+	.components-radio-control,
+	.block-editor-html-element-control {
 		&:where(:not(:last-child)) {
 			margin-bottom: $grid-unit-20;
 		}
@@ -20,7 +21,8 @@
 	// Reset unwanted margin-bottom from being applied to BaseControls within certain components.
 	.components-focal-point-picker-control,
 	.components-query-controls,
-	.components-range-control {
+	.components-range-control,
+	.block-editor-html-element-control {
 		.components-base-control {
 			margin-bottom: 0;
 		}

@@ -124,9 +124,10 @@ function DuotonePanelPure( { style, setAttributes, name } ) {
 		return null;
 	}
 
-	const duotonePresetOrColors = ! Array.isArray( duotoneStyle )
-		? getColorsFromDuotonePreset( duotoneStyle, duotonePalette )
-		: duotoneStyle;
+	const duotonePresetOrColors =
+		duotoneStyle === 'unset' || Array.isArray( duotoneStyle )
+			? duotoneStyle
+			: getColorsFromDuotonePreset( duotoneStyle, duotonePalette );
 
 	return (
 		<>

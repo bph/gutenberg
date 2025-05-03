@@ -86,7 +86,7 @@ export default function HTMLElementControl( {
 	} );
 
 	return (
-		<VStack spacing={ 2 }>
+		<VStack spacing={ 2 } className="block-editor-html-element-control">
 			<SelectControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
@@ -100,7 +100,7 @@ export default function HTMLElementControl( {
 			{ tagName === 'main' && hasMainElementElsewhere && (
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
-						'Multiple <main> elements detected. This is not valid HTML and may cause accessibility issues. Please change this HTML element.'
+						'Multiple <main> elements detected. The duplicate may be in your content or template. This is not valid HTML and may cause accessibility issues. Please change this HTML element.'
 					) }
 				</Notice>
 			) }

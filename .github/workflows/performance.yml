@@ -33,7 +33,7 @@ jobs:
         name: Run performance tests
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         if: ${{ github.repository == 'WordPress/gutenberg' }}
         env:
             WP_ARTIFACTS_PATH: ${{ github.workspace }}/artifacts
@@ -76,13 +76,14 @@ jobs:
             - name: Compare performance with base branch
               if: github.event_name == 'push'
               # The base hash used here need to be a commit that is compatible with the current WP version
-              # The current one is c7722262e65a3f4d0f1a2d1ad29eccb2069509e4 and it needs to be updated every WP major release.
+              # The current one is 177c166a5eada898ad015f5efaf1c6fefa7042c4 and it needs to be updated every WP major release.
               # It is used as a base comparison point to avoid fluctuation in the performance metrics.
+              # See: https://developer.wordpress.org/block-editor/explanations/architecture/performance/#update-the-reference-commit.
               run: |
                   WP_VERSION="$(awk -F ': ' '/^Tested up to/{print $2}' readme.txt)"
                   IFS=. read -ra WP_VERSION_ARRAY <<< "$WP_VERSION"
                   WP_MAJOR="${WP_VERSION_ARRAY[0]}.${WP_VERSION_ARRAY[1]}"
-                  ./bin/plugin/cli.js perf "$GITHUB_SHA" c7722262e65a3f4d0f1a2d1ad29eccb2069509e4 --tests-branch "$GITHUB_SHA" --wp-version "$WP_MAJOR"
+                  ./bin/plugin/cli.js perf "$GITHUB_SHA" 177c166a5eada898ad015f5efaf1c6fefa7042c4 --tests-branch "$GITHUB_SHA" --wp-version "$WP_MAJOR"
 
             - name: Compare performance with custom branches
               if: github.event_name == 'workflow_dispatch'
