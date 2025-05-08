@@ -29,7 +29,7 @@ jobs:
         name: Compute current and next stable release branches
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         if: ${{ github.event_name == 'workflow_dispatch' }}
         outputs:
             current_stable_branch: ${{ steps.get_branches.outputs.current_stable_branch }}
@@ -57,7 +57,7 @@ jobs:
         name: Bump version
         runs-on: ubuntu-latest
         permissions:
-          contents: write
+            contents: write
         needs: compute-stable-branches
         if: |
             github.event_name == 'workflow_dispatch' && (
@@ -132,7 +132,7 @@ jobs:
                   github.event.inputs.version == 'stable' ||
                   contains( steps.get_version.outputs.old_version, 'rc' )
               env:
-                 TARGET_BRANCH: ${{ steps.get_version.outputs.release_branch }}
+                  TARGET_BRANCH: ${{ steps.get_version.outputs.release_branch }}
               run: |
                   git fetch --depth=1 origin "$TARGET_BRANCH"
                   git checkout "$TARGET_BRANCH"
@@ -182,7 +182,7 @@ jobs:
         name: Build Release Artifact
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         needs: bump-version
         if: |
             always() && (
@@ -246,7 +246,7 @@ jobs:
         needs: [bump-version, build]
         runs-on: ubuntu-latest
         permissions:
-          contents: write
+            contents: write
         if: |
             always() &&
             ( needs.build.outputs.job_status == 'failure' ) &&
@@ -302,7 +302,7 @@ jobs:
         needs: [bump-version, build]
         runs-on: ubuntu-latest
         permissions:
-          contents: write
+            contents: write
 
         steps:
             - name: Set Release Version
@@ -349,7 +349,7 @@ jobs:
         name: Publish WordPress packages to npm
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         environment: WordPress packages
         needs: [bump-version, build]
         if: ${{ endsWith( needs.bump-version.outputs.new_version, '-rc.1' ) }}
@@ -370,7 +370,7 @@ jobs:
                   ref: trunk
                   token: ${{ secrets.GUTENBERG_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
-                  persist-credentials: false
+                  persist-credentials: true
 
             - name: Configure git user name and email (for publishing)
               run: |

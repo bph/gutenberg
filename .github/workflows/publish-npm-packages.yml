@@ -10,6 +10,7 @@ on:
                 default: 'development'
                 options:
                     - development
+                    - latest
                     - bugfix
                     - wp
             wp_version:
@@ -32,7 +33,7 @@ jobs:
         name: Release - ${{ github.event.inputs.release_type }}
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         environment: WordPress packages
         steps:
             - name: Checkout (for CLI)
@@ -53,7 +54,7 @@ jobs:
                   ref: trunk
                   token: ${{ secrets.GUTENBERG_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
-                  persist-credentials: false
+                  persist-credentials: true
 
             - name: Checkout (for publishing WP major version)
               if: ${{ github.event.inputs.release_type == 'wp' && github.event.inputs.wp_version }}
@@ -96,6 +97,15 @@ jobs:
                   cd cli
                   npm ci
                   ./bin/plugin/cli.js npm-next --ci --repository-path ../publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+            - name: Publish packages based on the latest Gutenberg plugin to npm ("latest" dist-tag)
+              if: ${{ github.event.inputs.release_type == 'latest' }}
+              run: |
+                  cd cli
+                  npm ci
+                  ./bin/plugin/cli.js npm-latest --semver minor --ci --repository-path ../publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

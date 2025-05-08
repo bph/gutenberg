@@ -1202,6 +1202,24 @@ describe( 'cleanForSlug', () => {
 		expect( cleanForSlug( 'the long - cat' ) ).toBe( 'the-long-cat' );
 		expect( cleanForSlug( 'the----long---cat' ) ).toBe( 'the-long-cat' );
 	} );
+
+	it( 'Should remove ampersands', () => {
+		expect( cleanForSlug( 'the long cat & dog' ) ).toBe(
+			'the-long-cat-dog'
+		);
+		expect(
+			cleanForSlug( 'the long cat &amp; a dog &amp;&amp; fish' )
+		).toBe( 'the-long-cat-a-dog-fish' );
+		expect( cleanForSlug( 'the long cat &amp;amp; dog' ) ).toBe(
+			'the-long-cat-amp-dog'
+		);
+	} );
+
+	it( 'Should remove HTML entities', () => {
+		expect(
+			cleanForSlug( 'No &nbsp; Entities> &ndash; Here &mdash;&lt;' )
+		).toBe( 'no-entities-here' );
+	} );
 } );
 
 describe( 'normalizePath', () => {

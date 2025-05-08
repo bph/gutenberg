@@ -10,8 +10,8 @@ module.exports = {
 				'flex-direction': '/^(?!(row|column)-reverse).*$/',
 			},
 			{
-				message:
-					'Avoid the flex-direction reverse values. For accessibility reasons, visual, reading, and DOM order must match. Only use the reverse values when they do not affect reading order, meaning, and interaction.',
+				message: ( property, value ) =>
+					`Avoid "${ value }" value for the "${ property }" property. For accessibility reasons, visual, reading, and DOM order must match. Only use the reverse values when they do not affect reading order, meaning, and interaction.`,
 			},
 		],
 		'declaration-property-value-disallowed-list': [
