@@ -2579,15 +2579,15 @@
 			"const": 3
 		},
 		"title": {
-			"description": "Title of the global styles variation. If not defined, the file name will be used.",
+			"description": "Title of the styles variation. If not defined, the file name will be used.",
 			"type": "string"
 		},
 		"slug": {
-			"description": "Slug of the global styles variation. If not defined, the kebab-case title will be used.",
+			"description": "Slug of the styles variation. If not defined, the kebab-case title will be used.",
 			"type": "string"
 		},
 		"description": {
-			"description": "Description of the global styles variation.",
+			"description": "Description of the styles variation.",
 			"type": "string"
 		},
 		"blockTypes": {

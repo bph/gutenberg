@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Enhancement
+
+-   `Snackbar`: Add support to open links in a new tab ([#69905](https://github.com/WordPress/gutenberg/pull/69905)).
+-   `ColorPicker`: Add a visual cue when the value is copied ([#70083](https://github.com/WordPress/gutenberg/pull/70083)).
+
+### Internal
+
+-   Clarify `withIgnoreIMEEvents` documentation to reflect support for all keyboard event handlers ([#70098](https://github.com/WordPress/gutenberg/pull/70098)).
+
 ## 29.9.0 (2025-05-07)
 
 ### Enhancement

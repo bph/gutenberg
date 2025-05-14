@@ -19,8 +19,8 @@ module.exports = {
 				'/.*/': [ '/--wp-components-color-/' ],
 			},
 			{
-				message:
-					'--wp-components-color-* variables are not ready to be used outside of the components package.',
+				message: ( property, value ) =>
+					`Avoid using "${ value }" in "${ property }". --wp-components-color-* variables are not ready to be used outside of the components package.`,
 			},
 		],
 		'font-weight-notation': null,

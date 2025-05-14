@@ -2388,7 +2388,7 @@
 		"parent": "contributors"
 	},
 	{
-		"title": "Versions in WordPress",
+		"title": "Gutenberg versions in WordPress",
 		"slug": "versions-in-wordpress",
 		"markdown_source": "../docs/contributors/versions-in-wordpress.md",
 		"parent": "contributors"

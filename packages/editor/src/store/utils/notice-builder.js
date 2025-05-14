@@ -58,6 +58,7 @@ export function getNotificationArgumentsForSaveSuccess( data ) {
 		actions.push( {
 			label: isDraft ? __( 'View Preview' ) : postType.labels.view_item,
 			url: post.link,
+			openInNewTab: true,
 		} );
 	}
 	return [

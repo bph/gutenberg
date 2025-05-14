@@ -145,6 +145,7 @@ An array of notice actions. Each member object should contain:
 
 - `label`: `string` containing the text of the button/link
 - `url`: `string` OR `onClick`: `( event: SyntheticEvent ) => void` to specify what the action does.
+- `openInNewTab`: `boolean` (optional) When set to `true`, opens the URL in a new browser tab.
 - `className`: `string` (optional) to add custom classes to the button styles.
 - `noDefaultClasses`: `boolean` (optional) A value of `true` will remove all default styling.
 - `variant`: `'primary' | 'secondary' | 'link'` (optional) You can denote a primary button action for a notice by passing a value of `primary`.
