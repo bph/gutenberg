@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Breaking Changes
+
+-   The `LoadingResponsePlaceholder` prop will no longer receive `showLoader`. The spinner rendering logic is now located in the same component ([#70147](https://github.com/WordPress/gutenberg/pull/70147)).
+
 ## 5.23.0 (2025-05-07)
 
 ### Bug Fixes

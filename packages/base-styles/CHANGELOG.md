@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Breaking Changes
+
+-   This package now requires [Dart Sass](https://www.npmjs.com/package/sass) to compile. Legacy Sass compilers like [LibSass](https://sass-lang.com/blog/libsass-is-deprecated/) ([`node-sass`](https://www.npmjs.com/package/node-sass)) and [Ruby Sass](https://sass-lang.com/blog/ruby-sass-is-unsupported/) are no longer supported ([#70135](https://github.com/WordPress/gutenberg/pull/70135)).
+
 ## 5.23.0 (2025-05-07)
 
 ## 5.22.0 (2025-04-11)

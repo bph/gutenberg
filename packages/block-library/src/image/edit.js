@@ -42,6 +42,7 @@ import {
 	LINK_DESTINATION_MEDIA,
 	LINK_DESTINATION_NONE,
 	ALLOWED_MEDIA_TYPES,
+	DEFAULT_MEDIA_SIZE_SLUG,
 } from './constants';
 
 export const pickRelevantMediaFiles = ( image, size ) => {
@@ -239,7 +240,7 @@ export function ImageEdit( {
 
 		// Try to use the previous selected image size if its available
 		// otherwise try the default image size or fallback to "full"
-		let newSize = 'full';
+		let newSize = DEFAULT_MEDIA_SIZE_SLUG;
 		if ( sizeSlug && hasSize( media, sizeSlug ) ) {
 			newSize = sizeSlug;
 		} else if ( hasSize( media, imageDefaultSize ) ) {

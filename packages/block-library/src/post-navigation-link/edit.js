@@ -19,6 +19,7 @@ import {
 	BlockControls,
 	AlignmentToolbar,
 	useBlockProps,
+	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import { __, _x } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
@@ -37,6 +38,8 @@ export default function PostNavigationLinkEdit( {
 	},
 	setAttributes,
 } ) {
+	const blockEditingMode = useBlockEditingMode();
+	const showControls = blockEditingMode === 'default';
 	const isNext = type === 'next';
 	let placeholder = isNext ? __( 'Next' ) : __( 'Previous' );
 
@@ -176,14 +179,16 @@ export default function PostNavigationLinkEdit( {
 					) }
 				/>
 			</InspectorControls>
-			<BlockControls>
-				<AlignmentToolbar
-					value={ textAlign }
-					onChange={ ( nextAlign ) => {
-						setAttributes( { textAlign: nextAlign } );
-					} }
-				/>
-			</BlockControls>
+			{ showControls && (
+				<BlockControls>
+					<AlignmentToolbar
+						value={ textAlign }
+						onChange={ ( nextAlign ) => {
+							setAttributes( { textAlign: nextAlign } );
+						} }
+					/>
+				</BlockControls>
+			) }
 			<div { ...blockProps }>
 				{ ! isNext && displayArrow && (
 					<span

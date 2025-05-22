@@ -69,7 +69,22 @@ function DefaultErrorResponsePlaceholder( { response, className } ) {
 	return <Placeholder className={ className }>{ errorMessage }</Placeholder>;
 }
 
-function DefaultLoadingResponsePlaceholder( { children, showLoader } ) {
+function DefaultLoadingResponsePlaceholder( { children, isLoading } ) {
+	const [ showLoader, setShowLoader ] = useState( false );
+
+	useEffect( () => {
+		if ( ! isLoading ) {
+			setShowLoader( false );
+			return;
+		}
+
+		// Schedule showing the Spinner after 1 second.
+		const timeout = setTimeout( () => {
+			setShowLoader( true );
+		}, 1000 );
+		return () => clearTimeout( timeout );
+	}, [ isLoading ] );
+
 	return (
 		<div style={ { position: 'relative' } }>
 			{ showLoader && (
@@ -101,7 +116,6 @@ export default function ServerSideRender( props ) {
 	} = props;
 
 	const isMountedRef = useRef( false );
-	const [ showLoader, setShowLoader ] = useState( false );
 	const fetchRequestRef = useRef();
 	const [ response, setResponse ] = useState( null );
 	const prevProps = usePrevious( props );
@@ -126,11 +140,6 @@ export default function ServerSideRender( props ) {
 		} = latestPropsRef.current;
 
 		setIsLoading( true );
-
-		// Schedule showing the Spinner after 1 second.
-		const timeout = setTimeout( () => {
-			setShowLoader( true );
-		}, 1000 );
 
 		let sanitizedAttributes =
 			attributes &&
@@ -185,9 +194,6 @@ export default function ServerSideRender( props ) {
 					fetchRequest === fetchRequestRef.current
 				) {
 					setIsLoading( false );
-					// Cancel the timeout to show the Spinner.
-					setShowLoader( false );
-					clearTimeout( timeout );
 				}
 			} ) );
 
@@ -221,7 +227,7 @@ export default function ServerSideRender( props ) {
 
 	if ( isLoading ) {
 		return (
-			<LoadingResponsePlaceholder { ...props } showLoader={ showLoader }>
+			<LoadingResponsePlaceholder { ...props } isLoading={ isLoading }>
 				{ hasResponse && ! hasError && (
 					<RawHTML className={ className }>{ response }</RawHTML>
 				) }
