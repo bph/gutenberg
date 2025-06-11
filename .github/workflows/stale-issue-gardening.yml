@@ -13,8 +13,8 @@ jobs:
         name: ${{ matrix.name }}
         runs-on: ubuntu-latest
         permissions:
-          issues: write
-          pull-requests: write
+            issues: write
+            pull-requests: write
         if: ${{ github.repository == 'WordPress/gutenberg' }}
         strategy:
             matrix:

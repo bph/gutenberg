@@ -11,7 +11,7 @@
 <section>
 	<h2>Region 1</h2>
 	<div
-		data-wp-interactive='{"namespace": "router-regions"}'
+		data-wp-interactive="router-regions"
 		data-wp-router-region="region-1"
 	>
 		<p
@@ -51,11 +51,10 @@
 	>not hydrated</p>
 </div>
 
-
 <section>
 	<h2>Region 2</h2>
 	<div
-		data-wp-interactive='{"namespace": "router-regions"}'
+		data-wp-interactive="router-regions"
 		data-wp-router-region="region-2"
 	>
 		<p
@@ -74,7 +73,7 @@
 			data-wp-on--click="actions.counter.increment"
 		>NaN</button>
 
-		<div data-wp-ignore>
+		<div>
 			<div>
 				<p
 					data-testid="no-region-text-2"
@@ -85,14 +84,40 @@
 			<section>
 				<h2>Nested region</h2>
 				<div
-					data-wp-interactive='{"namespace": "router-regions"}'
+					data-wp-interactive="router-regions"
 					data-wp-router-region="nested-region"
 				>
-					<p
-						data-testid="nested-region-ssr"
-					>content from page <?php echo $attributes['page']; ?></p>
+					<p data-testid="nested-region-ssr">
+						content from page <?php echo $attributes['page']; ?>
+					</p>
+
+					<button data-testid="add-item" data-wp-on--click="actions.addItem">
+						Add item
+					</button>
+
+					<ul>
+						<template data-wp-each="state.items">
+							<li data-testid="nested-item" data-wp-key="context.item" data-wp-text="context.item"></li>	
+						</template>
+						<li data-testid="nested-item" data-wp-each-child>item 1</li>
+						<li data-testid="nested-item" data-wp-each-child>item 2</li>
+						<li data-testid="nested-item" data-wp-each-child>item 3</li>
+					</ul>
 				</div>
 			</section>
 		</div>
 	</div>
 </section>
+
+<div data-wp-interactive="router-regions">
+	<div data-wp-router-region="invalid-region-1">
+		<p data-testid="invalid-region-text-1">
+			content from page <?php echo $attributes['page']; ?>
+		</p>
+	</div>
+	<div data-wp-interactive="router-regions" data-wp-router-region="invalid-region-2">
+		<p data-testid="invalid-region-text-2">
+			content from page <?php echo $attributes['page']; ?>
+		</p>
+	</div>
+</div>

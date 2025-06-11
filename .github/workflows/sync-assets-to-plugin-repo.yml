@@ -16,7 +16,7 @@ jobs:
         name: Sync assets to WordPress.org plugin repo
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         environment: wp.org plugin
         env:
             PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/gutenberg'

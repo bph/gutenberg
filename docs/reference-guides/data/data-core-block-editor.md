@@ -39,7 +39,7 @@ Determines if the given blocks are allowed to be inserted into the block list.
 _Parameters_
 
 -   _state_ `Object`: Editor state.
--   _clientIds_ `string`: The block client IDs to be inserted.
+-   _clientIds_ `string[]`: The block client IDs to be inserted.
 -   _rootClientId_ `?string`: Optional root client ID of block list.
 
 _Returns_

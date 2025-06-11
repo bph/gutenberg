@@ -3,11 +3,6 @@
  */
 import { store, privateApis, getConfig } from '@wordpress/interactivity';
 
-/**
- * Internal dependencies
- */
-import { fetchHeadAssets, updateHead, headElements } from './head';
-
 const {
 	directivePrefix,
 	getRegionRootFragment,
@@ -21,7 +16,10 @@ const {
 	'I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress.'
 );
 
-interface NavigateOptions {
+const regionAttr = `data-${ directivePrefix }-router-region`;
+const interactiveAttr = `data-${ directivePrefix }-interactive`;
+
+export interface NavigateOptions {
 	force?: boolean;
 	html?: string;
 	replace?: boolean;
@@ -30,7 +28,7 @@ interface NavigateOptions {
 	screenReaderAnnouncement?: boolean;
 }
 
-interface PrefetchOptions {
+export interface PrefetchOptions {
 	force?: boolean;
 	html?: string;
 }
@@ -41,16 +39,15 @@ interface VdomParams {
 
 interface Page {
 	regions: Record< string, any >;
-	head: HTMLHeadElement[];
 	title: string;
 	initialData: any;
 }
 
 type RegionsToVdom = ( dom: Document, params?: VdomParams ) => Promise< Page >;
 
-// Check if the navigation mode is full page or region based.
-const navigationMode: 'regionBased' | 'fullPage' =
-	getConfig( 'core/router' ).navigationMode ?? 'regionBased';
+// Check if the navigation mode is full page or region based. The only supported
+// mode for now is 'regionBased'.
+const navigationMode: 'regionBased' = 'regionBased';
 
 // The cache of visited and prefetched pages, stylesheets and scripts.
 const pages = new Map< string, Promise< Page | false > >();
@@ -83,19 +80,11 @@ const fetchPage = async ( url: string, { html }: { html: string } ) => {
 // `router-region` directive.
 const regionsToVdom: RegionsToVdom = async ( dom, { vdom } = {} ) => {
 	const regions = { body: undefined };
-	let head: HTMLElement[];
-	if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-		if ( navigationMode === 'fullPage' ) {
-			head = await fetchHeadAssets( dom );
-			regions.body = vdom
-				? vdom.get( document.body )
-				: toVdom( dom.body );
-		}
-	}
 	if ( navigationMode === 'regionBased' ) {
-		const attrName = `data-${ directivePrefix }-router-region`;
-		dom.querySelectorAll( `[${ attrName }]` ).forEach( ( region ) => {
-			const id = region.getAttribute( attrName );
+		dom.querySelectorAll(
+			`[${ interactiveAttr }][${ regionAttr }]:not([${ interactiveAttr }] [${ interactiveAttr }])`
+		).forEach( ( region ) => {
+			const id = region.getAttribute( regionAttr );
 			regions[ id ] = vdom?.has( region )
 				? vdom.get( region )
 				: toVdom( region );
@@ -103,30 +92,20 @@ const regionsToVdom: RegionsToVdom = async ( dom, { vdom } = {} ) => {
 	}
 	const title = dom.querySelector( 'title' )?.innerText;
 	const initialData = parseServerData( dom );
-	return { regions, head, title, initialData };
+	return { regions, title, initialData };
 };
 
 // Render all interactive regions contained in the given page.
 const renderRegions = async ( page: Page ) => {
-	if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-		if ( navigationMode === 'fullPage' ) {
-			// Once this code is tested and more mature, the head should be updated for region based navigation as well.
-			await updateHead( page.head );
-			const fragment = getRegionRootFragment( document.body );
-			batch( () => {
-				populateServerData( page.initialData );
-				render( page.regions.body, fragment );
-			} );
-		}
-	}
 	if ( navigationMode === 'regionBased' ) {
-		const attrName = `data-${ directivePrefix }-router-region`;
 		batch( () => {
 			populateServerData( page.initialData );
 			document
-				.querySelectorAll( `[${ attrName }]` )
+				.querySelectorAll(
+					`[${ interactiveAttr }][${ regionAttr }]:not([${ interactiveAttr }] [${ interactiveAttr }])`
+				)
 				.forEach( ( region ) => {
-					const id = region.getAttribute( attrName );
+					const id = region.getAttribute( regionAttr );
 					const fragment = getRegionRootFragment( region );
 					render( page.regions[ id ], fragment );
 				} );
@@ -167,48 +146,10 @@ window.addEventListener( 'popstate', async () => {
 } );
 
 // Initialize the router and cache the initial page using the initial vDOM.
-// Once this code is tested and more mature, the head should be updated for
-// region based navigation as well.
-if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-	if ( navigationMode === 'fullPage' ) {
-		// Cache the scripts. Has to be called before fetching the assets.
-		[].map.call(
-			document.querySelectorAll( 'script[type="module"][src]' ),
-			( script ) => {
-				headElements.set( script.getAttribute( 'src' ), {
-					tag: script,
-				} );
-			}
-		);
-		await fetchHeadAssets( document );
-	}
-}
 pages.set(
 	getPagePath( window.location.href ),
 	Promise.resolve( regionsToVdom( document, { vdom: initialVdom } ) )
 );
-
-// Check if the link is valid for client-side navigation.
-const isValidLink = ( ref: HTMLAnchorElement ) =>
-	ref &&
-	ref instanceof window.HTMLAnchorElement &&
-	ref.href &&
-	( ! ref.target || ref.target === '_self' ) &&
-	ref.origin === window.location.origin &&
-	! ref.pathname.startsWith( '/wp-admin' ) &&
-	! ref.pathname.startsWith( '/wp-login.php' ) &&
-	! ref.getAttribute( 'href' ).startsWith( '#' ) &&
-	! new URL( ref.href ).searchParams.has( '_wpnonce' );
-
-// Check if the event is valid for client-side navigation.
-const isValidEvent = ( event: MouseEvent ) =>
-	event &&
-	event.button === 0 && // Left clicks only.
-	! event.metaKey && // Open in new tab (Mac).
-	! event.ctrlKey && // Open in new tab (Windows).
-	! event.altKey && // Download.
-	! event.shiftKey &&
-	! event.defaultPrevented;
 
 // Variable to store the current navigation.
 let navigatingTo = '';
@@ -423,35 +364,4 @@ function a11ySpeak( messageKey: keyof typeof navigationTexts ) {
 		// Ignore failures to load the a11y module.
 		() => {}
 	);
-}
-
-// Add click and prefetch to all links.
-if ( globalThis.IS_GUTENBERG_PLUGIN ) {
-	if ( navigationMode === 'fullPage' ) {
-		// Navigate on click.
-		document.addEventListener(
-			'click',
-			function ( event ) {
-				const ref = ( event.target as Element ).closest( 'a' );
-				if ( isValidLink( ref ) && isValidEvent( event ) ) {
-					event.preventDefault();
-					actions.navigate( ref.href );
-				}
-			},
-			true
-		);
-		// Prefetch on hover.
-		document.addEventListener(
-			'mouseenter',
-			function ( event ) {
-				if ( ( event.target as Element )?.nodeName === 'A' ) {
-					const ref = ( event.target as Element ).closest( 'a' );
-					if ( isValidLink( ref ) && isValidEvent( event ) ) {
-						actions.prefetch( ref.href );
-					}
-				}
-			},
-			true
-		);
-	}
 }

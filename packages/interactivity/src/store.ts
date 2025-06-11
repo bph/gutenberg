@@ -179,14 +179,14 @@ export function store< T extends object >(
 // Overload for when types are passed via generics and they contain state.
 export function store< T extends { state: object } >(
 	namespace: string,
-	storePart: ConvertPromisesToGenerators< DeepPartialState< T > >,
+	storePart?: ConvertPromisesToGenerators< DeepPartialState< T > >,
 	options?: StoreOptions
 ): Prettify< ConvertGeneratorsToPromises< T > >;
 
 // Overload for when types are passed via generics and they don't contain state.
 export function store< T extends object >(
 	namespace: string,
-	storePart: ConvertPromisesToGenerators< T >,
+	storePart?: ConvertPromisesToGenerators< T >,
 	options?: StoreOptions
 ): Prettify< ConvertGeneratorsToPromises< T > >;
 

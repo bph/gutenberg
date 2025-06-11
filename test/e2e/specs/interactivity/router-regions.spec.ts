@@ -29,12 +29,10 @@ test.describe( 'Router regions', () => {
 		const region1Text = page.getByTestId( 'region-1-text' );
 		const region2Text = page.getByTestId( 'region-2-text' );
 		const noRegionText1 = page.getByTestId( 'no-region-text-1' );
-		const noRegionText2 = page.getByTestId( 'no-region-text-2' );
 
 		await expect( region1Text ).toHaveText( 'hydrated' );
 		await expect( region2Text ).toHaveText( 'hydrated' );
 		await expect( noRegionText1 ).toHaveText( 'not hydrated' );
-		await expect( noRegionText2 ).toHaveText( 'not hydrated' );
 	} );
 
 	test( 'should update after navigation', async ( { page } ) => {
@@ -89,13 +87,20 @@ test.describe( 'Router regions', () => {
 
 	test( 'can be nested', async ( { page } ) => {
 		const nestedRegionSsr = page.getByTestId( 'nested-region-ssr' );
+		const innerContent = page.getByTestId( 'nested-item' );
+
 		await expect( nestedRegionSsr ).toHaveText( 'content from page 1' );
+		await expect( innerContent ).toHaveCount( 3 );
 
 		await page.getByTestId( 'next' ).click();
 		await expect( nestedRegionSsr ).toHaveText( 'content from page 2' );
+		await expect( innerContent ).toHaveCount( 3 );
+		await page.getByTestId( 'add-item' ).click();
+		await expect( innerContent ).toHaveCount( 4 );
 
 		await page.getByTestId( 'back' ).click();
 		await expect( nestedRegionSsr ).toHaveText( 'content from page 1' );
+		await expect( innerContent ).toHaveCount( 4 );
 	} );
 
 	test( 'Page title is updated 2', async ( { page } ) => {
@@ -110,5 +115,33 @@ test.describe( 'Router regions', () => {
 		await expect( page ).toHaveTitle(
 			'router regions – page 1 – gutenberg'
 		);
+	} );
+
+	test( 'should not take into account regions that are not in the topmost `data-wp-interactive`.', async ( {
+		page,
+	} ) => {
+		const invalidRegionText1 = page.getByTestId( 'invalid-region-text-1' );
+		const invalidRegionText2 = page.getByTestId( 'invalid-region-text-2' );
+
+		await expect( invalidRegionText1 ).toHaveText( 'content from page 1' );
+		await expect( invalidRegionText2 ).toHaveText( 'content from page 1' );
+
+		await page.getByTestId( 'next' ).click();
+		// Waits until the navigation finishes so it doesn't read the text from
+		// the previous page.
+		await expect( page ).toHaveTitle(
+			'router regions – page 2 – gutenberg'
+		);
+		await expect( invalidRegionText1 ).toHaveText( 'content from page 1' );
+		await expect( invalidRegionText2 ).toHaveText( 'content from page 1' );
+
+		await page.getByTestId( 'back' ).click();
+		// Waits until the navigation finishes so it doesn't read the text from
+		// the previous page.
+		await expect( page ).toHaveTitle(
+			'router regions – page 1 – gutenberg'
+		);
+		await expect( invalidRegionText1 ).toHaveText( 'content from page 1' );
+		await expect( invalidRegionText2 ).toHaveText( 'content from page 1' );
 	} );
 } );

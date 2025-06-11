@@ -24,9 +24,9 @@ jobs:
     cherry-pick:
         runs-on: ubuntu-latest
         permissions:
-          contents: write
-          issues: write
-          pull-requests: read
+            contents: write
+            issues: write
+            pull-requests: read
         # When in the context of a PR, ensure the PR is merged.
         if: github.event.pull_request == null || github.event.pull_request.merged == true
         steps:

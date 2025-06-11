@@ -1053,6 +1053,26 @@ export function isPostLocked( state ) {
  *
  * @param {Object} state Global application state.
  *
+ * @example
+ * ```jsx
+ * import { __ } from '@wordpress/i18n';
+ * import { store as editorStore } from '@wordpress/editor';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const isSavingLocked = useSelect(
+ * 		( select ) => select( editorStore ).isPostSavingLocked(),
+ * 		[]
+ * 	);
+ *
+ * 	return isSavingLocked ? (
+ * 		<p>{ __( 'Post saving is locked' ) }</p>
+ * 	) : (
+ * 		<p>{ __( 'Post saving is not locked' ) }</p>
+ * 	);
+ * };
+ * ```
+ *
  * @return {boolean} Is locked.
  */
 export function isPostSavingLocked( state ) {

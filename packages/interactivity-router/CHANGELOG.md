@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Enhancements
+
+-   Export `NavigateOptions` and `PrefetchOptions` types. ([#70315](https://github.com/WordPress/gutenberg/pull/70315))
+
+### Bug Fixes
+
+-   Prevents duplicating nested router regions after a client-side navigation. ([#70302](https://github.com/WordPress/gutenberg/pull/70302))
+
+## 2.25.0 (2025-06-04)
+
+## 2.24.0 (2025-05-22)
+
 ## 2.23.0 (2025-05-07)
 
 ## 2.22.0 (2025-04-11)

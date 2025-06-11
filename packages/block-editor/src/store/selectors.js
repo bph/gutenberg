@@ -1807,9 +1807,9 @@ export const canInsertBlockType = createRegistrySelector( ( select ) =>
  * Determines if the given blocks are allowed to be inserted into the block
  * list.
  *
- * @param {Object}  state        Editor state.
- * @param {string}  clientIds    The block client IDs to be inserted.
- * @param {?string} rootClientId Optional root client ID of block list.
+ * @param {Object}   state        Editor state.
+ * @param {string[]} clientIds    The block client IDs to be inserted.
+ * @param {?string}  rootClientId Optional root client ID of block list.
  *
  * @return {boolean} Whether the given blocks are allowed to be inserted.
  */

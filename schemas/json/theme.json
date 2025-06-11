@@ -3,9 +3,9 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"//": {
-			"explainer": "https://developer.wordpress.org/themes/advanced-topics/theme-json/",
+			"explainer": "https://developer.wordpress.org/themes/global-settings-and-styles/",
 			"createTheme": "https://developer.wordpress.org/themes/",
-			"reference": "https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/"
+			"reference": "https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/"
 		},
 		"refComplete": {
 			"type": "object",

@@ -19,6 +19,7 @@ import { safeDecodeURI } from '@wordpress/url';
  * @property {number}               [id]            A post or term id.
  * @property {boolean}              [opensInNewTab] Sets link target to _blank when true.
  * @property {string}               [url]           Link href.
+ * @property {string}               [title]         Link title attribute.
  */
 /**
  * Link Control onChange handler that updates block attributes when a setting is changed.

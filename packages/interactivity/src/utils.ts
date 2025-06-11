@@ -150,11 +150,15 @@ export function withScope( func: ( ...args: unknown[] ) => unknown ) {
 			const gen = func( ...args ) as Generator;
 			let value: any;
 			let it: any;
+			let error: any;
 			while ( true ) {
 				setNamespace( ns );
 				setScope( scope );
 				try {
-					it = gen.next( value );
+					it = error ? gen.throw( error ) : gen.next( value );
+					error = undefined;
+				} catch ( e ) {
+					throw e;
 				} finally {
 					resetScope();
 					resetNamespace();
@@ -163,16 +167,14 @@ export function withScope( func: ( ...args: unknown[] ) => unknown ) {
 				try {
 					value = await it.value;
 				} catch ( e ) {
-					setNamespace( ns );
-					setScope( scope );
-					gen.throw( e );
-				} finally {
-					resetScope();
-					resetNamespace();
+					error = e;
 				}
-
 				if ( it.done ) {
-					break;
+					if ( error ) {
+						throw error;
+					} else {
+						break;
+					}
 				}
 			}
 

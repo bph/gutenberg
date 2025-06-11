@@ -13,9 +13,11 @@ import {
 	Button,
 	TextControl,
 	SelectControl,
+	ToggleControl,
 	__experimentalGrid as Grid,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
 import {
 	MediaUpload,
@@ -26,6 +28,13 @@ import { upload, media } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { getFilename } from '@wordpress/url';
+
+/**
+ * Internal dependencies
+ */
+import { unlock } from '../lock-unlock';
+
+const { Badge } = unlock( componentsPrivateApis );
 
 const ALLOWED_TYPES = [ 'text/vtt' ];
 
@@ -43,22 +52,25 @@ function TrackList( { tracks, onEditPress } ) {
 	const content = tracks.map( ( track, index ) => {
 		return (
 			<HStack
-				key={ index }
+				key={ track.src }
 				className="block-library-video-tracks-editor__track-list-track"
 			>
 				<span>{ track.label }</span>
-				<Button
-					__next40pxDefaultSize
-					variant="tertiary"
-					onClick={ () => onEditPress( index ) }
-					aria-label={ sprintf(
-						/* translators: %s: Label of the video text track e.g: "French subtitles". */
-						_x( 'Edit %s', 'text tracks' ),
-						track.label
-					) }
-				>
-					{ __( 'Edit' ) }
-				</Button>
+				<HStack justify="flex-end">
+					{ track.default && <Badge>{ __( 'Default' ) }</Badge> }
+					<Button
+						__next40pxDefaultSize
+						variant="tertiary"
+						onClick={ () => onEditPress( index ) }
+						aria-label={ sprintf(
+							/* translators: %s: Label of the video text track e.g: "French subtitles". */
+							_x( 'Edit %s', 'text tracks' ),
+							track.label
+						) }
+					>
+						{ __( 'Edit' ) }
+					</Button>
+				</HStack>
 			</HStack>
 		);
 	} );
@@ -73,8 +85,20 @@ function TrackList( { tracks, onEditPress } ) {
 	);
 }
 
-function SingleTrackEditor( { track, onChange, onClose, onRemove } ) {
-	const { src = '', label = '', srcLang = '', kind = DEFAULT_KIND } = track;
+function SingleTrackEditor( {
+	track,
+	onChange,
+	onClose,
+	onRemove,
+	allowSettingDefault,
+} ) {
+	const {
+		src = '',
+		label = '',
+		srcLang = '',
+		kind = DEFAULT_KIND,
+		default: isDefaultTrack = false,
+	} = track;
 	const fileName = src.startsWith( 'blob:' ) ? '' : getFilename( src ) || '';
 	return (
 		<VStack
@@ -115,7 +139,7 @@ function SingleTrackEditor( { track, onChange, onClose, onRemove } ) {
 					help={ __( 'Language tag (en, fr, etc.)' ) }
 				/>
 			</Grid>
-			<VStack spacing="8">
+			<VStack spacing="4">
 				<SelectControl
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
@@ -127,6 +151,19 @@ function SingleTrackEditor( { track, onChange, onClose, onRemove } ) {
 						onChange( {
 							...track,
 							kind: newKind,
+						} );
+					} }
+				/>
+				<ToggleControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Set as default track' ) }
+					checked={ isDefaultTrack }
+					disabled={ ! allowSettingDefault }
+					onChange={ ( defaultTrack ) => {
+						onChange( {
+							...track,
+							default: defaultTrack,
 						} );
 					} }
 				/>
@@ -237,6 +274,10 @@ export default function TracksEditor( { tracks = [], onChange } ) {
 								);
 								setTrackBeingEdited( null );
 							} }
+							allowSettingDefault={
+								! tracks.some( ( track ) => track.default ) ||
+								tracks[ trackBeingEdited ].default
+							}
 						/>
 					);
 				}

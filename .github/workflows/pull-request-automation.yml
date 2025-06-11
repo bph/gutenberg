@@ -12,9 +12,9 @@ jobs:
     pull-request-automation:
         runs-on: ubuntu-latest
         permissions:
-          contents: read
-          issues: write
-          pull-requests: write
+            contents: read
+            issues: write
+            pull-requests: write
         if: ${{ github.repository == 'WordPress/gutenberg' }}
 
         steps:

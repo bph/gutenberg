@@ -167,7 +167,7 @@ const SocialLinkEdit = ( {
 				// to edit this attribute.
 				<BlockControls group="other">
 					<Dropdown
-						popoverProps={ { position: 'bottom right' } }
+						popoverProps={ { placement: 'bottom-start' } }
 						renderToggle={ ( { isOpen, onToggle } ) => (
 							<ToolbarButton
 								onClick={ onToggle }

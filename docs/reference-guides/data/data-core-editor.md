@@ -1042,6 +1042,27 @@ _Returns_
 
 Returns whether post saving is locked.
 
+_Usage_
+
+```jsx
+import { __ } from '@wordpress/i18n';
+import { store as editorStore } from '@wordpress/editor';
+import { useSelect } from '@wordpress/data';
+
+const ExampleComponent = () => {
+	const isSavingLocked = useSelect(
+		( select ) => select( editorStore ).isPostSavingLocked(),
+		[]
+	);
+
+	return isSavingLocked ? (
+		<p>{ __( 'Post saving is locked' ) }</p>
+	) : (
+		<p>{ __( 'Post saving is not locked' ) }</p>
+	);
+};
+```
+
 _Parameters_
 
 -   _state_ `Object`: Global application state.

@@ -16,8 +16,8 @@ jobs:
         name: Sync Core Backport Issue
         runs-on: ubuntu-latest
         permissions:
-          contents: read
-          issues: write
+            contents: read
+            issues: write
         if: >
             github.event_name == 'push' ||
             (

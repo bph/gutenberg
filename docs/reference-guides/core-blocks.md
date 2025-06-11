@@ -484,7 +484,7 @@ Add a page, link, or another item to your navigation. ([Source](https://github.c
 -	**Parent:** core/navigation
 -	**Allowed Blocks:** core/navigation-link, core/navigation-submenu, core/page-list
 -	**Supports:** interactivity (clientNavigation), typography (fontSize, lineHeight), ~~html~~, ~~renaming~~, ~~reusable~~
--	**Attributes:** description, id, isTopLevelLink, kind, label, opensInNewTab, rel, type, url
+-	**Attributes:** description, id, isTopLevelLink, kind, label, opensInNewTab, rel, title, type, url
 
 ## Submenu
 
@@ -494,7 +494,7 @@ Add a submenu to your navigation. ([Source](https://github.com/WordPress/gutenbe
 -	**Category:** design
 -	**Parent:** core/navigation
 -	**Supports:** interactivity (clientNavigation), typography (fontSize, lineHeight), ~~html~~, ~~reusable~~
--	**Attributes:** description, id, isTopLevelItem, kind, label, opensInNewTab, rel, type, url
+-	**Attributes:** description, id, isTopLevelItem, kind, label, opensInNewTab, rel, title, type, url
 
 ## Page Break
 

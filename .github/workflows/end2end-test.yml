@@ -24,7 +24,7 @@ jobs:
         name: Playwright - ${{ matrix.part }}
         runs-on: ubuntu-latest
         permissions:
-          contents: read
+            contents: read
         if: ${{ github.repository == 'WordPress/gutenberg' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: false
@@ -110,9 +110,9 @@ jobs:
         if: ${{ needs.merge-artifacts.outputs.has-flaky-test-report == 'true' }}
         runs-on: ubuntu-latest
         permissions:
-          contents: read
-          issues: write
-          pull-requests: write
+            contents: read
+            issues: write
+            pull-requests: write
         steps:
             # Checkout defaults to using the branch which triggered the event, which
             # isn't necessarily `trunk` (e.g. in the case of a merge).

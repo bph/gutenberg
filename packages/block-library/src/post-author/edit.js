@@ -15,14 +15,19 @@ import {
 } from '@wordpress/block-editor';
 import {
 	ComboboxControl,
-	PanelBody,
 	SelectControl,
 	ToggleControl,
-	__experimentalVStack as VStack,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { store as coreStore } from '@wordpress/core-data';
+
+/**
+ * Internal dependencies
+ */
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const minimumUsersForCombobox = 25;
 
@@ -38,6 +43,8 @@ function PostAuthorEdit( {
 	setAttributes,
 } ) {
 	const isDescendentOfQueryLoop = Number.isFinite( queryId );
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+
 	const { authorId, authorDetails, authors, supportsAuthor } = useSelect(
 		( select ) => {
 			const { getEditedEntityRecord, getUser, getUsers, getPostType } =
@@ -61,8 +68,15 @@ function PostAuthorEdit( {
 
 	const { editEntityRecord } = useDispatch( coreStore );
 
-	const { textAlign, showAvatar, showBio, byline, isLink, linkTarget } =
-		attributes;
+	const {
+		textAlign,
+		showAvatar,
+		showBio,
+		byline,
+		isLink,
+		linkTarget,
+		avatarSize,
+	} = attributes;
 	const avatarSizes = [];
 	const authorName = authorDetails?.name || __( 'Post Author' );
 	if ( authorDetails?.avatar_urls ) {
@@ -114,13 +128,21 @@ function PostAuthorEdit( {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<VStack
-						spacing={ 4 }
-						className="wp-block-post-author__inspector-settings"
-					>
-						{ showAuthorControl &&
-							( ( showCombobox && (
+				<ToolsPanel
+					label={ __( 'Settings' ) }
+					resetAll={ () => {
+						setAttributes( {
+							avatarSize: 48,
+							showAvatar: true,
+							isLink: false,
+							linkTarget: '_self',
+						} );
+					} }
+					dropdownMenuProps={ dropdownMenuProps }
+				>
+					{ showAuthorControl && (
+						<div style={ { gridColumn: '1 / -1' } }>
+							{ ( showCombobox && (
 								<ComboboxControl
 									__next40pxDefaultSize
 									__nextHasNoMarginBottom
@@ -139,21 +161,42 @@ function PostAuthorEdit( {
 									options={ authorOptions }
 									onChange={ handleSelect }
 								/>
-							) ) }
+							) }
+						</div>
+					) }
+					<ToolsPanelItem
+						label={ __( 'Show avatar' ) }
+						isShownByDefault
+						hasValue={ () => ! showAvatar }
+						onDeselect={ () =>
+							setAttributes( { showAvatar: true } )
+						}
+					>
 						<ToggleControl
 							__nextHasNoMarginBottom
 							label={ __( 'Show avatar' ) }
 							checked={ showAvatar }
 							onChange={ () =>
-								setAttributes( { showAvatar: ! showAvatar } )
+								setAttributes( {
+									showAvatar: ! showAvatar,
+								} )
 							}
 						/>
-						{ showAvatar && (
+					</ToolsPanelItem>
+					{ showAvatar && (
+						<ToolsPanelItem
+							label={ __( 'Avatar size' ) }
+							isShownByDefault
+							hasValue={ () => avatarSize !== 48 }
+							onDeselect={ () =>
+								setAttributes( { avatarSize: 48 } )
+							}
+						>
 							<SelectControl
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
 								label={ __( 'Avatar size' ) }
-								value={ attributes.avatarSize }
+								value={ avatarSize }
 								options={ avatarSizes }
 								onChange={ ( size ) => {
 									setAttributes( {
@@ -161,15 +204,31 @@ function PostAuthorEdit( {
 									} );
 								} }
 							/>
-						) }
+						</ToolsPanelItem>
+					) }
+					<ToolsPanelItem
+						label={ __( 'Show bio' ) }
+						isShownByDefault
+						hasValue={ () => !! showBio }
+						onDeselect={ () =>
+							setAttributes( { showBio: undefined } )
+						}
+					>
 						<ToggleControl
 							__nextHasNoMarginBottom
 							label={ __( 'Show bio' ) }
-							checked={ showBio }
+							checked={ !! showBio }
 							onChange={ () =>
 								setAttributes( { showBio: ! showBio } )
 							}
 						/>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						label={ __( 'Link author name to author page' ) }
+						isShownByDefault
+						hasValue={ () => !! isLink }
+						onDeselect={ () => setAttributes( { isLink: false } ) }
+					>
 						<ToggleControl
 							__nextHasNoMarginBottom
 							label={ __( 'Link author name to author page' ) }
@@ -178,7 +237,16 @@ function PostAuthorEdit( {
 								setAttributes( { isLink: ! isLink } )
 							}
 						/>
-						{ isLink && (
+					</ToolsPanelItem>
+					{ isLink && (
+						<ToolsPanelItem
+							label={ __( 'Link target' ) }
+							isShownByDefault
+							hasValue={ () => linkTarget !== '_self' }
+							onDeselect={ () =>
+								setAttributes( { linkTarget: '_self' } )
+							}
+						>
 							<ToggleControl
 								__nextHasNoMarginBottom
 								label={ __( 'Open in new tab' ) }
@@ -189,9 +257,9 @@ function PostAuthorEdit( {
 								}
 								checked={ linkTarget === '_blank' }
 							/>
-						) }
-					</VStack>
-				</PanelBody>
+						</ToolsPanelItem>
+					) }
+				</ToolsPanel>
 			</InspectorControls>
 
 			<BlockControls group="block">
@@ -207,12 +275,8 @@ function PostAuthorEdit( {
 				{ showAvatar && authorDetails?.avatar_urls && (
 					<div className="wp-block-post-author__avatar">
 						<img
-							width={ attributes.avatarSize }
-							src={
-								authorDetails.avatar_urls[
-									attributes.avatarSize
-								]
-							}
+							width={ avatarSize }
+							src={ authorDetails.avatar_urls[ avatarSize ] }
 							alt={ authorDetails.name }
 						/>
 					</div>

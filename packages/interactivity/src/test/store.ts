@@ -281,6 +281,42 @@ describe( 'Interactivity API', () => {
 					myStore.state.nonExistent satisfies {};
 				};
 			} );
+
+			describe( 'a typed store can be returned without adding a new store part', () => {
+				type State = {
+					someValue: number;
+				};
+				type Actions = {
+					incrementValue: ( n: number ) => void;
+				};
+
+				const { state, actions } = store< {
+					state: State;
+					actions: Actions;
+				} >( 'storeWithState', {
+					actions: {
+						incrementValue( n ) {
+							state.someValue += n;
+						},
+					},
+				} );
+
+				state.someValue satisfies number;
+				actions.incrementValue( 1 ) satisfies void;
+
+				const { actions: actions2 } = store< { actions: Actions } >(
+					'storeWithoutState',
+					{
+						actions: {
+							incrementValue( n ) {
+								state.someValue += n;
+							},
+						},
+					}
+				);
+
+				actions2.incrementValue( 1 ) satisfies void;
+			} );
 		} );
 	} );
 } );

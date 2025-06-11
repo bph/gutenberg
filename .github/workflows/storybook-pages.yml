@@ -13,7 +13,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         permissions:
-          contents: write
+            contents: write
         if: ${{ github.repository == 'WordPress/gutenberg' }}
 
         steps:

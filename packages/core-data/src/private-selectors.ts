@@ -138,6 +138,7 @@ export const getHomePage = createRegistrySelector( ( select ) =>
 				'root',
 				'__unstableBase'
 			) as SiteData | undefined;
+			// Still resolving getEntityRecord.
 			if ( ! siteData ) {
 				return null;
 			}
@@ -153,6 +154,10 @@ export const getHomePage = createRegistrySelector( ( select ) =>
 			).getDefaultTemplateId( {
 				slug: 'front-page',
 			} );
+			// Still resolving getDefaultTemplateId.
+			if ( ! frontPageTemplateId ) {
+				return null;
+			}
 			return { postType: 'wp_template', postId: frontPageTemplateId };
 		},
 		( state ) => [
