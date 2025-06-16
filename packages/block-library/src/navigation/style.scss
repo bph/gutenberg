@@ -312,11 +312,6 @@ button.wp-block-navigation-item__content {
 	cursor: pointer;
 }
 
-// Flip submenu arrow icon when expanded.
-.wp-block-navigation-submenu__toggle[aria-expanded="true"] {
-	transform: scaleY(-1);
-}
-
 // When set to open on click, a button element is used.
 // We pad it to include the arrow icon in the clickable area.
 // The padding can be blanket for click, since you can't set click and hide the icon.

@@ -14,6 +14,7 @@ process.on( 'unhandledRejection', ( err ) => {
  */
 const { resolve } = require( 'node:path' );
 const { sync: spawn } = require( 'cross-spawn' );
+const path = require( 'path' );
 
 /**
  * Internal dependencies
@@ -25,6 +26,11 @@ const {
 	getArgsFromCLI,
 	getAsBooleanFromENV,
 } = require( '../utils' );
+
+/**
+ * Internal dependencies
+ */
+const loadConfig = require( '../../env/lib/config/load-config' );
 
 if ( ! getAsBooleanFromENV( 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD' ) ) {
 	const result = spawn( 'npx', [ 'playwright', 'install' ], {
@@ -51,19 +57,25 @@ if ( ! process.env.WP_ARTIFACTS_PATH ) {
 	);
 }
 
-const testResult = spawn(
-	'node',
-	[
-		require.resolve( '@playwright/test/cli' ),
-		'test',
-		...config,
-		...getArgsFromCLI(),
-	],
-	{
-		stdio: 'inherit',
+loadConfig( path.resolve( '.' ) ).then( ( envConfig ) => {
+	if ( ! process.env.WP_BASE_URL ) {
+		process.env.WP_BASE_URL = `http://localhost:${ envConfig.env.tests.port }`;
 	}
-);
 
-if ( testResult.status > 0 ) {
-	process.exit( testResult.status );
-}
+	const testResult = spawn(
+		'node',
+		[
+			require.resolve( '@playwright/test/cli' ),
+			'test',
+			...config,
+			...getArgsFromCLI(),
+		],
+		{
+			stdio: 'inherit',
+		}
+	);
+
+	if ( testResult.status > 0 ) {
+		process.exit( testResult.status );
+	}
+} );

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   `FormFileUpload`: Extend audio accept MIME types for iOS compatibility ([#70354](https://github.com/WordPress/gutenberg/pull/70354)).
+
 ### Internal
 
 -   `FormFileUpload`: Remove temporary fix for selecting .heic file in Chromium browsers ([#70383](https://github.com/WordPress/gutenberg/pull/70383)).

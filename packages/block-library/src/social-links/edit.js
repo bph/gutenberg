@@ -33,6 +33,7 @@ import { useSelect } from '@wordpress/data';
 import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const sizeOptions = [
+	{ label: __( 'Default' ), value: '' },
 	{ label: __( 'Small' ), value: 'has-small-icon-size' },
 	{ label: __( 'Normal' ), value: 'has-normal-icon-size' },
 	{ label: __( 'Large' ), value: 'has-large-icon-size' },
@@ -166,19 +167,17 @@ export function SocialLinksEdit( props ) {
 						setAttributes( {
 							openInNewTab: false,
 							showLabels: false,
-							size: 'has-normal-icon-size',
+							size: undefined,
 						} );
 					} }
 					dropdownMenuProps={ dropdownMenuProps }
 				>
 					<ToolsPanelItem
 						isShownByDefault
-						hasValue={ () =>
-							!! size && size !== 'has-normal-icon-size'
-						}
+						hasValue={ () => !! size }
 						label={ __( 'Icon size' ) }
 						onDeselect={ () =>
-							setAttributes( { size: 'has-normal-icon-size' } )
+							setAttributes( { size: undefined } )
 						}
 					>
 						<SelectControl
@@ -187,10 +186,10 @@ export function SocialLinksEdit( props ) {
 							label={ __( 'Icon Size' ) }
 							onChange={ ( newSize ) => {
 								setAttributes( {
-									size: newSize,
+									size: newSize === '' ? undefined : newSize,
 								} );
 							} }
-							value={ size ?? 'has-normal-icon-size' }
+							value={ size ?? '' }
 							options={ sizeOptions }
 						/>
 					</ToolsPanelItem>

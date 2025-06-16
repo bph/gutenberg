@@ -43,7 +43,7 @@ test.describe( 'Image', () => {
 		);
 		await expect( imageBlock ).toBeVisible();
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
@@ -51,11 +51,11 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 		await expect( image ).toBeVisible();
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 
 		const regex = new RegExp(
 			`<!-- wp:image {"id":(\\d+),"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="[^"]+\\/${ filename }\\.png" alt="" class="wp-image-\\1"/></figure>
+<figure class="wp-block-image size-full"><img src="[^"]+\\/${ fileName }\\.png" alt="" class="wp-image-\\1"/></figure>
 <!-- \\/wp:image -->`
 		);
 		expect( await editor.getEditedPostContent() ).toMatch( regex );
@@ -75,10 +75,10 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 		await editor.clickBlockToolbarButton( 'Add caption' );
 		await page.keyboard.type( '1' );
 		await page.keyboard.press( 'Enter' );
@@ -240,11 +240,11 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 
 		// Assert that the image is initially unscaled and unedited.
 		const initialImageSrc = await image.getAttribute( 'src' );
@@ -308,11 +308,11 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 
 		// Assert that the image is initially unscaled and unedited.
 		const initialImageSrc = await image.getAttribute( 'src' );
@@ -367,11 +367,11 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 
 		// Rotate the image.
 		await editor.clickBlockToolbarButton( 'Crop' );
@@ -405,11 +405,11 @@ test.describe( 'Image', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 		await editor.canvas.locator( '.wp-block-image' ).focus();
 		await pageUtils.pressKeys( 'primary+z' );
 
@@ -590,7 +590,7 @@ test.describe( 'Image', () => {
 		);
 		await expect( imageBlock ).toBeVisible();
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
@@ -600,7 +600,7 @@ test.describe( 'Image', () => {
 		await expect( imageInEditor ).toBeVisible();
 		await expect( imageInEditor ).toHaveAttribute(
 			'src',
-			new RegExp( filename )
+			new RegExp( fileName )
 		);
 
 		const postId = await editor.publishPost();
@@ -613,7 +613,7 @@ test.describe( 'Image', () => {
 		await expect( imageDom ).toBeVisible();
 		await expect( imageDom ).toHaveAttribute(
 			'src',
-			new RegExp( filename )
+			new RegExp( fileName )
 		);
 	} );
 
@@ -1037,7 +1037,7 @@ test.describe( 'Image - Site editor', () => {
 		);
 		await expect( imageBlock ).toBeVisible();
 
-		const filename = await imageBlockUtils.upload(
+		const fileName = await imageBlockUtils.upload(
 			imageBlock.locator( 'data-testid=form-file-upload-input' )
 		);
 
@@ -1045,11 +1045,11 @@ test.describe( 'Image - Site editor', () => {
 			name: 'This image has an empty alt attribute',
 		} );
 		await expect( image ).toBeVisible();
-		await expect( image ).toHaveAttribute( 'src', new RegExp( filename ) );
+		await expect( image ).toHaveAttribute( 'src', new RegExp( fileName ) );
 
 		const regex = new RegExp(
 			`<!-- wp:image {"id":(\\d+),"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="[^"]+\\/${ filename }\\.png" alt="" class="wp-image-\\1"/></figure>
+<figure class="wp-block-image size-full"><img src="[^"]+\\/${ fileName }\\.png" alt="" class="wp-image-\\1"/></figure>
 <!-- \\/wp:image -->`
 		);
 		expect( await editor.getEditedPostContent() ).toMatch( regex );
@@ -1072,16 +1072,16 @@ class ImageBlockUtils {
 		const tmpDirectory = await fs.mkdtemp(
 			path.join( os.tmpdir(), 'gutenberg-test-image-' )
 		);
-		const filename = uuid();
-		const tmpFileName = path.join( tmpDirectory, filename + '.png' );
-		const filepath = customFile
+		const fileName = uuid();
+		const tmpFileName = path.join( tmpDirectory, fileName + '.png' );
+		const filePath = customFile
 			? path.join( this.basePath, customFile )
 			: this.TEST_IMAGE_FILE_PATH;
-		await fs.copyFile( filepath, tmpFileName );
+		await fs.copyFile( filePath, tmpFileName );
 
 		await inputElement.setInputFiles( tmpFileName );
 
-		return filename;
+		return fileName;
 	}
 
 	async getImageBuffer( url ) {

@@ -20,6 +20,7 @@ export const settings = {
 	edit,
 	save,
 	variations,
+	example: {},
 };
 
 export const init = () => {
