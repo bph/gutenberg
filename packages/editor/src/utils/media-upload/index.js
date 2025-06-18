@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
  * WordPress dependencies
  */
 import { select, dispatch } from '@wordpress/data';
+import { store as coreDataStore } from '@wordpress/core-data';
 import { uploadMedia } from '@wordpress/media-utils';
 
 /**
@@ -40,6 +41,7 @@ export default function mediaUpload( {
 	onSuccess,
 	multiple = true,
 } ) {
+	const { receiveEntityRecords } = dispatch( coreDataStore );
 	const { getCurrentPost, getEditorSettings } = select( editorStore );
 	const {
 		lockPostAutosaving,
@@ -82,6 +84,21 @@ export default function mediaUpload( {
 				clearSaveLock();
 			}
 			onFileChange?.( file );
+
+			// Files are initially received by `onFileChange` as a blob.
+			// After that the function is called a second time with the file as an entity.
+			// For core-data, we only care about receiving/invalidating entities.
+			const entityFiles = file.filter( ( _file ) => _file?.id );
+			if ( entityFiles?.length ) {
+				const invalidateCache = true;
+				receiveEntityRecords(
+					'root',
+					'media',
+					entityFiles,
+					undefined,
+					invalidateCache
+				);
+			}
 		},
 		onSuccess,
 		additionalData: {

@@ -204,6 +204,7 @@ function block_core_image_render_lightbox( $block_content, $block ) {
 			JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
 		)
 	);
+	$p->set_attribute( 'data-wp-key', $unique_image_id );
 
 	// Image.
 	$p->next_tag( 'img' );
@@ -272,12 +273,14 @@ function block_core_image_print_lightbox_overlay() {
 		<div
 			class="wp-lightbox-overlay zoom"
 			data-wp-interactive="core/image"
+			data-wp-router-region='{ "id": "core/image-overlay", "attachTo": "body" }'
+			data-wp-key="wp-lightbox-overlay"
 			data-wp-context='{}'
 			data-wp-bind--role="state.roleAttribute"
 			data-wp-bind--aria-label="state.currentImage.ariaLabel"
 			data-wp-bind--aria-modal="state.ariaModal"
 			data-wp-class--active="state.overlayEnabled"
-			data-wp-class--show-closing-animation="state.showClosingAnimation"
+			data-wp-class--show-closing-animation="state.overlayOpened"
 			data-wp-watch="callbacks.setOverlayFocus"
 			data-wp-on--keydown="actions.handleKeydown"
 			data-wp-on-async--touchstart="actions.handleTouchStart"

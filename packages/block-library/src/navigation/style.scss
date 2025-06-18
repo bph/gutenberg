@@ -310,6 +310,14 @@ button.wp-block-navigation-item__content {
 
 .wp-block-navigation-submenu__toggle {
 	cursor: pointer;
+
+	// Rotate submenu icon when open.
+	&[aria-expanded="true"] {
+		+ .wp-block-navigation__submenu-icon > svg,
+		> svg {
+			transform: rotate(180deg);
+		}
+	}
 }
 
 // When set to open on click, a button element is used.

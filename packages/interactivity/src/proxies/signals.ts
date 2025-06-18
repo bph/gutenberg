@@ -119,7 +119,7 @@ export class PropSignal {
 	}
 
 	/**
-	 *  Update the internal signals for the value and the getter of the
+	 *  Updates the internal signals for the value and the getter of the
 	 *  corresponding prop.
 	 *
 	 * @param param0

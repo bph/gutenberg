@@ -25,7 +25,10 @@ test.describe( 'Editor - Multi-entity save flow', () => {
 		} );
 	} );
 
-	test( 'Save flow should work as expected', async ( {
+	// Reinstate once the patch that fixes the REST API endpoints is committed to core.
+	// https://core.trac.wordpress.org/ticket/41604.
+	// eslint-disable-next-line playwright/no-skipped-test
+	test.skip( 'Save flow should work as expected', async ( {
 		admin,
 		editor,
 		page,
@@ -146,7 +149,10 @@ test.describe( 'Editor - Multi-entity save flow', () => {
 		await expect( openSavePanel ).toBeEnabled();
 	} );
 
-	test( 'Site blocks should save individually', async ( {
+	// Reinstate once the patch that fixes the REST API endpoints is committed to core.
+	// https://core.trac.wordpress.org/ticket/41604.
+	// eslint-disable-next-line playwright/no-skipped-test
+	test.skip( 'Site blocks should save individually', async ( {
 		admin,
 		editor,
 		page,

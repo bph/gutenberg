@@ -287,16 +287,17 @@ export function useCallback< T extends Function >(
 }
 
 /**
- * Pass a factory function and an array of inputs. `useMemo` will only recompute
- * the memoized value when one of the inputs has changed.
+ * Returns the memoized output of the passed factory function, allowing access
+ * to the current element's scope.
  *
  * This hook is equivalent to Preact's `useMemo` and makes the element's scope
  * available so functions like `getElement()` and `getContext()` can be used
- * inside the passed factory function.
+ * inside the passed factory function. Note that `useMemo` will only recompute
+ * the memoized value when one of the inputs has changed.
  *
  * @param factory Factory function that returns that value for memoization.
- * @param inputs  If present, the factory will only be run to recompute if
- *                the values in the list change (using `===`).
+ * @param inputs  If present, the factory will only be run to recompute if the
+ *                values in the list change (using `===`).
  *
  * @return The memoized value.
  */
