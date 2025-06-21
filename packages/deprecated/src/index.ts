@@ -6,22 +6,41 @@ import { doAction } from '@wordpress/hooks';
 /**
  * Object map tracking messages which have been logged, for use in ensuring a
  * message is only logged once.
- *
- * @type {Record<string, true | undefined>}
  */
-export const logged = Object.create( null );
+export const logged: Record< string, true > = Object.create( null );
+
+type DeprecatedOptions = {
+	/**
+	 * Version in which the feature was deprecated.
+	 */
+	since?: string;
+	/**
+	 * Version in which the feature will be removed.
+	 */
+	version?: string;
+	/**
+	 * Feature to use instead.
+	 */
+	alternative?: string;
+	/**
+	 * Plugin name if it's a plugin feature.
+	 */
+	plugin?: string;
+	/**
+	 * Link to documentation.
+	 */
+	link?: string;
+	/**
+	 * Additional message to help transition away from the deprecated feature.
+	 */
+	hint?: string;
+};
 
 /**
  * Logs a message to notify developers about a deprecated feature.
  *
- * @param {string} feature               Name of the deprecated feature.
- * @param {Object} [options]             Personalisation options
- * @param {string} [options.since]       Version in which the feature was deprecated.
- * @param {string} [options.version]     Version in which the feature will be removed.
- * @param {string} [options.alternative] Feature to use instead
- * @param {string} [options.plugin]      Plugin name if it's a plugin feature
- * @param {string} [options.link]        Link to documentation
- * @param {string} [options.hint]        Additional message to help transition away from the deprecated feature.
+ * @param {string}            feature   Name of the deprecated feature.
+ * @param {DeprecatedOptions} [options] Personalisation options
  *
  * @example
  * ```js
@@ -38,7 +57,10 @@ export const logged = Object.create( null );
  * // Logs: 'Eating meat is deprecated since version 2019.01.01 and will be removed from the earth in version 2020.01.01. Please use vegetables instead. Note: You may find it beneficial to transition gradually.'
  * ```
  */
-export default function deprecated( feature, options = {} ) {
+export default function deprecated(
+	feature: string,
+	options: DeprecatedOptions = {}
+) {
 	const { since, version, alternative, plugin, link, hint } = options;
 
 	const pluginMessage = plugin ? ` from ${ plugin }` : '';
@@ -61,15 +83,9 @@ export default function deprecated( feature, options = {} ) {
 	/**
 	 * Fires whenever a deprecated feature is encountered
 	 *
-	 * @param {string}  feature             Name of the deprecated feature.
-	 * @param {?Object} options             Personalisation options
-	 * @param {string}  options.since       Version in which the feature was deprecated.
-	 * @param {?string} options.version     Version in which the feature will be removed.
-	 * @param {?string} options.alternative Feature to use instead
-	 * @param {?string} options.plugin      Plugin name if it's a plugin feature
-	 * @param {?string} options.link        Link to documentation
-	 * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
-	 * @param {?string} message             Message sent to console.warn
+	 * @param {string}            feature Name of the deprecated feature.
+	 * @param {DeprecatedOptions} options Personalisation options
+	 * @param {string}            message Message sent to console.warn
 	 */
 	doAction( 'deprecated', feature, options, message );
 
@@ -78,5 +94,3 @@ export default function deprecated( feature, options = {} ) {
 
 	logged[ message ] = true;
 }
-
-/** @typedef {import('utility-types').NonUndefined<Parameters<typeof deprecated>[1]>} DeprecatedOptions */

@@ -6,7 +6,7 @@ import { didAction } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import deprecated, { logged } from '../';
+import deprecated, { logged } from '..';
 
 describe( 'deprecated', () => {
 	afterEach( () => {
