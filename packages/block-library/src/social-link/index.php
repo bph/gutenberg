@@ -335,6 +335,19 @@ function block_core_social_link_services( $service = '', $field = '' ) {
 		),
 	);
 
+	/**
+	 * Filter the list of available social service.
+	 *
+	 * This can be used to change icons or add custom icons (additionally to variations in the editor).
+	 * Icons should be directly renderable - therefore SVGs work best.
+	 *
+	 * @since 6.9.0
+	 *
+	 * @param array $services_data The list of services. Each item is an array containing a 'name' and 'icon' key.
+	 * @return array The list of social services.
+	 */
+	$services_data = apply_filters( 'block_core_social_link_get_services', $services_data );
+
 	if ( ! empty( $service )
 		&& ! empty( $field )
 		&& isset( $services_data[ $service ] )

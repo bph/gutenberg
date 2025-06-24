@@ -15,6 +15,7 @@
 ### Bug Fixes
 
 -   Prevents duplicating nested router regions after a client-side navigation. ([#70302](https://github.com/WordPress/gutenberg/pull/70302))
+-   Fix dynamic imports on new visited pages. ([#70489](https://github.com/WordPress/gutenberg/pull/70489))
 
 ## 2.25.0 (2025-06-04)
 

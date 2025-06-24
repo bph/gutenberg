@@ -595,6 +595,7 @@ export default function Image( {
 			aspectRatio: undefined,
 			lightbox: undefined,
 		} );
+		updateImage( DEFAULT_MEDIA_SIZE_SLUG );
 	};
 
 	const sizeControls = (
