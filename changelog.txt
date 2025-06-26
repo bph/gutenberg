@@ -1,5 +1,166 @@
 == Changelog ==
 
+= 21.1.0-rc.1 =
+
+
+## Changelog
+
+### Features
+
+#### Interactivity API
+- iAPI Router: Add support for new router regions with `attachTo`. ([70421](https://github.com/WordPress/gutenberg/pull/70421))
+
+
+### Enhancements
+
+#### Block Library
+- Author Block: Refactor Settings panel to use Toolspanel. ([67965](https://github.com/WordPress/gutenberg/pull/67965))
+- Avatar: Refactor settings panel to use ToolsPanel. ([67952](https://github.com/WordPress/gutenberg/pull/67952))
+- Comments Pagination: Remove unwanted bottom margin from links. ([70360](https://github.com/WordPress/gutenberg/pull/70360))
+- Navigation Block: Flip submenu indicator icon on submenu expansion. ([70307](https://github.com/WordPress/gutenberg/pull/70307))
+- Navigation Block: Rotate submenu indicator icons on submenu expansion. ([70442](https://github.com/WordPress/gutenberg/pull/70442))
+- Navigation Link: Add `dropdownMenuProps` and a `resetAll` function. ([70505](https://github.com/WordPress/gutenberg/pull/70505))
+- Post Navigation Link: Refactor settings panel to use ToolsPanel. ([70276](https://github.com/WordPress/gutenberg/pull/70276))
+- Refactor Site Logo "Settings" Panel to Use ToolsPanel. ([67972](https://github.com/WordPress/gutenberg/pull/67972))
+- [ Experimental Form ]: Add example block previews. ([70436](https://github.com/WordPress/gutenberg/pull/70436))
+
+#### Interactivity API
+- iAPI Router: Support new styles and script modules on client-side navigation. ([70353](https://github.com/WordPress/gutenberg/pull/70353))
+- iAPI: Export `NavigateOptions` and `PrefetchOptions` types. ([70315](https://github.com/WordPress/gutenberg/pull/70315))
+- iAPI: Introduce `AsyncAction` and `TypeYield` type helpers. ([70422](https://github.com/WordPress/gutenberg/pull/70422))
+
+#### Extensibility
+- Social: Allow custom link icons using block variations. ([70261](https://github.com/WordPress/gutenberg/pull/70261))
+
+
+### Bug Fixes
+
+- Core data: getHomePage: Do not return object until resolved. ([70345](https://github.com/WordPress/gutenberg/pull/70345))
+
+#### Block Library
+- Fix : Calendar block: Colors do not change between global styles and `theme.json`. ([70184](https://github.com/WordPress/gutenberg/pull/70184))
+- Form Block: Apply class names correctly in the block editor. ([70394](https://github.com/WordPress/gutenberg/pull/70394))
+- FormFileUpload: Extend audio accept MIME types for iOS compatibility. ([70354](https://github.com/WordPress/gutenberg/pull/70354))
+- Image: Fix outdated accessibility hint on native component. ([70346](https://github.com/WordPress/gutenberg/pull/70346))
+- Image: Fixed resetAll to return image resolution to default value. ([70398](https://github.com/WordPress/gutenberg/pull/70398))
+- Revert "Flip submenu indicator icon on submenu expansion (#70307)". ([70427](https://github.com/WordPress/gutenberg/pull/70427))
+- Social Links: Allow icon size to be reset and honor theme.json styles. ([70380](https://github.com/WordPress/gutenberg/pull/70380))
+- Video Block: Guard against duplicate tracks. ([70295](https://github.com/WordPress/gutenberg/pull/70295))
+
+#### Interactivity API
+- Fix image lightbox issues in new full client-side navigation logic. ([70416](https://github.com/WordPress/gutenberg/pull/70416))
+- iAPI Router: Fix dynamic imports on new visited pages. ([70489](https://github.com/WordPress/gutenberg/pull/70489))
+- iAPI: Fix captured errors in `withScope` generators. ([70303](https://github.com/WordPress/gutenberg/pull/70303))
+- iAPI: Fix duplicated nested regions. ([70302](https://github.com/WordPress/gutenberg/pull/70302))
+- iAPI: Fix parsing of comments without siblings. ([70304](https://github.com/WordPress/gutenberg/pull/70304))
+
+#### Global Styles
+- Fix: Global styles affect all form elements ( Form Block ). ([70392](https://github.com/WordPress/gutenberg/pull/70392))
+- Implement uniform header layout. ([70464](https://github.com/WordPress/gutenberg/pull/70464))
+
+#### DataViews
+- Data forms: Achieve vertical spacing with vertical spacing rather than cell padding. ([70435](https://github.com/WordPress/gutenberg/pull/70435))
+
+#### Post Editor
+- Fix: Update post-publish panel to use taxonomy label instead of hardcoded "Tags". ([70410](https://github.com/WordPress/gutenberg/pull/70410))
+
+#### Media
+- Invalidate entities when new media is uploaded. ([70405](https://github.com/WordPress/gutenberg/pull/70405))
+
+#### Plugin
+- Fix: Incorrect style handle in RTL style registration for wp-list-reusable-blocks. ([70402](https://github.com/WordPress/gutenberg/pull/70402))
+
+#### Data Layer
+- Add private selector support to resolveSelect and suspendSelect. ([52036](https://github.com/WordPress/gutenberg/pull/52036))
+
+
+### Accessibility
+
+#### Templates API
+- Templates: Add back button & fix focus loss when navigating through template creation flow. ([70091](https://github.com/WordPress/gutenberg/pull/70091))
+
+
+### Performance
+
+#### Block Library
+- Avatar: Optimize user control query. ([70511](https://github.com/WordPress/gutenberg/pull/70511))
+
+
+### Documentation
+
+- Add `isPostSavingLocked ` example to doc block. ([70370](https://github.com/WordPress/gutenberg/pull/70370))
+- Commands: Add stylesheet requirements to README. ([70323](https://github.com/WordPress/gutenberg/pull/70323))
+- Create Block: Add documentation for custom block namespace. ([70215](https://github.com/WordPress/gutenberg/pull/70215))
+- Docs: Fix broken links on Developer.WordPress.org. ([70473](https://github.com/WordPress/gutenberg/pull/70473))
+- Fix some typos. ([70419](https://github.com/WordPress/gutenberg/pull/70419))
+- Fix typo folder-structure.md. ([70375](https://github.com/WordPress/gutenberg/pull/70375))
+- block-attributes: Add `role` attribute explanation. ([70361](https://github.com/WordPress/gutenberg/pull/70361))
+
+
+### Code Quality
+
+- Patterns: Delete unused property. ([70321](https://github.com/WordPress/gutenberg/pull/70321))
+- TypeScript: Converts HtmlEntities Package to TS. ([69326](https://github.com/WordPress/gutenberg/pull/69326))
+- TypeScript: Migrate deprecated package to TS. ([70362](https://github.com/WordPress/gutenberg/pull/70362))
+- TypeScript: Migrate is-shallow-equal package to TS. ([70407](https://github.com/WordPress/gutenberg/pull/70407))
+- iAPI: Fix the changelog to include PR 70296 in 6.25. ([70309](https://github.com/WordPress/gutenberg/pull/70309))
+
+#### Block Editor
+- Media List: Use 'placement' prop for popover positioning. ([70350](https://github.com/WordPress/gutenberg/pull/70350))
+- Refactor: `URLInputButton` component to functional react component. ([70384](https://github.com/WordPress/gutenberg/pull/70384))
+- Warning: Replace popoverProps.position to popoverProps.placement. ([70347](https://github.com/WordPress/gutenberg/pull/70347))
+
+#### Components
+- Circular Option Picker: Use 'placement' prop for popover positioning. ([70359](https://github.com/WordPress/gutenberg/pull/70359))
+- FormFileUpload: Remove temporary fix for selecting .heic file in Chromium browsers. ([70383](https://github.com/WordPress/gutenberg/pull/70383))
+
+#### Post Editor
+- PostAuthorCombobox: Simplify 'onFilterValueChange' debounced callback. ([70512](https://github.com/WordPress/gutenberg/pull/70512))
+
+#### Interactivity API
+- iAPI: Minor fixes to the Interactivity and Interactivity Router comments. ([70420](https://github.com/WordPress/gutenberg/pull/70420))
+
+#### Block Library
+- Social Link: Use `placement` prop for popover positioning. ([70348](https://github.com/WordPress/gutenberg/pull/70348))
+
+
+### Tools
+
+#### Testing
+- Test: Improve document settings sidebar locator. ([70331](https://github.com/WordPress/gutenberg/pull/70331))
+- Ensure the actual tests environment is used for end-to-end tests. ([70280](https://github.com/WordPress/gutenberg/pull/70280))
+- Skip falling end-to-end tests. ([70460](https://github.com/WordPress/gutenberg/pull/70460))
+- end-to-end Tests: Add test case for `Link` color support. ([69141](https://github.com/WordPress/gutenberg/pull/69141))
+- end-to-end Tests: Minor code quality improvement in some tests. ([70382](https://github.com/WordPress/gutenberg/pull/70382))
+
+
+### Various
+
+#### Block Library
+- Remove screencast.com embed block variation. ([70480](https://github.com/WordPress/gutenberg/pull/70480))
+
+
+## First-time contributors
+
+The following PRs were merged by first-time contributors:
+
+- @alejandrogonzalvo: test: Improve document settings sidebar locator. ([70331](https://github.com/WordPress/gutenberg/pull/70331))
+- @BugReportOnWeb: FormFileUpload: Extend audio accept MIME types for iOS compatibility. ([70354](https://github.com/WordPress/gutenberg/pull/70354))
+- @iamsandeepdahiya: Fix: Incorrect style handle in RTL style registration for wp-list-reusable-blocks. ([70402](https://github.com/WordPress/gutenberg/pull/70402))
+- @kushagra-goyal-14: TypeScript: Migrate is-shallow-equal package to TS. ([70407](https://github.com/WordPress/gutenberg/pull/70407))
+- @NidhiDhandhukiya74: Refactor Site Logo "Settings" Panel to Use ToolsPanel. ([67972](https://github.com/WordPress/gutenberg/pull/67972))
+- @shrivastavanolo: Navigation Block: Flip submenu indicator icon on submenu expansion. ([70307](https://github.com/WordPress/gutenberg/pull/70307))
+- @USERSATOSHI: TypeScript: Migrate deprecated package to TS. ([70362](https://github.com/WordPress/gutenberg/pull/70362))
+- @yashjawale: Image: Fix outdated accessibility hint on native component. ([70346](https://github.com/WordPress/gutenberg/pull/70346))
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@alejandrogonzalvo @BugReportOnWeb @DAreRodz @dd32 @ellatrix @himanshupathak95 @iamsandeepdahiya @im3dabasia @Infinite-Null @jsnajdr @karthikeya-io @kushagra-goyal-14 @Maikuolan @Mamaduka @Mayank-Tripathi32 @NidhiDhandhukiya74 @peterwilsoncc @ramonjd @Rishit30G @SainathPoojary @SantosGuillamot @shimotmk @shrivastavanolo @t-hamano @talldan @USERSATOSHI @vk17-starlord @Vrishabhsk @westonruter @yashjawale @yogeshbhutkar
+
+
 = 21.0.0 =
 
 ## Changelog

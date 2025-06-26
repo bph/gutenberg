@@ -24,8 +24,9 @@ import {
 	MediaUploadCheck,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
+import { store as noticesStore } from '@wordpress/notices';
 import { upload, media } from '@wordpress/icons';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { getFilename } from '@wordpress/url';
 
@@ -212,11 +213,26 @@ function SingleTrackEditor( {
 }
 
 export default function TracksEditor( { tracks = [], onChange } ) {
+	const { createNotice } = useDispatch( noticesStore );
 	const mediaUpload = useSelect( ( select ) => {
 		return select( blockEditorStore ).getSettings().mediaUpload;
 	}, [] );
 	const [ trackBeingEdited, setTrackBeingEdited ] = useState( null );
 	const dropdownPopoverRef = useRef();
+
+	const handleTrackSelect = ( { title, url } ) => {
+		if ( tracks.some( ( track ) => track.src === url ) ) {
+			createNotice( 'error', __( 'This track already exists.' ), {
+				isDismissible: true,
+				type: 'snackbar',
+			} );
+			return;
+		}
+
+		const trackIndex = tracks.length;
+		onChange( [ ...tracks, { label: title || '', src: url } ] );
+		setTrackBeingEdited( trackIndex );
+	};
 
 	useEffect( () => {
 		dropdownPopoverRef.current?.focus();
@@ -306,11 +322,7 @@ export default function TracksEditor( { tracks = [], onChange } ) {
 								label={ __( 'Add tracks' ) }
 							>
 								<MediaUpload
-									onSelect={ ( { url } ) => {
-										const trackIndex = tracks.length;
-										onChange( [ ...tracks, { src: url } ] );
-										setTrackBeingEdited( trackIndex );
-									} }
+									onSelect={ handleTrackSelect }
 									allowedTypes={ ALLOWED_TYPES }
 									render={ ( { open } ) => (
 										<MenuItem

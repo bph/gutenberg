@@ -42,6 +42,7 @@ import { useMergeRefs, usePrevious } from '@wordpress/compose';
 import { LinkUI } from './link-ui';
 import { updateAttributes } from './update-attributes';
 import { getColors } from '../navigation/edit/utils';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 
 const DEFAULT_BLOCK = { name: 'core/navigation-link' };
 const NESTING_BLOCK_NAMES = [
@@ -175,8 +176,20 @@ function getMissingText( type ) {
  */
 function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
 	const { label, url, description, rel } = attributes;
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 	return (
-		<ToolsPanel label={ __( 'Settings' ) }>
+		<ToolsPanel
+			label={ __( 'Settings' ) }
+			resetAll={ () => {
+				setAttributes( {
+					label: '',
+					url: '',
+					description: '',
+					rel: '',
+				} );
+			} }
+			dropdownMenuProps={ dropdownMenuProps }
+		>
 			<ToolsPanelItem
 				hasValue={ () => !! label }
 				label={ __( 'Text' ) }

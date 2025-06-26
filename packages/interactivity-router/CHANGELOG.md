@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.26.0 (2025-06-25)
+
 ### New Features
 
 -   Add support for new router regions with `attachTo` from new pages. ([70421](https://github.com/WordPress/gutenberg/pull/70421))

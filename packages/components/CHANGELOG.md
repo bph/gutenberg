@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 29.12.0 (2025-06-25)
+
 ### Bug Fixes
 
 -   `FormFileUpload`: Extend audio accept MIME types for iOS compatibility ([#70354](https://github.com/WordPress/gutenberg/pull/70354)).
