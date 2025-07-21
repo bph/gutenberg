@@ -159,7 +159,7 @@ function WidthPanel( { selectedWidth, setAttributes } ) {
 								key={ widthValue }
 								value={ widthValue }
 								label={ sprintf(
-									/* translators: Percentage value. */
+									/* translators: %d: Percentage value. */
 									__( '%d%%' ),
 									widthValue
 								) }

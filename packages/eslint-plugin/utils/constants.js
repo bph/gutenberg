@@ -55,8 +55,24 @@ const REGEXP_SPRINTF_PLACEHOLDER =
 const REGEXP_SPRINTF_PLACEHOLDER_UNORDERED =
 	/(?:(?<!%)%[+-]?(?:(?:0|'.)?-?[0-9]*(?:\.(?:[ 0]|'.)?[0-9]+)?|(?:[ ])?-?[0-9]+(?:\.(?:[ 0]|'.)?[0-9]+)?)[bcdeEfFgGosuxX])/;
 
+/**
+ * Regular expression matching comment placeholders.
+ *
+ * /(?:^|\s|,)\s*(%[sdf]|%?[a-zA-Z0-9_]+|%[0-9]+\$?[sdf]{0,1})(:)?/g;
+ * 		▲			▲			▲				▲		  ▲
+ * 		│			 │			  │ 				│		  │
+ * 		│			 │			  │					│		  └─ Match colon at the end of the placeholder ( optional )
+ * 		│			 │			  │					└─ Match a Index placeholder but allow variations (e.g. %1, %1s, %1$d)
+ * 		│			 │			  └─ Match a placeholder with index or named argument (e.g. %1, %name, %2)
+ * 		│			 └─ Match Unamed placeholder (e.g. %s, %d)
+ * 		└─ Match the start of string, whitespace, or comma
+ */
+const REGEXP_COMMENT_PLACEHOLDER =
+	/(?:^|\s|,)\s*(%[sdf]|%?[a-zA-Z0-9_]+|%[0-9]+\$?[sdf]{0,1})(:)?/g;
+
 module.exports = {
 	TRANSLATION_FUNCTIONS,
 	REGEXP_SPRINTF_PLACEHOLDER,
 	REGEXP_SPRINTF_PLACEHOLDER_UNORDERED,
+	REGEXP_COMMENT_PLACEHOLDER,
 };

@@ -71,10 +71,12 @@ export const subscribe = i18n.subscribe.bind( i18n );
  *
  * @see https://developer.wordpress.org/reference/functions/__/
  *
- * @param {string} text     Text to translate.
+ * @template {string} Text
+ *
+ * @param {Text}   text     Text to translate.
  * @param {string} [domain] Domain to retrieve the translated text.
  *
- * @return {string} Translated text.
+ * @return {import('./types').TranslatableText< Text >} Translated text.
  */
 export const __ = i18n.__.bind( i18n );
 
@@ -83,11 +85,13 @@ export const __ = i18n.__.bind( i18n );
  *
  * @see https://developer.wordpress.org/reference/functions/_x/
  *
- * @param {string} text     Text to translate.
+ * @template {string} Text
+ *
+ * @param {Text}   text     Text to translate.
  * @param {string} context  Context information for the translators.
  * @param {string} [domain] Domain to retrieve the translated text.
  *
- * @return {string} Translated context string without pipe.
+ * @return {import('./types').TranslatableText< Text >} Translated context string without pipe.
  */
 export const _x = i18n._x.bind( i18n );
 
@@ -97,13 +101,16 @@ export const _x = i18n._x.bind( i18n );
  *
  * @see https://developer.wordpress.org/reference/functions/_n/
  *
- * @param {string} single   The text to be used if the number is singular.
- * @param {string} plural   The text to be used if the number is plural.
+ * @template {string} Single
+ * @template {string} Plural
+ *
+ * @param {Single} single   The text to be used if the number is singular.
+ * @param {Plural} plural   The text to be used if the number is plural.
  * @param {number} number   The number to compare against to use either the
  *                          singular or plural form.
  * @param {string} [domain] Domain to retrieve the translated text.
  *
- * @return {string} The translated singular or plural form.
+ * @return {import('./types').TranslatableText< Single | Plural >} The translated singular or plural form.
  */
 export const _n = i18n._n.bind( i18n );
 
@@ -113,14 +120,17 @@ export const _n = i18n._n.bind( i18n );
  *
  * @see https://developer.wordpress.org/reference/functions/_nx/
  *
- * @param {string} single   The text to be used if the number is singular.
- * @param {string} plural   The text to be used if the number is plural.
+ * @template {string} Single
+ * @template {string} Plural
+ *
+ * @param {Single} single   The text to be used if the number is singular.
+ * @param {Plural} plural   The text to be used if the number is plural.
  * @param {number} number   The number to compare against to use either the
  *                          singular or plural form.
  * @param {string} context  Context information for the translators.
  * @param {string} [domain] Domain to retrieve the translated text.
  *
- * @return {string} The translated singular or plural form.
+ * @return {import('./types').TranslatableText< Single | Plural >} The translated singular or plural form.
  */
 export const _nx = i18n._nx.bind( i18n );
 

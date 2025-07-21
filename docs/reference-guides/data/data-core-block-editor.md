@@ -564,15 +564,9 @@ _Returns_
 
 ### getHoveredBlockClientId
 
+> **Deprecated**
+
 Returns the currently hovered block.
-
-_Parameters_
-
--   _state_ `Object`: Global application state.
-
-_Returns_
-
--   `Object`: Client Id of the hovered block.
 
 ### getInserterItems
 
@@ -1298,15 +1292,9 @@ Action that hides the insertion point.
 
 ### hoverBlock
 
+> **Deprecated**
+
 Returns an action object used in signalling that the block with the specified client ID has been hovered.
-
-_Parameters_
-
--   _clientId_ `string`: Block client ID.
-
-_Returns_
-
--   `Object`: Action object.
 
 ### insertAfterBlock
 

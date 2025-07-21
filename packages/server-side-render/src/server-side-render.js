@@ -69,21 +69,16 @@ function DefaultErrorResponsePlaceholder( { response, className } ) {
 	return <Placeholder className={ className }>{ errorMessage }</Placeholder>;
 }
 
-function DefaultLoadingResponsePlaceholder( { children, isLoading } ) {
+function DefaultLoadingResponsePlaceholder( { children } ) {
 	const [ showLoader, setShowLoader ] = useState( false );
 
 	useEffect( () => {
-		if ( ! isLoading ) {
-			setShowLoader( false );
-			return;
-		}
-
 		// Schedule showing the Spinner after 1 second.
 		const timeout = setTimeout( () => {
 			setShowLoader( true );
 		}, 1000 );
 		return () => clearTimeout( timeout );
-	}, [ isLoading ] );
+	}, [] );
 
 	return (
 		<div style={ { position: 'relative' } }>
@@ -227,7 +222,7 @@ export default function ServerSideRender( props ) {
 
 	if ( isLoading ) {
 		return (
-			<LoadingResponsePlaceholder { ...props } isLoading={ isLoading }>
+			<LoadingResponsePlaceholder { ...props }>
 				{ hasResponse && ! hasError && (
 					<RawHTML className={ className }>{ response }</RawHTML>
 				) }

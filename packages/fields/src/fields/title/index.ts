@@ -20,6 +20,7 @@ const titleField: Field< CommonPost > = {
 	render: TitleView,
 	enableHiding: false,
 	enableGlobalSearch: true,
+	filterBy: false,
 };
 
 /**

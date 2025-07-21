@@ -34,31 +34,41 @@ const ICON_COLORS = [ '#191e23', '#f8f9f9' ];
  * Determines whether the block's attributes are equal to the default attributes
  * which means the block is unmodified.
  *
- * @param {WPBlock} block Block Object
+ * @param {WPBlock} block Block Object.
+ * @param {?string} role  Optional role to filter attributes for modification check.
  *
  * @return {boolean} Whether the block is an unmodified block.
  */
-export function isUnmodifiedBlock( block ) {
-	return Object.entries( getBlockType( block.name )?.attributes ?? {} ).every(
-		( [ key, definition ] ) => {
-			const value = block.attributes[ key ];
+export function isUnmodifiedBlock( block, role ) {
+	const blockAttributes = getBlockType( block.name )?.attributes ?? {};
 
-			// Every attribute that has a default must match the default.
-			if ( definition.hasOwnProperty( 'default' ) ) {
-				return value === definition.default;
-			}
+	// Filter attributes by role if a role is provided.
+	const attributesToCheck = role
+		? Object.entries( blockAttributes ).filter(
+				( [ , definition ] ) =>
+					definition.role === role ||
+					definition.__experimentalRole === role
+		  )
+		: Object.entries( blockAttributes );
 
-			// The rich text type is a bit different from the rest because it
-			// has an implicit default value of an empty RichTextData instance,
-			// so check the length of the value.
-			if ( definition.type === 'rich-text' ) {
-				return ! value?.length;
-			}
+	return attributesToCheck.every( ( [ key, definition ] ) => {
+		const value = block.attributes[ key ];
 
-			// Every attribute that doesn't have a default should be undefined.
-			return value === undefined;
+		// Every attribute that has a default must match the default.
+		if ( definition.hasOwnProperty( 'default' ) ) {
+			return value === definition.default;
 		}
-	);
+
+		// The rich text type is a bit different from the rest because it
+		// has an implicit default value of an empty RichTextData instance,
+		// so check the length of the value.
+		if ( definition.type === 'rich-text' ) {
+			return ! value?.length;
+		}
+
+		// Every attribute that doesn't have a default should be undefined.
+		return value === undefined;
+	} );
 }
 
 /**
@@ -66,11 +76,14 @@ export function isUnmodifiedBlock( block ) {
  * to the default attributes which means the block is unmodified.
  *
  * @param {WPBlock} block Block Object
+ * @param {?string} role  Optional role to filter attributes for modification check.
  *
  * @return {boolean} Whether the block is an unmodified default block.
  */
-export function isUnmodifiedDefaultBlock( block ) {
-	return block.name === getDefaultBlockName() && isUnmodifiedBlock( block );
+export function isUnmodifiedDefaultBlock( block, role ) {
+	return (
+		block.name === getDefaultBlockName() && isUnmodifiedBlock( block, role )
+	);
 }
 
 /**
@@ -242,7 +255,7 @@ export function getAccessibleBlockLabel(
 
 	if ( hasLabel ) {
 		return sprintf(
-			/* translators: accessibility text. %1: The block title. %2: The block label. */
+			/* translators: accessibility text. 1: The block title. 2: The block label. */
 			__( '%1$s Block. %2$s' ),
 			title,
 			label

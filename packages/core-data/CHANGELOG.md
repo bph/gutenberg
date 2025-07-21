@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-   Fixed the TS type for meta values for core entities ([#70788](https://github.com/WordPress/gutenberg/pull/70788))
+
 ## 7.26.0 (2025-06-25)
 
 ## 7.25.0 (2025-06-04)

@@ -7,7 +7,7 @@ import * as Ariakit from '@ariakit/react';
  * WordPress dependencies
  */
 import { createContext, useCallback, useMemo } from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -43,8 +43,11 @@ function defaultRenderSelectedValue(
 	if ( Array.isArray( value ) ) {
 		return value.length === 1
 			? value[ 0 ]
-			: // translators: %s: number of items selected (it will always be 2 or more items)
-			  sprintf( __( '%s items selected' ), value.length );
+			: sprintf(
+					// translators: %d: number of items selected (it will always be 2 or more items)
+					_n( '%d item selected', '%d items selected', value.length ),
+					value.length
+			  );
 	}
 
 	return value;

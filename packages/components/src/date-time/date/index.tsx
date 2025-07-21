@@ -344,7 +344,7 @@ function getDayLabel( date: Date, isSelected: boolean, numEvents: number ) {
 		);
 	} else if ( isSelected ) {
 		return sprintf(
-			// translators: %s: The calendar date.
+			// translators: 1: The calendar date.
 			__( '%1$s. Selected' ),
 			localizedDate
 		);

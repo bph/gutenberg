@@ -8,6 +8,9 @@ const transpiledPackageNames = glob( 'packages/*/src/index.{js,ts,tsx}' ).map(
 	( fileName ) => fileName.split( '/' )[ 1 ]
 );
 
+// Make sure the tests run in UTC timezone, regardless of the system timezone.
+process.env.TZ = 'UTC';
+
 module.exports = {
 	rootDir: '../../',
 	moduleNameMapper: {

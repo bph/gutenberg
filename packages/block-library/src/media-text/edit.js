@@ -317,8 +317,8 @@ function MediaTextEdit( {
 					mediaAlt: '',
 					focalPoint: undefined,
 					mediaWidth: 50,
-					mediaSizeSlug: undefined,
 				} );
+				updateImage( DEFAULT_MEDIA_SIZE_SLUG );
 			} }
 			dropdownMenuProps={ dropdownMenuProps }
 		>

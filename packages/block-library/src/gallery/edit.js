@@ -7,15 +7,15 @@ import clsx from 'clsx';
  * WordPress dependencies
  */
 import {
-	BaseControl,
-	PanelBody,
 	SelectControl,
 	ToggleControl,
 	RangeControl,
-	Spinner,
 	MenuGroup,
 	MenuItem,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 	ToolbarDropdownMenu,
+	PanelBody,
 } from '@wordpress/components';
 import {
 	store as blockEditorStore,
@@ -48,6 +48,7 @@ import {
 import { sharedIcon } from './shared-icon';
 import { defaultColumnsNumber, pickRelevantMediaFiles } from './shared';
 import { getHrefAndDestination } from './utils';
+import { useToolsPanelDropdownMenuProps } from '../utils/hooks';
 import {
 	getUpdatedLinkTargetSettings,
 	getImageSizeAttributes,
@@ -58,6 +59,7 @@ import {
 	LINK_DESTINATION_MEDIA,
 	LINK_DESTINATION_NONE,
 	LINK_DESTINATION_LIGHTBOX,
+	DEFAULT_MEDIA_SIZE_SLUG,
 } from './constants';
 import useImageSizes from './use-image-sizes';
 import useGetNewImages from './use-get-new-images';
@@ -465,7 +467,7 @@ export default function GalleryEdit( props ) {
 			sprintf(
 				/* translators: %s: image size settings */
 				__( 'All gallery image sizes updated to: %s' ),
-				imageSize.label
+				imageSize?.label ?? newSizeSlug
 			),
 			{
 				id: 'gallery-attributes-sizeSlug',
@@ -546,6 +548,8 @@ export default function GalleryEdit( props ) {
 		...nativeInnerBlockProps,
 	} );
 
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+
 	if ( ! hasImages ) {
 		return (
 			<View { ...innerBlocksProps }>
@@ -560,39 +564,163 @@ export default function GalleryEdit( props ) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					{ images.length > 1 && (
-						<RangeControl
-							__nextHasNoMarginBottom
-							label={ __( 'Columns' ) }
-							value={
-								columns
-									? columns
-									: defaultColumnsNumber( images.length )
+				{ Platform.isWeb && (
+					<ToolsPanel
+						label={ __( 'Settings' ) }
+						resetAll={ () => {
+							setAttributes( {
+								columns: undefined,
+								imageCrop: true,
+								randomOrder: false,
+							} );
+
+							if ( sizeSlug !== DEFAULT_MEDIA_SIZE_SLUG ) {
+								updateImagesSize( DEFAULT_MEDIA_SIZE_SLUG );
 							}
-							onChange={ setColumnsNumber }
-							min={ 1 }
-							max={ Math.min( MAX_COLUMNS, images.length ) }
-							{ ...MOBILE_CONTROL_PROPS_RANGE_CONTROL }
-							required
-							__next40pxDefaultSize
-						/>
-					) }
-					{ imageSizeOptions?.length > 0 && (
-						<SelectControl
-							__nextHasNoMarginBottom
-							label={ __( 'Resolution' ) }
-							help={ __(
-								'Select the size of the source images.'
-							) }
-							value={ sizeSlug }
-							options={ imageSizeOptions }
-							onChange={ updateImagesSize }
-							hideCancelButton
-							size="__unstable-large"
-						/>
-					) }
-					{ Platform.isNative ? (
+
+							if ( linkTarget ) {
+								toggleOpenInNewTab( false );
+							}
+						} }
+						dropdownMenuProps={ dropdownMenuProps }
+					>
+						{ images.length > 1 && (
+							<ToolsPanelItem
+								isShownByDefault
+								label={ __( 'Columns' ) }
+								hasValue={ () =>
+									!! columns && columns !== images.length
+								}
+								onDeselect={ () =>
+									setColumnsNumber( undefined )
+								}
+							>
+								<RangeControl
+									__nextHasNoMarginBottom
+									label={ __( 'Columns' ) }
+									value={
+										columns
+											? columns
+											: defaultColumnsNumber(
+													images.length
+											  )
+									}
+									onChange={ setColumnsNumber }
+									min={ 1 }
+									max={ Math.min(
+										MAX_COLUMNS,
+										images.length
+									) }
+									required
+									__next40pxDefaultSize
+								/>
+							</ToolsPanelItem>
+						) }
+						{ imageSizeOptions?.length > 0 && (
+							<ToolsPanelItem
+								isShownByDefault
+								label={ __( 'Resolution' ) }
+								hasValue={ () =>
+									sizeSlug !== DEFAULT_MEDIA_SIZE_SLUG
+								}
+								onDeselect={ () =>
+									updateImagesSize( DEFAULT_MEDIA_SIZE_SLUG )
+								}
+							>
+								<SelectControl
+									__nextHasNoMarginBottom
+									label={ __( 'Resolution' ) }
+									help={ __(
+										'Select the size of the source images.'
+									) }
+									value={ sizeSlug }
+									options={ imageSizeOptions }
+									onChange={ updateImagesSize }
+									hideCancelButton
+									size="__unstable-large"
+								/>
+							</ToolsPanelItem>
+						) }
+						<ToolsPanelItem
+							isShownByDefault
+							label={ __( 'Crop images to fit' ) }
+							hasValue={ () => ! imageCrop }
+							onDeselect={ () =>
+								setAttributes( { imageCrop: true } )
+							}
+						>
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Crop images to fit' ) }
+								checked={ !! imageCrop }
+								onChange={ toggleImageCrop }
+							/>
+						</ToolsPanelItem>
+						<ToolsPanelItem
+							isShownByDefault
+							label={ __( 'Randomize order' ) }
+							hasValue={ () => !! randomOrder }
+							onDeselect={ () =>
+								setAttributes( { randomOrder: false } )
+							}
+						>
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Randomize order' ) }
+								checked={ !! randomOrder }
+								onChange={ toggleRandomOrder }
+							/>
+						</ToolsPanelItem>
+						{ hasLinkTo && (
+							<ToolsPanelItem
+								isShownByDefault
+								label={ __( 'Open images in new tab' ) }
+								hasValue={ () => !! linkTarget }
+								onDeselect={ () => toggleOpenInNewTab( false ) }
+							>
+								<ToggleControl
+									__nextHasNoMarginBottom
+									label={ __( 'Open images in new tab' ) }
+									checked={ linkTarget === '_blank' }
+									onChange={ toggleOpenInNewTab }
+								/>
+							</ToolsPanelItem>
+						) }
+					</ToolsPanel>
+				) }
+				{ Platform.isNative && (
+					<PanelBody title={ __( 'Settings' ) }>
+						{ images.length > 1 && (
+							<RangeControl
+								__nextHasNoMarginBottom
+								label={ __( 'Columns' ) }
+								value={
+									columns
+										? columns
+										: defaultColumnsNumber( images.length )
+								}
+								onChange={ setColumnsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_COLUMNS, images.length ) }
+								{ ...MOBILE_CONTROL_PROPS_RANGE_CONTROL }
+								required
+								__next40pxDefaultSize
+							/>
+						) }
+						{ imageSizeOptions?.length > 0 && (
+							<SelectControl
+								__nextHasNoMarginBottom
+								label={ __( 'Resolution' ) }
+								help={ __(
+									'Select the size of the source images.'
+								) }
+								value={ sizeSlug }
+								options={ imageSizeOptions }
+								onChange={ updateImagesSize }
+								hideCancelButton
+								size="__unstable-large"
+							/>
+						) }
 						<SelectControl
 							__nextHasNoMarginBottom
 							label={ __( 'Link' ) }
@@ -602,42 +730,28 @@ export default function GalleryEdit( props ) {
 							hideCancelButton
 							size="__unstable-large"
 						/>
-					) : null }
-					<ToggleControl
-						__nextHasNoMarginBottom
-						label={ __( 'Crop images to fit' ) }
-						checked={ !! imageCrop }
-						onChange={ toggleImageCrop }
-					/>
-					<ToggleControl
-						__nextHasNoMarginBottom
-						label={ __( 'Randomize order' ) }
-						checked={ !! randomOrder }
-						onChange={ toggleRandomOrder }
-					/>
-					{ hasLinkTo && (
 						<ToggleControl
 							__nextHasNoMarginBottom
-							label={ __( 'Open images in new tab' ) }
-							checked={ linkTarget === '_blank' }
-							onChange={ toggleOpenInNewTab }
+							label={ __( 'Crop images to fit' ) }
+							checked={ !! imageCrop }
+							onChange={ toggleImageCrop }
 						/>
-					) }
-					{ Platform.isWeb && ! imageSizeOptions && hasImageIds && (
-						<BaseControl
-							className="gallery-image-sizes"
+						<ToggleControl
 							__nextHasNoMarginBottom
-						>
-							<BaseControl.VisualLabel>
-								{ __( 'Resolution' ) }
-							</BaseControl.VisualLabel>
-							<View className="gallery-image-sizes__loading">
-								<Spinner />
-								{ __( 'Loading options…' ) }
-							</View>
-						</BaseControl>
-					) }
-				</PanelBody>
+							label={ __( 'Randomize order' ) }
+							checked={ !! randomOrder }
+							onChange={ toggleRandomOrder }
+						/>
+						{ hasLinkTo && (
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __( 'Open images in new tab' ) }
+								checked={ linkTarget === '_blank' }
+								onChange={ toggleOpenInNewTab }
+							/>
+						) }
+					</PanelBody>
+				) }
 			</InspectorControls>
 			{ Platform.isWeb ? (
 				<BlockControls group="block">

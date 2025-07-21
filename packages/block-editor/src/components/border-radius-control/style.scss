@@ -1,4 +1,9 @@
 .components-border-radius-control {
+	// Reset `fieldset` browser defaults.
+	border: 0;
+	padding: 0;
+	margin: 0;
+
 	margin-bottom: $grid-unit-15;
 
 	legend {

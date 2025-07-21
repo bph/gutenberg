@@ -23,7 +23,6 @@ import {
 	Button,
 	DropZone,
 	FlexItem,
-	PanelBody,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalItemGroup as ItemGroup,
@@ -476,6 +475,7 @@ export default function LogoEdit( {
 	}, [] );
 	const { getSettings } = useSelect( blockEditorStore );
 	const [ temporaryURL, setTemporaryURL ] = useState();
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const { editEntityRecord } = useDispatch( coreStore );
 
@@ -633,9 +633,15 @@ export default function LogoEdit( {
 
 	const mediaInspectorPanel = ( canUserEdit || logoUrl ) && (
 		<InspectorControls>
-			<PanelBody title={ __( 'Media' ) }>
-				<div className="block-library-site-logo__inspector-media-replace-container">
-					{ ! canUserEdit ? (
+			<ToolsPanel
+				label={ __( 'Media' ) }
+				dropdownMenuProps={ dropdownMenuProps }
+			>
+				{ ! canUserEdit ? (
+					<div
+						className="block-library-site-logo__inspector-media-replace-container"
+						style={ { gridColumn: '1 / -1' } }
+					>
 						<InspectorLogoPreview
 							media={ mediaItemData }
 							itemGroupProps={ {
@@ -644,8 +650,14 @@ export default function LogoEdit( {
 									'block-library-site-logo__inspector-readonly-logo-preview',
 							} }
 						/>
-					) : (
-						<>
+					</div>
+				) : (
+					<ToolsPanelItem
+						hasValue={ () => !! logoUrl }
+						label={ __( 'Logo' ) }
+						isShownByDefault
+					>
+						<div className="block-library-site-logo__inspector-media-replace-container">
 							<SiteLogoReplaceFlow
 								{ ...mediaReplaceFlowProps }
 								name={
@@ -668,10 +680,10 @@ export default function LogoEdit( {
 								) }
 							/>
 							<DropZone onFilesDrop={ onFilesDrop } />
-						</>
-					) }
-				</div>
-			</PanelBody>
+						</div>
+					</ToolsPanelItem>
+				) }
+			</ToolsPanel>
 		</InspectorControls>
 	);
 

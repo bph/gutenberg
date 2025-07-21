@@ -14,6 +14,7 @@ const orderField: Field< BasePost > = {
 	type: 'integer',
 	label: __( 'Order' ),
 	description: __( 'Determines the order of pages.' ),
+	filterBy: false,
 };
 
 /**

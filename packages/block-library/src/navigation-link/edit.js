@@ -11,6 +11,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import {
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	CheckboxControl,
 	TextControl,
 	TextareaControl,
 	ToolbarButton,
@@ -175,7 +176,7 @@ function getMissingText( type ) {
  * Consider reusing this components for both blocks.
  */
 function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
-	const { label, url, description, rel } = attributes;
+	const { label, url, description, rel, opensInNewTab } = attributes;
 	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 	return (
 		<ToolsPanel
@@ -186,6 +187,7 @@ function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
 					url: '',
 					description: '',
 					rel: '',
+					opensInNewTab: false,
 				} );
 			} }
 			dropdownMenuProps={ dropdownMenuProps }
@@ -230,6 +232,22 @@ function Controls( { attributes, setAttributes, setIsLabelFieldFocused } ) {
 					} }
 					autoComplete="off"
 					type="url"
+				/>
+			</ToolsPanelItem>
+
+			<ToolsPanelItem
+				hasValue={ () => !! opensInNewTab }
+				label={ __( 'Open in new tab' ) }
+				onDeselect={ () => setAttributes( { opensInNewTab: false } ) }
+				isShownByDefault
+			>
+				<CheckboxControl
+					__nextHasNoMarginBottom
+					label={ __( 'Open in new tab' ) }
+					checked={ opensInNewTab }
+					onChange={ ( value ) =>
+						setAttributes( { opensInNewTab: value } )
+					}
 				/>
 			</ToolsPanelItem>
 

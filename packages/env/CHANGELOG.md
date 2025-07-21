@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Enhancements
+
+-   Add config file for WP-CLI when creating an environment. ([#70661](https://github.com/WordPress/gutenberg/pull/70661)).
+
 ## 10.26.0 (2025-06-25)
 
 ## 10.25.0 (2025-06-04)

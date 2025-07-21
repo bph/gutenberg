@@ -395,7 +395,8 @@ Determines whether the block's attributes are equal to the default attributes wh
 
 _Parameters_
 
--   _block_ `WPBlock`: Block Object
+-   _block_ `WPBlock`: Block Object.
+-   _role_ `?string`: Optional role to filter attributes for modification check.
 
 _Returns_
 
@@ -408,6 +409,7 @@ Determines whether the block is a default block and its attributes are equal to 
 _Parameters_
 
 -   _block_ `WPBlock`: Block Object
+-   _role_ `?string`: Optional role to filter attributes for modification check.
 
 _Returns_
 

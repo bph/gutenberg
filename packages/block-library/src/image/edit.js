@@ -249,6 +249,18 @@ export function ImageEdit( {
 
 		let mediaAttributes = pickRelevantMediaFiles( media, newSize );
 
+		// Normalize newline characters in caption to <br />
+		// to preserve line breaks in both editor and frontend.
+		if (
+			typeof mediaAttributes.caption === 'string' &&
+			mediaAttributes.caption.includes( '\n' )
+		) {
+			mediaAttributes.caption = mediaAttributes.caption.replace(
+				/\n/g,
+				'<br>'
+			);
+		}
+
 		// If a caption text was meanwhile written by the user,
 		// make sure the text is not overwritten by empty captions.
 		if ( captionRef.current && ! mediaAttributes.caption ) {

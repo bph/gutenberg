@@ -15,6 +15,13 @@ add_action(
 			plugin_dir_url( __FILE__ ) . 'style-from-link.css',
 			array()
 		);
+		wp_enqueue_style(
+			'wrapper-styles-media-print',
+			plugin_dir_url( __FILE__ ) . 'style-media-print.css',
+			array(),
+			false,
+			'print'
+		);
 	}
 );
 
@@ -91,4 +98,10 @@ $wrapper_attributes = get_block_wrapper_attributes();
 	<div data-wp-interactive="test/router-styles" >
 		Prefetching: <span data-testid="prefetching" data-wp-text="state.prefetching"></span>
 	</div>
+
+	<!-- Text hidden when media=print applies. -->
+	<div class="hide-on-print" data-testid="hide-on-print">This should be visible when media is not "print".</div>
 </div>
+
+
+

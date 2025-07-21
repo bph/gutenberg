@@ -1006,6 +1006,27 @@ _Returns_
 
 Returns whether post autosaving is locked.
 
+_Usage_
+
+```jsx
+import { __ } from '@wordpress/i18n';
+import { store as editorStore } from '@wordpress/editor';
+import { useSelect } from '@wordpress/data';
+
+const ExampleComponent = () => {
+	const isAutoSavingLocked = useSelect(
+		( select ) => select( editorStore ).isPostAutosavingLocked(),
+		[]
+	);
+
+	return isAutoSavingLocked ? (
+		<p>{ __( 'Post auto saving is locked' ) }</p>
+	) : (
+		<p>{ __( 'Post auto saving is not locked' ) }</p>
+	);
+};
+```
+
 _Parameters_
 
 -   _state_ `Object`: Global application state.

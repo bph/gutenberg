@@ -411,4 +411,23 @@ test.describe( 'Router styles', () => {
 		await expect( blue ).toHaveCSS( 'color', COLOR_WRAPPER );
 		await expect( all ).toHaveCSS( 'color', COLOR_GREEN );
 	} );
+
+	test( 'should respect the original media attribute on initial style sheets', async ( {
+		page,
+	} ) => {
+		const csn = page.getByTestId( 'client-side navigation' );
+		const hideOnPrint = page.getByTestId( 'hide-on-print' );
+
+		await expect( hideOnPrint ).toBeVisible();
+
+		await page.getByTestId( 'link red' ).click();
+
+		// This element disappears when a navigation starts.
+		// It should be visible again after a successful navigation.
+		await expect( csn ).toBeHidden();
+		await expect( csn ).toBeVisible();
+
+		// The "hide-on-print" element should remain visible.
+		await expect( hideOnPrint ).toBeVisible();
+	} );
 } );

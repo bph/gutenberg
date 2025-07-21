@@ -52,30 +52,11 @@ Examples: "my-custom-server-side-rendered".
 
 ### httpMethod
 
-The HTTP request method to use, either 'GET' or 'POST'. It's 'GET' by default. The 'POST' value will cause an error on WP earlier than 5.5, unless 'rest_endpoints' is filtered in PHP to allow this. If 'POST', this sends the attributes in the request body, not in the URL. This can allow a bigger attributes object.
+The HTTP request method to use is either `GET` or `POST`, with `GET` as the default. When using `POST`, attributes are sent in the request body rather than the URL, allowing for a larger attributes object.
 
 -   Type: `String`
 -   Required: No
 -   Default: 'GET'
-
-#### Example:
-
-```php
-function add_rest_method( $endpoints ) {
-    if ( is_wp_version_compatible( '5.5' ) ) {
-        return $endpoints;
-    }
-
-    foreach ( $endpoints as $route => $handler ) {
-        if ( isset( $endpoints[ $route ][0] ) ) {
-            $endpoints[ $route ][0]['methods'] = [ WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ];
-        }
-    }
-
-    return $endpoints;
-}
-add_filter( 'rest_endpoints', 'add_rest_method');
-```
 
 ### skipBlockSupportAttributes
 

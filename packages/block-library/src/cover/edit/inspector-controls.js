@@ -198,8 +198,8 @@ export default function CoverInspectorControls( {
 								focalPoint: undefined,
 								isRepeated: false,
 								alt: '',
-								sizeSlug: undefined,
 							} );
+							updateImage( DEFAULT_MEDIA_SIZE_SLUG );
 						} }
 						dropdownMenuProps={ dropdownMenuProps }
 					>
@@ -208,7 +208,7 @@ export default function CoverInspectorControls( {
 								<ToolsPanelItem
 									label={ __( 'Fixed background' ) }
 									isShownByDefault
-									hasValue={ () => hasParallax }
+									hasValue={ () => !! hasParallax }
 									onDeselect={ () =>
 										setAttributes( {
 											hasParallax: false,
@@ -219,7 +219,7 @@ export default function CoverInspectorControls( {
 									<ToggleControl
 										__nextHasNoMarginBottom
 										label={ __( 'Fixed background' ) }
-										checked={ hasParallax }
+										checked={ !! hasParallax }
 										onChange={ toggleParallax }
 									/>
 								</ToolsPanelItem>

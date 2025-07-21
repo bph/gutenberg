@@ -122,8 +122,8 @@ export function getNameAndSlugForPosition(
 
 	return {
 		name: sprintf(
-			/* translators: %s: is an id for a custom color */
-			__( 'Color %s' ),
+			/* translators: %d: is an id for a custom color */
+			__( 'Color %d' ),
 			position
 		),
 		slug: `${ slugPrefix }color-${ position }`,
@@ -223,7 +223,7 @@ function Option< T extends PaletteElement >( {
 					aria-label={ sprintf(
 						// translators: %s is a color or gradient name, e.g. "Red".
 						__( 'Edit: %s' ),
-						element.name.trim().length ? element.name : value
+						element.name.trim().length ? element.name : value || ''
 					) }
 					style={ { padding: 0 } }
 				>
@@ -267,7 +267,7 @@ function Option< T extends PaletteElement >( {
 								__( 'Remove color: %s' ),
 								element.name.trim().length
 									? element.name
-									: value
+									: value || ''
 							) }
 							onClick={ onRemove }
 						/>

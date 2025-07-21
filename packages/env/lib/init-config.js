@@ -129,6 +129,11 @@ RUN sed -i 's|deb.debian.org/debian stretch|archive.debian.org/debian stretch|g'
 RUN sed -i 's|security.debian.org/debian-security stretch|archive.debian.org/debian-security stretch|g' /etc/apt/sources.list
 RUN sed -i '/stretch-updates/d' /etc/apt/sources.list
 
+# buster (https://lists.debian.org/debian-devel-announce/2025/06/msg00001.html)
+RUN sed -i 's|deb.debian.org/debian buster|archive.debian.org/debian buster|g' /etc/apt/sources.list
+RUN sed -i 's|security.debian.org/debian-security buster/updates|archive.debian.org/debian-security buster/updates|g' /etc/apt/sources.list
+RUN sed -i '/buster-updates/d' /etc/apt/sources.list
+
 # Create the host's user so that we can match ownership in the container.
 ARG HOST_USERNAME
 ARG HOST_UID
@@ -196,6 +201,7 @@ function installDependencies( service, env, config ) {
 		case 'wordpress': {
 			dockerFileContent += `
 # Make sure we're working with the latest packages.
+RUN apt-get clean
 RUN apt-get -qy update
 
 # Install some basic PHP dependencies.

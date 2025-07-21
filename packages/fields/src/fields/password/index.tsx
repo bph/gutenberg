@@ -16,6 +16,7 @@ const passwordField: Field< BasePost > = {
 	enableSorting: false,
 	enableHiding: false,
 	isVisible: ( item ) => item.status !== 'private',
+	filterBy: false,
 };
 
 /**

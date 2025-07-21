@@ -25,7 +25,7 @@ Node.js (`node`) is an open-source runtime environment that allows you to execut
 Node.js and its accompanying development tools allow you to:
 
 -   Install and run WordPress packages needed for Block Editor development, such as `wp-scripts`
--   Setup local WordPress environments with `wp-env` and `wp-now`
+-   Set up local WordPress environments with `wp-env` and `wp-now`
 -   Use the latest ECMAScript features and write code in ESNext
 -   Lint, format, and test JavaScript code
 -   Scaffold custom blocks with the `create-block` package
@@ -53,8 +53,8 @@ Refer to the [Get started with `wp-env`](/docs/getting-started/devenv/get-starte
 
 This list is not exhaustive, but here are several additional options to choose from if you prefer not to use `wp-env`:
 
+- [WordPress Studio](https://developer.wordpress.com/studio/)
 - [Local](https://localwp.com/)
-- [WP Studio](https://developer.wordpress.com/studio/)
 - [XAMPP](https://www.apachefriends.org/)
 - [MAMP](https://www.mamp.info/en/mamp/mac/)
 - [Varying Vagrant Vagrants](https://varyingvagrantvagrants.org/) (VVV)
