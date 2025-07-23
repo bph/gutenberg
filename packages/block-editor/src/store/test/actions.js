@@ -808,8 +808,16 @@ describe( 'actions', () => {
 			} );
 		} );
 
-		it( 'should only focus the blockA if the blockA has no merge function', () => {
-			registerBlockType( 'core/test-block', defaultBlockSettings );
+		it( 'should only focus the blockA if the blockA has no merge function and the content of blockB is modified', () => {
+			registerBlockType( 'core/test-block', {
+				...defaultBlockSettings,
+				attributes: {
+					content: {
+						type: 'string',
+						role: 'content',
+					},
+				},
+			} );
 			const blockA = deepFreeze( {
 				clientId: 'chicken',
 				name: 'core/test-block',
@@ -817,15 +825,20 @@ describe( 'actions', () => {
 			const blockB = deepFreeze( {
 				clientId: 'ribs',
 				name: 'core/test-block',
+				attributes: {
+					content: 'Updated content',
+				},
 			} );
 
 			const select = {
 				getBlock: ( clientId ) =>
 					[ blockA, blockB ].find( ( b ) => b.clientId === clientId ),
 				getBlockEditingMode: () => 'default',
+				isBlockSelected: () => false,
 			};
 			const dispatch = Object.assign( jest.fn(), {
 				selectBlock: jest.fn(),
+				removeBlock: jest.fn(),
 			} );
 
 			mergeBlocks(

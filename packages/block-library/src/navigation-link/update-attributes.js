@@ -125,7 +125,7 @@ export const updateAttributes = (
 	const {
 		title: newLabel = '', // the title of any provided Post.
 		label: newLabelFromLabel = '', // alternative to title
-		url: newUrl = '',
+		url: newUrl,
 		opensInNewTab,
 		id: newID,
 		kind: newKind = originalKind,
@@ -136,7 +136,7 @@ export const updateAttributes = (
 	const finalNewLabel = newLabel || newLabelFromLabel;
 
 	const newLabelWithoutHttp = finalNewLabel.replace( /http(s?):\/\//gi, '' );
-	const newUrlWithoutHttp = newUrl.replace( /http(s?):\/\//gi, '' );
+	const newUrlWithoutHttp = newUrl?.replace( /http(s?):\/\//gi, '' ) ?? '';
 
 	const useNewLabel =
 		finalNewLabel &&
@@ -174,7 +174,9 @@ export const updateAttributes = (
 
 	const attributes = {
 		// Passed `url` may already be encoded. To prevent double encoding, decodeURI is executed to revert to the original string.
-		...( newUrl && { url: encodeURI( safeDecodeURI( newUrl ) ) } ),
+		...( newUrl !== undefined
+			? { url: newUrl ? encodeURI( safeDecodeURI( newUrl ) ) : newUrl }
+			: {} ),
 		...( label && { label } ),
 		...( undefined !== opensInNewTab && { opensInNewTab } ),
 		...( kind && { kind } ),

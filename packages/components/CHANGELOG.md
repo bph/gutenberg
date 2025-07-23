@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 30.0.0 (2025-07-23)
+
 ### Breaking Changes
 
 -   `Icon`: Pass `size` prop value as `width`/`height` attributes when `icon` is a component that doesn't exactly match `SVG` ([#70756](https://github.com/WordPress/gutenberg/pull/70756)).

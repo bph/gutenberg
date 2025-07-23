@@ -326,3 +326,40 @@ export const CustomPerPageSizes = () => {
 		/>
 	);
 };
+
+export const GroupedGridLayout = () => {
+	const [ view, setView ] = useState< View >( {
+		type: LAYOUT_GRID,
+		search: '',
+		page: 1,
+		perPage: 20,
+		filters: [],
+		fields: [ 'satellites' ],
+		titleField: 'title',
+		descriptionField: 'description',
+		mediaField: 'image',
+		groupByField: 'type',
+		layout: {
+			badgeFields: [ 'satellites' ],
+		},
+	} );
+	const { data: shownData, paginationInfo } = useMemo( () => {
+		return filterSortAndPaginate( data, view, fields );
+	}, [ view ] );
+	return (
+		<DataViews
+			getItemId={ ( item ) => item.id.toString() }
+			paginationInfo={ paginationInfo }
+			data={ shownData }
+			view={ view }
+			fields={ fields }
+			onChangeView={ setView }
+			actions={ actions }
+			defaultLayouts={ {
+				[ LAYOUT_GRID ]: {},
+				[ LAYOUT_LIST ]: {},
+				[ LAYOUT_TABLE ]: {},
+			} }
+		/>
+	);
+};

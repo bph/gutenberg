@@ -102,6 +102,7 @@ function CoverEdit( {
 		tagName: TagName = 'div',
 		isUserOverlayColor,
 		sizeSlug,
+		poster,
 	} = attributes;
 
 	const [ featuredImage ] = useEntityProp(
@@ -324,7 +325,7 @@ function CoverEdit( {
 	const [ resizeListener, { height, width } ] = useResizeObserver();
 	const resizableBoxDimensions = useMemo( () => {
 		return {
-			height: minHeightUnit === 'px' ? minHeight : 'auto',
+			height: minHeightUnit === 'px' && minHeight ? minHeight : 'auto',
 			width: 'auto',
 		};
 	}, [ minHeight, minHeightUnit ] );
@@ -446,6 +447,7 @@ function CoverEdit( {
 			currentSettings={ currentSettings }
 			toggleUseFeaturedImage={ toggleUseFeaturedImage }
 			onClearMedia={ onClearMedia }
+			blockEditingMode={ blockEditingMode }
 		/>
 	);
 
@@ -589,6 +591,7 @@ function CoverEdit( {
 						muted
 						loop
 						src={ url }
+						poster={ poster }
 						style={ mediaStyle }
 					/>
 				) }

@@ -759,5 +759,6 @@ export const fields: Field< SpaceObject >[] = [
 			{ value: 'Gas giant', label: 'Gas giant' },
 		],
 		type: 'array',
+		enableGlobalSearch: true,
 	},
 ];

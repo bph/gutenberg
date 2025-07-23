@@ -7,6 +7,12 @@ import { createI18n } from './create-i18n';
  * WordPress dependencies
  */
 import { defaultHooks } from '@wordpress/hooks';
+import {
+	LocaleData,
+	SubscribeCallback,
+	TranslatableText,
+	UnsubscribeCallback,
+} from './types';
 
 const i18n = createI18n( undefined, undefined, defaultHooks );
 
@@ -21,18 +27,12 @@ export default i18n;
  */
 
 /**
- * @typedef {import('./create-i18n').LocaleData} LocaleData
- * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
- * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
- */
-
-/**
  * Returns locale data by domain in a Jed-formatted JSON object shape.
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {string} [domain] Domain for which to get the data.
- * @return {LocaleData} Locale data.
+ * @param { string | undefined } [domain] Domain for which to get the data.
+ * @return { LocaleData } Locale data.
  */
 export const getLocaleData = i18n.getLocaleData.bind( i18n );
 
@@ -42,8 +42,8 @@ export const getLocaleData = i18n.getLocaleData.bind( i18n );
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {LocaleData} [data]   Locale data configuration.
- * @param {string}     [domain] Domain for which configuration applies.
+ * @param {LocaleData }        [data]   Locale data configuration.
+ * @param {string | undefined} [domain] Domain for which configuration applies.
  */
 export const setLocaleData = i18n.setLocaleData.bind( i18n );
 
@@ -53,8 +53,8 @@ export const setLocaleData = i18n.setLocaleData.bind( i18n );
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {LocaleData} [data]   Locale data configuration.
- * @param {string}     [domain] Domain for which configuration applies.
+ * @param {LocaleData}         [data]   Locale data configuration.
+ * @param {string | undefined} [domain] Domain for which configuration applies.
  */
 export const resetLocaleData = i18n.resetLocaleData.bind( i18n );
 
@@ -73,10 +73,10 @@ export const subscribe = i18n.subscribe.bind( i18n );
  *
  * @template {string} Text
  *
- * @param {Text}   text     Text to translate.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @param {Text}               text   Text to translate.
+ * @param {string | undefined} domain Domain to retrieve the translated text.
  *
- * @return {import('./types').TranslatableText< Text >} Translated text.
+ * @return {TranslatableText<Text>} Translated text.
  */
 export const __ = i18n.__.bind( i18n );
 
@@ -87,11 +87,11 @@ export const __ = i18n.__.bind( i18n );
  *
  * @template {string} Text
  *
- * @param {Text}   text     Text to translate.
- * @param {string} context  Context information for the translators.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @param {Text}               text    Text to translate.
+ * @param {string}             context Context information for the translators.
+ * @param {string | undefined} domain  Domain to retrieve the translated text.
  *
- * @return {import('./types').TranslatableText< Text >} Translated context string without pipe.
+ * @return {TranslatableText<Text>} Translated context string without pipe.
  */
 export const _x = i18n._x.bind( i18n );
 
@@ -104,13 +104,13 @@ export const _x = i18n._x.bind( i18n );
  * @template {string} Single
  * @template {string} Plural
  *
- * @param {Single} single   The text to be used if the number is singular.
- * @param {Plural} plural   The text to be used if the number is plural.
- * @param {number} number   The number to compare against to use either the
- *                          singular or plural form.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @param {Single}             single The text to be used if the number is singular.
+ * @param {Plural}             plural The text to be used if the number is plural.
+ * @param {number}             number The number to compare against to use either the
+ *                                    singular or plural form.
+ * @param {string | undefined} domain Domain to retrieve the translated text.
  *
- * @return {import('./types').TranslatableText< Single | Plural >} The translated singular or plural form.
+ * @return {TranslatableText<Single | Plural>} The translated singular or plural form.
  */
 export const _n = i18n._n.bind( i18n );
 
@@ -122,15 +122,16 @@ export const _n = i18n._n.bind( i18n );
  *
  * @template {string} Single
  * @template {string} Plural
+ * @param {Single}             single   The text to be used if the number is singular.
  *
- * @param {Single} single   The text to be used if the number is singular.
- * @param {Plural} plural   The text to be used if the number is plural.
- * @param {number} number   The number to compare against to use either the
- *                          singular or plural form.
- * @param {string} context  Context information for the translators.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @param {Single}             single   The text to be used if the number is singular.
+ * @param {Plural}             plural   The text to be used if the number is plural.
+ * @param {number}             number   The number to compare against to use either the
+ *                                      singular or plural form.
+ * @param {string}             context  Context information for the translators.
+ * @param {string | undefined} [domain] Domain to retrieve the translated text.
  *
- * @return {import('./types').TranslatableText< Single | Plural >} The translated singular or plural form.
+ * @return {TranslatableText<Single | Plural>} The translated singular or plural form.
  */
 export const _nx = i18n._nx.bind( i18n );
 
@@ -149,9 +150,10 @@ export const isRTL = i18n.isRTL.bind( i18n );
 /**
  * Check if there is a translation for a given string (in singular form).
  *
- * @param {string} single    Singular form of the string to look up.
- * @param {string} [context] Context information for the translators.
- * @param {string} [domain]  Domain to retrieve the translated text.
+ * @param {string} single  Singular form of the string to look up.
+ * @param {string} context Context information for the translators.
+ * @param {string} domain  Domain to retrieve the translated text.
+ *
  * @return {boolean} Whether the translation exists or not.
  */
 export const hasTranslation = i18n.hasTranslation.bind( i18n );

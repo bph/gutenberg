@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import type { Middleware, AnyAction } from 'redux';
+
+/**
  * Internal dependencies
  */
 import isGenerator from './is-generator';
@@ -12,11 +17,16 @@ import createRuntime from './runtime';
  * value of the yield assignment. If the control handler returns undefined, the
  * execution is not continued.
  *
- * @param {Record<string, (value: import('redux').AnyAction) => Promise<boolean> | boolean>} controls Object of control handlers.
+ * @param controls Object of control handlers.
  *
- * @return {import('redux').Middleware} Co-routine runtime
+ * @return Co-routine runtime
  */
-export default function createMiddleware( controls = {} ) {
+export default function createMiddleware(
+	controls: Record<
+		string,
+		( value: AnyAction ) => Promise< boolean > | boolean
+	> = {}
+): Middleware {
 	return ( store ) => {
 		const runtime = createRuntime( controls, store.dispatch );
 		return ( next ) => ( action ) => {

@@ -3,32 +3,34 @@
  */
 import { Component } from '@wordpress/element';
 
-export class PluginErrorBoundary extends Component {
-	/**
-	 * @param {Object} props
-	 */
-	constructor( props ) {
+/**
+ * Internal dependencies
+ */
+import type {
+	PluginErrorBoundaryProps as Props,
+	PluginErrorBoundaryState as State,
+} from '../../types';
+
+export class PluginErrorBoundary extends Component< Props, State > {
+	constructor( props: Props ) {
 		super( props );
 		this.state = {
 			hasError: false,
 		};
 	}
 
-	static getDerivedStateFromError() {
+	static getDerivedStateFromError(): State {
 		return { hasError: true };
 	}
 
-	/**
-	 * @param {Error} error Error object passed by React.
-	 */
-	componentDidCatch( error ) {
+	componentDidCatch( error: Error ): void {
 		const { name, onError } = this.props;
 		if ( onError ) {
 			onError( name, error );
 		}
 	}
 
-	render() {
+	render(): React.ReactNode {
 		if ( ! this.state.hasError ) {
 			return this.props.children;
 		}

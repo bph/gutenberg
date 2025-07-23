@@ -379,6 +379,7 @@ async function loadTaxonomyEntities() {
 			baseURLParams: { context: 'edit' },
 			name,
 			label: taxonomy.name,
+			getTitle: ( record ) => record?.name,
 		};
 	} );
 }

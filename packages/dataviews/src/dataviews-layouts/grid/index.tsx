@@ -16,7 +16,7 @@ import {
 	FlexItem,
 	privateApis as componentsPrivateApis,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
 
 /**
@@ -293,51 +293,142 @@ function ViewGrid< Item >( {
 				gridTemplateColumns: `repeat(${ usedPreviewSize }, minmax(0, 1fr))`,
 		  }
 		: {};
+
+	const groupField = view.groupByField
+		? fields.find( ( f ) => f.id === view.groupByField )
+		: null;
+
+	// Group data by groupByField if specified
+	const dataByGroup = groupField
+		? data.reduce( ( groups: Map< string, typeof data >, item ) => {
+				const groupName = groupField.getValue( { item } );
+				if ( ! groups.has( groupName ) ) {
+					groups.set( groupName, [] );
+				}
+				groups.get( groupName )?.push( item );
+				return groups;
+		  }, new Map< string, typeof data >() )
+		: null;
+
 	return (
 		<>
-			{ hasData && (
-				<Grid
-					gap={ 8 }
-					columns={ 2 }
-					alignment="top"
-					className={ clsx( 'dataviews-view-grid', className ) }
-					style={ gridStyle }
-					aria-busy={ isLoading }
-				>
-					{ data.map( ( item ) => {
-						return (
-							<GridItem
-								key={ getItemId( item ) }
-								view={ view }
-								selection={ selection }
-								onChangeSelection={ onChangeSelection }
-								onClickItem={ onClickItem }
-								isItemClickable={ isItemClickable }
-								renderItemLink={ renderItemLink }
-								getItemId={ getItemId }
-								item={ item }
-								actions={ actions }
-								mediaField={ mediaField }
-								titleField={ titleField }
-								descriptionField={ descriptionField }
-								regularFields={ regularFields }
-								badgeFields={ badgeFields }
-								hasBulkActions={ hasBulkActions }
-							/>
-						);
-					} ) }
-				</Grid>
-			) }
-			{ ! hasData && (
-				<div
-					className={ clsx( {
-						'dataviews-loading': isLoading,
-						'dataviews-no-results': ! isLoading,
-					} ) }
-				>
-					<p>{ isLoading ? <Spinner /> : __( 'No results' ) }</p>
-				</div>
-			) }
+			{
+				// Render multiple groups.
+				hasData && groupField && dataByGroup && (
+					<VStack spacing={ 4 }>
+						{ Array.from( dataByGroup.entries() ).map(
+							( [ groupName, groupItems ] ) => (
+								<VStack key={ groupName } spacing={ 2 }>
+									<h3 className="dataviews-view-grid__group-header">
+										{ sprintf(
+											// translators: 1: The label of the field e.g. "Date". 2: The value of the field, e.g.: "May 2022".
+											__( '%1$s: %2$s' ),
+											groupField.label,
+											groupName
+										) }
+									</h3>
+									<Grid
+										gap={ 8 }
+										columns={ 2 }
+										alignment="top"
+										className={ clsx(
+											'dataviews-view-grid',
+											className
+										) }
+										style={ gridStyle }
+										aria-busy={ isLoading }
+									>
+										{ groupItems.map( ( item ) => {
+											return (
+												<GridItem
+													key={ getItemId( item ) }
+													view={ view }
+													selection={ selection }
+													onChangeSelection={
+														onChangeSelection
+													}
+													onClickItem={ onClickItem }
+													isItemClickable={
+														isItemClickable
+													}
+													renderItemLink={
+														renderItemLink
+													}
+													getItemId={ getItemId }
+													item={ item }
+													actions={ actions }
+													mediaField={ mediaField }
+													titleField={ titleField }
+													descriptionField={
+														descriptionField
+													}
+													regularFields={
+														regularFields
+													}
+													badgeFields={ badgeFields }
+													hasBulkActions={
+														hasBulkActions
+													}
+												/>
+											);
+										} ) }
+									</Grid>
+								</VStack>
+							)
+						) }
+					</VStack>
+				)
+			}
+
+			{
+				// Render a single grid with all data.
+				hasData && ! dataByGroup && (
+					<Grid
+						gap={ 8 }
+						columns={ 2 }
+						alignment="top"
+						className={ clsx( 'dataviews-view-grid', className ) }
+						style={ gridStyle }
+						aria-busy={ isLoading }
+					>
+						{ data.map( ( item ) => {
+							return (
+								<GridItem
+									key={ getItemId( item ) }
+									view={ view }
+									selection={ selection }
+									onChangeSelection={ onChangeSelection }
+									onClickItem={ onClickItem }
+									isItemClickable={ isItemClickable }
+									renderItemLink={ renderItemLink }
+									getItemId={ getItemId }
+									item={ item }
+									actions={ actions }
+									mediaField={ mediaField }
+									titleField={ titleField }
+									descriptionField={ descriptionField }
+									regularFields={ regularFields }
+									badgeFields={ badgeFields }
+									hasBulkActions={ hasBulkActions }
+								/>
+							);
+						} ) }
+					</Grid>
+				)
+			}
+			{
+				// Render empty state.
+				! hasData && (
+					<div
+						className={ clsx( {
+							'dataviews-loading': isLoading,
+							'dataviews-no-results': ! isLoading,
+						} ) }
+					>
+						<p>{ isLoading ? <Spinner /> : __( 'No results' ) }</p>
+					</div>
+				)
+			}
 		</>
 	);
 }

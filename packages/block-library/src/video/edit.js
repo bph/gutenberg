@@ -23,7 +23,6 @@ import {
 } from '@wordpress/block-editor';
 import { useRef, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { useInstanceId } from '@wordpress/compose';
 import { useDispatch } from '@wordpress/data';
 import { video as icon } from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
@@ -52,7 +51,6 @@ function VideoEdit( {
 	insertBlocksAfter,
 	onReplace,
 } ) {
-	const instanceId = useInstanceId( VideoEdit );
 	const videoPlayer = useRef();
 	const { id, controls, poster, src, tracks } = attributes;
 	const [ temporaryURL, setTemporaryURL ] = useState( attributes.blob );
@@ -210,7 +208,7 @@ function VideoEdit( {
 							muted: false,
 							playsInline: false,
 							preload: 'metadata',
-							poster: '',
+							poster: undefined,
 						} );
 					} }
 					dropdownMenuProps={ dropdownMenuProps }
@@ -222,7 +220,6 @@ function VideoEdit( {
 					<PosterImage
 						poster={ poster }
 						setAttributes={ setAttributes }
-						instanceId={ instanceId }
 					/>
 				</ToolsPanel>
 			</InspectorControls>

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 5.0.0 (2025-07-23)
+
 ### Bug Fixes
 
 - Fix `filterSortAndPaginate` to handle undefined values for the `is` filter.
@@ -9,6 +11,7 @@
 
 ### Features
 
+- Add support for grouping items by a field in the `grid` layout by introducing a `groupByField` prop in the View object.
 - Add support for free composition in the `DataViews` component by exporting subcomponents: `<DataViews.ViewConfig />`, `<DataViews.Search />`, `<DataViews.Pagination />`, `<DataViews.LayoutSwitcher />`, `<DataViews.Layout />`, `<DataViews.FiltersToggle />`, `<DataViews.Filters />`, `<DataViews.BulkActionToolbar />`.
 - `select`, `text`, `email` controls: add `help` support from the field `description` prop.
 - `text`, `email` Edit control: add `help` support from the field `description` prop.

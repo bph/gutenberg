@@ -98,10 +98,17 @@ export function filterSortAndPaginate< Item >(
 		filteredData = filteredData.filter( ( item ) => {
 			return _fields
 				.filter( ( field ) => field.enableGlobalSearch )
-				.map( ( field ) => {
-					return normalizeSearchInput( field.getValue( { item } ) );
-				} )
-				.some( ( field ) => field.includes( normalizedSearch ) );
+				.some( ( field ) => {
+					const fieldValue = field.getValue( { item } );
+					const values = Array.isArray( fieldValue )
+						? fieldValue
+						: [ fieldValue ];
+					return values.some( ( value ) =>
+						normalizeSearchInput( String( value ) ).includes(
+							normalizedSearch
+						)
+					);
+				} );
 		} );
 	}
 
@@ -375,16 +382,34 @@ export function filterSortAndPaginate< Item >(
 	}
 
 	// Handle sorting.
-	if ( view.sort ) {
-		const fieldId = view.sort.field;
-		const fieldToSort = _fields.find( ( field ) => {
-			return field.id === fieldId;
+	const sortByField = view.sort?.field
+		? _fields.find( ( field ) => {
+				return field.id === view.sort?.field;
+		  } )
+		: null;
+	const groupByField = view.groupByField
+		? _fields.find( ( field ) => {
+				return field.id === view.groupByField;
+		  } )
+		: null;
+	if ( sortByField || groupByField ) {
+		filteredData.sort( ( a, b ) => {
+			if ( groupByField ) {
+				const groupCompare = groupByField.sort( a, b, 'asc' );
+
+				// If items are in different groups, return the group comparison result.
+				// Otherwise, fall back to sorting by the sort field.
+				if ( groupCompare !== 0 ) {
+					return groupCompare;
+				}
+			}
+
+			if ( sortByField ) {
+				return sortByField.sort( a, b, view.sort?.direction ?? 'desc' );
+			}
+
+			return 0;
 		} );
-		if ( fieldToSort ) {
-			filteredData.sort( ( a, b ) => {
-				return fieldToSort.sort( a, b, view.sort?.direction ?? 'desc' );
-			} );
-		}
 	}
 
 	// Handle pagination.

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.27.0 (2025-07-23)
+
 ### Bug Fixes
 
 -   Preserve `media` attribute on intial style sheets after client-side navigation. ([70668](https://github.com/WordPress/gutenberg/pull/70668))

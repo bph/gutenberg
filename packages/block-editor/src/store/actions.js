@@ -1255,7 +1255,14 @@ export const mergeBlocks =
 		}
 
 		if ( ! blockAType.merge ) {
-			dispatch.selectBlock( blockA.clientId );
+			if ( isUnmodifiedBlock( blockB, 'content' ) ) {
+				dispatch.removeBlock(
+					clientIdB,
+					select.isBlockSelected( clientIdB )
+				);
+			} else {
+				dispatch.selectBlock( blockA.clientId );
+			}
 			return;
 		}
 

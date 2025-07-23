@@ -11,6 +11,11 @@ import check from '../../library/check';
 import * as icons from '../../';
 import keywords from './keywords';
 
+/**
+ * External dependencies
+ */
+import type { ReactElement } from 'react';
+
 const {
 	Icon: _Icon,
 
@@ -29,7 +34,7 @@ const meta = {
 };
 export default meta;
 
-export const Default = () => {
+export const Default = (): ReactElement => {
 	return (
 		<>
 			<div>
@@ -50,8 +55,8 @@ export const Default = () => {
 	);
 };
 
-const LibraryExample = () => {
-	const [ filter, setFilter ] = useState( '' );
+const LibraryExample = (): ReactElement => {
+	const [ filter, setFilter ] = useState< string >( '' );
 	const filteredIcons = filter.length
 		? Object.fromEntries(
 				Object.entries( availableIcons ).filter( ( [ name ] ) => {
@@ -61,7 +66,7 @@ const LibraryExample = () => {
 					return (
 						normalizedName.includes( normalizedFilter ) ||
 						// @ts-expect-error - Not worth the effort to cast `name`
-						keywords[ name ]?.some( ( keyword ) =>
+						keywords[ name ]?.some( ( keyword: string ) =>
 							keyword.toLowerCase().includes( normalizedFilter )
 						)
 					);
@@ -108,4 +113,4 @@ const LibraryExample = () => {
 	);
 };
 
-export const Library = () => <LibraryExample />;
+export const Library = (): ReactElement => <LibraryExample />;

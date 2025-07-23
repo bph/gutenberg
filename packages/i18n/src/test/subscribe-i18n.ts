@@ -13,7 +13,7 @@ describe( 'i18n updates', () => {
 		const hooks = createHooks();
 		const i18n = createI18n( undefined, undefined, hooks );
 
-		const doneTranslations = [];
+		const doneTranslations: string[] = [];
 
 		function doTranslation() {
 			doneTranslations.push( i18n.__( 'original' ) );
@@ -30,9 +30,9 @@ describe( 'i18n updates', () => {
 		} );
 
 		// Add a filter and then remove it.
-		const filter = ( text ) => '[' + text + ']';
+		const filter = ( text: string ) => `[${ text }]`;
 		hooks.addFilter( 'i18n.gettext', 'test', filter );
-		hooks.removeFilter( 'i18n.gettext', 'test', filter );
+		hooks.removeFilter( 'i18n.gettext', 'test' );
 
 		expect( doneTranslations ).toEqual( [
 			'original', // No translations before setLocaleData.
