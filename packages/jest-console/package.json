@@ -27,11 +27,11 @@
 	"files": [
 		"build",
 		"build-module",
-		"types"
+		"build-types"
 	],
 	"main": "build/index.js",
 	"module": "build-module/index.js",
-	"types": "types",
+	"types": "build-types",
 	"dependencies": {
 		"@babel/runtime": "7.25.7",
 		"jest-matcher-utils": "^29.6.2"

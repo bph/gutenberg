@@ -1,4 +1,4 @@
-const supportedMatchers = {
+const supportedMatchers: Record< string, string > = {
 	error: 'toHaveErrored',
 	info: 'toHaveInformed',
 	log: 'toHaveLogged',

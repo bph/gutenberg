@@ -11,7 +11,7 @@ declare namespace jest {
 		/**
 		 * Ensure that `console.error` function was called with specific arguments.
 		 */
-		toHaveErroredWith( ...args: any[] ): R;
+		toHaveErroredWith( ...args: unknown[] ): R;
 
 		/**
 		 * Ensure that `console.info` function was called.
@@ -21,7 +21,7 @@ declare namespace jest {
 		/**
 		 * Ensure that `console.info` function was called with specific arguments.
 		 */
-		toHaveInformedWith( ...args: any[] ): R;
+		toHaveInformedWith( ...args: unknown[] ): R;
 
 		/**
 		 * Ensure that `console.log` function was called.
@@ -31,7 +31,7 @@ declare namespace jest {
 		/**
 		 * Ensure that `console.log` function was called with specific arguments.
 		 */
-		toHaveLoggedWith( ...args: any[] ): R;
+		toHaveLoggedWith( ...args: unknown[] ): R;
 
 		/**
 		 * Ensure that `console.warn` function was called.
@@ -41,6 +41,6 @@ declare namespace jest {
 		/**
 		 * Ensure that `console.warn` function was called with specific arguments.
 		 */
-		toHaveWarnedWith( ...args: any[] ): R;
+		toHaveWarnedWith( ...args: unknown[] ): R;
 	}
 }

@@ -4,15 +4,16 @@
 import 'requestidlecallback';
 
 /**
- * @typedef {( timeOrDeadline: IdleDeadline | number ) => void} Callback
+ * Internal dependencies
  */
+import type { RequestIdleCallbackCallback } from './types';
 
 /**
- * @return {(callback: Callback) => void} RequestIdleCallback
+ * @return A function that schedules a callback when the browser is idle or via setTimeout on the server.
  */
 export function createRequestIdleCallback() {
 	if ( typeof window === 'undefined' ) {
-		return ( callback ) => {
+		return ( callback: RequestIdleCallbackCallback ) => {
 			setTimeout( () => callback( Date.now() ), 0 );
 		};
 	}

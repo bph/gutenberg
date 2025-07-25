@@ -7,8 +7,24 @@ import { matcherHint, printExpected, printReceived } from 'jest-matcher-utils';
  * Internal dependencies
  */
 import supportedMatchers from './supported-matchers';
+import type { Mock } from 'jest-mock';
+import type {
+	ExtendedMock,
+	MatcherFunction,
+	MatcherResult,
+	MatcherWithArgsFunction,
+} from './types';
 
-const createErrorMessage = ( spyInfo ) => {
+interface SpyInfo {
+	spy: Mock;
+	pass: boolean;
+	calls: unknown[][];
+	matcherName: string;
+	methodName: string;
+	expected?: unknown[];
+}
+
+const createErrorMessage = ( spyInfo: SpyInfo ) => {
 	const { spy, pass, calls, matcherName, methodName, expected } = spyInfo;
 	const hint = pass ? `.not${ matcherName }` : matcherName;
 	const message = pass
@@ -28,7 +44,12 @@ const createErrorMessage = ( spyInfo ) => {
 		'See https://www.npmjs.com/package/@wordpress/jest-console for details.';
 };
 
-const createSpyInfo = ( spy, matcherName, methodName, expected ) => {
+const createSpyInfo = (
+	spy: Mock,
+	matcherName: string,
+	methodName: string,
+	expected?: unknown[]
+) => {
 	const calls = spy.mock.calls;
 
 	const pass = expected
@@ -51,27 +72,35 @@ const createSpyInfo = ( spy, matcherName, methodName, expected ) => {
 };
 
 const createToHaveBeenCalledMatcher =
-	( matcherName, methodName ) => ( received ) => {
-		const spy = received[ methodName ];
+	( matcherName: string, methodName: string ) =>
+	( received: Record< string, Mock > ): MatcherResult => {
+		const spy = received[ methodName ] as ExtendedMock;
 		const spyInfo = createSpyInfo( spy, matcherName, methodName );
-
 		spy.assertionsNumber += 1;
-
 		return spyInfo;
 	};
 
-const createToHaveBeenCalledWith = ( matcherName, methodName ) =>
-	function ( received, ...expected ) {
-		const spy = received[ methodName ];
+const createToHaveBeenCalledWith = (
+	matcherName: string,
+	methodName: string
+) =>
+	function (
+		received: Record< string, Mock >,
+		...expected: unknown[]
+	): MatcherResult {
+		const spy = received[ methodName ] as ExtendedMock;
 		const spyInfo = createSpyInfo( spy, matcherName, methodName, expected );
-
 		spy.assertionsNumber += 1;
-
 		return spyInfo;
 	};
+
+type MatchersObject = Record<
+	string,
+	MatcherFunction | MatcherWithArgsFunction
+>;
 
 expect.extend(
-	Object.entries( supportedMatchers ).reduce(
+	Object.entries( supportedMatchers ).reduce< MatchersObject >(
 		( result, [ methodName, matcherName ] ) => {
 			const matcherNameWith = `${ matcherName }With`;
 

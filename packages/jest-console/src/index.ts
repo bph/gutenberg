@@ -3,18 +3,18 @@
  */
 import './matchers';
 import supportedMatchers from './supported-matchers';
+import type { ExtendedMock } from './types';
 
 /**
  * Sets spy on the console object's method to make it possible to fail test when method called without assertion.
  *
- * @param {Array}  args
- * @param {string} args."0" Name of console method.
- * @param {string} args."1" Name of Jest matcher.
+ * @param args
  */
-const setConsoleMethodSpy = ( [ methodName, matcherName ] ) => {
+const setConsoleMethodSpy = ( args: [ string, string ] ) => {
+	const [ methodName, matcherName ] = args;
 	const spy = jest
-		.spyOn( console, methodName )
-		.mockName( `console.${ methodName }` );
+		.spyOn( console, methodName as 'error' | 'info' | 'log' | 'warn' )
+		.mockName( `console.${ methodName }` ) as ExtendedMock;
 
 	/**
 	 * Resets the spy to its initial state.

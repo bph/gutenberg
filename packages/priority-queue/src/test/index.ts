@@ -2,7 +2,12 @@
  * Internal dependencies
  */
 import { createQueue } from '../';
-import requestIdleCallback from '../request-idle-callback';
+import _requestIdleCallback from '../request-idle-callback';
+
+const requestIdleCallback =
+	_requestIdleCallback as typeof _requestIdleCallback & {
+		tick: ( deadline?: Partial< IdleDeadline > | number ) => void;
+	};
 
 jest.mock( '../request-idle-callback', () => {
 	const emitter = new ( jest.requireActual( 'events' ).EventEmitter )();
@@ -17,7 +22,7 @@ jest.mock( '../request-idle-callback', () => {
 } );
 
 describe( 'createQueue', () => {
-	let queue;
+	let queue: ReturnType< typeof createQueue >;
 	beforeEach( () => {
 		queue = createQueue();
 	} );

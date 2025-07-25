@@ -610,9 +610,14 @@ export const isEditedPostAutosaveable = createRegistrySelector(
 		}
 
 		const postType = getCurrentPostType( state );
+		const postTypeObject = select( coreStore ).getPostType( postType );
 
 		// Currently template autosaving is not supported.
-		if ( postType === 'wp_template' ) {
+		// @todo: Remove hardcode check for template after bumping required WP version to 6.8.
+		if (
+			postType === 'wp_template' ||
+			! postTypeObject?.supports?.autosave
+		) {
 			return false;
 		}
 

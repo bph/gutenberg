@@ -80,6 +80,7 @@ export { default as currencyDollar } from './library/currency-dollar';
 export { default as currencyEuro } from './library/currency-euro';
 export { default as currencyPound } from './library/currency-pound';
 export { default as customPostType } from './library/custom-post-type';
+export { default as dashboard } from './library/dashboard';
 export { default as desktop } from './library/desktop';
 export { default as details } from './library/details';
 export { default as drafts } from './library/drafts';
