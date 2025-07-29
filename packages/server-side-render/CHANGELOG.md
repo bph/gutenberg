@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New Features
+
+-   Introduce a new `useServerSideRender` hook ([70543](https://github.com/WordPress/gutenberg/pull/70543)).
+
 ## 6.3.0 (2025-07-23)
 
 ## 6.2.0 (2025-06-25)

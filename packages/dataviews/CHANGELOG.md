@@ -6,6 +6,10 @@
 
 - Fix `filterSortAndPaginate` to handle searching fields that have a type of `array` ([#70785](https://github.com/WordPress/gutenberg/pull/70785)).
 
+### Features
+
+- Support Ctrl + Click / Cmd + Click for multiselecting rows in the Table layout ([#70891](https://github.com/WordPress/gutenberg/pull/70891)).
+
 ## 5.0.0 (2025-07-23)
 
 ### Bug Fixes
@@ -33,7 +37,8 @@
 - Add `label-position-side` classes to labels in the form field layouts. Ensure that labels in the panel view do not align center, and that all side labels are center aligned.
 - Allow readonly fields in DataForm when `readOnly` is set to `true`.
 - Adjust the padding when the component is placed inside a `Card`.
-- Introduce `perPageSizes` to control the available sizes of the items per page
+- Introduce `perPageSizes` to control the available sizes of the items per page.
+- Align media styles in table view with list view for consistency.
 
 ### Breaking Changes
 

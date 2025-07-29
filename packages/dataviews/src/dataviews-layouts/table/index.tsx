@@ -16,6 +16,7 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
+import { isAppleOS } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
@@ -147,19 +148,34 @@ function TableRow< Item >( {
 			onTouchStart={ () => {
 				isTouchDeviceRef.current = true;
 			} }
-			onClick={ () => {
+			onClick={ ( event ) => {
 				if ( ! hasPossibleBulkAction ) {
 					return;
 				}
+
 				if (
 					! isTouchDeviceRef.current &&
 					document.getSelection()?.type !== 'Range'
 				) {
-					onChangeSelection(
-						selection.includes( id )
-							? selection.filter( ( itemId ) => id !== itemId )
-							: [ id ]
-					);
+					if ( isAppleOS() ? event.metaKey : event.ctrlKey ) {
+						// Handle non-consecutive selection.
+						onChangeSelection(
+							selection.includes( id )
+								? selection.filter(
+										( itemId ) => id !== itemId
+								  )
+								: [ ...selection, id ]
+						);
+					} else {
+						// Handle single selection
+						onChangeSelection(
+							selection.includes( id )
+								? selection.filter(
+										( itemId ) => id !== itemId
+								  )
+								: [ id ]
+						);
+					}
 				}
 			} }
 		>

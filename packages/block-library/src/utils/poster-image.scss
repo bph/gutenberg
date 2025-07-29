@@ -1,0 +1,75 @@
+.block-library-poster-image__container {
+	position: relative;
+
+	&:hover,
+	&:focus,
+	&:focus-within {
+		.block-library-poster-image__actions {
+			opacity: 1;
+		}
+	}
+
+	.block-library-poster-image__actions.block-library-poster-image__actions-select {
+		opacity: 1;
+		margin-top: $grid-unit-20;
+	}
+}
+
+.block-library-poster-image__toggle,
+.block-library-poster-image__preview {
+	width: 100%;
+	padding: 0;
+	overflow: hidden; // Ensure the focus style properly encapsulates the image.
+	outline-offset: -#{$border-width};
+	min-height: $grid-unit-50;
+
+	display: flex;
+	justify-content: center;
+}
+
+.block-library-poster-image__preview {
+	height: auto !important;
+	outline: $border-width solid rgba($black, 0.1);
+
+	.block-library-poster-image__preview-image {
+		object-fit: cover;
+		width: 100%;
+		object-position: 50% 50%;
+		aspect-ratio: 2/1;
+	}
+}
+
+.block-library-poster-image__toggle {
+	box-shadow: inset 0 0 0 $border-width $gray-400;
+
+	&:focus:not(:disabled) {
+		// Allow smooth transition between focused and unfocused box-shadow states.
+		box-shadow:
+			0 0 0 currentColor inset,
+			0 0 0 var(--wp-admin-border-width-focus)
+			var(--wp-admin-theme-color);
+	}
+}
+
+.block-library-poster-image__actions {
+	&:not(.block-library-poster-image__actions-select) {
+		bottom: 0;
+		opacity: 0; // Use opacity instead of visibility so that the buttons remain in the tab order.
+		padding: $grid-unit-10;
+		position: absolute;
+
+		@media not ( prefers-reduced-motion ) {
+			transition: opacity 50ms ease-out;
+		}
+
+		.block-library-poster-image__action {
+			backdrop-filter: blur(16px) saturate(180%);
+			background: rgba(255, 255, 255, 0.75);
+		}
+	}
+
+	.block-library-poster-image__action {
+		flex-grow: 1;
+		justify-content: center;
+	}
+}

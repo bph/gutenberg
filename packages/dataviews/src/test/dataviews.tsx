@@ -285,6 +285,71 @@ describe( 'DataViews component', () => {
 			await user.click( titleField );
 			expect( onClickItemCallback ).toHaveBeenCalledWith( data[ 0 ] );
 		} );
+
+		it( 'accepts click for single selection', async () => {
+			render(
+				<DataViewWrapper
+					view={ {
+						...DEFAULT_VIEW,
+						fields: [ 'author' ],
+						titleField: 'title',
+					} }
+					// A bulk action is required for the dataview to be multi-selectable.
+					actions={ actions }
+				/>
+			);
+			const firstItemElement = screen.getByText( data[ 0 ].title );
+			const thirdItemElement = screen.getByText( data[ 2 ].title );
+			const user = userEvent.setup();
+			await user.click( firstItemElement );
+
+			// First item should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			await user.click( thirdItemElement );
+
+			// Third item should be selected. First item was deselected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 2 ].title } )
+			).toBeChecked();
+		} );
+
+		it( 'accepts ctrl/cmd key and click for non-consecutive multi-selection', async () => {
+			render(
+				<DataViewWrapper
+					view={ {
+						...DEFAULT_VIEW,
+						fields: [ 'author' ],
+						titleField: 'title',
+					} }
+					// A bulk action is required for the dataview to be multi-selectable.
+					actions={ actions }
+				/>
+			);
+			const firstItemElement = screen.getByText( data[ 0 ].title );
+			const thirdItemElement = screen.getByText( data[ 2 ].title );
+			const user = userEvent.setup();
+			await user.click( firstItemElement );
+
+			// First item should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			await user.keyboard( '{Control>}' );
+			await user.click( thirdItemElement );
+
+			// Both items should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 2 ].title } )
+			).toBeChecked();
+
+			// Don't keep the modifier pressed down, that's just mean.
+			await user.keyboard( '{/Control}' );
+		} );
 	} );
 
 	describe( 'in grid view', () => {
@@ -362,6 +427,70 @@ describe( 'DataViews component', () => {
 			const user = userEvent.setup();
 			await user.click( imageField );
 			expect( mediaClickItemCallback ).toHaveBeenCalledWith( data[ 0 ] );
+		} );
+
+		it( 'accepts click for single selection', async () => {
+			render(
+				<DataViewWrapper
+					view={ {
+						...DEFAULT_VIEW,
+						fields: [ 'author' ],
+						titleField: 'title',
+					} }
+					// A bulk action is required for the dataview to be multi-selectable.
+					actions={ actions }
+				/>
+			);
+			const firstItemElement = screen.getByText( data[ 0 ].title );
+			const thirdItemElement = screen.getByText( data[ 2 ].title );
+			const user = userEvent.setup();
+			await user.click( firstItemElement );
+
+			// First item should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			await user.click( thirdItemElement );
+
+			// Third item should be selected. First item was deselected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 2 ].title } )
+			).toBeChecked();
+		} );
+
+		it( 'accepts ctrl/cmd key and click for non-consecutive multi-selection', async () => {
+			render(
+				<DataViewWrapper
+					view={ {
+						...DEFAULT_VIEW,
+						fields: [ 'author' ],
+						titleField: 'title',
+					} }
+					// A bulk action is required for the dataview to be multi-selectable.
+					actions={ actions }
+				/>
+			);
+			const firstItemElement = screen.getByText( data[ 0 ].title );
+			const thirdItemElement = screen.getByText( data[ 2 ].title );
+			const user = userEvent.setup();
+			await user.click( firstItemElement );
+
+			// First item should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			await user.keyboard( '{Control>}' );
+			await user.click( thirdItemElement );
+
+			// Both items should be selected.
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 0 ].title } )
+			).toBeChecked();
+			expect(
+				screen.getByRole( 'checkbox', { name: data[ 2 ].title } )
+			).toBeChecked();
+
+			await user.keyboard( '{/Control}' );
 		} );
 	} );
 

@@ -18,6 +18,7 @@ import {
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
+import { isAppleOS } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
@@ -117,7 +118,7 @@ function GridItem< Item >( {
 				'is-selected': hasBulkAction && isSelected,
 			} ) }
 			onClickCapture={ ( event ) => {
-				if ( event.ctrlKey || event.metaKey ) {
+				if ( isAppleOS() ? event.metaKey : event.ctrlKey ) {
 					event.stopPropagation();
 					event.preventDefault();
 					if ( ! hasBulkAction ) {

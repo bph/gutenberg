@@ -624,7 +624,7 @@ Display the publish date for an entry such as a post or page. ([Source](https://
 -	**Name:** core/post-date
 -	**Category:** theme
 -	**Supports:** color (background, gradients, link, text), interactivity (clientNavigation), spacing (margin, padding), typography (fontSize, lineHeight), ~~html~~
--	**Attributes:** displayType, format, isLink, textAlign
+-	**Attributes:** datetime, format, isLink, textAlign
 
 ## Excerpt
 

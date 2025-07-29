@@ -138,6 +138,7 @@ export const rootEntitiesConfig = [
 		name: 'user',
 		kind: 'root',
 		baseURL: '/wp/v2/users',
+		getTitle: ( record ) => record?.name || record?.slug,
 		baseURLParams: { context: 'edit' },
 		plural: 'users',
 	},
