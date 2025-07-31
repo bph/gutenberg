@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { store as coreDataStore } from '@wordpress/core-data';
 
 /**
@@ -41,12 +42,12 @@ function getPostDataFields( select, context ) {
 		);
 		dataFields = {
 			date: {
-				label: 'Post Date',
+				label: __( 'Post Date' ),
 				value: entityDataValues?.date,
 				type: 'string',
 			},
 			modified: {
-				label: 'Post Modified Date',
+				label: __( 'Post Modified Date' ),
 				value: entityDataValues?.modified,
 				type: 'string',
 			},

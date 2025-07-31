@@ -1,13 +1,22 @@
 /**
  * WordPress dependencies
  */
-import { useMemo, useState } from '@wordpress/element';
+import { useCallback, useMemo, useState } from '@wordpress/element';
+import {
+	Button,
+	__experimentalVStack as VStack,
+	privateApis,
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import DataForm from '../index';
-import type { Field, Form } from '../../../types';
+import { isItemValid } from '../../../validation';
+import type { Field, Form, DataFormControlProps } from '../../../types';
+import { unlock } from '../../../lock-unlock';
+
+const { ValidatedTextControl } = unlock( privateApis );
 
 type SamplePost = {
 	title: string;
@@ -257,5 +266,172 @@ export const CombinedFields = {
 	},
 	args: {
 		type: 'panel',
+	},
+};
+
+function CustomEditControl< Item >( {
+	data,
+	field,
+	onChange,
+	hideLabelFromVision,
+}: DataFormControlProps< Item > ) {
+	const { id, label, placeholder, description } = field;
+	const value = field.getValue( { item: data } );
+
+	const onChangeControl = useCallback(
+		( newValue: string ) =>
+			onChange( {
+				[ id ]: newValue,
+			} ),
+		[ id, onChange ]
+	);
+
+	return (
+		<ValidatedTextControl
+			required={ !! field.isValid?.required }
+			label={ label }
+			placeholder={ placeholder }
+			value={ value ?? '' }
+			help={ description }
+			onChange={ onChangeControl }
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
+			hideLabelFromVision={ hideLabelFromVision }
+		/>
+	);
+}
+
+const DataFormValidationComponent = ( { required }: { required: boolean } ) => {
+	type ValidatedItem = {
+		text: string;
+		email: string;
+		integer: number;
+		boolean: boolean;
+		customEdit: string;
+		customValidation: string;
+	};
+
+	const [ post, setPost ] = useState< ValidatedItem >( {
+		text: 'Hello, World!',
+		email: 'hi@example.com',
+		integer: 2,
+		boolean: true,
+		customEdit: 'custom control',
+		customValidation: 'potato',
+	} );
+
+	const _fields: Field< ValidatedItem >[] = [
+		{
+			id: 'text',
+			type: 'text' as const,
+			label: 'Text',
+			isValid: {
+				required,
+			},
+		},
+		{
+			id: 'email',
+			type: 'email' as const,
+			label: 'e-mail',
+			isValid: {
+				required,
+			},
+		},
+		{
+			id: 'integer',
+			type: 'integer' as const,
+			label: 'Integer',
+			isValid: {
+				required,
+			},
+		},
+		{
+			id: 'boolean',
+			type: 'boolean' as const,
+			label: 'Boolean',
+			isValid: {
+				required,
+			},
+		},
+		{
+			id: 'customEdit',
+			label: 'Custom Control',
+			Edit: CustomEditControl,
+			isValid: {
+				required,
+			},
+		},
+		{
+			id: 'customValidation',
+			type: 'text',
+			label: 'Custom validation',
+			isValid: {
+				required,
+				custom: ( value: ValidatedItem ) => {
+					if (
+						! [ 'tomato', 'potato' ].includes(
+							value.customValidation
+						)
+					) {
+						return 'Value must be one of "tomato", "potato"';
+					}
+
+					return null;
+				},
+			},
+		},
+	];
+
+	const form = {
+		fields: [
+			'text',
+			'email',
+			'integer',
+			'boolean',
+			'customEdit',
+			'customValidation',
+		],
+	};
+
+	const canSave = isItemValid( post, _fields, form );
+
+	return (
+		<form>
+			<VStack alignment="left">
+				<DataForm< ValidatedItem >
+					data={ post }
+					fields={ _fields }
+					form={ form }
+					onChange={ ( edits ) =>
+						setPost( ( prev ) => ( {
+							...prev,
+							...edits,
+						} ) )
+					}
+				/>
+				<Button
+					__next40pxDefaultSize
+					accessibleWhenDisabled
+					disabled={ ! canSave }
+					variant="primary"
+				>
+					Submit
+				</Button>
+			</VStack>
+		</form>
+	);
+};
+
+export const Validation = {
+	title: 'DataForm/Validation',
+	render: DataFormValidationComponent,
+	argTypes: {
+		required: {
+			control: { type: 'boolean' },
+			description: 'Whether or not the fields are required.',
+		},
+	},
+	args: {
+		required: true,
 	},
 };

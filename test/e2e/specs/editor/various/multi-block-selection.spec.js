@@ -291,9 +291,6 @@ test.describe( 'Multi-block selection (@firefox, @webkit)', () => {
 		editor,
 		pageUtils,
 	} ) => {
-		// To do: run with iframe.
-		await editor.switchToLegacyCanvas();
-
 		await editor.insertBlock( {
 			name: 'core/paragraph',
 			attributes: { content: 'test' },
@@ -301,10 +298,8 @@ test.describe( 'Multi-block selection (@firefox, @webkit)', () => {
 
 		await editor.saveDraft();
 		await page.reload();
-		// To do: run with iframe.
-		await editor.switchToLegacyCanvas();
 
-		await page
+		await editor.canvas
 			.getByRole( 'document', { name: 'Block: Paragraph' } )
 			.click( { modifiers: [ 'Shift' ] } );
 		await pageUtils.pressKeys( 'primary+a' );

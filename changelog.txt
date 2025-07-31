@@ -1,6 +1,6 @@
 == Changelog ==
 
-= 21.3.0-rc.1 =
+= 21.3.0 =
 
 ## Changelog
 
@@ -60,6 +60,7 @@
 - Block Editor Components: Add missing style resets for fieldset elements. ([70685](https://github.com/WordPress/gutenberg/pull/70685))
 - Inserter: Fix focus style for disabled items. ([70691](https://github.com/WordPress/gutenberg/pull/70691))
 - Inserter: Restore styling for disabled blocks. ([70663](https://github.com/WordPress/gutenberg/pull/70663))
+- Block Editor: Fix link interception in the iframed editor. (https://github.com/WordPress/gutenberg/pull/70931)
 
 #### Global Styles
 - Core/File: Reduce specificity of pseudo-selector styles for better override support via theme.json. ([70358](https://github.com/WordPress/gutenberg/pull/70358))
@@ -162,6 +163,8 @@
 The following contributors merged PRs in this release:
 
 @Adi-ty @aduth @andrewserong @carolinan @chihsuan @ciampo @DAreRodz @dhruvikpatel18 @dmsnell @EliezerSPP @ellatrix @getdave @gigitux @im3dabasia @Infinite-Null @jeryj @jsnajdr @kellychoffman @Mamaduka @manzoorwanijk @mukeshpanchal27 @n2erjo00 @ndiego @oandregal @prasadkarmalkar @priethor @shimotmk @shrivastavanolo @SirLouen @t-hamano @talldan @vipul0425 @yogeshbhutkar @youknowriad
+
+
 
 
 = 21.2.0 =

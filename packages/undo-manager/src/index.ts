@@ -3,24 +3,49 @@
  */
 import isShallowEqual from '@wordpress/is-shallow-equal';
 
-/** @typedef {import('./types').HistoryRecord}  HistoryRecord */
-/** @typedef {import('./types').HistoryChange}  HistoryChange */
-/** @typedef {import('./types').HistoryChanges} HistoryChanges */
-/** @typedef {import('./types').UndoManager} UndoManager */
+/**
+ * Internal dependencies
+ */
+import type {
+	HistoryChange as _HistoryChange,
+	HistoryChanges as _HistoryChanges,
+	HistoryRecord as _HistoryRecord,
+	UndoManager as _UndoManager,
+} from './types';
+
+/**
+ * Represents a single change in history.
+ */
+export type HistoryChange< T = unknown > = _HistoryChange< T >;
+
+/**
+ * Represents changes for a single item.
+ */
+export type HistoryChanges< T = unknown > = _HistoryChanges< T >;
+
+/**
+ * Represents a record of history changes.
+ */
+export type HistoryRecord< T = unknown > = _HistoryRecord< T >;
+
+/**
+ * The undo manager interface.
+ */
+export type UndoManager< T = unknown > = _UndoManager< T >;
 
 /**
  * Merge changes for a single item into a record of changes.
  *
- * @param {Record< string, HistoryChange >} changes1 Previous changes
- * @param {Record< string, HistoryChange >} changes2 NextChanges
+ * @param changes1 Previous changes
+ * @param changes2 Next changes
  *
- * @return {Record< string, HistoryChange >} Merged changes
+ * @return Merged changes
  */
-function mergeHistoryChanges( changes1, changes2 ) {
-	/**
-	 * @type {Record< string, HistoryChange >}
-	 */
-	const newChanges = { ...changes1 };
+function mergeHistoryChanges< T >(
+	changes1: Record< string, HistoryChange< T > >,
+	changes2: Record< string, HistoryChange< T > >
+): Record< string, HistoryChange< T > > {
+	const newChanges: Record< string, HistoryChange< T > > = { ...changes1 };
 	Object.entries( changes2 ).forEach( ( [ key, value ] ) => {
 		if ( newChanges[ key ] ) {
 			newChanges[ key ] = { ...newChanges[ key ], to: value.to };
@@ -35,10 +60,13 @@ function mergeHistoryChanges( changes1, changes2 ) {
 /**
  * Adds history changes for a single item into a record of changes.
  *
- * @param {HistoryRecord}  record  The record to merge into.
- * @param {HistoryChanges} changes The changes to merge.
+ * @param record  The record to merge into.
+ * @param changes The changes to merge.
  */
-const addHistoryChangesIntoRecord = ( record, changes ) => {
+const addHistoryChangesIntoRecord = < T >(
+	record: HistoryRecord< T >,
+	changes: HistoryChanges< T >
+): HistoryRecord< T > => {
 	const existingChangesIndex = record?.findIndex(
 		( { id: recordIdentifier } ) => {
 			return typeof recordIdentifier === 'string'
@@ -66,28 +94,19 @@ const addHistoryChangesIntoRecord = ( record, changes ) => {
 /**
  * Creates an undo manager.
  *
- * @return {UndoManager} Undo manager.
+ * @return Undo manager.
  */
-export function createUndoManager() {
-	/**
-	 * @type {HistoryRecord[]}
-	 */
-	let history = [];
-	/**
-	 * @type {HistoryRecord}
-	 */
-	let stagedRecord = [];
-	/**
-	 * @type {number}
-	 */
+export function createUndoManager< T = unknown >(): UndoManager< T > {
+	let history: HistoryRecord< T >[] = [];
+	let stagedRecord: HistoryRecord< T > = [];
 	let offset = 0;
 
-	const dropPendingRedos = () => {
+	const dropPendingRedos = (): void => {
 		history = history.slice( 0, offset || undefined );
 		offset = 0;
 	};
 
-	const appendStagedRecordToLatestHistoryRecord = () => {
+	const appendStagedRecordToLatestHistoryRecord = (): void => {
 		const index = history.length === 0 ? 0 : history.length - 1;
 		let latestRecord = history[ index ] ?? [];
 		stagedRecord.forEach( ( changes ) => {
@@ -102,10 +121,10 @@ export function createUndoManager() {
 	 * A record is considered empty if it the changes keep the same values.
 	 * Also updates to function values are ignored.
 	 *
-	 * @param {HistoryRecord} record
-	 * @return {boolean} Whether the record is empty.
+	 * @param record The record to check.
+	 * @return Whether the record is empty.
 	 */
-	const isRecordEmpty = ( record ) => {
+	const isRecordEmpty = ( record: HistoryRecord< T > ): boolean => {
 		const filteredRecord = record.filter( ( { changes } ) => {
 			return Object.values( changes ).some(
 				( { from, to } ) =>
@@ -118,13 +137,7 @@ export function createUndoManager() {
 	};
 
 	return {
-		/**
-		 * Record changes into the history.
-		 *
-		 * @param {HistoryRecord=} record   A record of changes to record.
-		 * @param {boolean}        isStaged Whether to immediately create an undo point or not.
-		 */
-		addRecord( record, isStaged = false ) {
+		addRecord( record?: HistoryRecord< T >, isStaged = false ): void {
 			const isEmpty = ! record || isRecordEmpty( record );
 			if ( isStaged ) {
 				if ( isEmpty ) {
@@ -148,7 +161,7 @@ export function createUndoManager() {
 			}
 		},
 
-		undo() {
+		undo(): HistoryRecord< T > | undefined {
 			if ( stagedRecord.length ) {
 				dropPendingRedos();
 				appendStagedRecordToLatestHistoryRecord();
@@ -161,7 +174,7 @@ export function createUndoManager() {
 			return undoRecord;
 		},
 
-		redo() {
+		redo(): HistoryRecord< T > | undefined {
 			const redoRecord = history[ history.length + offset ];
 			if ( ! redoRecord ) {
 				return;
@@ -170,11 +183,11 @@ export function createUndoManager() {
 			return redoRecord;
 		},
 
-		hasUndo() {
+		hasUndo(): boolean {
 			return !! history[ history.length - 1 + offset ];
 		},
 
-		hasRedo() {
+		hasRedo(): boolean {
 			return !! history[ history.length + offset ];
 		},
 	};

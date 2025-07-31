@@ -33,7 +33,7 @@ export default function useSaveImage( {
 	const { editMediaEntity } = useSelect( ( select ) => {
 		const settings = select( blockEditorStore ).getSettings();
 		return {
-			editMediaEntity: settings[ mediaEditKey ],
+			editMediaEntity: settings?.[ mediaEditKey ],
 		};
 	}, [] );
 
@@ -43,6 +43,18 @@ export default function useSaveImage( {
 	}, [ onFinishEditing ] );
 
 	const apply = useCallback( async () => {
+		if ( ! editMediaEntity ) {
+			onFinishEditing();
+			createErrorNotice(
+				__( 'Sorry, you are not allowed to edit images on this site.' ),
+				{
+					id: 'image-editing-error',
+					type: 'snackbar',
+				}
+			);
+			return;
+		}
+
 		setIsInProgress( true );
 
 		const modifiers = [];

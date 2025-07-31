@@ -1055,41 +1055,55 @@ Example:
 
 ### `isValid`
 
-Function to validate a field's value.
+Object that contains the validation rules for the field. If a rule is not met, the control will be marked as invalid and a message will be displayed.
 
--   Type: function.
--   Optional.
--   Args
-    -   `item`: the data to validate
-    -   `context`: an object containing the following props:
-        -   `elements`: the elements defined by the field
--   Returns a boolean, indicating if the field is valid or not.
+- `required`: boolean indicating whether the field is required or not.
+- `custom`: a function that validates a field's value. If the value is invalid, the function should return a string explaining why the value is invalid. Otherwise, the function must return null.
 
 Example:
 
 ```js
-// Custom isValid function.
 {
-	isValid: ( item, context ) => {
-		return !! item;
-	};
+	isValid: {
+		custom: ( item: Item, field: NormalizedField<Item> ) => {
+			if ( /* item value is invalid */) {
+				return 'Reason why item value is invalid';
+			}
+
+			return null;
+		}
+	}
 }
 ```
 
+Note that fields that define a type (e.g., `integer`) come with default validation for the type. For example, the `integer` type if the value is a valid integer:
+
 ```js
-// If the field defines a type,
-// it'll get a default isValid function for the type.
 {
-	type: 'number',
+	type: 'integer',
 }
 ```
 
+However, this can be overriden by the field author:
+
 ```js
-// Even if the field provides a type,
-// the field can override the default isValid function.
 {
-	type: 'number',
-	isValid: ( item, context ) => { /* Custom function. */ }
+	type: 'integer',
+	isValid: {
+		custom: ( item: Item, field: NormalizedField<Item> ) => {
+			/* Your custom validation logic. */
+		}
+	}
+}
+```
+
+Fields that define their own Edit component have access to the validation rules via the `field.isValid` object:
+
+```js
+{
+  Edit: ( { field }) => {
+	  return <input required={ !! field.isValid.required } />
+  }
 }
 ```
 
@@ -1164,7 +1178,7 @@ Example:
 
 ### `elements`
 
-List of valid values for a field. If provided, it creates a DataViews' filter for the field. DataForm's edit control will also use these values. (See `Edit` field property.)
+List of valid values for a field. If provided, the field's filter will use these as predefined options instead of using the field's `Edit` function for user input (unless `filterBy` is set to `false`, see below).
 
 -   Type: `array` of objects.
 -   Optional.
@@ -1188,11 +1202,12 @@ Example:
 
 ### `filterBy`
 
-Configuration of the filters.
+Configuration of the filters. By default, fields have filtering enabled using the field's `Edit` function for user input. When `elements` are provided, the filter will use those as predefined options instead. Set to `false` to opt the field out of filtering entirely.
 
--   Type: `object`.
+-   Type: `object` | `boolean`.
 -   Optional.
--   Properties:
+-   If `false`, the field will not be available for filtering.
+-   If an object, it can have the following properties:
     -   `operators`: the list of operators supported by the field. See "operators" below. A filter will support the `isAny` and `isNone` multi-selection operators by default.
     -   `isPrimary`: boolean, optional. Indicates if the filter is primary. A primary filter is always visible and is not listed in the "Add filter" component, except for the list layout where it behaves like a secondary filter.
 
@@ -1251,6 +1266,13 @@ Example:
 	filterBy: {
 		operators: [ `isAny`, `isNone`, `isAll`, `isNotAll` ];
 	}
+}
+```
+
+```js
+// Opt out of filtering entirely.
+{
+	filterBy: false;
 }
 ```
 

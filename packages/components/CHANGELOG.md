@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Enhancement
+
+-   `ColorPicker`: Improve color picker slider focus styles for better keyboard navigation accessibility ([#70146](https://github.com/WordPress/gutenberg/pull/70146)).
+
 ### Bug Fixes
 
 -   `TextareaControl`: Add missing component CSS classname ([#70930](https://github.com/WordPress/gutenberg/pull/70930)).
@@ -14,6 +18,7 @@
 ### Internal
 
 -	`RangeControl`: Add placement prop to replace position ([#70326](https://github.com/WordPress/gutenberg/pull/70326)).
+- Expose `ValidatedNumberControl`, `ValidatedTextControl`, and `ValidatedToggleControl` via privateAPIs. ([#70901](https://github.com/WordPress/gutenberg/pull/70901)).
 
 ## 30.0.0 (2025-07-23)
 

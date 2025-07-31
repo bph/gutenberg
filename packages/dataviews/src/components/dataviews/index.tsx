@@ -8,7 +8,7 @@ import type { ReactNode, ComponentProps, ReactElement } from 'react';
  */
 import { __experimentalHStack as HStack } from '@wordpress/components';
 import { useContext, useMemo, useRef, useState } from '@wordpress/element';
-import { useMergeRefs, useResizeObserver } from '@wordpress/compose';
+import { useResizeObserver } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -193,6 +193,7 @@ function DataViews< Item >( {
 				renderItemLink,
 				containerWidth,
 				containerRef,
+				resizeObserverRef,
 				defaultLayouts,
 				filters,
 				isShowingFilter,
@@ -200,10 +201,7 @@ function DataViews< Item >( {
 				perPageSizes,
 			} }
 		>
-			<div
-				className="dataviews-wrapper"
-				ref={ useMergeRefs( [ containerRef, resizeObserverRef ] ) }
-			>
+			<div className="dataviews-wrapper" ref={ containerRef }>
 				{ children ?? (
 					<DefaultUI
 						header={ header }

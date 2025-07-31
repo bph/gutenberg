@@ -1,13 +1,16 @@
 /**
  * WordPress dependencies
  */
-import { TextControl } from '@wordpress/components';
+import { privateApis } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import type { DataFormControlProps } from '../types';
+import { unlock } from '../lock-unlock';
+
+const { ValidatedTextControl } = unlock( privateApis );
 
 export default function Text< Item >( {
 	data,
@@ -27,7 +30,21 @@ export default function Text< Item >( {
 	);
 
 	return (
-		<TextControl
+		<ValidatedTextControl
+			required={ !! field.isValid?.required }
+			customValidator={ ( newValue: any ) => {
+				if ( field.isValid?.custom ) {
+					return field.isValid.custom(
+						{
+							...data,
+							[ id ]: newValue,
+						},
+						field
+					);
+				}
+
+				return null;
+			} }
 			label={ label }
 			placeholder={ placeholder }
 			value={ value ?? '' }

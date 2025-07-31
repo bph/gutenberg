@@ -47,6 +47,9 @@ type DataViewsContextType< Item > = {
 	isItemClickable: ( item: Item ) => boolean;
 	containerWidth: number;
 	containerRef: React.MutableRefObject< HTMLDivElement | null >;
+	resizeObserverRef:
+		| ( ( element?: HTMLDivElement | null ) => void )
+		| React.RefObject< HTMLDivElement >;
 	defaultLayouts: SupportedLayouts;
 	filters: NormalizedFilter[];
 	isShowingFilter: boolean;
@@ -72,6 +75,7 @@ const DataViewsContext = createContext< DataViewsContextType< any > >( {
 	renderItemLink: undefined,
 	containerWidth: 0,
 	containerRef: createRef(),
+	resizeObserverRef: () => {},
 	defaultLayouts: { list: {}, grid: {}, table: {} },
 	filters: [],
 	isShowingFilter: false,

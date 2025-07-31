@@ -79,6 +79,9 @@ require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-user-controller.ph
 require __DIR__ . '/compat/wordpress-6.8/block-template-utils.php';
 require __DIR__ . '/compat/wordpress-6.8/site-preview.php';
 
+// WordPress 6.9 compat.
+require __DIR__ . '/compat/wordpress-6.9/customizer-preview-custom-css.php';
+
 // Experimental features.
 require __DIR__ . '/experimental/block-editor-settings-mobile.php';
 require __DIR__ . '/experimental/blocks.php';

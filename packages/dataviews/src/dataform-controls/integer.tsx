@@ -5,6 +5,7 @@ import {
 	Flex,
 	BaseControl,
 	__experimentalNumberControl as NumberControl,
+	privateApis,
 } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -14,6 +15,9 @@ import { __ } from '@wordpress/i18n';
  */
 import { OPERATOR_BETWEEN } from '../constants';
 import type { DataFormControlProps } from '../types';
+import { unlock } from '../lock-unlock';
+
+const { ValidatedNumberControl } = unlock( privateApis );
 
 function BetweenControls< Item >( {
 	id,
@@ -81,10 +85,16 @@ export default function Integer< Item >( {
 	const { id, label, description } = field;
 	const value = field.getValue( { item: data } ) ?? '';
 	const onChangeControl = useCallback(
-		( newValue: string | undefined ) =>
+		( newValue: string | undefined ) => {
 			onChange( {
-				[ id ]: Number( newValue ),
-			} ),
+				// Do not convert an empty string or undefined to a number,
+				// otherwise there's a mismatch between the UI control (empty)
+				// and the data relied by onChange (0).
+				[ id ]: [ '', undefined ].includes( newValue )
+					? undefined
+					: Number( newValue ),
+			} );
+		},
 		[ id, onChange ]
 	);
 
@@ -100,7 +110,23 @@ export default function Integer< Item >( {
 	}
 
 	return (
-		<NumberControl
+		<ValidatedNumberControl
+			required={ !! field.isValid?.required }
+			customValidator={ ( newValue: any ) => {
+				if ( field.isValid?.custom ) {
+					return field.isValid.custom(
+						{
+							...data,
+							[ id ]: [ undefined, '', null ].includes( newValue )
+								? undefined
+								: Number( newValue ),
+						},
+						field
+					);
+				}
+
+				return null;
+			} }
 			label={ label }
 			help={ description }
 			value={ value }
