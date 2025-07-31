@@ -42,7 +42,7 @@ add_filter( 'gu_no_release_asset_branches', '__return_true' );
 
 ### BEGIN AUTO-GENERATED DEFINES
 define( 'GUTENBERG_VERSION', '21.5.20250731' );
-define( 'GUTENBERG_GIT_COMMIT', '004fb2e20749b7d556e2101b90ae5ad3c3274c15' );
+define( 'GUTENBERG_GIT_COMMIT', '8c1c040d12abdf019977cadfb98f967ca49201f1' );
 ### END AUTO-GENERATED DEFINES
 defined( 'GUTENBERG_MINIMUM_WP_VERSION' ) or define( 'GUTENBERG_MINIMUM_WP_VERSION', '6.7' );
 
