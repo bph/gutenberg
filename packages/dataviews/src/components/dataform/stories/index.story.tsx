@@ -71,6 +71,7 @@ const fields = [
 		label: 'Date as options',
 		type: 'datetime' as const,
 		elements: [
+			{ value: '', label: 'Select a date' },
 			{ value: '1970-02-23T12:00:00', label: "Jane's birth date" },
 			{ value: '1950-02-23T12:00:00', label: "John's birth date" },
 		],
@@ -434,4 +435,54 @@ export const Validation = {
 	args: {
 		required: true,
 	},
+};
+
+const DataFormVisibilityComponent = () => {
+	type Post = {
+		name: string;
+		email: string;
+		isActive: boolean;
+	};
+	const [ data, setData ] = useState( {
+		name: '',
+		email: '',
+		isActive: true,
+	} );
+
+	const _fields = [
+		{ id: 'isActive', label: 'Is module active?', type: 'boolean' },
+		{
+			id: 'name',
+			label: 'Name',
+			type: 'text',
+			isVisible: ( post ) => post.isActive === true,
+		},
+		{
+			id: 'email',
+			label: 'Email',
+			type: 'email',
+			isVisible: ( post ) => post.isActive === true,
+		},
+	] satisfies Field< Post >[];
+	const form = {
+		fields: [ 'isActive', 'name', 'email' ],
+	};
+	return (
+		<DataForm< Post >
+			data={ data }
+			fields={ _fields }
+			form={ form }
+			onChange={ ( edits ) =>
+				setData( ( prev ) => ( {
+					...prev,
+					...edits,
+				} ) )
+			}
+		/>
+	);
+};
+
+export const Visibility = {
+	title: 'DataForm/Visibility',
+	render: DataFormVisibilityComponent,
 };

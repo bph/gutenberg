@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 30.1.0 (2025-08-07)
+
 ### Enhancement
 
 -   `ColorPicker`: Improve color picker slider focus styles for better keyboard navigation accessibility ([#70146](https://github.com/WordPress/gutenberg/pull/70146)).

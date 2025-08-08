@@ -41,7 +41,8 @@ export const data: SpaceObject[] = [
 	{
 		id: 1,
 		title: 'Moon',
-		description: "Earth's satellite",
+		description:
+			'The Moon is Earth’s only natural satellite, orbiting at an average distance of 384,400 kilometers with a synchronous rotation that leads to fixed lunar phases as seen from Earth. Its cratered surface and subtle glow define night skies, inspiring exploration missions and influencing tides and biological rhythms worldwide.',
 		image: 'https://live.staticflickr.com/7398/9458193857_e1256123e3_z.jpg',
 		type: 'Satellite',
 		isPlanet: false,

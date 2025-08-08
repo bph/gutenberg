@@ -55,7 +55,9 @@ describe( 'filters', () => {
 			fields
 		);
 		expect( result ).toHaveLength( 2 );
-		expect( result[ 0 ].description ).toBe( "Earth's satellite" );
+		expect( result[ 0 ].description ).toBe(
+			'The Moon is Earth’s only natural satellite, orbiting at an average distance of 384,400 kilometers with a synchronous rotation that leads to fixed lunar phases as seen from Earth. Its cratered surface and subtle glow define night skies, inspiring exploration missions and influencing tides and biological rhythms worldwide.'
+		);
 	} );
 
 	it( 'should perform case-insensitive and accent-insensitive search', () => {
@@ -422,7 +424,7 @@ describe( 'filters', () => {
 			fields
 		);
 		expect( result.map( ( r ) => r.description ) ).toEqual( [
-			"Earth's satellite",
+			'The Moon is Earth’s only natural satellite, orbiting at an average distance of 384,400 kilometers with a synchronous rotation that leads to fixed lunar phases as seen from Earth. Its cratered surface and subtle glow define night skies, inspiring exploration missions and influencing tides and biological rhythms worldwide.',
 			'Moon of Jupiter',
 			'Moon of Jupiter',
 			'La planète Vénus',

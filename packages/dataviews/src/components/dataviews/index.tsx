@@ -7,7 +7,13 @@ import type { ReactNode, ComponentProps, ReactElement } from 'react';
  * WordPress dependencies
  */
 import { __experimentalHStack as HStack } from '@wordpress/components';
-import { useContext, useMemo, useRef, useState } from '@wordpress/element';
+import {
+	useContext,
+	useMemo,
+	useRef,
+	useState,
+	useEffect,
+} from '@wordpress/element';
 import { useResizeObserver } from '@wordpress/compose';
 
 /**
@@ -59,7 +65,8 @@ type DataViewsProps< Item > = {
 	header?: ReactNode;
 	getItemLevel?: ( item: Item ) => number;
 	children?: ReactNode;
-	perPageSizes?: [ number, number, number, number ];
+	perPageSizes?: number[];
+	empty?: ReactNode;
 } & ( Item extends ItemWithId
 	? { getItemId?: ( item: Item ) => string }
 	: { getItemId: ( item: Item ) => string } );
@@ -133,7 +140,8 @@ function DataViews< Item >( {
 	isItemClickable = defaultIsItemClickable,
 	header,
 	children,
-	perPageSizes,
+	perPageSizes = [ 10, 20, 50, 100 ],
+	empty,
 }: DataViewsProps< Item > ) {
 	const containerRef = useRef< HTMLDivElement | null >( null );
 	const [ containerWidth, setContainerWidth ] = useState( 0 );
@@ -168,9 +176,22 @@ function DataViews< Item >( {
 	}, [ selection, data, getItemId ] );
 
 	const filters = useFilters( _fields, view );
-	const [ isShowingFilter, setIsShowingFilter ] = useState< boolean >( () =>
-		( filters || [] ).some( ( filter ) => filter.isPrimary )
+	const hasPrimaryOrLockedFilters = useMemo(
+		() =>
+			( filters || [] ).some(
+				( filter ) => filter.isPrimary || filter.isLocked
+			),
+		[ filters ]
 	);
+	const [ isShowingFilter, setIsShowingFilter ] = useState< boolean >(
+		hasPrimaryOrLockedFilters
+	);
+
+	useEffect( () => {
+		if ( hasPrimaryOrLockedFilters && ! isShowingFilter ) {
+			setIsShowingFilter( true );
+		}
+	}, [ hasPrimaryOrLockedFilters, isShowingFilter ] );
 
 	return (
 		<DataViewsContext.Provider
@@ -199,6 +220,7 @@ function DataViews< Item >( {
 				isShowingFilter,
 				setIsShowingFilter,
 				perPageSizes,
+				empty,
 			} }
 		>
 			<div className="dataviews-wrapper" ref={ containerRef }>

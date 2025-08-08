@@ -9,6 +9,7 @@
  * Renders the `core/post-date` block on the server.
  *
  * @since 5.8.0
+ * @since 6.9.0 Added `datetime` attribute and Block Bindings support.
  *
  * @param array    $attributes Block attributes.
  * @param string   $content    Block default content.
@@ -18,44 +19,39 @@
 function render_block_core_post_date( $attributes, $content, $block ) {
 	$classes = array();
 
-	if ( ! isset( $attributes['datetime'] ) ) {
+	if (
+		isset( $attributes['metadata']['bindings']['datetime']['source'] ) &&
+		isset( $attributes['metadata']['bindings']['datetime']['args'] )
+	) {
 		/*
-		 * This can mean two things:
-		 *
-		 * 1. We're dealing with the legacy version of the block that didn't have the `datetime` attribute.
-		 * 2. The `datetime` attribute is bound to a Block Bindings source, but we're on a version of WordPress
-		 *    that doesn't support binding that attribute to a Block Bindings source.
-		 *
-		 * In both cases, we set the `datetime` attribute to its correct value by applying Block Bindings manually.
+		 * We might be running on a version of WordPress that doesn't support binding the block's `datetime` attribute
+		 * to a Block Bindings source. In this case, we need to manually set the `datetime` attribute to its correct value.
+		 * This branch can be removed once the minimum required WordPress version is 6.9 or newer.
 		 */
-		if (
-			isset( $attributes['metadata']['bindings']['datetime']['source'] ) &&
-			isset( $attributes['metadata']['bindings']['datetime']['args'] )
-		) {
-			// We're using a version of WordPress that doesn't support binding the block's `datetime` attribute to a Block Bindings source.
-			// This branch can be removed once the minimum required WordPress version supports the `core/post-data` source.
-			$source      = get_block_bindings_source( $attributes['metadata']['bindings']['datetime']['source'] );
-			$source_args = $attributes['metadata']['bindings']['datetime']['args'];
-		} else {
-			// This is the legacy version of the block that didn't have the `datetime` attribute.
-			// This branch needs to be kept for backward compatibility.
-			$source = get_block_bindings_source( 'core/post-data' );
-			if ( isset( $attributes['displayType'] ) && 'modified' === $attributes['displayType'] ) {
-				$source_args = array(
-					'key' => 'modified',
-				);
-			} else {
-				$source_args = array(
-					'key' => 'date',
-				);
-			}
-		}
+		$source      = get_block_bindings_source( $attributes['metadata']['bindings']['datetime']['source'] );
+		$source_args = $attributes['metadata']['bindings']['datetime']['args'];
 
 		$attributes['datetime'] = $source->get_value( $source_args, $block, 'datetime' );
-
-		if ( isset( $source_args['key'] ) && 'modified' === $source_args['key'] ) {
-			$classes[] = 'wp-block-post-date__modified-date';
+	} elseif ( ! isset( $attributes['datetime'] ) ) {
+		/*
+		 * This is the legacy version of the block that didn't have the `datetime` attribute.
+		 * This branch needs to be kept for backward compatibility.
+		 */
+		$source = get_block_bindings_source( 'core/post-data' );
+		if ( isset( $attributes['displayType'] ) && 'modified' === $attributes['displayType'] ) {
+			$source_args = array(
+				'key' => 'modified',
+			);
+		} else {
+			$source_args = array(
+				'key' => 'date',
+			);
 		}
+		$attributes['datetime'] = $source->get_value( $source_args, $block, 'datetime' );
+	}
+
+	if ( isset( $source_args['key'] ) && 'modified' === $source_args['key'] ) {
+		$classes[] = 'wp-block-post-date__modified-date';
 	}
 
 	if ( empty( $attributes['datetime'] ) ) {

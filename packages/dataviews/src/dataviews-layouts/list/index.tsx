@@ -358,6 +358,7 @@ export default function ViewList< Item >( props: ViewListProps< Item > ) {
 		selection,
 		view,
 		className,
+		empty,
 	} = props;
 	const baseId = useInstanceId( ViewList, 'view-list' );
 
@@ -491,9 +492,7 @@ export default function ViewList< Item >( props: ViewListProps< Item > ) {
 					'dataviews-no-results': ! hasData && ! isLoading,
 				} ) }
 			>
-				{ ! hasData && (
-					<p>{ isLoading ? <Spinner /> : __( 'No results' ) }</p>
-				) }
+				{ ! hasData && <p>{ isLoading ? <Spinner /> : empty }</p> }
 			</div>
 		);
 	}

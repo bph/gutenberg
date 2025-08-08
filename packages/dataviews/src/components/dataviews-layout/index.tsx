@@ -7,6 +7,7 @@ import type { ComponentType } from 'react';
  * WordPress dependencies
  */
 import { useContext } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -35,6 +36,7 @@ export default function DataViewsLayout( { className }: DataViewsLayoutProps ) {
 		onClickItem,
 		isItemClickable,
 		renderItemLink,
+		empty = __( 'No results' ),
 	} = useContext( DataViewsContext );
 
 	const ViewComponent = VIEW_LAYOUTS.find( ( v ) => v.type === view.type )
@@ -57,6 +59,7 @@ export default function DataViewsLayout( { className }: DataViewsLayoutProps ) {
 			renderItemLink={ renderItemLink }
 			isItemClickable={ isItemClickable }
 			view={ view }
+			empty={ empty }
 		/>
 	);
 }

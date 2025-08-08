@@ -2,19 +2,34 @@
 
 ## Unreleased
 
+## 6.0.0 (2025-08-07)
+
 ### Breaking changes
 
 - Field API: `isValid` is now an object that contains `required` and `custom` validation rules. Additionally, fields should now opt-in into being a "required" field by setting `isValid.required` to `true` (all fields of type `email` and `integer` were required by default). [#70901](https://github.com/WordPress/gutenberg/pull/70901)
 
 ### Bug Fixes
 
+- Do not render an empty `&nbsp;` when the title field has level 0. [#71021](https://github.com/WordPress/gutenberg/pull/71021)
+- When a field type is `array` and it has elements, the select control should allow multi-selection. [#71000](https://github.com/WordPress/gutenberg/pull/71000)
+- Set minimum and maximum number of items in `pePageSizes`, so that the UI control is disabled when the list exceeds those limits. [#71004](https://github.com/WordPress/gutenberg/pull/71004)
 - Fix `filterSortAndPaginate` to handle searching fields that have a type of `array` ([#70785](https://github.com/WordPress/gutenberg/pull/70785)).
 - Fix user-input filters: empty value for text and integer filters means there's no value to search for (so it returns all items). It also fixes a type conversion where empty strings for integer were converted to 0 [#70956](https://github.com/WordPress/gutenberg/pull/70956/).
+- Fix Table layout Title's column wrapping and min-width so that long descriptions can be visualized without scrolling. [#70983](https://github.com/WordPress/gutenberg/pull/70983)
 
 ### Features
 
+- Introduce locked filters, as filters that cannot be edited by the user. [#71075](https://github.com/WordPress/gutenberg/pull/71075)
+- Add "groupBy" support to the table layout. [#71055](https://github.com/WordPress/gutenberg/pull/71055)
+- Elements in the Field API can now provide an empty value that will be used instead of the default. [#70894](https://github.com/WordPress/gutenberg/pull/70894)
 - Support Ctrl + Click / Cmd + Click for multiselecting rows in the Table layout ([#70891](https://github.com/WordPress/gutenberg/pull/70891)).
 - Add support for the `Edit` control on the date field type ([#70836](https://github.com/WordPress/gutenberg/pull/70836)).
+- Add support for responsive image attributes in media fields by adding a `config` prop to `mediaField.render`, containing a `sizes` string. Also simplifies grid logic and fixes imprecisions in grid resizing by changing the observed container. ([#70493](https://github.com/WordPress/gutenberg/pull/70493)).
+- `DataViews` empty state can be customized using the new `empty` prop.
+
+### Enhancements
+
+- Make the media item clickable along the title ([#70985](https://github.com/WordPress/gutenberg/pull/70985)).
 
 ## 5.0.0 (2025-07-23)
 

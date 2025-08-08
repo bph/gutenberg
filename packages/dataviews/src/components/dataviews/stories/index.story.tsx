@@ -20,6 +20,7 @@ import {
 	__experimentalText as Text,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	Button,
 } from '@wordpress/components';
 import { __, _n } from '@wordpress/i18n';
 
@@ -53,7 +54,7 @@ const defaultLayouts = {
 	[ LAYOUT_LIST ]: {},
 };
 
-export const Default = () => {
+export const Default = ( { perPageSizes = [ 10, 25, 50, 100 ] } ) => {
 	const [ view, setView ] = useState< View >( {
 		...DEFAULT_VIEW,
 		fields: [ 'categories' ],
@@ -86,8 +87,20 @@ export const Default = () => {
 			) }
 			isItemClickable={ () => true }
 			defaultLayouts={ defaultLayouts }
+			perPageSizes={ perPageSizes }
 		/>
 	);
+};
+
+Default.args = {
+	perPageSizes: [ 10, 25, 50, 100 ],
+};
+
+Default.argTypes = {
+	perPageSizes: {
+		control: 'object',
+		description: 'Array of available page sizes',
+	},
 };
 
 export const Empty = () => {
@@ -106,6 +119,27 @@ export const Empty = () => {
 			onChangeView={ setView }
 			actions={ actions }
 			defaultLayouts={ defaultLayouts }
+		/>
+	);
+};
+
+export const CustomEmpty = () => {
+	const [ view, setView ] = useState< View >( {
+		...DEFAULT_VIEW,
+		fields: [ 'title', 'description', 'categories' ],
+	} );
+
+	return (
+		<DataViews
+			getItemId={ ( item ) => item.id.toString() }
+			paginationInfo={ { totalItems: 0, totalPages: 0 } }
+			data={ [] }
+			view={ view }
+			fields={ fields }
+			onChangeView={ setView }
+			actions={ actions }
+			defaultLayouts={ defaultLayouts }
+			empty={ view.search ? 'No sites found' : 'No sites' }
 		/>
 	);
 };
@@ -261,6 +295,19 @@ export const FreeComposition = () => {
 					table: {},
 					grid: {},
 				} }
+				empty={
+					<VStack
+						justify="space-around"
+						alignment="center"
+						className="free-composition-dataviews-empty"
+					>
+						<Text size={ 18 } as="p">
+							No planets
+						</Text>
+						<Text variant="muted">{ `Try a different search because “${ view.search }” returned no results.` }</Text>
+						<Button variant="secondary">Create new planet</Button>
+					</VStack>
+				}
 			>
 				<PlanetOverview planets={ planets } />
 			</DataViews>
@@ -300,34 +347,7 @@ export const WithCard = () => {
 	);
 };
 
-export const CustomPerPageSizes = () => {
-	const [ view, setView ] = useState< View >( {
-		...DEFAULT_VIEW,
-		fields: [ 'categories' ],
-		titleField: 'title',
-		descriptionField: 'description',
-		mediaField: 'image',
-		perPage: 3,
-	} );
-	const { data: shownData, paginationInfo } = useMemo( () => {
-		return filterSortAndPaginate( data, view, fields );
-	}, [ view ] );
-	return (
-		<DataViews
-			getItemId={ ( item ) => item.id.toString() }
-			paginationInfo={ paginationInfo }
-			data={ shownData }
-			view={ view }
-			fields={ fields }
-			onChangeView={ setView }
-			actions={ actions.filter( ( action ) => ! action.supportsBulk ) }
-			defaultLayouts={ defaultLayouts }
-			perPageSizes={ [ 3, 6, 12, 24 ] }
-		/>
-	);
-};
-
-export const GroupedGridLayout = () => {
+export const GroupByLayout = () => {
 	const [ view, setView ] = useState< View >( {
 		type: LAYOUT_GRID,
 		search: '',

@@ -263,6 +263,7 @@ function ViewGrid< Item >( {
 	selection,
 	view,
 	className,
+	empty,
 }: ViewGridProps< Item > ) {
 	const { resizeObserverRef } = useContext( DataViewsContext );
 	const titleField = fields.find(
@@ -446,7 +447,7 @@ function ViewGrid< Item >( {
 							'dataviews-no-results': ! isLoading,
 						} ) }
 					>
-						<p>{ isLoading ? <Spinner /> : __( 'No results' ) }</p>
+						<p>{ isLoading ? <Spinner /> : empty }</p>
 					</div>
 				)
 			}

@@ -1,11 +1,11 @@
 /**
  * Return true if platform is MacOS.
  *
- * @param {Window?} _window window object by default; used for DI testing.
+ * @param _window window object by default; used for DI testing.
  *
- * @return {boolean} True if MacOS; false otherwise.
+ * @return True if MacOS; false otherwise.
  */
-export function isAppleOS( _window = null ) {
+export function isAppleOS( _window?: Window ): boolean {
 	if ( ! _window ) {
 		if ( typeof window === 'undefined' ) {
 			return false;

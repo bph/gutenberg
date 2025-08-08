@@ -193,6 +193,7 @@ Properties:
     -   `field`: which field this filter is bound to.
     -   `operator`: which type of filter it is. See "Operator types".
     -   `value`: the actual value selected by the user.
+    -   `isLocked`: whether the filter is locked (cannot be edited by the user).
 -   `perPage`: number of records to show per page.
 -   `page`: the page that is visible.
 -   `sort`:
@@ -207,7 +208,7 @@ Properties:
 -   `showMedia`: Whether the media should be shown in the UI. `true` by default.
 -   `showDescription`: Whether the description should be shown in the UI. `true` by default.
 -   `showLevels`: Whether to display the hierarchical levels for the data. `false` by default. See related `getItemLevel` DataView prop.
--   `groupByField`: The id of the field used for grouping the dataset. So far, only the `grid` layout supports grouping.
+-   `groupByField`: The id of the field used for grouping the dataset. Supported by the `grid` and `table` layouts.
 -   `fields`: a list of remaining field `id` that are visible in the UI and the specific order in which they are displayed.
 -   `layout`: config that is specific to a particular layout type.
 
@@ -415,11 +416,13 @@ The component receives the following props:
 
 React component to be rendered next to the view config button.
 
-#### `perPageSizes`: `[ number, number, number, number ]`
+#### `perPageSizes`: `number[]`
 
-A list of numbers used to control the available item counts per page.
+A list of numbers used to control the available item counts per page. It's optional. Defaults to `[10, 20, 50, 100]`. The list needs to have a minimum of 2 items and a maximum of 6, otherwise the UI component won't be displayed.
 
-It's optional. Defaults to `[10, 20, 50, 100]`.
+#### `empty`: React node
+
+A message or element to be displayed instead of the dataview's default empty message.
 
 ### Composition modes
 
@@ -938,6 +941,7 @@ React component that renders the field. This is used by the layouts.
 -   Defaults to `getValue`.
 -   Props
     -   `item` value to be processed.
+    -   `config` object containing configuration options for the field. It's optional. So far, the only object property available is `sizes`: in fields that are set to be the media field, layouts can pass down the expected size reserved for them so that the field can react accordingly.
 -   Returns a React element that represents the field's value.
 
 Example:
@@ -1199,6 +1203,8 @@ Example:
 	];
 }
 ```
+
+By default, we add an empty value (label: "Select item"). The label can be overriden by providing an empty element (`{ value: '', label: 'Custom label for empty value'}`).
 
 ### `filterBy`
 

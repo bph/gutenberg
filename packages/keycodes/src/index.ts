@@ -19,27 +19,48 @@ import { __ } from '@wordpress/i18n';
  */
 import { isAppleOS } from './platform';
 
-/** @typedef {typeof ALT | CTRL | COMMAND | SHIFT } WPModifierPart */
+/**
+ * External dependencies
+ */
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 
-/** @typedef {'primary' | 'primaryShift' | 'primaryAlt' | 'secondary' | 'access' | 'ctrl' | 'alt' | 'ctrlShift' | 'shift' | 'shiftAlt' | 'undefined'} WPKeycodeModifier */
+export type WPModifierPart =
+	| typeof ALT
+	| typeof CTRL
+	| typeof COMMAND
+	| typeof SHIFT;
+
+export type WPKeycodeModifier =
+	| 'primary'
+	| 'primaryShift'
+	| 'primaryAlt'
+	| 'secondary'
+	| 'access'
+	| 'ctrl'
+	| 'alt'
+	| 'ctrlShift'
+	| 'shift'
+	| 'shiftAlt'
+	| 'undefined';
 
 /**
  * An object of handler functions for each of the possible modifier
  * combinations. A handler will return a value for a given key.
- *
- * @template T
- *
- * @typedef {Record<WPKeycodeModifier, T>} WPModifierHandler
  */
+export type WPModifierHandler< T > = Record< WPKeycodeModifier, T >;
 
-/**
- * @template T
- *
- * @typedef {(character: string, isApple?: () => boolean) => T} WPKeyHandler
- */
-/** @typedef {(event: import('react').KeyboardEvent<HTMLElement> | KeyboardEvent, character: string, isApple?: () => boolean) => boolean} WPEventKeyHandler */
+export type WPKeyHandler< T > = (
+	character: string,
+	isApple?: () => boolean
+) => T;
 
-/** @typedef {( isApple: () => boolean ) => WPModifierPart[]} WPModifier */
+export type WPEventKeyHandler = (
+	event: ReactKeyboardEvent< HTMLElement > | KeyboardEvent,
+	character: string,
+	isApple?: () => boolean
+) => boolean;
+
+export type WPModifier = ( isApple: () => boolean ) => WPModifierPart[];
 
 /**
  * Keycode for BACKSPACE key.
@@ -145,10 +166,10 @@ export { isAppleOS };
 
 /**
  * Capitalise the first character of a string.
- * @param {string} string String to capitalise.
- * @return {string} Capitalised string.
+ * @param string String to capitalise.
+ * @return Capitalised string.
  */
-function capitaliseFirstCharacter( string ) {
+function capitaliseFirstCharacter( string: string ): string {
 	return string.length < 2
 		? string.toUpperCase()
 		: string.charAt( 0 ).toUpperCase() + string.slice( 1 );
@@ -157,29 +178,30 @@ function capitaliseFirstCharacter( string ) {
 /**
  * Map the values of an object with a specified callback and return the result object.
  *
- * @template {{ [s: string]: any; } | ArrayLike<any>} T
+ * @template T The object type
+ * @template R The return type of the mapping function
  *
- * @param {T}                     object Object to map values of.
- * @param {( value: any ) => any} mapFn  Mapping function
- *
- * @return {any} Active modifier constants.
+ * @param    object Object to map values of.
+ * @param    mapFn  Mapping function to apply to each value.
+ * @return Object with the same keys and transformed values.
  */
-function mapValues( object, mapFn ) {
+function mapValues< T extends Record< string, any >, R >(
+	object: T,
+	mapFn: ( value: T[ keyof T ] ) => R
+): Record< keyof T, R > {
 	return Object.fromEntries(
 		Object.entries( object ).map( ( [ key, value ] ) => [
 			key,
 			mapFn( value ),
 		] )
-	);
+	) as Record< keyof T, R >;
 }
 
 /**
  * Object that contains functions that return the available modifier
  * depending on platform.
- *
- * @type {WPModifierHandler< ( isApple: () => boolean ) => WPModifierPart[]>}
  */
-export const modifiers = {
+export const modifiers: WPModifierHandler< WPModifier > = {
 	primary: ( _isApple ) => ( _isApple() ? [ COMMAND ] : [ CTRL ] ),
 	primaryShift: ( _isApple ) =>
 		_isApple() ? [ SHIFT, COMMAND ] : [ CTRL, SHIFT ],
@@ -207,17 +229,11 @@ export const modifiers = {
  * rawShortcut.primary( 'm' )
  * // "meta+m""
  * ```
- *
- * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to raw
- *                                                 shortcuts.
  */
-export const rawShortcut =
+export const rawShortcut: WPModifierHandler< WPKeyHandler< string > > =
 	/* @__PURE__ */
-	mapValues( modifiers, ( /** @type {WPModifier} */ modifier ) => {
-		return /** @type {WPKeyHandler<string>} */ (
-			character,
-			_isApple = isAppleOS
-		) => {
+	mapValues( modifiers, ( modifier: WPModifier ) => {
+		return ( character: string, _isApple = isAppleOS ) => {
 			return [ ...modifier( _isApple ), character.toLowerCase() ].join(
 				'+'
 			);
@@ -234,40 +250,44 @@ export const rawShortcut =
  * // [ "⌘", "M" ]
  * ```
  *
- * @type {WPModifierHandler<WPKeyHandler<string[]>>} Keyed map of functions to
- *                                                   shortcut sequences.
+ * Keyed map of functions to shortcut sequences.
  */
-export const displayShortcutList =
+export const displayShortcutList: WPModifierHandler<
+	WPKeyHandler< string[] >
+> =
 	/* @__PURE__ */
-	mapValues( modifiers, ( /** @type {WPModifier} */ modifier ) => {
-		return /** @type {WPKeyHandler<string[]>} */ (
-			character,
-			_isApple = isAppleOS
-		) => {
-			const isApple = _isApple();
-			const replacementKeyMap = {
-				[ ALT ]: isApple ? '⌥' : 'Alt',
-				[ CTRL ]: isApple ? '⌃' : 'Ctrl', // Make sure ⌃ is the U+2303 UP ARROWHEAD unicode character and not the caret character.
-				[ COMMAND ]: '⌘',
-				[ SHIFT ]: isApple ? '⇧' : 'Shift',
+	mapValues(
+		modifiers,
+		( modifier: WPModifier ): WPKeyHandler< string[] > => {
+			return ( character: string, _isApple = isAppleOS ) => {
+				const isApple = _isApple();
+				const replacementKeyMap = {
+					[ ALT ]: isApple ? '⌥' : 'Alt',
+					[ CTRL ]: isApple ? '⌃' : 'Ctrl', // Make sure ⌃ is the U+2303 UP ARROWHEAD unicode character and not the caret character.
+					[ COMMAND ]: '⌘',
+					[ SHIFT ]: isApple ? '⇧' : 'Shift',
+				};
+
+				const modifierKeys = modifier( _isApple ).reduce< string[] >(
+					( accumulator, key ) => {
+						const replacementKey = replacementKeyMap[ key ] ?? key;
+						// If on the Mac, adhere to platform convention and don't show plus between keys.
+						if ( isApple ) {
+							return [ ...accumulator, replacementKey ];
+						}
+
+						return [ ...accumulator, replacementKey, '+' ];
+					},
+					[]
+				);
+
+				return [
+					...modifierKeys,
+					capitaliseFirstCharacter( character ),
+				];
 			};
-
-			const modifierKeys = modifier( _isApple ).reduce(
-				( accumulator, key ) => {
-					const replacementKey = replacementKeyMap[ key ] ?? key;
-					// If on the Mac, adhere to platform convention and don't show plus between keys.
-					if ( isApple ) {
-						return [ ...accumulator, replacementKey ];
-					}
-
-					return [ ...accumulator, replacementKey, '+' ];
-				},
-				/** @type {string[]} */ ( [] )
-			);
-
-			return [ ...modifierKeys, capitaliseFirstCharacter( character ) ];
-		};
-	} );
+		}
+	);
 
 /**
  * An object that contains functions to display shortcuts.
@@ -279,18 +299,15 @@ export const displayShortcutList =
  * // "⌘M"
  * ```
  *
- * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to
- *                                                 display shortcuts.
+ * Keyed map of functions to display shortcuts.
  */
-export const displayShortcut =
+export const displayShortcut: WPModifierHandler< WPKeyHandler< string > > =
 	/* @__PURE__ */
 	mapValues(
 		displayShortcutList,
-		( /** @type {WPKeyHandler<string[]>} */ shortcutList ) => {
-			return /** @type {WPKeyHandler<string>} */ (
-				character,
-				_isApple = isAppleOS
-			) => shortcutList( character, _isApple ).join( '' );
+		( shortcutList: WPKeyHandler< string[] > ): WPKeyHandler< string > => {
+			return ( character: string, _isApple = isAppleOS ) =>
+				shortcutList( character, _isApple ).join( '' );
 		}
 	);
 
@@ -305,19 +322,14 @@ export const displayShortcut =
  * // "Command + Period"
  * ```
  *
- * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to
- *                                                 shortcut ARIA labels.
+ * Keyed map of functions to shortcut ARIA labels.
  */
-export const shortcutAriaLabel =
+export const shortcutAriaLabel: WPModifierHandler< WPKeyHandler< string > > =
 	/* @__PURE__ */
-	mapValues( modifiers, ( /** @type {WPModifier} */ modifier ) => {
-		return /** @type {WPKeyHandler<string>} */ (
-			character,
-			_isApple = isAppleOS
-		) => {
+	mapValues( modifiers, ( modifier: WPModifier ): WPKeyHandler< string > => {
+		return ( character: string, _isApple = isAppleOS ) => {
 			const isApple = _isApple();
-			/** @type {Record<string,string>} */
-			const replacementKeyMap = {
+			const replacementKeyMap: Record< string, string > = {
 				[ SHIFT ]: 'Shift',
 				[ COMMAND ]: isApple ? 'Command' : 'Control',
 				[ CTRL ]: 'Control',
@@ -344,22 +356,17 @@ export const shortcutAriaLabel =
  * From a given KeyboardEvent, returns an array of active modifier constants for
  * the event.
  *
- * @param {import('react').KeyboardEvent<HTMLElement> | KeyboardEvent} event Keyboard event.
+ * @param event Keyboard event.
  *
- * @return {Array<WPModifierPart>} Active modifier constants.
+ * @return Active modifier constants.
  */
-function getEventModifiers( event ) {
-	return /** @type {WPModifierPart[]} */ ( [
-		ALT,
-		CTRL,
-		COMMAND,
-		SHIFT,
-	] ).filter(
+function getEventModifiers(
+	event: ReactKeyboardEvent< HTMLElement > | KeyboardEvent
+): WPModifierPart[] {
+	return ( [ ALT, CTRL, COMMAND, SHIFT ] as const ).filter(
 		( key ) =>
-			event[
-				/** @type {'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'} */ (
-					`${ key }Key`
-				)
+			( event as KeyboardEvent )[
+				`${ key }Key` as 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'
 			]
 	);
 }
@@ -375,21 +382,16 @@ function getEventModifiers( event ) {
  * // true
  * ```
  *
- * @type {WPModifierHandler<WPEventKeyHandler>} Keyed map of functions
- *                                                       to match events.
+ * Keyed map of functions to match events.
  */
-export const isKeyboardEvent =
+export const isKeyboardEvent: WPModifierHandler< WPEventKeyHandler > =
 	/* @__PURE__ */
-	mapValues( modifiers, ( /** @type {WPModifier} */ getModifiers ) => {
-		return /** @type {WPEventKeyHandler} */ (
-			event,
-			character,
-			_isApple = isAppleOS
-		) => {
+	mapValues( modifiers, ( getModifiers: WPModifier ): WPEventKeyHandler => {
+		return ( event, character, _isApple = isAppleOS ) => {
 			const mods = getModifiers( _isApple );
 			const eventMods = getEventModifiers( event );
-			/** @type {Record<string,string>} */
-			const replacementWithShiftKeyMap = {
+
+			const replacementWithShiftKeyMap: Record< string, string > = {
 				Comma: ',',
 				Backslash: '\\',
 				// Windows returns `\` for both IntlRo and IntlYen.
@@ -411,7 +413,7 @@ export const isKeyboardEvent =
 			let key = event.key.toLowerCase();
 
 			if ( ! character ) {
-				return mods.includes( /** @type {WPModifierPart} */ ( key ) );
+				return mods.includes( key as WPModifierPart );
 			}
 
 			if ( event.altKey && character.length === 1 ) {
