@@ -434,6 +434,9 @@ function ViewTable< Item >( {
 										onChangeView={ onChangeView }
 										onHide={ onHide }
 										setOpenedFilter={ setOpenedFilter }
+										canMove={
+											view.layout?.enableMoving ?? true
+										}
 									/>
 								</th>
 							);

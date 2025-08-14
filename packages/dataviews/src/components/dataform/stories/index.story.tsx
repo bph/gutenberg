@@ -29,6 +29,7 @@ type SamplePost = {
 	password?: string;
 	filesize?: number;
 	dimensions?: string;
+	tags?: string[];
 };
 
 const meta = {
@@ -143,6 +144,20 @@ const fields = [
 		type: 'text' as const,
 		readOnly: true,
 	},
+	{
+		id: 'tags',
+		label: 'Tags',
+		type: 'array' as const,
+		placeholder: 'Enter comma-separated tags',
+		description: 'Add tags separated by commas (e.g., "tag1, tag2, tag3")',
+		elements: [
+			{ value: 'astronomy', label: 'Astronomy' },
+			{ value: 'book-review', label: 'Book review' },
+			{ value: 'event', label: 'Event' },
+			{ value: 'photography', label: 'Photography' },
+			{ value: 'travel', label: 'Travel' },
+		],
+	},
 ] as Field< SamplePost >[];
 
 export const Default = ( {
@@ -165,6 +180,7 @@ export const Default = ( {
 		can_comment: false,
 		filesize: 1024,
 		dimensions: '1920x1080',
+		tags: [ 'photography' ],
 	} );
 
 	const form = useMemo(
@@ -185,6 +201,7 @@ export const Default = ( {
 				'can_comment',
 				'filesize',
 				'dimensions',
+				'tags',
 			],
 		} ),
 		[ type, labelPosition ]
@@ -222,6 +239,7 @@ const CombinedFieldsComponent = ( {
 		birthdate: '1950-02-23T12:00:00',
 		filesize: 1024,
 		dimensions: '1920x1080',
+		tags: [ 'photography' ],
 	} );
 
 	const form = useMemo(
@@ -239,6 +257,7 @@ const CombinedFieldsComponent = ( {
 				'author',
 				'filesize',
 				'dimensions',
+				'tags',
 			],
 		} ),
 		[ type, labelPosition ]
