@@ -54,8 +54,9 @@ type DataViewsContextType< Item > = {
 	filters: NormalizedFilter[];
 	isShowingFilter: boolean;
 	setIsShowingFilter: ( value: boolean ) => void;
-	perPageSizes: number[];
+	config: false | { perPageSizes: number[] };
 	empty?: ReactNode;
+	hasInfiniteScrollHandler: boolean;
 };
 
 const DataViewsContext = createContext< DataViewsContextType< any > >( {
@@ -81,7 +82,10 @@ const DataViewsContext = createContext< DataViewsContextType< any > >( {
 	filters: [],
 	isShowingFilter: false,
 	setIsShowingFilter: () => {},
-	perPageSizes: [],
+	hasInfiniteScrollHandler: false,
+	config: {
+		perPageSizes: [],
+	},
 } );
 
 export default DataViewsContext;

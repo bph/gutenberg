@@ -416,9 +416,9 @@ The component receives the following props:
 
 React component to be rendered next to the view config button.
 
-#### `perPageSizes`: `number[]`
+#### `config`: false | { perPageSizes: number[] }
 
-A list of numbers used to control the available item counts per page. It's optional. Defaults to `[10, 20, 50, 100]`. The list needs to have a minimum of 2 items and a maximum of 6, otherwise the UI component won't be displayed.
+Optional. Set it to `false` to hide the view config control entirely. Pass an object with a list of `perPageSizes` to control the available item counts per page (defaults to `[10, 20, 50, 100]`). `perPageSizes` needs to have a minimum of 2 items and a maximum of 6, otherwise the UI component won't be displayed.
 
 #### `empty`: React node
 
@@ -557,15 +557,17 @@ const fields = [
 
 #### `form`: `Object[]`
 
--   `type`: either `regular` or `panel`.
--   `labelPosition`: either `side`, `top`, or `none`.
+-   `layout`: an object describing the layout used to render the top-level fields present in `fields`. See `layout` prop in "Form Field API".
 -   `fields`: a list of fields ids that should be rendered. Field ids can also be defined as an object and allow you to define a `layout`, `labelPosition` or `children` if displaying combined fields. See "Form Field API" for a description of every property.
 
 Example:
 
 ```js
 const form = {
-	type: 'panel',
+	layout: {
+		type: 'panel',
+		labelPosition: 'side'
+	},
 	fields: [
 		'title',
 		'data',
@@ -1301,31 +1303,57 @@ Example:
 
 ### `layout`
 
-The same as the `form.type`, either `regular` or `panel` only for the individual field. It defaults to `form.type`.
+Represents the type of layout used to render the field. It'll be one of Regular, Panel, or Card. This prop is the same as the `form.layout` prop.
 
--   Type: `string`.
+#### Regular
 
-Example:
+- `type`: `regular`. Required.
+- `labelPosition`: one of `side`, `top`, or `none`. Optional. `top` by default.
+
+For example:
 
 ```js
 {
 	id: 'field_id',
-	layout: 'regular'
+	layout: {
+		type: 'regular',
+		labelPosition: 'side'
+	},
 }
 ```
 
-### `labelPosition`
+#### Panel
 
-The same as the `form.labelPosition`, either `side`, `top`, or `none` for the individual field. It defaults to `form.labelPosition`.
+- `type`: `panel`. Required.
+- `labelPosition`: one of `side`, `top`, or `none`. Optional. `top` by default.
 
--   Type: `string`.
+For example:
+```js
+{
+	id: 'field_id',
+	layout: {
+		type: 'panel',
+		labelPosition: 'top'
+	},
+}
+```
 
-Example:
+#### Card
+
+- `type`: `card`. Required.
+- `isOpened`: boolean. Optional. `true` by default.
+- `withHeader`: boolean. Optional. `true` by default.
+
+For example:
 
 ```js
 {
 	id: 'field_id',
-	labelPosition: 'none'
+	layout: {
+		type: 'card',
+		isOpened: false,
+		withHeader: true,
+	},
 }
 ```
 

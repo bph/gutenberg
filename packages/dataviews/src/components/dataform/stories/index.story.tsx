@@ -40,7 +40,7 @@ const meta = {
 			control: { type: 'select' },
 			description:
 				'Chooses the default layout of each field. "regular" is the default layout.',
-			options: [ 'default', 'regular', 'panel' ],
+			options: [ 'default', 'regular', 'panel', 'card' ],
 		},
 		labelPosition: {
 			control: { type: 'select' },
@@ -164,7 +164,7 @@ export const Default = ( {
 	type,
 	labelPosition,
 }: {
-	type: 'default' | 'regular' | 'panel';
+	type: 'default' | 'regular' | 'panel' | 'card';
 	labelPosition: 'default' | 'top' | 'side' | 'none';
 } ) => {
 	const [ post, setPost ] = useState( {
@@ -185,8 +185,10 @@ export const Default = ( {
 
 	const form = useMemo(
 		() => ( {
-			type,
-			labelPosition,
+			layout: {
+				type,
+				labelPosition,
+			},
 			fields: [
 				'title',
 				'order',
@@ -226,7 +228,7 @@ const CombinedFieldsComponent = ( {
 	type,
 	labelPosition,
 }: {
-	type: 'default' | 'regular' | 'panel';
+	type: 'default' | 'regular' | 'panel' | 'card';
 	labelPosition: 'default' | 'top' | 'side' | 'none';
 } ) => {
 	const [ post, setPost ] = useState< SamplePost >( {
@@ -244,8 +246,10 @@ const CombinedFieldsComponent = ( {
 
 	const form = useMemo(
 		() => ( {
-			type,
-			labelPosition,
+			layout: {
+				type,
+				labelPosition,
+			},
 			fields: [
 				'title',
 				{
@@ -504,4 +508,256 @@ const DataFormVisibilityComponent = () => {
 export const Visibility = {
 	title: 'DataForm/Visibility',
 	render: DataFormVisibilityComponent,
+};
+
+const LayoutCardComponent = () => {
+	type Customer = {
+		name: string;
+		email: string;
+		phone: string;
+		plan: string;
+		shippingAddress: string;
+		billingAddress: string;
+		displayPayments: boolean;
+		totalOrders: number;
+		totalRevenue: number;
+		averageOrderValue: number;
+		hasVat: boolean;
+		vat: number;
+		commission: number;
+	};
+
+	const customerFields: Field< Customer >[] = [
+		{
+			id: 'name',
+			label: 'Customer Name',
+			type: 'text',
+		},
+		{
+			id: 'phone',
+			label: 'Phone',
+			type: 'text',
+		},
+		{
+			id: 'email',
+			label: 'Email',
+			type: 'email',
+		},
+		{
+			id: 'plan',
+			label: 'Plan',
+			type: 'text',
+			Edit: 'toggleGroup',
+			elements: [
+				{ value: 'basic', label: 'Basic' },
+				{ value: 'business', label: 'Business' },
+				{ value: 'vip', label: 'VIP' },
+			],
+		},
+		{
+			id: 'shippingAddress',
+			label: 'Shipping Address',
+			type: 'text',
+		},
+		{
+			id: 'billingAddress',
+			label: 'Billing Address',
+			type: 'text',
+		},
+		{
+			id: 'displayPayments',
+			label: 'Display Payments?',
+			type: 'boolean',
+		},
+		{
+			id: 'payments',
+			label: 'Payments',
+			type: 'text',
+			readOnly: true, // Triggers using the render method instead of Edit.
+			isVisible: ( item ) => item.displayPayments,
+			render: ( { item } ) => {
+				return (
+					<p>
+						The customer has made a total of { item.totalOrders }{ ' ' }
+						orders, amounting to { item.totalRevenue } dollars. The
+						average order value is { item.averageOrderValue }{ ' ' }
+						dollars.
+					</p>
+				);
+			},
+		},
+		{
+			id: 'vat',
+			label: 'VAT',
+			type: 'integer',
+		},
+		{
+			id: 'commission',
+			label: 'Commission',
+			type: 'integer',
+		},
+	];
+
+	const [ customer, setCustomer ] = useState< Customer >( {
+		name: 'Danyka Romaguera',
+		email: 'aromaguera@example.org',
+		phone: '1-828-352-1250',
+		plan: 'Business',
+		shippingAddress: 'N/A',
+		billingAddress: 'Danyka Romaguera, West Myrtiehaven, 80240-4282, BI',
+		displayPayments: true,
+		totalOrders: 2,
+		totalRevenue: 1430,
+		averageOrderValue: 715,
+		hasVat: true,
+		vat: 10,
+		commission: 5,
+	} );
+
+	const form = useMemo(
+		() =>
+			( {
+				layout: {
+					type: 'card',
+				},
+				fields: [
+					{
+						id: 'customerCard',
+						label: 'Customer',
+						children: [
+							{
+								id: 'customerContact',
+								label: 'Contact',
+								layout: { type: 'panel', labelPosition: 'top' },
+								children: [
+									{
+										id: 'name',
+										layout: {
+											type: 'regular',
+											labelPosition: 'top',
+										},
+									},
+									{
+										id: 'phone',
+										layout: {
+											type: 'regular',
+											labelPosition: 'top',
+										},
+									},
+									{
+										id: 'email',
+										layout: {
+											type: 'regular',
+											labelPosition: 'top',
+										},
+									},
+								],
+							},
+							{
+								id: 'plan',
+								layout: { type: 'panel', labelPosition: 'top' },
+							},
+							{
+								id: 'shippingAddress',
+								layout: { type: 'panel', labelPosition: 'top' },
+							},
+							{
+								id: 'billingAddress',
+								layout: { type: 'panel', labelPosition: 'top' },
+							},
+							'displayPayments',
+						],
+					},
+					{
+						id: 'payments',
+						layout: { type: 'card', withHeader: false },
+					},
+					{
+						id: 'taxConfiguration',
+						label: 'Taxes',
+						layout: {
+							type: 'card',
+							isOpened: false,
+						},
+						children: [ 'vat', 'commission' ],
+					},
+				],
+			} ) satisfies Form,
+		[]
+	);
+
+	return (
+		<DataForm
+			data={ customer }
+			fields={ customerFields }
+			form={ form }
+			onChange={ ( edits ) =>
+				setCustomer( ( prev ) => ( {
+					...prev,
+					...edits,
+				} ) )
+			}
+		/>
+	);
+};
+
+export const LayoutCard = {
+	title: 'DataForm/LayoutCard',
+	render: LayoutCardComponent,
+};
+
+const LayoutMixedComponent = () => {
+	const [ post, setPost ] = useState< SamplePost >( {
+		title: 'Hello, World!',
+		order: 2,
+		author: 1,
+		status: 'draft',
+		reviewer: 'fulano',
+		date: '2021-01-01T12:00:00',
+		birthdate: '1950-02-23T12:00:00',
+		filesize: 1024,
+		dimensions: '1920x1080',
+	} );
+
+	const form = useMemo(
+		() =>
+			( {
+				fields: [
+					{
+						id: 'title',
+						layout: { type: 'panel', labelPosition: 'top' },
+					},
+					'status',
+					{ id: 'order', layout: { type: 'card' } },
+					{
+						id: 'authorDateCard',
+						label: 'Author & Date',
+						layout: {
+							type: 'card',
+						},
+						children: [ 'author', 'date' ],
+					},
+				],
+			} ) satisfies Form,
+		[]
+	);
+
+	return (
+		<DataForm< SamplePost >
+			data={ post }
+			fields={ fields }
+			form={ form }
+			onChange={ ( edits ) =>
+				setPost( ( prev ) => ( {
+					...prev,
+					...edits,
+				} ) )
+			}
+		/>
+	);
+};
+
+export const LayoutMixed = {
+	title: 'DataForm/LayoutMixed',
+	render: LayoutMixedComponent,
 };

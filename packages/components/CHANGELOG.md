@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Enhancement
+
+-   Upgrade `gradient-parser` to version `1.1.1` to support HSL/HSLA color, CSS variables, and `calc()` expressions ([#71186](https://github.com/WordPress/gutenberg/pull/71186)).
+
+### Internal
+
+-   Validated form controls: Add support for async validation. This is a breaking API change that splits the `customValidator` prop into an `onValidate` callback and a `customValidity` object. ([#71184](https://github.com/WordPress/gutenberg/pull/71184)).
+
 ## 30.1.0 (2025-08-07)
 
 ### Enhancement
