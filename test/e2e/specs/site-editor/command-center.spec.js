@@ -39,6 +39,37 @@ test.describe( 'Site editor command palette', () => {
 		).toBeVisible();
 	} );
 
+	test( 'Open the command palette and create page using "create" keyword', async ( {
+		page,
+	} ) => {
+		await page
+			.getByRole( 'button', { name: 'Open command palette' } )
+			.focus();
+		await page.keyboard.press( 'Meta+k' );
+		await page.keyboard.type( 'create page' );
+		await page.getByRole( 'option', { name: 'Add new page' } ).click();
+		await expect( page ).toHaveURL(
+			/\/wp-admin\/site-editor.php\?p=%2Fpage%2F(\d+)&canvas=edit/
+		);
+		await expect(
+			page
+				.getByRole( 'region', { name: 'Editor top bar' } )
+				.getByRole( 'button', { name: 'No title · Page' } )
+		).toBeVisible();
+	} );
+
+	test( 'Open the command palette and create post using "create" keyword', async ( {
+		page,
+	} ) => {
+		await page
+			.getByRole( 'button', { name: 'Open command palette' } )
+			.focus();
+		await page.keyboard.press( 'Meta+k' );
+		await page.keyboard.type( 'create post' );
+		await page.getByRole( 'option', { name: 'Add new post' } ).click();
+		await expect( page ).toHaveURL( /\/wp-admin\/post-new\.php/ );
+	} );
+
 	test( 'Open the command palette and navigate to a template', async ( {
 		page,
 	} ) => {
