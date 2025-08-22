@@ -25,9 +25,10 @@ test.describe( 'Site editor command palette', () => {
 	} ) => {
 		await page
 			.getByRole( 'button', { name: 'Open command palette' } )
-			.focus();
-		await page.keyboard.press( 'Meta+k' );
-		await page.keyboard.type( 'new page' );
+			.click();
+		await page
+			.getByRole( 'combobox', { name: 'Search commands and settings' } )
+			.fill( 'new' );
 		await page.getByRole( 'option', { name: 'Add Page' } ).click();
 		await expect( page ).toHaveURL(
 			/\/wp-admin\/site-editor.php\?p=%2Fpage%2F(\d+)&canvas=edit/
@@ -44,10 +45,11 @@ test.describe( 'Site editor command palette', () => {
 	} ) => {
 		await page
 			.getByRole( 'button', { name: 'Open command palette' } )
-			.focus();
-		await page.keyboard.press( 'Meta+k' );
-		await page.keyboard.type( 'create page' );
-		await page.getByRole( 'option', { name: 'Add new page' } ).click();
+			.click();
+		await page
+			.getByRole( 'combobox', { name: 'Search commands and settings' } )
+			.fill( 'create' );
+		await page.getByRole( 'option', { name: 'Add Page' } ).click();
 		await expect( page ).toHaveURL(
 			/\/wp-admin\/site-editor.php\?p=%2Fpage%2F(\d+)&canvas=edit/
 		);
@@ -63,10 +65,11 @@ test.describe( 'Site editor command palette', () => {
 	} ) => {
 		await page
 			.getByRole( 'button', { name: 'Open command palette' } )
-			.focus();
-		await page.keyboard.press( 'Meta+k' );
-		await page.keyboard.type( 'create post' );
-		await page.getByRole( 'option', { name: 'Add new post' } ).click();
+			.click();
+		await page
+			.getByRole( 'combobox', { name: 'Search commands and settings' } )
+			.fill( 'create' );
+		await page.getByRole( 'option', { name: 'Add Post' } ).click();
 		await expect( page ).toHaveURL( /\/wp-admin\/post-new\.php/ );
 	} );
 
