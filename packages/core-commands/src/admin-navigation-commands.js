@@ -1,9 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { useCommand, useCommandLoader } from '@wordpress/commands';
+import { useCommandLoader } from '@wordpress/commands';
 import { __ } from '@wordpress/i18n';
-import { plus } from '@wordpress/icons';
+import { plus, dashboard } from '@wordpress/icons';
 import { getPath } from '@wordpress/url';
 import { store as coreStore } from '@wordpress/core-data';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -20,6 +20,14 @@ const { useHistory } = unlock( routerPrivateApis );
 
 const getAddNewPageCommand = () =>
 	function useAddNewPageCommand() {
+		const canCreatePage = useSelect(
+			( select ) =>
+				select( coreStore ).canUser( 'create', {
+					kind: 'postType',
+					name: 'page',
+				} ),
+			[]
+		);
 		const isSiteEditor = getPath( window.location.href )?.includes(
 			'site-editor.php'
 		);
@@ -65,6 +73,10 @@ const getAddNewPageCommand = () =>
 		);
 
 		const commands = useMemo( () => {
+			if ( ! canCreatePage ) {
+				return [];
+			}
+
 			const addNewPage =
 				isSiteEditor && isBlockBasedTheme
 					? createPageEntity
@@ -85,7 +97,12 @@ const getAddNewPageCommand = () =>
 					],
 				},
 			];
-		}, [ createPageEntity, isSiteEditor, isBlockBasedTheme ] );
+		}, [
+			createPageEntity,
+			isSiteEditor,
+			isBlockBasedTheme,
+			canCreatePage,
+		] );
 
 		return {
 			isLoading: false,
@@ -137,15 +154,88 @@ const getAdminBasicNavigationCommands = () =>
 		};
 	};
 
+const getDashboardCommand = () =>
+	function useDashboardCommand() {
+		const currentPath = getPath( window.location.href );
+
+		const isEditorScreen =
+			currentPath?.includes( 'site-editor.php' ) ||
+			currentPath?.includes( 'post.php' ) ||
+			currentPath?.includes( 'post-new.php' ) ||
+			currentPath?.includes( 'widgets.php' ) ||
+			currentPath?.includes( 'customize.php' );
+
+		const commands = useMemo( () => {
+			if ( isEditorScreen ) {
+				return [
+					{
+						name: 'core/dashboard',
+						label: __( 'Dashboard' ),
+						icon: dashboard,
+						callback: () => {
+							document.location.assign( 'index.php' );
+						},
+					},
+				];
+			}
+			return [];
+		}, [ isEditorScreen ] );
+
+		return {
+			isLoading: false,
+			commands,
+		};
+	};
+
+const getAddNewPostCommand = () =>
+	function useAddNewPostCommand() {
+		const canCreatePost = useSelect(
+			( select ) =>
+				select( coreStore ).canUser( 'create', {
+					kind: 'postType',
+					name: 'post',
+				} ),
+			[]
+		);
+
+		const commands = useMemo( () => {
+			if ( ! canCreatePost ) {
+				return [];
+			}
+
+			return [
+				{
+					name: 'core/add-new-post',
+					label: __( 'Add Post' ),
+					icon: plus,
+					callback: () => {
+						document.location.assign( 'post-new.php' );
+					},
+					keywords: [
+						__( 'post' ),
+						__( 'new' ),
+						__( 'add' ),
+						__( 'create' ),
+					],
+				},
+			];
+		}, [ canCreatePost ] );
+
+		return {
+			isLoading: false,
+			commands,
+		};
+	};
+
 export function useAdminNavigationCommands() {
-	useCommand( {
+	useCommandLoader( {
 		name: 'core/add-new-post',
-		label: __( 'Add Post' ),
-		icon: plus,
-		callback: () => {
-			document.location.assign( 'post-new.php' );
-		},
-		keywords: [ __( 'post' ), __( 'new' ), __( 'add' ), __( 'create' ) ],
+		hook: getAddNewPostCommand(),
+	} );
+
+	useCommandLoader( {
+		name: 'core/dashboard',
+		hook: getDashboardCommand(),
 	} );
 
 	useCommandLoader( {
