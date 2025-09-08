@@ -32,8 +32,8 @@ const meta = {
 			options: [
 				'default',
 				'array',
-				'boolean',
 				'checkbox',
+				'color',
 				'date',
 				'datetime',
 				'email',
@@ -43,6 +43,7 @@ const meta = {
 				'telephone',
 				'url',
 				'text',
+				'toggle',
 				'toggleGroup',
 			],
 		},
@@ -61,6 +62,7 @@ type DataType = {
 	integer: number;
 	integerWithElements: number;
 	boolean: boolean;
+	booleanWithToggle: boolean;
 	booleanWithElements: boolean;
 	datetime: string;
 	datetimeWithElements: string;
@@ -70,6 +72,8 @@ type DataType = {
 	emailWithElements: string;
 	telephone: string;
 	telephoneWithElements: string;
+	color: string;
+	colorWithElements: string;
 	url: string;
 	urlWithElements: string;
 	media: string;
@@ -88,6 +92,7 @@ const data: DataType[] = [
 		integer: 1,
 		integerWithElements: 1,
 		boolean: true,
+		booleanWithToggle: true,
 		booleanWithElements: true,
 		datetime: '2021-01-01T14:30:00Z',
 		datetimeWithElements: '2021-01-01T14:30:00Z',
@@ -97,6 +102,8 @@ const data: DataType[] = [
 		emailWithElements: 'hi@example.com',
 		telephone: '+1-555-123-4567',
 		telephoneWithElements: '+1-555-123-4567',
+		color: '#ff6600',
+		colorWithElements: 'rgba(255, 165, 0, 0.8)',
 		url: 'https://example.com',
 		urlWithElements: 'https://example.com',
 		media: 'https://live.staticflickr.com/7398/9458193857_e1256123e3_z.jpg',
@@ -149,6 +156,13 @@ const fields: Field< DataType >[] = [
 		type: 'boolean',
 		label: 'Boolean',
 		description: 'Help for boolean.',
+	},
+	{
+		id: 'booleanWithToggle',
+		type: 'boolean',
+		label: 'Boolean (with toggle)',
+		description: 'Help for boolean with toggle control.',
+		Edit: 'toggle',
 	},
 	{
 		id: 'booleanWithElements',
@@ -255,6 +269,30 @@ const fields: Field< DataType >[] = [
 		],
 	},
 	{
+		id: 'color',
+		type: 'color',
+		label: 'Color',
+		description:
+			'Help for color. Supports hex, rgb, hsl formats with alpha channel.',
+	},
+	{
+		id: 'colorWithElements',
+		type: 'color',
+		label: 'Color (with elements)',
+		description: 'Help for color with predefined color options.',
+		elements: [
+			{ value: '#ff0000', label: 'Red' },
+			{ value: '#00ff00', label: 'Green' },
+			{ value: '#0000ff', label: 'Blue' },
+			{ value: 'rgba(255, 165, 0, 0.8)', label: 'Orange (80% opacity)' },
+			{ value: 'hsl(300, 100%, 50%)', label: 'Magenta' },
+			{
+				value: 'hsla(120, 100%, 25%, 0.6)',
+				label: 'Dark Green (60% opacity)',
+			},
+		],
+	},
+	{
 		id: 'media',
 		type: 'media',
 		label: 'Media',
@@ -332,8 +370,8 @@ type PanelTypes = 'regular' | 'panel';
 type ControlTypes =
 	| 'default'
 	| 'array'
-	| 'boolean'
 	| 'checkbox'
+	| 'color'
 	| 'date'
 	| 'datetime'
 	| 'email'
@@ -343,6 +381,7 @@ type ControlTypes =
 	| 'telephone'
 	| 'url'
 	| 'text'
+	| 'toggle'
 	| 'toggleGroup';
 
 interface FieldTypeStoryProps {
@@ -605,6 +644,23 @@ export const Url = ( {
 	);
 
 	return <FieldTypeStory fields={ urlFields } type={ type } Edit={ Edit } />;
+};
+
+export const Color = ( {
+	type,
+	Edit,
+}: {
+	type: PanelTypes;
+	Edit: ControlTypes;
+} ) => {
+	const colorFields = useMemo(
+		() => fields.filter( ( field ) => field.type === 'color' ),
+		[]
+	);
+
+	return (
+		<FieldTypeStory fields={ colorFields } type={ type } Edit={ Edit } />
+	);
 };
 
 export const Media = ( {
