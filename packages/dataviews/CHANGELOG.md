@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 9.0.0 (2025-09-17)
+
 ### Breaking changes
 
 - Remove `boolean` form control. Fields using `Edit: 'boolean'` must now use `Edit: 'checkbox'` or `Edit: 'toggle'` instead. Boolean field types now use checkboxes by default. [#71505](https://github.com/WordPress/gutenberg/pull/71505)
@@ -21,6 +23,7 @@
 - DataForm: support validation in toggleGroup control. ([#71666](https://github.com/WordPress/gutenberg/pull/71666))
 -  DataForm: Add object configuration support for Edit property with some options. ([#71582](https://github.com/WordPress/gutenberg/pull/71582))
 - DataForm: Add summary field support for composed fields. ([#71614](https://github.com/WordPress/gutenberg/pull/71614))
+- DataForm: update radio control to support `required` and `custom` validation. [#71664](https://github.com/WordPress/gutenberg/pull/71664)
 
 ### Bug Fixes
 
