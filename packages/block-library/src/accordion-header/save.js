@@ -34,7 +34,6 @@ export default function save( { attributes } ) {
 				'accordion-content__heading',
 				{
 					[ `has-custom-font-size` ]: blockProps?.style?.fontSize,
-					[ `icon-position-left` ]: iconPosition === 'left',
 					[ `has-text-align-${ textAlign }` ]: textAlign,
 				}
 			) }
@@ -50,9 +49,26 @@ export default function save( { attributes } ) {
 					...spacingProps.style,
 				} }
 			>
-				<RichText.Content tagName="span" value={ title } />
-				{ showIcon && (
-					<span className="accordion-content__toggle-icon">+</span>
+				{ showIcon && iconPosition === 'left' && (
+					<span
+						className="accordion-content__toggle-icon"
+						aria-hidden="true"
+					>
+						+
+					</span>
+				) }
+				<RichText.Content
+					className="accordion-content__toggle-title"
+					tagName="span"
+					value={ title }
+				/>
+				{ showIcon && iconPosition === 'right' && (
+					<span
+						className="accordion-content__toggle-icon"
+						aria-hidden="true"
+					>
+						+
+					</span>
 				) }
 			</button>
 		</TagName>
