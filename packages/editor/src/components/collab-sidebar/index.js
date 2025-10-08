@@ -21,7 +21,7 @@ import { collabHistorySidebarName, collabSidebarName } from './constants';
 import { Comments } from './comments';
 import { AddComment } from './add-comment';
 import { store as editorStore } from '../../store';
-import AddCommentButton from './comment-button';
+import AddCommentMenuItem from './comment-menu-item';
 import CommentAvatarIndicator from './comment-indicator-toolbar';
 import { useGlobalStylesContext } from '../global-styles-provider';
 import { useBlockComments } from './hooks';
@@ -97,6 +97,8 @@ function CollabSidebarContent( {
 					isDismissible: true,
 				}
 			);
+
+			return savedRecord;
 		} catch ( error ) {
 			onError( error );
 		}
@@ -178,6 +180,7 @@ function CollabSidebarContent( {
 					onSubmit={ addNewComment }
 					showCommentBoard={ showCommentBoard }
 					setShowCommentBoard={ setShowCommentBoard }
+					commentSidebarRef={ commentSidebarRef }
 				/>
 				<Comments
 					threads={ comments }
@@ -245,10 +248,6 @@ export default function CollabSidebar() {
 		} );
 	}
 
-	const AddCommentComponent = blockCommentId
-		? CommentAvatarIndicator
-		: AddCommentButton;
-
 	// Find the current thread for the selected block.
 	const currentThread = blockCommentId
 		? resultComments.find( ( thread ) => thread.id === blockCommentId )
@@ -261,11 +260,13 @@ export default function CollabSidebar() {
 
 	return (
 		<>
-			<AddCommentComponent
-				onClick={ openCollabBoard }
-				thread={ currentThread }
-				hasMoreComments={ hasMoreComments }
-			/>
+			{ blockCommentId && (
+				<CommentAvatarIndicator
+					thread={ currentThread }
+					hasMoreComments={ hasMoreComments }
+				/>
+			) }
+			<AddCommentMenuItem onClick={ openCollabBoard } />
 			<PluginSidebar
 				identifier={ collabHistorySidebarName }
 				// translators: Comments sidebar title
