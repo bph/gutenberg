@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, copyFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { parseArgs } from 'node:util';
@@ -13,6 +13,11 @@ import watch from 'node-watch';
 // See https://github.com/WordPress/gutenberg/issues/72136
 // eslint-disable-next-line import/no-unresolved
 import browserslistToEsbuild from 'browserslist-to-esbuild';
+import { sassPlugin } from 'esbuild-sass-plugin';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
+import rtlcss from 'rtlcss';
+import cssnano from 'cssnano';
 
 /**
  * Internal dependencies
@@ -34,6 +39,19 @@ const TEST_FILE_PATTERNS = [
 	/\/(benchmark|__mocks__|__tests__|test|storybook|stories)\/.+/,
 	/\.(spec|test)\.(js|ts|tsx)$/,
 ];
+
+// Define global variables for feature flagging, matching webpack's DefinePlugin behavior
+const define = {
+	'globalThis.IS_GUTENBERG_PLUGIN': JSON.stringify(
+		Boolean( process.env.npm_package_config_IS_GUTENBERG_PLUGIN )
+	),
+	'globalThis.IS_WORDPRESS_CORE': JSON.stringify(
+		Boolean( process.env.npm_package_config_IS_WORDPRESS_CORE )
+	),
+	'globalThis.SCRIPT_DEBUG': JSON.stringify(
+		process.env.NODE_ENV === 'development'
+	),
+};
 
 /**
  * Normalize path separators for cross-platform compatibility.
@@ -113,10 +131,14 @@ function momentTimezoneAliasPlugin() {
  * WordPress externals and asset plugin.
  * Inspired by wp-build's wordpressExternalsAndAssetPlugin.
  *
- * @param {string} assetName Optional. The name of the asset file to generate (without .asset.php extension). Defaults to 'index.min'.
+ * @param {string} assetName   Optional. The name of the asset file to generate (without .asset.php extension). Defaults to 'index.min'.
+ * @param {string} buildFormat Optional. The build format: 'iife' for scripts or 'esm' for script modules. Defaults to 'iife'.
  * @return {Object} esbuild plugin.
  */
-function wordpressExternalsPlugin( assetName = 'index.min' ) {
+function wordpressExternalsPlugin(
+	assetName = 'index.min',
+	buildFormat = 'iife'
+) {
 	return {
 		name: 'wordpress-externals',
 		setup( build ) {
@@ -257,11 +279,17 @@ function wordpressExternalsPlugin( assetName = 'index.min' ) {
 					return undefined;
 				}
 
-				// Check if this is a script module
-				const isScriptModule = isScriptModuleImport(
+				// Check if this is a script module or a script dependency.
+				let isScriptModule = isScriptModuleImport(
 					packageJson,
 					subpath
 				);
+				let isScript = packageJson.wpScript;
+				if ( isScriptModule && isScript ) {
+					// If the package is both a script and a script module, we should rely on the format being built
+					isScript = buildFormat === 'iife';
+					isScriptModule = buildFormat === 'esm';
+				}
 
 				// Determine import kind: dynamic or static
 				const kind =
@@ -283,7 +311,7 @@ function wordpressExternalsPlugin( assetName = 'index.min' ) {
 				}
 
 				// If it has wpScript, convert to global variable
-				if ( packageJson.wpScript ) {
+				if ( isScript ) {
 					// Track regular script dependency using wp- handle format
 					dependencies.add( wpHandle );
 
@@ -383,6 +411,48 @@ function wordpressExternalsPlugin( assetName = 'index.min' ) {
 }
 
 /**
+ * Resolve the entry point for bundling from package.json exports field.
+ * Falls back to build-module/index.js if no exports field is found.
+ *
+ * @param {string} packageDir  Package directory path.
+ * @param {Object} packageJson Package.json object.
+ * @return {string} Resolved entry point path.
+ */
+function resolveEntryPoint( packageDir, packageJson ) {
+	// If package has exports field, use it
+	if ( packageJson.exports ) {
+		const rootExport = packageJson.exports[ '.' ];
+		if ( rootExport ) {
+			// If it's an object with conditions, prefer 'import' over 'default'
+			if ( typeof rootExport === 'object' ) {
+				const entryFile =
+					rootExport.import ||
+					rootExport.default ||
+					rootExport.require;
+				if ( entryFile ) {
+					return path.join( packageDir, entryFile );
+				}
+			}
+			// If it's a string, use it directly
+			if ( typeof rootExport === 'string' ) {
+				return path.join( packageDir, rootExport );
+			}
+		}
+	}
+
+	// Fallback: try module field, then main field, then build-module/index.js
+	if ( packageJson.module ) {
+		return path.join( packageDir, packageJson.module );
+	}
+	if ( packageJson.main ) {
+		return path.join( packageDir, packageJson.main );
+	}
+
+	// Ultimate fallback
+	return path.join( packageDir, 'build-module', 'index.js' );
+}
+
+/**
  * Bundle a package for WordPress using esbuild.
  *
  * @param {string} packageName Package name.
@@ -397,7 +467,7 @@ async function bundlePackage( packageName ) {
 
 	// Bundle wpScript (IIFE format for global wp.* namespace)
 	if ( packageJson.wpScript ) {
-		const entryPoint = path.join( packageDir, 'build-module', 'index.js' );
+		const entryPoint = resolveEntryPoint( packageDir, packageJson );
 		const outputDir = path.join( PACKAGES_DIR, '..', 'build', packageName );
 		const target = browserslistToEsbuild();
 		const globalName = `wp.${ kebabToCamelCase( packageName ) }`;
@@ -424,16 +494,21 @@ async function bundlePackage( packageName ) {
 				...baseConfig,
 				outfile: path.join( outputDir, 'index.min.js' ),
 				minify: true,
+				define,
 				plugins: [
 					momentTimezoneAliasPlugin(),
-					wordpressExternalsPlugin( 'index.min' ),
+					wordpressExternalsPlugin( 'index.min', 'iife' ),
 				],
 			} ),
 			esbuild.build( {
 				...baseConfig,
 				outfile: path.join( outputDir, 'index.js' ),
 				minify: false,
-				plugins: [ momentTimezoneAliasPlugin() ],
+				define,
+				plugins: [
+					momentTimezoneAliasPlugin(),
+					wordpressExternalsPlugin( 'index.min', 'iife' ),
+				],
 			} )
 		);
 	}
@@ -476,11 +551,70 @@ async function bundlePackage( packageName ) {
 					target,
 					platform: 'browser',
 					minify: true,
+					define,
 					plugins: [
-						wordpressExternalsPlugin( `${ fileName }.min` ),
+						wordpressExternalsPlugin( `${ fileName }.min`, 'esm' ),
 					],
 				} )
 			);
+		}
+	}
+
+	// Process CSS files from build-style to build directory (for wpScript packages)
+	if ( packageJson.wpScript ) {
+		const buildStyleDir = path.join( packageDir, 'build-style' );
+		const outputDir = path.join( PACKAGES_DIR, '..', 'build', packageName );
+		const isProduction = process.env.NODE_ENV === 'production';
+
+		try {
+			// Find CSS files in build-style directory
+			const cssFiles = await glob(
+				normalizePath( path.join( buildStyleDir, '*.css' ) )
+			);
+
+			if ( cssFiles.length > 0 ) {
+				// Ensure output directory exists
+				await mkdir( outputDir, { recursive: true } );
+
+				// Process each CSS file
+				for ( const cssFile of cssFiles ) {
+					const filename = path.basename( cssFile );
+					const destPath = path.join( outputDir, filename );
+
+					if ( isProduction ) {
+						// In production, minify CSS with cssnano
+						builds.push(
+							( async () => {
+								const cssContent = await readFile(
+									cssFile,
+									'utf8'
+								);
+								const result = await postcss( [
+									cssnano( {
+										preset: [
+											'default',
+											{
+												discardComments: {
+													removeAll: true,
+												},
+											},
+										],
+									} ),
+								] ).process( cssContent, {
+									from: cssFile,
+									to: destPath,
+								} );
+								await writeFile( destPath, result.css );
+							} )()
+						);
+					} else {
+						// In development, just copy the file
+						builds.push( copyFile( cssFile, destPath ) );
+					}
+				}
+			}
+		} catch ( error ) {
+			// build-style doesn't exist or is empty - that's fine, not all packages have styles
 		}
 	}
 
@@ -494,66 +628,18 @@ async function bundlePackage( packageName ) {
 }
 
 /**
- * Transpile source files for a package (both CJS and ESM).
- *
- * @param {string}   packageDir  Package directory path.
- * @param {string[]} srcFiles    Array of source file paths.
- * @param {Object}   packageJson Package.json contents.
- */
-async function transpilePackage( packageDir, srcFiles, packageJson ) {
-	const buildDir = path.join( packageDir, 'build' );
-	const buildModuleDir = path.join( packageDir, 'build-module' );
-	const target = browserslistToEsbuild();
-
-	const builds = [];
-
-	// Only build CJS if package has 'main' property
-	if ( packageJson.main ) {
-		builds.push(
-			esbuild.build( {
-				entryPoints: srcFiles,
-				outdir: buildDir,
-				outbase: path.join( packageDir, 'src' ),
-				bundle: false,
-				platform: 'node',
-				format: 'cjs',
-				sourcemap: true,
-				target,
-			} )
-		);
-	}
-
-	// Only build ESM if package has 'module' property
-	if ( packageJson.module ) {
-		builds.push(
-			esbuild.build( {
-				entryPoints: srcFiles,
-				outdir: buildModuleDir,
-				outbase: path.join( packageDir, 'src' ),
-				bundle: false,
-				platform: 'neutral',
-				format: 'esm',
-				sourcemap: true,
-				target,
-			} )
-		);
-	}
-
-	await Promise.all( builds );
-}
-
-/**
- * Transpile a single package's source files.
+ * Transpile a single package's source files and copy JSON files.
  *
  * @param {string} packageName Package name.
  * @return {Promise<number>} Build time in milliseconds.
  */
-async function transpilePackageFiles( packageName ) {
+async function transpilePackage( packageName ) {
 	const startTime = Date.now();
 	const packageDir = path.join( PACKAGES_DIR, packageName );
 	const packageJsonPath = path.join( packageDir, 'package.json' );
 	const packageJson = JSON.parse( await readFile( packageJsonPath, 'utf8' ) );
 
+	// Find source files to transpile
 	const srcFiles = await glob(
 		normalizePath(
 			path.join( packageDir, `src/**/*.${ SOURCE_EXTENSIONS }` )
@@ -563,7 +649,161 @@ async function transpilePackageFiles( packageName ) {
 		}
 	);
 
-	await transpilePackage( packageDir, srcFiles, packageJson );
+	// Find JSON files to copy
+	const jsonFiles = await glob(
+		normalizePath( path.join( packageDir, 'src/**/*.json' ) ),
+		{
+			ignore: IGNORE_PATTERNS,
+		}
+	);
+
+	const buildDir = path.join( packageDir, 'build' );
+	const buildModuleDir = path.join( packageDir, 'build-module' );
+	const srcDir = path.join( packageDir, 'src' );
+	const target = browserslistToEsbuild();
+
+	const builds = [];
+
+	// Build CJS and copy JSON files to build directory
+	if ( packageJson.main ) {
+		builds.push(
+			esbuild.build( {
+				entryPoints: srcFiles,
+				outdir: buildDir,
+				outbase: srcDir,
+				bundle: false,
+				platform: 'node',
+				format: 'cjs',
+				sourcemap: true,
+				target,
+				jsx: 'automatic',
+				jsxImportSource: 'react',
+				loader: {
+					'.js': 'jsx',
+				},
+			} )
+		);
+
+		// Copy JSON files to build directory
+		for ( const jsonFile of jsonFiles ) {
+			const relativePath = path.relative( srcDir, jsonFile );
+			const destPath = path.join( buildDir, relativePath );
+			const destDir = path.dirname( destPath );
+			builds.push(
+				mkdir( destDir, { recursive: true } ).then( () =>
+					copyFile( jsonFile, destPath )
+				)
+			);
+		}
+	}
+
+	// Build ESM and copy JSON files to build-module directory
+	if ( packageJson.module ) {
+		builds.push(
+			esbuild.build( {
+				entryPoints: srcFiles,
+				outdir: buildModuleDir,
+				outbase: srcDir,
+				bundle: false,
+				platform: 'neutral',
+				format: 'esm',
+				sourcemap: true,
+				target,
+				jsx: 'automatic',
+				jsxImportSource: 'react',
+				loader: {
+					'.js': 'jsx',
+				},
+			} )
+		);
+
+		// Copy JSON files to build-module directory
+		for ( const jsonFile of jsonFiles ) {
+			const relativePath = path.relative( srcDir, jsonFile );
+			const destPath = path.join( buildModuleDir, relativePath );
+			const destDir = path.dirname( destPath );
+			builds.push(
+				mkdir( destDir, { recursive: true } ).then( () =>
+					copyFile( jsonFile, destPath )
+				)
+			);
+		}
+	}
+
+	await compileStyles( packageName );
+
+	await Promise.all( builds );
+
+	return Date.now() - startTime;
+}
+
+/**
+ * Compile styles for a single package.
+ *
+ * @param {string} packageName Package name.
+ * @return {Promise<number|null>} Build time in milliseconds, or null if no styles.
+ */
+async function compileStyles( packageName ) {
+	const packageDir = path.join( PACKAGES_DIR, packageName );
+	const styleEntryPath = path.join( packageDir, 'src', 'style.scss' );
+
+	// Check if style entry point exists
+	try {
+		await readFile( styleEntryPath );
+	} catch {
+		return null;
+	}
+
+	const startTime = Date.now();
+	const buildStyleDir = path.join( packageDir, 'build-style' );
+
+	// Create build-style directory
+	await mkdir( buildStyleDir, { recursive: true } );
+
+	// Build with Sass plugin
+	await esbuild.build( {
+		entryPoints: [ styleEntryPath ],
+		outdir: buildStyleDir,
+		bundle: true,
+		write: false,
+		loader: {
+			'.scss': 'css',
+		},
+		plugins: [
+			sassPlugin( {
+				loadPaths: [
+					'node_modules',
+					path.join( PACKAGES_DIR, 'base-styles' ),
+				],
+				async transform( source ) {
+					// Process with autoprefixer for LTR version
+					const ltrResult = await postcss( [
+						autoprefixer( { grid: true } ),
+					] ).process( source, { from: undefined } );
+
+					// Process with rtlcss for RTL version
+					const rtlResult = await postcss( [ rtlcss() ] ).process(
+						ltrResult.css,
+						{ from: undefined }
+					);
+
+					// Write both versions
+					await Promise.all( [
+						writeFile(
+							path.join( buildStyleDir, 'style.css' ),
+							ltrResult.css
+						),
+						writeFile(
+							path.join( buildStyleDir, 'style-rtl.css' ),
+							rtlResult.css
+						),
+					] );
+
+					return '';
+				},
+			} ),
+		],
+	} );
 
 	return Date.now() - startTime;
 }
@@ -579,7 +819,7 @@ function isV2SourceFile( filename ) {
 		path.relative( process.cwd(), filename )
 	);
 
-	if ( ! /\/src\/.+\.(js|ts|tsx)$/.test( relativePath ) ) {
+	if ( ! /\/src\/.+\.(js|ts|tsx|scss)$/.test( relativePath ) ) {
 		return false;
 	}
 
@@ -631,7 +871,7 @@ async function buildAll() {
 	console.log( '📝 Phase 1: Transpiling packages...\n' );
 	await Promise.all(
 		V2_PACKAGES.map( async ( packageName ) => {
-			const buildTime = await transpilePackageFiles( packageName );
+			const buildTime = await transpilePackage( packageName );
 			console.log( `✔ Transpiled ${ packageName } (${ buildTime }ms)` );
 		} )
 	);
@@ -674,7 +914,7 @@ async function watchMode() {
 			try {
 				const startTime = Date.now();
 
-				await transpilePackageFiles( packageName );
+				await transpilePackage( packageName );
 				await bundlePackage( packageName );
 
 				const buildTime = Date.now() - startTime;
@@ -694,7 +934,25 @@ async function watchMode() {
 
 	watch(
 		PACKAGES_DIR,
-		{ recursive: true, delay: 500 },
+		{
+			recursive: true,
+			delay: 500,
+			filter( filename ) {
+				// Exclude build output directories and dependencies to reduce file descriptor usage
+				const basename = path.basename( filename );
+				if (
+					basename === 'node_modules' ||
+					basename === 'build' ||
+					basename === 'build-module' ||
+					basename === 'build-style' ||
+					basename === 'build-types' ||
+					basename === '.git'
+				) {
+					return false;
+				}
+				return true;
+			},
+		},
 		( event, filename ) => {
 			if ( ! isV2SourceFile( filename ) ) {
 				return;

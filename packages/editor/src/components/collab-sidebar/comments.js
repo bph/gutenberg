@@ -58,16 +58,41 @@ export function Comments( {
 	setShowCommentBoard,
 	commentSidebarRef,
 } ) {
-	const [ selectedThread, setSelectedThread ] = useState();
-
-	const blockCommentId = useSelect( ( select ) => {
+	const { blockCommentId, selectedBlockClientId } = useSelect( ( select ) => {
 		const { getBlockAttributes, getSelectedBlockClientId } =
 			select( blockEditorStore );
 		const clientId = getSelectedBlockClientId();
-		return clientId
-			? getBlockAttributes( clientId )?.metadata?.commentId
-			: null;
+		return {
+			blockCommentId: clientId
+				? getBlockAttributes( clientId )?.metadata?.commentId
+				: null,
+			selectedBlockClientId: clientId,
+		};
 	}, [] );
+	const { selectBlock } = useDispatch( blockEditorStore );
+	const [ selectedThread = blockCommentId, setSelectedThread ] = useState();
+
+	const handleDelete = async ( comment ) => {
+		const currentIndex = threads.findIndex( ( t ) => t.id === comment.id );
+		const nextThread = threads[ currentIndex + 1 ];
+		const prevThread = threads[ currentIndex - 1 ];
+
+		await onCommentDelete( comment );
+
+		// Focus logic after deletion completes.
+		if ( nextThread ) {
+			setSelectedThread( nextThread.id );
+			focusCommentThread( nextThread.id, commentSidebarRef.current );
+		} else if ( prevThread ) {
+			setSelectedThread( prevThread.id );
+			focusCommentThread( prevThread.id, commentSidebarRef.current );
+		} else {
+			setSelectedThread( null );
+			setShowCommentBoard( false );
+			// Focus the parent block instead of just scrolling into view.
+			selectBlock( selectedBlockClientId );
+		}
+	};
 
 	// Auto-select the related comment thread when a block is selected.
 	useEffect( () => {
@@ -96,7 +121,7 @@ export function Comments( {
 			key={ thread.id }
 			thread={ thread }
 			onAddReply={ onAddReply }
-			onCommentDelete={ onCommentDelete }
+			onCommentDelete={ handleDelete }
 			onEditComment={ onEditComment }
 			isSelected={ selectedThread === thread.id }
 			setSelectedThread={ setSelectedThread }
@@ -206,6 +231,20 @@ function Thread( {
 			aria-label={ ariaLabel }
 			aria-expanded={ isSelected }
 		>
+			<Button
+				className="editor-collab-sidebar-panel__skip-link"
+				variant="secondary"
+				size="compact"
+				onClick={ () => {
+					focusCommentThread(
+						thread.id,
+						commentSidebarRef.current,
+						'textarea'
+					);
+				} }
+			>
+				{ __( 'Add New Comment' ) }
+			</Button>
 			{ ! relatedBlockElement && (
 				<Text as="p" weight={ 500 } variant="muted">
 					{ __( 'Original block deleted.' ) }
