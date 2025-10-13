@@ -6,7 +6,7 @@
 
  * Requires at least: 6.6
  * Requires PHP: 7.4
- * Version: 22.0.20251011
+ * Version: 22.0.20251013
  * Author: Gutenberg Team and Birgit Pauli-Haack (Gutenberg Times)
  * Text Domain: gutenberg
  * GitHub Plugin URI: bph/gutenberg
