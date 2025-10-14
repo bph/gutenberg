@@ -152,6 +152,7 @@ describe( 'validation', () => {
 					{ value: 'b', label: 'B' },
 				],
 				isValid: {
+					elements: false,
 					custom: () => null, // Overrides the validation provided for integer types.
 				},
 			},
