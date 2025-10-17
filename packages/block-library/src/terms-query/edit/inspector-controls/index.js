@@ -20,6 +20,7 @@ import NestedTermsControl from './nested-terms-control';
 import InheritControl from './inherit-control';
 import MaxTermsControl from './max-terms-control';
 import AdvancedControls from './advanced-controls';
+import IncludeControl from './include-control';
 
 export default function TermsQueryInspectorControls( {
 	attributes,
@@ -37,6 +38,7 @@ export default function TermsQueryInspectorControls( {
 		inherit,
 		showNested,
 		perPage,
+		include,
 	} = termQuery;
 	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
@@ -45,7 +47,7 @@ export default function TermsQueryInspectorControls( {
 	const isTaxonomyHierarchical = taxonomies.find(
 		( _taxonomy ) => _taxonomy.slug === taxonomy
 	)?.hierarchical;
-
+	const inheritQuery = !! inherit;
 	// Display the inherit control when we're in a taxonomy-related
 	// template (category, tag, or custom taxonomy).
 	const displayInheritControl =
@@ -53,13 +55,9 @@ export default function TermsQueryInspectorControls( {
 		templateSlug?.startsWith( 'taxonomy-' ) ||
 		templateSlug?.startsWith( 'category-' ) ||
 		templateSlug?.startsWith( 'tag-' );
-
 	// Only display the showNested control if the taxonomy is hierarchical and not inheriting.
-	const displayShowNestedControl =
-		isTaxonomyHierarchical && ! termQuery.inherit;
-
-	// Only display the taxonomy control when not inheriting (custom query type).
-	const displayTaxonomyControl = ! termQuery.inherit;
+	const displayShowNestedControl = isTaxonomyHierarchical && ! inheritQuery;
+	const hasIncludeFilter = !! include?.length;
 
 	// Labels shared between ToolsPanelItem and its child control.
 	const queryTypeControlLabel = __( 'Query type' );
@@ -68,6 +66,7 @@ export default function TermsQueryInspectorControls( {
 	const emptyTermsControlLabel = __( 'Show empty terms' );
 	const nestedTermsControlLabel = __( 'Show nested terms' );
 	const maxTermsControlLabel = __( 'Max terms' );
+	const includeControlLabel = __( 'Selected terms' );
 
 	return (
 		<>
@@ -80,10 +79,10 @@ export default function TermsQueryInspectorControls( {
 								taxonomy: 'category',
 								order: 'asc',
 								orderBy: 'name',
+								include: [],
 								hideEmpty: true,
 								showNested: false,
 								inherit: false,
-								parent: false,
 								perPage: 10,
 							},
 						} );
@@ -104,7 +103,7 @@ export default function TermsQueryInspectorControls( {
 							/>
 						</ToolsPanelItem>
 					) }
-					{ displayTaxonomyControl && (
+					{ ! inheritQuery && (
 						<ToolsPanelItem
 							hasValue={ () => taxonomy !== 'category' }
 							label={ taxonomyControlLabel }
@@ -117,7 +116,8 @@ export default function TermsQueryInspectorControls( {
 								label={ taxonomyControlLabel }
 								value={ taxonomy }
 								onChange={ ( value ) =>
-									setQuery( { taxonomy: value } )
+									// We also need to reset the include filter when changing taxonomy.
+									setQuery( { taxonomy: value, include: [] } )
 								}
 							/>
 						</ToolsPanelItem>
@@ -139,8 +139,39 @@ export default function TermsQueryInspectorControls( {
 									order: newOrder,
 								} );
 							} }
+							disabled={ hasIncludeFilter }
+							help={
+								hasIncludeFilter
+									? __(
+											'When specific terms are selected, the order is based on their selection order.'
+									  )
+									: undefined
+							}
 						/>
 					</ToolsPanelItem>
+					{ ! inheritQuery && (
+						<ToolsPanelItem
+							hasValue={ () => !! include?.length }
+							label={ includeControlLabel }
+							onDeselect={ () =>
+								setQuery( {
+									include: [],
+									orderBy: 'name',
+									order: 'asc',
+								} )
+							}
+							isShownByDefault
+						>
+							<IncludeControl
+								label={ includeControlLabel }
+								taxonomy={ taxonomy }
+								value={ include }
+								onChange={ ( value ) =>
+									setQuery( { include: value } )
+								}
+							/>
+						</ToolsPanelItem>
+					) }
 					<ToolsPanelItem
 						hasValue={ () => hideEmpty !== true }
 						label={ emptyTermsControlLabel }
@@ -169,6 +200,14 @@ export default function TermsQueryInspectorControls( {
 								value={ showNested }
 								onChange={ ( value ) =>
 									setQuery( { showNested: value } )
+								}
+								disabled={ hasIncludeFilter }
+								help={
+									hasIncludeFilter
+										? __(
+												'When specific terms are selected, only those are displayed.'
+										  )
+										: undefined
 								}
 							/>
 						</ToolsPanelItem>

@@ -27,6 +27,7 @@ import {
 	useEnableFloatingSidebar,
 } from './hooks';
 import { focusCommentThread } from './utils';
+import PluginMoreMenuItem from '../plugin-more-menu-item';
 
 function CollabSidebarContent( {
 	showCommentBoard,
@@ -98,7 +99,7 @@ export default function CollabSidebar() {
 			select( blockEditorStore );
 		const clientId = getSelectedBlockClientId();
 		return clientId
-			? getBlockAttributes( clientId )?.metadata?.commentId
+			? getBlockAttributes( clientId )?.metadata?.noteId
 			: null;
 	}, [] );
 
@@ -195,6 +196,9 @@ export default function CollabSidebar() {
 					/>
 				</PluginSidebar>
 			) }
+			<PluginMoreMenuItem icon={ commentIcon } onClick={ openTheSidebar }>
+				{ __( 'Notes' ) }
+			</PluginMoreMenuItem>
 		</>
 	);
 }
