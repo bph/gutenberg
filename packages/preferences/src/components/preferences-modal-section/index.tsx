@@ -1,4 +1,10 @@
-const Section = ( { description, title, children } ) => (
+export type SectionProps = {
+	description?: React.ReactNode;
+	title?: React.ReactNode;
+	children?: React.ReactNode;
+};
+
+const Section = ( { description, title, children }: SectionProps ) => (
 	<fieldset className="preferences-modal__section">
 		<legend className="preferences-modal__section-legend">
 			<h2 className="preferences-modal__section-title">{ title }</h2>

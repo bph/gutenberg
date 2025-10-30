@@ -28,7 +28,12 @@ const { Tabs } = unlock( componentsPrivateApis );
 
 const PREFERENCES_MENU = 'preferences-menu';
 
-export default function PreferencesModalTabs( { sections } ) {
+export type PreferencesModalTabsProps = {
+	sections: { name: string; tabLabel: string; content: React.ReactNode }[];
+};
+export default function PreferencesModalTabs( {
+	sections,
+}: PreferencesModalTabsProps ) {
 	const isLargeViewport = useViewportMatch( 'medium' );
 
 	// This is also used to sync the two different rendered components
@@ -40,12 +45,15 @@ export default function PreferencesModalTabs( { sections } ) {
 	 * is used for easier access to active tab's content.
 	 */
 	const { tabs, sectionsContentMap } = useMemo( () => {
-		let mappedTabs = {
+		let mappedTabs: {
+			tabs: { name: string; title: string }[];
+			sectionsContentMap: Record< string, React.ReactNode >;
+		} = {
 			tabs: [],
 			sectionsContentMap: {},
 		};
 		if ( sections.length ) {
-			mappedTabs = sections.reduce(
+			mappedTabs = sections.reduce< typeof mappedTabs >(
 				( accumulator, { name, tabLabel: title, content } ) => {
 					accumulator.tabs.push( { name, title } );
 					accumulator.sectionsContentMap[ name ] = content;
@@ -102,6 +110,7 @@ export default function PreferencesModalTabs( { sections } ) {
 							<ItemGroup>
 								{ tabs.map( ( tab ) => {
 									return (
+										// @ts-expect-error: Navigator.Button is currently typed in a way that prevents Item from being passed in
 										<Navigator.Button
 											key={ tab.name }
 											path={ `/${ tab.name }` }
@@ -144,6 +153,7 @@ export default function PreferencesModalTabs( { sections } ) {
 										justify="left"
 										size="small"
 										gap="6"
+										as="div"
 									>
 										<Navigator.BackButton
 											icon={
