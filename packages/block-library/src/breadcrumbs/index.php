@@ -76,25 +76,55 @@ function render_block_core_breadcrumbs( $attributes, $content, $block ) {
 			return '';
 		}
 
-		// Determine breadcrumb type for accurate rendering (matching JavaScript logic).
+		// For non-hierarchical post types with parents (e.g., attachments), build trail for the parent.
+		$post_parent = $post->post_parent;
+		$parent_post = null;
+		if ( ! is_post_type_hierarchical( $post_type ) && $post_parent ) {
+			$parent_post = get_post( $post_parent );
+			if ( $parent_post ) {
+				$post_id     = $parent_post->ID;
+				$post_type   = $parent_post->post_type;
+				$post_parent = $parent_post->post_parent;
+			}
+		}
+
+		// Determine breadcrumb type.
+		// Some non-hierarchical post types (e.g., attachments) can have parents.
+		// Use hierarchical breadcrumbs if a parent exists, otherwise use taxonomy breadcrumbs.
 		$show_terms = false;
-		if ( ! is_post_type_hierarchical( $post_type ) ) {
+		if ( ! is_post_type_hierarchical( $post_type ) && ! $post_parent ) {
 			$show_terms = true;
 		} elseif ( empty( get_object_taxonomies( $post_type, 'objects' ) ) ) {
-			// Hierarchical post type without taxonomies can only use ancestors.
 			$show_terms = false;
 		} else {
-			// For hierarchical post types with taxonomies, use the attribute.
 			$show_terms = $attributes['prefersTaxonomy'];
 		}
 
+		// Build breadcrumb trail.
 		if ( ! $show_terms ) {
 			$breadcrumb_items = array_merge( $breadcrumb_items, block_core_breadcrumbs_get_hierarchical_post_type_breadcrumbs( $post_id ) );
 		} else {
 			$breadcrumb_items = array_merge( $breadcrumb_items, block_core_breadcrumbs_get_terms_breadcrumbs( $post_id, $post_type ) );
 		}
-		// Add current post title (not linked).
-		$breadcrumb_items[] = block_core_breadcrumbs_create_current_item( block_core_breadcrumbs_get_post_title( $post ), true );
+
+		// Add post title: linked when viewing a paginated page, plain text otherwise.
+		$is_paged = (int) get_query_var( 'page' ) > 1;
+		$title    = block_core_breadcrumbs_get_post_title( $post );
+
+		if ( $is_paged ) {
+			$breadcrumb_items[] = block_core_breadcrumbs_create_link(
+				get_permalink( $post ),
+				$title,
+				true
+			);
+
+			$breadcrumb_items[] = block_core_breadcrumbs_create_page_number_item( 'page' );
+		} else {
+			$breadcrumb_items[] = block_core_breadcrumbs_create_current_item(
+				$title,
+				true
+			);
+		}
 	}
 
 	// Remove last item if disabled.
@@ -146,11 +176,12 @@ function block_core_breadcrumbs_is_paged() {
  * Creates a "Page X" breadcrumb item for paginated views.
  *
  * @since 6.9.0
- *
+ * @param string $query_var Optional. Query variable to get current page number. Default 'paged'.
  * @return string The "Page X" breadcrumb HTML.
  */
-function block_core_breadcrumbs_create_page_number_item() {
-	$paged = (int) get_query_var( 'paged' );
+function block_core_breadcrumbs_create_page_number_item( $query_var = 'paged' ) {
+	$paged = (int) get_query_var( $query_var );
+
 	return block_core_breadcrumbs_create_current_item(
 		/* translators: %s: page number */
 		sprintf( __( 'Page %s' ), number_format_i18n( $paged ) )
@@ -236,7 +267,7 @@ function block_core_breadcrumbs_get_post_title( $post_id_or_object ) {
  *
  * @since 6.9.0
  *
- * @param int    $post_id   The post ID.
+ * @param int $post_id   The post ID.
  *
  * @return array Array of breadcrumb HTML items.
  */
