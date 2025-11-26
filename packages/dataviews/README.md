@@ -459,6 +459,12 @@ Optional. Pass an object with a list of `perPageSizes` to control the available 
 
 An element to display when the `data` prop is empty. Defaults to `<p>No results</p>`.
 
+### Styling
+
+These are the CSS Custom Properties that can be used to tweak the appearance of the component:
+
+`--wp-dataviews-color-background`: sets the background color.
+
 ### Composition modes
 
 The `DataViews` component supports two composition modes:
@@ -1850,7 +1856,7 @@ Display format configuration for fields. Currently supported for date fields. Th
 -   Optional.
 -   Properties:
     -   `date`: The format string using PHP date format (e.g., 'F j, Y' for 'March 10, 2023'). Optional, defaults to WordPress "Date Format" setting.
-    -   `weekStartsOn`: Specifies the first day of the week for calendar controls. One of `'sunday'`, `'monday'`, `'tuesday'`, `'wednesday'`, `'thursday'`, `'friday'`, `'saturday'`. Optional, defaults to WordPress "Week Starts On" setting.
+    -   `weekStartsOn`: Specifies the first day of the week for calendar controls. One of 0, 1, 2, 3, 4, 5, 6. Optional, defaults to WordPress "Week Starts On" setting, whose value is 0 (Sunday).
 
 Example:
 
@@ -1861,7 +1867,7 @@ Example:
 	label: 'Publish Date',
 	format: {
 		date: 'F j, Y',
-		weekStartsOn: 'monday',
+		weekStartsOn: 1,
 	},
 }
 ```
