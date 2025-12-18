@@ -3,9 +3,7 @@
  */
 import { type ComponentProps } from '../utils/types';
 
-type SizeToken = '2xs' | 'xs' | 'sm' | 'md' | 'lg';
-
-type Size = number | SizeToken;
+type Size = '2xs' | 'xs' | 'sm' | 'md' | 'lg';
 
 type BackgroundColor =
 	| 'neutral'
@@ -52,6 +50,14 @@ type StrokeColor =
 	| 'warning'
 	| 'warning-strong';
 
+type Target =
+	| 'surface'
+	| 'interactive'
+	| 'content'
+	| 'track'
+	| 'thumb'
+	| 'focus';
+
 type DimensionVariant< T > = {
 	block?: T;
 	blockStart?: T;
@@ -65,7 +71,7 @@ export interface BoxProps extends ComponentProps< 'div' > {
 	/**
 	 * The target rendering element design token grouping to use for the box.
 	 */
-	target?: string;
+	target?: Target;
 
 	/**
 	 * The surface background design token for box background color.
@@ -85,12 +91,12 @@ export interface BoxProps extends ComponentProps< 'div' > {
 	/**
 	 * The surface border radius design token.
 	 */
-	borderRadius?: Exclude< SizeToken, '2xs' >;
+	borderRadius?: Exclude< Size, '2xs' >;
 
 	/**
 	 * The surface border width design token.
 	 */
-	borderWidth?: Exclude< SizeToken, '2xs' >;
+	borderWidth?: Exclude< Size, '2xs' >;
 
 	/**
 	 * The surface border stroke color design token.
