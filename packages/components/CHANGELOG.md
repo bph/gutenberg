@@ -17,6 +17,7 @@
 -   `RangeControl`: The `__nextHasNoMarginBottom` prop is now true by default. The prop can be safely removed ([#74033](https://github.com/WordPress/gutenberg/pull/74033)).
 -   `ComboboxControl`: The `__nextHasNoMarginBottom` prop is now true by default. The prop can be safely removed ([#74034](https://github.com/WordPress/gutenberg/pull/74034)).
 -   `SelectControl`: The `__nextHasNoMarginBottom` prop is now true by default. The prop can be safely removed ([#74052](https://github.com/WordPress/gutenberg/pull/74052)).
+-   `BaseControl`: The `__nextHasNoMarginBottom` prop is now true by default. The prop can be safely removed ([#74077](https://github.com/WordPress/gutenberg/pull/74077)).
 -   `DimensionControl`: Completely remove deprecated component ([#73944](https://github.com/WordPress/gutenberg/pull/73944)).
 
 ### Enhancements
@@ -27,6 +28,10 @@
 -   `Snackbar`: Shorten timeout duration ([#73814](https://github.com/WordPress/gutenberg/pull/73814)).
 -   `ToolsPanel`: Remove line-height workaround for control labels ([#73892](https://github.com/WordPress/gutenberg/pull/73892)).
 -   `Notice`: Add right margin to content only when dismissible ([#73905](https://github.com/WordPress/gutenberg/pull/73905)).
+-   `Popover`: Update animation, also affecting `Autocomplete`, `BorderControl`, `CircularOptionPicker`, `ColorPalette`, `Dropdown`, `DropdownMenu`, and `PaletteEdit` ([#74082](https://github.com/WordPress/gutenberg/pull/74082)).
+-   `Autocomplete`: Add offset to popover ([#74084](https://github.com/WordPress/gutenberg/pull/74084)).
+-   `Button`: Hide focus style when `:active` ([#74106](https://github.com/WordPress/gutenberg/pull/74106)).
+-   Converted package to a compliant dual CJS/ESM module ([#73822](https://github.com/WordPress/gutenberg/pull/73822)).
 
 ### Bug Fixes
 
