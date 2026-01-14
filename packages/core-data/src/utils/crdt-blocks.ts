@@ -7,16 +7,10 @@ import fastDeepEqual from 'fast-deep-equal/es6/index.js';
 /**
  * WordPress dependencies
  */
-import { RichTextData } from '@wordpress/rich-text';
-import { Y } from '@wordpress/sync';
-
 // @ts-expect-error No exported types.
 import { getBlockTypes } from '@wordpress/blocks';
-
-/**
- * Internal dependencies
- */
-import type { WPBlockSelection } from '../types';
+import { RichTextData } from '@wordpress/rich-text';
+import { Y, Delta } from '@wordpress/sync';
 
 /**
  * Internal dependencies
@@ -192,13 +186,13 @@ function createNewYBlock( block: Block ): YBlock {
  * This function is called to sync local block changes to a shared Y.Doc.
  *
  * @param yblocks        The blocks in the local Y.Doc.
- * @param incomingBlocks Gutenberg blocks being synced, either from a peer or from the local editor.
- * @param lastSelection  The last cursor position, used for hinting the diff algorithm.
+ * @param incomingBlocks Gutenberg blocks being synced.
+ * @param cursorPosition The position of the cursor after the change occurs.
  */
 export function mergeCrdtBlocks(
 	yblocks: YBlocks,
 	incomingBlocks: Block[],
-	lastSelection: WPBlockSelection | null
+	cursorPosition: number | null
 ): void {
 	// Ensure we are working with serializable block data.
 	if ( ! serializableBlocksCache.has( incomingBlocks ) ) {
@@ -315,7 +309,7 @@ export function mergeCrdtBlocks(
 								mergeRichTextUpdate(
 									currentAttribute,
 									attributeValue,
-									lastSelection
+									cursorPosition
 								);
 							} else {
 								currentAttributes.set(
@@ -351,7 +345,11 @@ export function mergeCrdtBlocks(
 						yblock.set( key, yInnerBlocks );
 					}
 
-					mergeCrdtBlocks( yInnerBlocks, value ?? [], lastSelection );
+					mergeCrdtBlocks(
+						yInnerBlocks,
+						value ?? [],
+						cursorPosition
+					);
 					break;
 				}
 
@@ -464,22 +462,21 @@ function isRichTextAttribute(
 	);
 }
 
+let localDoc: Y.Doc;
+
 /**
  * Given a Y.Text object and an updated string value, diff the new value and
  * apply the delta to the Y.Text.
  *
- * @param blockYText    The Y.Text to update.
- * @param updatedValue  The updated value.
- * @param lastSelection The last cursor position before this update, used to hint the diff algorithm.
+ * @param blockYText     The Y.Text to update.
+ * @param updatedValue   The updated value.
+ * @param cursorPosition The position of the cursor after the change occurs.
  */
 function mergeRichTextUpdate(
 	blockYText: Y.Text,
 	updatedValue: string,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	lastSelection: WPBlockSelection | null
+	cursorPosition: number | null
 ): void {
-	// TODO
-	// ====
 	// Gutenberg does not use Yjs shared types natively, so we can only subscribe
 	// to changes from store and apply them to Yjs types that we create and
 	// manage. Crucially, for rich-text attributes, we do not receive granular
@@ -487,31 +484,24 @@ function mergeRichTextUpdate(
 	// only a single character changed.
 	//
 	// The code below allows us to compute a delta between the current and new
-	// value, then apply it to the Y.Text. However, it relies on a library
-	// (quill-delta) with a licensing issue that we are working to resolve.
-	//
-	// For now, we simply replace the full text content on each change.
-	//
-	// if ( ! localDoc ) {
-	// 	// Y.Text must be attached to a Y.Doc to be able to do operations on it.
-	// 	// Create a temporary Y.Text attached to a local Y.Doc for delta computation.
-	// 	localDoc = new Y.Doc();
-	// }
+	// value, then apply it to the Y.Text.
 
-	// const localYText = localDoc.getText( 'temporary-text' );
-	// localYText.delete( 0, localYText.length );
-	// localYText.insert( 0, updatedValue );
+	if ( ! localDoc ) {
+		// Y.Text must be attached to a Y.Doc to be able to do operations on it.
+		// Create a temporary Y.Text attached to a local Y.Doc for delta computation.
+		localDoc = new Y.Doc();
+	}
 
-	// const currentValueAsDelta = new Delta( blockYText.toDelta() );
-	// const updatedValueAsDelta = new Delta( localYText.toDelta() );
+	const localYText = localDoc.getText( 'temporary-text' );
+	localYText.delete( 0, localYText.length );
+	localYText.insert( 0, updatedValue );
 
-	// const deltaDiff = currentValueAsDelta.diff(
-	// 	updatedValueAsDelta,
-	// 	lastSelection?.offset
-	// );
+	const currentValueAsDelta = new Delta( blockYText.toDelta() );
+	const updatedValueAsDelta = new Delta( localYText.toDelta() );
+	const deltaDiff = currentValueAsDelta.diffWithCursor(
+		updatedValueAsDelta,
+		cursorPosition
+	);
 
-	// blockYText.applyDelta( deltaDiff.ops );
-
-	blockYText.delete( 0, blockYText.toString().length );
-	blockYText.insert( 0, updatedValue );
+	blockYText.applyDelta( deltaDiff.ops );
 }
