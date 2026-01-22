@@ -203,31 +203,31 @@ function ColorTools( {
 		},
 	];
 
-	// Only show overlay controls when using the default overlay.
-	if ( ! hasCustomOverlay ) {
-		colorSettings.push(
-			{
-				colorValue: overlayTextColor.color,
-				label: isWithinOverlay
+	// Only show overlay controls when not in an overlay template.
+	colorSettings.push(
+		{
+			colorValue: overlayTextColor.color,
+			label:
+				hasCustomOverlay || isWithinOverlay
 					? __( 'Submenu text' )
 					: __( 'Submenu & overlay text' ),
-				onColorChange: setOverlayTextColor,
-				resetAllFilter: () => setOverlayTextColor(),
-				clearable: true,
-				enableAlpha: true,
-			},
-			{
-				colorValue: overlayBackgroundColor.color,
-				label: isWithinOverlay
+			onColorChange: setOverlayTextColor,
+			resetAllFilter: () => setOverlayTextColor(),
+			clearable: true,
+			enableAlpha: true,
+		},
+		{
+			colorValue: overlayBackgroundColor.color,
+			label:
+				hasCustomOverlay || isWithinOverlay
 					? __( 'Submenu background' )
 					: __( 'Submenu & overlay background' ),
-				onColorChange: setOverlayBackgroundColor,
-				resetAllFilter: () => setOverlayBackgroundColor(),
-				clearable: true,
-				enableAlpha: true,
-			}
-		);
-	}
+			onColorChange: setOverlayBackgroundColor,
+			resetAllFilter: () => setOverlayBackgroundColor(),
+			clearable: true,
+			enableAlpha: true,
+		}
+	);
 
 	return (
 		<>
@@ -300,17 +300,25 @@ function Navigation( {
 	);
 
 	const recursionId = `navigationMenu/${ ref }`;
-	const hasAlreadyRendered = useHasRecursion( recursionId );
+
+	// Skip recursion check when in preview mode.
+	const recursionDetected = useHasRecursion( recursionId );
+	const { isPreviewMode, onNavigateToEntityRecord, currentTheme } = useSelect(
+		( select ) => {
+			const { getSettings } = select( blockEditorStore );
+			const settings = getSettings();
+			return {
+				isPreviewMode: settings.isPreviewMode,
+				onNavigateToEntityRecord: settings?.onNavigateToEntityRecord,
+				// Needed to construct the template part ID for the overlay preview.
+				currentTheme: select( coreStore ).getCurrentTheme()?.stylesheet,
+			};
+		},
+		[]
+	);
+	const hasAlreadyRendered = isPreviewMode ? false : recursionDetected;
 
 	const blockEditingMode = useBlockEditingMode();
-
-	const { onNavigateToEntityRecord } = useSelect( ( select ) => {
-		const { getSettings } = select( blockEditorStore );
-		const settings = getSettings();
-		return {
-			onNavigateToEntityRecord: settings?.onNavigateToEntityRecord,
-		};
-	}, [] );
 
 	const isOverlayExperimentEnabled =
 		typeof window !== 'undefined' &&
@@ -453,8 +461,12 @@ function Navigation( {
 
 	const navRef = useRef();
 
-	// The standard HTML5 tag for the block wrapper.
-	const TagName = 'nav';
+	// Detect if we're editing inside an overlay template part.
+	const isWithinOverlay = useSelect( () => isWithinNavigationOverlay(), [] );
+
+	// Use div wrapper if this navigation block is within an overlay template part.
+	// Otherwise, use nav as the standard HTML5 tag.
+	const TagName = isWithinOverlay ? 'div' : 'nav';
 
 	// "placeholder" shown if:
 	// - there is no ref attribute pointing to a Navigation Post.
@@ -490,9 +502,6 @@ function Navigation( {
 			),
 		[ clientId ]
 	);
-
-	// Check if this navigation block is inside an overlay template part.
-	const isWithinOverlay = useSelect( () => isWithinNavigationOverlay(), [] );
 
 	// Force overlayMenu to 'never' if within an overlay template part
 	// to prevent overlays within overlays.
@@ -828,6 +837,7 @@ function Navigation( {
 						overlayMenuPreviewClasses={ overlayMenuPreviewClasses }
 						overlayMenuPreviewId={ overlayMenuPreviewId }
 						isResponsive={ isResponsive }
+						currentTheme={ currentTheme }
 					/>
 				</InspectorControls>
 			) }
