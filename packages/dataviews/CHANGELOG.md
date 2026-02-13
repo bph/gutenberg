@@ -13,6 +13,7 @@
 - DataViews: Add title attribute in grid item title field. [#75085](https://github.com/WordPress/gutenberg/pull/75085)
 - DataViews: Fix title truncation in list layout. [#75063](https://github.com/WordPress/gutenberg/pull/75063)
 - DataViews: Fix fields async validation. [#74948](https://github.com/WordPress/gutenberg/pull/74948)
+- DataForm: Fix color picker styles. [#75427](https://github.com/WordPress/gutenberg/pull/75427)
 
 ### Enhancements
 
@@ -22,6 +23,9 @@
 - DataViews: Add details form layout validation. [#74996](https://github.com/WordPress/gutenberg/pull/74996)
 - Add new `adaptiveSelect` DataForm control. [#74937](https://github.com/WordPress/gutenberg/pull/74937)
 - DataViews: Consistent rendering of selection checkbox and actions in grid layout. [#75056](https://github.com/WordPress/gutenberg/pull/75056)
+
+### Code Quality
+- DataForm: Style SummaryButton in panel layout with `is-disabled` classname. [#75470](https://github.com/WordPress/gutenberg/pull/75470)
 
 ### Internal
 

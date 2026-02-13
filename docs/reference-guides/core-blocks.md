@@ -389,7 +389,7 @@ Display multiple images in a rich gallery. ([Source](https://github.com/WordPres
 -	**Name:** core/gallery
 -	**Category:** media
 -	**Allowed Blocks:** core/image
--	**Supports:** align, anchor, color (background, gradients, ~~text~~), interactivity (clientNavigation), layout (default, ~~allowEditing~~, ~~allowInheriting~~, ~~allowSwitching~~), spacing (blockGap, margin, padding), units (em, px, rem, vh, vw), ~~html~~
+-	**Supports:** align, anchor, color (background, gradients, ~~text~~), interactivity (clientNavigation), layout (default, ~~allowEditing~~, ~~allowInheriting~~, ~~allowSwitching~~), listView, spacing (blockGap, margin, padding), units (em, px, rem, vh, vw), ~~html~~
 -	**Attributes:** allowResize, aspectRatio, caption, columns, fixedHeight, ids, imageCrop, images, linkTarget, linkTo, navigationButtonType, randomOrder, shortCodeTransforms, sizeSlug
 
 ## Group
@@ -428,6 +428,16 @@ Add custom HTML code and preview it as you edit. ([Source](https://github.com/Wo
 -	**Category:** widgets
 -	**Supports:** interactivity (clientNavigation), ~~className~~, ~~customCSS~~, ~~customClassName~~, ~~html~~
 -	**Attributes:** content
+
+## Icon
+
+Insert an SVG icon. ([Source](https://github.com/WordPress/gutenberg/tree/trunk/packages/block-library/src/icon))
+
+-	**Name:** core/icon
+-	**Experimental:** true
+-	**Category:** media
+-	**Supports:** align (center, left, right), anchor, ariaLabel, color (background, text), dimensions (width), interactivity (clientNavigation), spacing (margin, padding), ~~html~~
+-	**Attributes:** icon, style
 
 ## Image
 
@@ -528,7 +538,7 @@ A collection of blocks that allow visitors to get around your site. ([Source](ht
 
 -	**Name:** core/navigation
 -	**Category:** theme
--	**Allowed Blocks:** core/navigation-link, core/search, core/social-links, core/page-list, core/spacer, core/home-link, core/site-title, core/site-logo, core/navigation-submenu, core/loginout, core/buttons
+-	**Allowed Blocks:** core/navigation-link, core/search, core/social-links, core/page-list, core/spacer, core/home-link, core/icon, core/site-title, core/site-logo, core/navigation-submenu, core/loginout, core/buttons
 -	**Supports:** align (full, wide), anchor, ariaLabel, contentRole, inserter, interactivity, layout (allowSizingOnChildren, default, ~~allowInheriting~~, ~~allowSwitching~~, ~~allowVerticalAlignment~~), spacing (blockGap, units), typography (fontSize, lineHeight), ~~html~~, ~~renaming~~
 -	**Attributes:** __unstableLocation, backgroundColor, customBackgroundColor, customOverlayBackgroundColor, customOverlayTextColor, customTextColor, hasIcon, icon, maxNestingLevel, overlay, overlayBackgroundColor, overlayMenu, overlayTextColor, ref, rgbBackgroundColor, rgbTextColor, showSubmenuIcon, submenuVisibility, templateLock, textColor
 
@@ -1029,7 +1039,7 @@ Display content in a tabbed interface to help users navigate detailed content wi
 -	**Experimental:** true
 -	**Category:** design
 -	**Allowed Blocks:** core/tabs-menu, core/tab-panel
--	**Supports:** align, anchor, color (~~background~~, ~~text~~), interactivity, layout (allowJustification, allowOrientation, allowSizingOnChildren, allowVerticalAlignment, default, ~~allowSwitching~~), renaming, spacing (blockGap, margin, padding), typography (fontSize), ~~html~~
+-	**Supports:** align, anchor, color (background, text), interactivity, layout (allowJustification, allowOrientation, allowSizingOnChildren, allowVerticalAlignment, default, ~~allowSwitching~~), renaming, spacing (blockGap, margin, padding), typography (fontSize), ~~html~~
 -	**Attributes:** activeTabIndex, editorActiveTabIndex
 
 ## Tabs Menu
