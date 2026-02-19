@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 32.2.0 (2026-02-18)
+
 ### Bug Fixes
 
 -   `Tabs`: Set explicit `font-family` on tab buttons to prevent inheriting unintended fonts ([#75537](https://github.com/WordPress/gutenberg/pull/75537)).
@@ -16,6 +18,7 @@
 ### Enhancements
 
 -   Improve visual emphasis of the selected item in the ToggleGroupControl component ([#75138](https://github.com/WordPress/gutenberg/pull/75138)).
+-   `DateCalendar`, `DateRangeCalendar`: use lighter gray for disabled dates ([#75683](https://github.com/WordPress/gutenberg/pull/75683)).
 
 ### Internal
 
@@ -28,6 +31,7 @@
 -   Clean up type declarations using the `React` namespace ([#75499](https://github.com/WordPress/gutenberg/pull/75499) and ([#75508](https://github.com/WordPress/gutenberg/pull/75508))).
 -   Always specify initial values for `useRef` calls ([#75513](https://github.com/WordPress/gutenberg/pull/75513)).
 -   Update `RefObject` type usage for React 19 compatibility ([#75567](https://github.com/WordPress/gutenberg/pull/75567)).
+-   Upgraded `@ariakit/react` (v0.4.21) and `@ariakit/test` (v0.4.13) ([#75620](https://github.com/WordPress/gutenberg/pull/75620)).
 
 ## 32.1.0 (2026-01-29)
 
