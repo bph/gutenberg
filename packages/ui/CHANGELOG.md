@@ -2,9 +2,17 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   `VisuallyHidden`: Add `word-break: normal` to prevent text wrapping issues in screen reader content ([#75539](https://github.com/WordPress/gutenberg/pull/75539)).
+
 ### New Features
 
 -   Add `Card` and `CollapsibleCard` primitives ([#76252](https://github.com/WordPress/gutenberg/pull/76252)).
+
+### Enhancements
+
+-   `Notice`: Improve narrow layout by letting description and actions span the icon column when a title is present ([#76202](https://github.com/WordPress/gutenberg/pull/76202)).
 
 ## 0.8.0 (2026-03-04)
 
