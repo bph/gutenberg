@@ -37,6 +37,7 @@ import {
 	notesField,
 	scheduledDateField,
 	formatField,
+	postContentInfoField,
 } from '@wordpress/fields';
 import {
 	altTextField,
@@ -276,6 +277,9 @@ export const registerPostTypeSchema =
 				postTypeConfig.supports?.[ 'post-formats' ] &&
 					! disablePostFormats &&
 					formatField,
+				! DESIGN_POST_TYPES.includes( postTypeConfig.slug ) &&
+					postTypeConfig.supports?.editor &&
+					postContentInfoField,
 				passwordField,
 				postTypeConfig.supports?.editor &&
 					postTypeConfig.viewable &&
