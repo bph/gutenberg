@@ -140,6 +140,7 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 		sectionRootClientId,
 		deviceType,
 		isNavigationOverlayContext,
+		isRevisionsMode,
 	} = useSelect(
 		( select ) => {
 			const {
@@ -151,7 +152,9 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 			} = select( coreStore );
 			const { get } = select( preferencesStore );
 			const { getBlockTypes } = select( blocksStore );
-			const { getDeviceType } = unlock( select( editorStore ) );
+			const { getDeviceType, isRevisionsMode: _isRevisionsMode } = unlock(
+				select( editorStore )
+			);
 			const { getBlocksByName, getBlockAttributes } =
 				select( blockEditorStore );
 			const siteSettings = canUser( 'read', {
@@ -219,6 +222,7 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 								postId
 						  )?.area === 'navigation-overlay'
 						: false,
+				isRevisionsMode: _isRevisionsMode(),
 			};
 		},
 		[ postType, postId, isLargeViewport, renderingMode ]
@@ -310,12 +314,9 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 	return useMemo( () => {
 		const blockEditorSettings = {
 			...Object.fromEntries(
-				Object.entries( settings )
-					.filter( ( [ key ] ) =>
-						BLOCK_EDITOR_SETTINGS.includes( key )
-					)
-					// Exclude onNavigateToEntityRecord since we're wrapping it
-					.filter( ( [ key ] ) => key !== 'onNavigateToEntityRecord' )
+				Object.entries( settings ).filter( ( [ key ] ) =>
+					BLOCK_EDITOR_SETTINGS.includes( key )
+				)
 			),
 			[ globalStylesDataKey ]: globalStylesData,
 			[ globalStylesLinksDataKey ]: globalStylesLinksData,
@@ -327,7 +328,6 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 			hasFixedToolbar,
 			isDistractionFree,
 			keepCaretInsideBlock,
-			onNavigateToEntityRecord: settings.onNavigateToEntityRecord,
 			[ getMediaSelectKey ]: ( select, attachmentId ) => {
 				return select( coreStore ).getEntityRecord(
 					'postType',
@@ -401,8 +401,13 @@ function useBlockEditorSettings( settings, postType, postId, renderingMode ) {
 			[ isNavigationOverlayContextKey ]: isNavigationOverlayContext,
 		};
 
+		if ( isRevisionsMode ) {
+			blockEditorSettings.isPreviewMode = true;
+		}
+
 		return blockEditorSettings;
 	}, [
+		isRevisionsMode,
 		allowedBlockTypes,
 		allowRightClickOverrides,
 		focusMode,
