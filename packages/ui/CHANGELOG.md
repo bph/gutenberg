@@ -11,6 +11,7 @@
 
 ### Bug Fixes
 
+-   `InputLayout.Slot`: Forward the incoming `className` prop instead of letting it be silently overwritten by the rest spread ([#76459](https://github.com/WordPress/gutenberg/pull/76459)).
 -   `VisuallyHidden`: Add `word-break: normal` to prevent text wrapping issues in screen reader content ([#75539](https://github.com/WordPress/gutenberg/pull/75539)).
 
 ### Enhancements
@@ -20,6 +21,7 @@
 -   `Notice`: Use `Text` component for `Title` and `Description` typography ([#75870](https://github.com/WordPress/gutenberg/pull/75870)).
 -   `Card`, `CollapsibleCard`: update padding to match legacy `Card` component ([#76368](https://github.com/WordPress/gutenberg/pull/76368)).
 -   `CollapsibleCard`: move trigger to the header ([#76265](https://github.com/WordPress/gutenberg/pull/76265)).
+-   `CollapsibleCard`: add animations ([#76378](https://github.com/WordPress/gutenberg/pull/76378)).
 
 ## 0.8.0 (2026-03-04)
 
