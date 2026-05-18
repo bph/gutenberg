@@ -37,9 +37,22 @@ import {
  */
 import { LanesItem } from './lanes-item';
 import { useLanePlacement } from './use-lane-placement';
+import { GridOverlay } from '../shared/grid-overlay';
 import type { DashboardLanesLayoutItem, DashboardLanesProps } from './types';
 import type { ResizeDelta } from '../shared/types';
 import styles from './lanes.module.css';
+
+// Fallback gap in pixels for math that runs before the computed gap
+// can be read from the DOM. Matches the `'md'` step the surface
+// resolves to in CSS (`--wpds-dimension-gap-md`); the next layout
+// effect overwrites this with the actual computed value.
+const FALLBACK_GAP_PX = 12;
+
+// Default lane cap when no explicit `columns` or `minColumnWidth` is
+// supplied. Layered semantics: `columns` acts as a cap and
+// `minColumnWidth` as a per-tile floor; if neither is set we still
+// need a finite count to render against.
+const DEFAULT_COLUMNS = 6;
 
 const NO_SORT_STRATEGY = () => null;
 
@@ -84,11 +97,10 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 	function DashboardLanes( props, ref ) {
 		const {
 			layout,
-			columns = 6,
+			columns,
 			children,
 			className,
 			style,
-			spacing = 2,
 			flowTolerance = 16,
 			rowUnit = 4,
 			minColumnWidth,
@@ -97,6 +109,7 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 			onPreviewLayout,
 			renderResizeHandle,
 			renderDragPreview,
+			renderGridOverlay,
 			...divProps
 		} = props;
 
@@ -119,6 +132,7 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 			null
 		);
 		const [ containerWidth, setContainerWidth ] = useState( 0 );
+		const [ gapPx, setGapPx ] = useState( FALLBACK_GAP_PX );
 		const resizeObserverRef = useResizeObserver(
 			( [ { contentRect } ] ) => {
 				setContainerWidth( contentRect.width );
@@ -130,25 +144,34 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 			ref,
 		] );
 
+		// Measure synchronously before paint and snapshot the computed
+		// `column-gap` so the placement math tracks the design-system
+		// token under any density.
 		useLayoutEffect( () => {
-			if ( container ) {
-				const { width } = container.getBoundingClientRect();
-				if ( width > 0 ) {
-					setContainerWidth( width );
-				}
+			if ( ! container ) {
+				return;
+			}
+			const { width } = container.getBoundingClientRect();
+			if ( width > 0 ) {
+				setContainerWidth( width );
+			}
+			const parsed = Number.parseFloat(
+				window.getComputedStyle( container ).columnGap
+			);
+			if ( Number.isFinite( parsed ) && parsed > 0 ) {
+				setGapPx( parsed );
 			}
 		}, [ container ] );
-
-		const gapPx = spacing * 4;
 		const effectiveColumns = useMemo( () => {
 			if ( ! minColumnWidth ) {
-				return columns;
+				return columns ?? DEFAULT_COLUMNS;
 			}
 			const totalWidthPerColumn = minColumnWidth + gapPx;
-			const maxColumns = Math.floor(
-				( containerWidth + gapPx ) / totalWidthPerColumn
+			const maxFit = Math.max(
+				1,
+				Math.floor( ( containerWidth + gapPx ) / totalWidthPerColumn )
 			);
-			return Math.max( 1, maxColumns );
+			return columns !== undefined ? Math.min( columns, maxFit ) : maxFit;
 		}, [ minColumnWidth, gapPx, containerWidth, columns ] );
 		const columnWidth =
 			( containerWidth - ( effectiveColumns - 1 ) * gapPx ) /
@@ -421,6 +444,21 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 				</div>
 			) : null;
 
+		// Edit-mode background visual. Lanes are content-driven
+		// vertically, so the overlay only mirrors columns; the default
+		// can be replaced wholesale via `renderGridOverlay`. Rendered
+		// unconditionally so the overlay can cross-fade on edit-mode
+		// toggles; `isActive` drives the opacity transition inside the
+		// overlay. Memoized so drag/resize re-renders skip
+		// reconciliation while inputs are stable.
+		const Overlay = renderGridOverlay ?? GridOverlay;
+		const gridOverlay = useMemo(
+			() => (
+				<Overlay columns={ effectiveColumns } isActive={ editMode } />
+			),
+			[ Overlay, editMode, effectiveColumns ]
+		);
+
 		return (
 			<DndContext
 				sensors={ sensors }
@@ -442,15 +480,15 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 							{
 								...style,
 								gridTemplateColumns: `repeat(${ effectiveColumns }, minmax(0, 1fr))`,
-								// `column-gap` and `row-gap` resolve through
-								// the `--wp-grid-lane-gap` custom property in
-								// `lanes.module.css`, which uses `@supports`
-								// to zero `row-gap` in polyfill mode (the
-								// skyline already encodes vertical spacing
-								// in each tile's `top`). Driving the toggle
-								// from CSS keeps SSR and client output
-								// identical regardless of native support.
-								'--wp-grid-lane-gap': `${ gapPx }px`,
+								// `column-gap` and `row-gap` are set in
+								// `lanes.module.css` from the
+								// design-system gap token, with an
+								// `@supports` block that zeroes `row-gap`
+								// in polyfill mode (the skyline already
+								// encodes vertical spacing in each tile's
+								// `top`). Driving the toggle from CSS
+								// keeps SSR and client output identical
+								// regardless of native support.
 								'--wp-grid-lane-row-unit': `${ Math.max(
 									1,
 									rowUnit
@@ -458,6 +496,7 @@ export const DashboardLanes = forwardRef< HTMLDivElement, DashboardLanesProps >(
 							} as React.CSSProperties
 						}
 					>
+						{ gridOverlay }
 						{ items.map( ( id ) => {
 							const child = childrenMap.get( id );
 							if ( ! child ) {
