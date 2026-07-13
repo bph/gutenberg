@@ -26,14 +26,12 @@ jest.mock( '../waveform-utils', () => ( {
 function createFakePlayer( options, element ) {
 	const titleEl = document.createElement( 'span' );
 	titleEl.textContent = options.title ?? '';
-	// The subtitle and artwork elements only exist when the track had an
-	// artist/image when the player was created, mirroring the library markup.
-	let subtitleEl = null;
+	let artistEl;
 	if ( options.artist ) {
-		subtitleEl = document.createElement( 'span' );
-		subtitleEl.textContent = options.artist;
+		artistEl = document.createElement( 'span' );
+		artistEl.textContent = options.artist;
 	}
-	let artworkEl = null;
+	let artworkEl;
 	if ( options.image ) {
 		artworkEl = document.createElement( 'img' );
 		artworkEl.src = options.image;
@@ -41,30 +39,56 @@ function createFakePlayer( options, element ) {
 	}
 
 	element.append( titleEl );
-	if ( subtitleEl ) {
-		element.append( subtitleEl );
+	if ( artistEl ) {
+		element.append( artistEl );
 	}
 	if ( artworkEl ) {
 		element.append( artworkEl );
 	}
 
+	const instance = {
+		titleEl,
+		artistEl: artistEl || null,
+		artworkEl: artworkEl || null,
+		pause: jest.fn(),
+		syncArtist: jest.fn( ( artist ) => {
+			if ( ! artist ) {
+				instance.artistEl?.remove();
+				instance.artistEl = null;
+				return;
+			}
+			if ( ! instance.artistEl ) {
+				instance.artistEl = document.createElement( 'span' );
+				element.append( instance.artistEl );
+			}
+			instance.artistEl.textContent = artist;
+			instance.artistEl.style.display = '';
+		} ),
+		syncArtwork: jest.fn( ( image, imageAlt = '' ) => {
+			if ( ! image ) {
+				instance.artworkEl?.remove();
+				instance.artworkEl = null;
+				return;
+			}
+			if ( ! instance.artworkEl ) {
+				instance.artworkEl = document.createElement( 'img' );
+				element.append( instance.artworkEl );
+			}
+			instance.artworkEl.src = image;
+			instance.artworkEl.alt = imageAlt || '';
+		} ),
+		loadTrack: jest.fn( async ( src, title, artist, trackOptions ) => {
+			titleEl.textContent = title;
+			instance.syncArtist( artist );
+			instance.syncArtwork(
+				trackOptions.artwork,
+				trackOptions.artworkAlt
+			);
+		} ),
+	};
+
 	return {
-		instance: {
-			titleEl,
-			subtitleEl,
-			artworkEl,
-			pause: jest.fn(),
-			loadTrack: jest.fn( async ( src, title, artist, trackOptions ) => {
-				titleEl.textContent = title;
-				if ( subtitleEl ) {
-					subtitleEl.textContent = artist;
-					subtitleEl.style.display = artist ? '' : 'none';
-				}
-				if ( artworkEl && trackOptions.artwork ) {
-					artworkEl.src = trackOptions.artwork;
-				}
-			} ),
-		},
+		instance,
 		destroy: jest.fn(),
 	};
 }
@@ -135,7 +159,7 @@ describe( 'WaveformPlayer', () => {
 		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
 		expect( player.destroy ).not.toHaveBeenCalled();
 		expect( player.instance.titleEl ).toHaveTextContent( 'New Title' );
-		expect( player.instance.subtitleEl ).toHaveTextContent( 'New Artist' );
+		expect( player.instance.artistEl ).toHaveTextContent( 'New Artist' );
 		expect( player.instance.artworkEl ).toHaveAttribute(
 			'src',
 			'https://example.com/new.jpg'
@@ -168,9 +192,18 @@ describe( 'WaveformPlayer', () => {
 
 		expect( player.destroy ).not.toHaveBeenCalled();
 		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
+		expect( player.instance.loadTrack ).toHaveBeenCalledWith(
+			'https://example.com/other.mp3',
+			'Original Title',
+			'Original Artist',
+			{
+				artwork: 'https://example.com/cover.jpg',
+				artworkAlt: 'A bright abstract album cover',
+			}
+		);
 	} );
 
-	it( 'recreates the player to show an image added to a track that had none', () => {
+	it( 'updates the player in place to show an image added to a track that had none', () => {
 		const { rerender } = render(
 			<WaveformPlayer { ...baseProps } image="" />
 		);
@@ -194,16 +227,15 @@ describe( 'WaveformPlayer', () => {
 			jest.advanceTimersByTime( 100 );
 		} );
 
-		expect( firstPlayer.destroy ).toHaveBeenCalledTimes( 1 );
-		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 2 );
-		const secondPlayer = initWaveformPlayer.mock.results[ 1 ].value;
-		expect( secondPlayer.instance.artworkEl ).toHaveAttribute(
+		expect( firstPlayer.destroy ).not.toHaveBeenCalled();
+		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
+		expect( firstPlayer.instance.artworkEl ).toHaveAttribute(
 			'src',
 			'https://example.com/added.jpg'
 		);
 	} );
 
-	it( 'recreates the player when the image is removed', () => {
+	it( 'updates the player in place when the image is removed', () => {
 		const { rerender } = render( <WaveformPlayer { ...baseProps } /> );
 
 		act( () => {
@@ -218,10 +250,9 @@ describe( 'WaveformPlayer', () => {
 			jest.advanceTimersByTime( 100 );
 		} );
 
-		expect( player.destroy ).toHaveBeenCalledTimes( 1 );
-		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 2 );
-		const secondPlayer = initWaveformPlayer.mock.results[ 1 ].value;
-		expect( secondPlayer.instance.artworkEl ).toBeNull();
+		expect( player.destroy ).not.toHaveBeenCalled();
+		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
+		expect( player.instance.artworkEl ).toBeNull();
 	} );
 
 	it( 'updates the player in place to show an artist added to a track that had none', () => {
@@ -234,18 +265,16 @@ describe( 'WaveformPlayer', () => {
 		} );
 
 		const firstPlayer = initWaveformPlayer.mock.results[ 0 ].value;
-		// The editor seeds a hidden subtitle element so artist edits can
-		// update in place.
-		expect( firstPlayer.instance.subtitleEl ).toHaveTextContent( '' );
+		expect( firstPlayer.instance.artistEl ).toBeNull();
 
 		rerender( <WaveformPlayer { ...baseProps } artist="New Artist" /> );
 
 		expect( firstPlayer.destroy ).not.toHaveBeenCalled();
 		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
-		expect( firstPlayer.instance.subtitleEl ).toHaveTextContent(
+		expect( firstPlayer.instance.artistEl ).toHaveTextContent(
 			'New Artist'
 		);
-		expect( firstPlayer.instance.subtitleEl ).not.toHaveStyle( {
+		expect( firstPlayer.instance.artistEl ).not.toHaveStyle( {
 			display: 'none',
 		} );
 	} );
@@ -263,9 +292,6 @@ describe( 'WaveformPlayer', () => {
 
 		expect( player.destroy ).not.toHaveBeenCalled();
 		expect( initWaveformPlayer ).toHaveBeenCalledTimes( 1 );
-		expect( player.instance.subtitleEl ).toHaveTextContent( '' );
-		expect( player.instance.subtitleEl ).toHaveStyle( {
-			display: 'none',
-		} );
+		expect( player.instance.artistEl ).toBeNull();
 	} );
 } );
