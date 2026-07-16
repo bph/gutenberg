@@ -9,35 +9,18 @@
  * Version: 23.7.20260716
  * Author: Gutenberg Team and Birgit Pauli-Haack (Gutenberg Times)
  * Text Domain: gutenberg
- * GitHub Plugin URI: bph/gutenberg
- * Primary Branch: trunk
- * Release Asset: true
+ * Update URI: https://gutenbergtimes.com
  *
  * @package gutenberg
  */
 
-// GitHub Updater filters.
-add_filter(
-	'gu_override_dot_org',
-	function ( $overrides ) {
-		return array_merge(
-			$overrides,
-			array( 'gutenberg/gutenberg.php' )
-		);
-	}
-);
-add_filter(
-	'gu_release_asset_rollback',
-	function ( $rollback, $file ) {
-		if ( $file === plugin_basename( __FILE__ ) ) {
-			return [ 'gutenberg-nightly' ];
-		}
-	},
-	10,
-	2
-);
-add_filter( 'gu_no_release_asset_branches', '__return_true' );
-// End GitHub Updater filters.
+ // Initialize Git Updater Lite.
+ require_once __DIR__ . '/vendor/afragen/git-updater-lite/Lite.php';
+( new \Fragen\Git_Updater\Lite( __FILE__ ) )->run();
+
+// Get dev release assets for Gutenberg plugin.
+add_filter( 'gu_dev_release_asset', fn( $bool, $repo ) => ( 'gutenberg' === $repo->slug ), 10, 2 );
+
 
 
 ### BEGIN AUTO-GENERATED DEFINES
