@@ -66,14 +66,14 @@ module.exports = {
 	},
 	testLocationInResults: true,
 	testPathIgnorePatterns: [
-		'/.git/',
+		'/\\.git($|/)',
 		'/node_modules/',
 		'/packages/e2e-tests',
-		'/packages/e2e-test-utils-playwright/src/test.ts',
+		'/packages/e2e-test-utils-playwright/src/test\\.ts$',
 		'<rootDir>/.*/build/',
 		'<rootDir>/.*/build-module/',
 		'<rootDir>/.*/build-types/',
-		'<rootDir>/.+.d.ts$',
+		'<rootDir>/.+\\.d\\.ts$',
 	],
 	resolver: '<rootDir>/test/unit/scripts/resolver.js',
 	transform: {
@@ -100,7 +100,7 @@ module.exports = {
 		'<rootDir>packages/scripts/config/jest-github-actions-reporter/index.js',
 		process.env.CI
 			? [
-					'@flakiness/jest',
+					require.resolve( '@flakiness/jest' ),
 					{
 						flakinessProject: 'WordPress/gutenberg',
 						duplicates: 'rename',
