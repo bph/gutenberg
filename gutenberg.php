@@ -37,6 +37,11 @@ add_filter(
 	2
 );
 add_filter( 'gu_no_release_asset_branches', '__return_true' );
+// Opt this plugin into Git Updater's dev release asset version path so the
+// rolling <major.minor>-nightly tag is compared against the actual Version
+// header on trunk. Required from Git Updater 14.x onward for correct update
+// detection with Release Asset: true.
+add_filter( 'gu_dev_release_asset', fn( $bool, $repo ) => ( 'gutenberg' === $repo->slug ), 10, 2 );
 // End GitHub Updater filters.
 
 
