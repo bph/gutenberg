@@ -9,12 +9,23 @@
  * Version: 24.0.20260903
  * Author: Gutenberg Team and Birgit Pauli-Haack (Gutenberg Times)
  * Text Domain: gutenberg
+ * Update URI: https://gutenbergtimes.com
  * GitHub Plugin URI: bph/gutenberg
  * Primary Branch: trunk
  * Release Asset: true
  *
  * @package gutenberg
  */
+
+// Add the development channel to the Git Updater Lite API URL for the Gutenberg plugin.
+add_filter( 'git_updater_lite_api_url', fn( $url, $slug ) => ( 'gutenberg' === $slug ) ? add_query_arg( [ 'channel' => 'development' ], $url ) : $url, 10, 2 );
+
+ // Initialize Git Updater Lite.
+ if ( file_exists( __DIR__ . '/vendor/afragen/git-updater-lite/Lite.php' ) ) {
+	require_once __DIR__ . '/vendor/afragen/git-updater-lite/Lite.php';
+	( new \Fragen\Git_Updater\Lite( __FILE__ ) )->run();
+}
+
 
 // GitHub Updater filters.
 add_filter(
