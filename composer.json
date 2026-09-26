@@ -42,8 +42,8 @@
 		}
 	],
 	"require": {
-		"php": ">=7.4",
-		"composer/installers": "^1.0 || ^2.0"
+		"composer/installers": "^1.0 || ^2.0",
+		"afragen/git-updater-lite": "^3"
 	},
 	"scripts": {
 		"format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
