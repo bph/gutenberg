@@ -4750,11 +4750,6 @@
 			"count": 1
 		}
 	},
-	"packages/components/src/date-time/date-time/styles.ts": {
-		"no-restricted-imports": {
-			"count": 1
-		}
-	},
 	"packages/components/src/date-time/time-picker/styles.ts": {
 		"no-restricted-imports": {
 			"count": 2
@@ -4771,11 +4766,6 @@
 		}
 	},
 	"packages/components/src/focal-point-picker/styles/focal-point-style.ts": {
-		"no-restricted-imports": {
-			"count": 1
-		}
-	},
-	"packages/components/src/font-size-picker/styles.ts": {
 		"no-restricted-imports": {
 			"count": 1
 		}
@@ -4813,11 +4803,6 @@
 	"packages/components/src/number-control/styles/number-control-styles.ts": {
 		"no-restricted-imports": {
 			"count": 2
-		}
-	},
-	"packages/components/src/palette-edit/styles.ts": {
-		"no-restricted-imports": {
-			"count": 1
 		}
 	},
 	"packages/components/src/panel/body.tsx": {
