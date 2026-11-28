@@ -142,7 +142,7 @@ export interface BlockVariation<
 	/**
 	 * Values which override block attributes.
 	 */
-	attributes?: Attributes;
+	attributes?: Partial< Attributes >;
 	/**
 	 * Initial configuration of nested blocks.
 	 */
@@ -512,7 +512,11 @@ export interface BlockType<
 	 *
 	 * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#example
 	 */
-	example?: Partial< BlockType > & {
+	example?: Partial< Omit< BlockType, 'attributes' > > & {
+		/**
+		 * Attribute values for the block preview.
+		 */
+		attributes?: Partial< Attributes >;
 		innerBlocks?: BlockExampleInnerBlock[];
 		/**
 		 * Static HTML fragments interleaved with inner blocks, where `null`
